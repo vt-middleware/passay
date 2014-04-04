@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<module name="Checker">
+
+  <!-- limit source file size -->
+  <module name="FileLength">
+    <property name="max" value="2000"/>
+  </module>
+
+  <!-- require a header -->
+  <module name="RegexpHeader">
+    <property name="headerFile" value="${checkstyle.header.file}"/>
+    <property name="fileExtensions" value="java"/>
+  </module>
+
+  <!-- forbid tab characters in source files -->
+  <module name="FileTabCharacter"/>
+
+  <module name="SuppressionCommentFilter">
+    <property name="offCommentFormat" value="CheckStyle\:([\w\|]+) OFF"/>
+    <property name="onCommentFormat" value="CheckStyle\:([\w\|]+) ON"/>
+    <property name="checkFormat" value="$1"/>
+  </module>
+  <module name="NewlineAtEndOfFile">
+    <property name="fileExtensions" value="java"/>
+  </module>
+  <module name="TreeWalker">
+    <property name="tabWidth" value="2"/>
+
+    <module name="FileContentsHolder"/>
+
+    <!--  annotations -->
+    <module name="AnnotationUseStyle"/>
+    <module name="MissingDeprecated"/>
+    <module name="MissingOverride"/>
+    <module name="SuppressWarnings"/>
+
+    <!-- javadocs -->
+    <module name="JavadocType">
+      <property name="authorFormat" value="\S+"/>
+    </module>
+    <module name="JavadocMethod">
+      <property name="allowThrowsTagsForSubclasses" value="true"/>
+      <property name="allowUndeclaredRTE" value="true"/>
+    </module>
+    <module name="JavadocVariable"/>
+    <module name="JavadocStyle">
+      <property name="checkFirstSentence" value="false"/>
+    </module>
+
+    <!-- naming -->
+    <module name="AbstractClassName">
+      <property name="format" value="^Abstract.*$"/>
+    </module>
+    <module name="ClassTypeParameterName"/>
+    <module name="ConstantName"/>
+    <module name="LocalFinalVariableName"/>
+    <module name="LocalVariableName"/>
+    <module name="MemberName"/>
+    <module name="MethodName"/>
+    <module name="MethodTypeParameterName"/>
+    <module name="PackageName"/>
+    <module name="ParameterName"/>
+    <module name="StaticVariableName"/>
+    <module name="TypeName"/>
+
+    <!-- imports -->
+    <module name="AvoidStarImport"/>
+    <module name="AvoidStaticImport"/>
+    <module name="IllegalImport"/>
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+    <module name="ImportOrder">
+      <property name="groups" value="java,javax"/>
+      <property name="ordered" value="true"/>
+      <property name="option" value="bottom"/>
+    </module>
+
+    <!-- sizes -->
+    <module name="LineLength">
+      <property name="ignorePattern" value="(^.*\$.*\$.*$)|(^import .*)"/>
+      <property name="max" value="80"/>
+    </module>
+    <module name="MethodLength">
+      <property name="max" value="300"/>
+    </module>
+    <module name="AnonInnerLength">
+      <property name="max" value="30"/>
+    </module>
+    <module name="ParameterNumber"/>
+    <module name="OuterTypeNumber"/>
+
+    <!-- whitespace -->
+    <module name="GenericWhitespace"/>
+    <module name="EmptyForInitializerPad"/>
+    <module name="EmptyForIteratorPad"/>
+    <module name="MethodParamPad"/>
+    <module name="NoWhitespaceAfter"/>
+    <module name="NoWhitespaceBefore">
+      <property name="allowLineBreaks" value="true"/>
+      <property name="tokens"
+                value="SEMI,DOT,POST_DEC,POST_INC,PLUS"/>
+    </module>
+    <module name="OperatorWrap">
+      <property name="option" value="eol"/>
+      <property name="tokens"
+                value="BAND,BOR,BSR,BXOR,DIV,EQUAL,GE,GT,LAND,LE,
+                       LITERAL_INSTANCEOF,LOR,LT,MINUS,MOD,NOT_EQUAL,PLUS,
+                       SL,SR,STAR"/>
+    </module>
+    <module name="ParenPad"/>
+    <module name="TypecastParenPad"/>
+    <module name="WhitespaceAfter"/>
+    <module name="WhitespaceAround">
+      <property name="tokens"
+                value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,
+                       BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,EQUAL,GE,GT,LAND,
+                       LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,
+                       LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,
+                       LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,
+                       LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,
+                       NOT_EQUAL,PLUS_ASSIGN,QUESTION,SL,
+                       SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN"/>
+    </module>
+
+    <!-- modifiers -->
+    <module name="ModifierOrder"/>
+    <module name="RedundantModifier"/>
+
+    <!-- blocks -->
+    <module name="EmptyBlock"/>
+    <module name="LeftCurly">
+      <property name="option" value="nl"/>
+      <property name="tokens"
+                value="CLASS_DEF,CTOR_DEF,INTERFACE_DEF,METHOD_DEF"/>
+    </module>
+    <module name="NeedBraces"/>
+    <module name="RightCurly"/>
+    <module name="AvoidNestedBlocks"/>
+
+    <!-- coding -->
+    <module name="ArrayTrailingComma"/>
+    <module name="CovariantEquals"/>
+    <module name="EmptyStatement"/>
+    <module name="EqualsAvoidNull"/>
+    <module name="EqualsHashCode"/>
+    <module name="FinalLocalVariable"/>
+    <module name="HiddenField"/>
+    <module name="IllegalInstantiation">
+      <property name="classes" value="java.lang.Boolean"/>
+    </module>
+    <module name="InnerAssignment"/>
+    <module name="MagicNumber"/>
+    <module name="MissingSwitchDefault"/>
+    <module name="RedundantThrows">
+      <property name="allowUnchecked" value="true"/>
+    </module>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+    <module name="NestedIfDepth">
+      <property name="max" value="5"/>
+    </module>
+    <module name="NestedTryDepth">
+      <property name="max" value="5"/>
+    </module>
+    <module name="SuperClone"/>
+    <module name="SuperFinalize"/>
+    <module name="PackageDeclaration"/>
+    <module name="ReturnCount"/>
+    <module name="IllegalType">
+      <property name="illegalClassNames"
+                value="java.util.GregorianCalendar, java.util.Hashtable,
+                       java.util.HashSet, java.util.HashMap,
+                       java.util.ArrayList, java.util.LinkedList,
+                       java.util.LinkedHashMap, java.util.LinkedHashSet,
+                       java.util.TreeSet, java.util.TreeMap, java.util.Vector"/>
+    </module>
+    <module name="DeclarationOrder"/>
+    <module name="ParameterAssignment"/>
+    <module name="ExplicitInitialization"/>
+    <module name="DefaultComesLast"/>
+    <module name="FallThrough"/>
+    <module name="MultipleVariableDeclarations"/>
+    <module name="RequireThis">
+      <property name="checkFields" value="false"/>
+      <property name="checkMethods" value="false"/>
+    </module>
+    <module name="UnnecessaryParentheses"/>
+
+    <!-- design -->
+    <module name="VisibilityModifier">
+      <property name="protectedAllowed" value="true"/>
+    </module>
+    <module name="FinalClass"/>
+    <module name="InterfaceIsType"/>
+    <module name="HideUtilityClassConstructor"/>
+    <module name="MutableException"/>
+    <module name="ThrowsCount">
+      <property name="max" value="2"/>
+    </module>
+
+    <!-- prevent trailing whitespace -->
+    <module name="Regexp">
+      <property name="format" value="[ \t]+$"/>
+      <property name="illegalPattern" value="true"/>
+      <property name="message" value="Trailing whitespace"/>
+    </module>
+
+    <!-- misc -->
+    <module name="UpperEll"/>
+    <module name="ArrayTypeStyle"/>
+    <module name="FinalParameters"/>
+    <module name="Indentation">
+      <property name="basicOffset" value="2"/>
+      <property name="caseIndent" value="0"/>
+      <property name="throwsIndent" value="2"/>
+    </module>
+    <module name="TrailingComment"/>
+
+  </module>
+</module>

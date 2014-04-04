@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:p="http://www.springframework.org/schema/p"
+  xmlns:util="http://www.springframework.org/schema/util"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+  <bean id="dictionary" class="org.passay.dictionary.WordListDictionary">
+    <constructor-arg>
+      <bean class="org.passay.dictionary.FileWordList">
+        <constructor-arg>
+          <bean class="java.io.RandomAccessFile">
+            <constructor-arg value="src/test/resources/web2.sort"/>
+            <constructor-arg value="r"/>
+          </bean>
+        </constructor-arg>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="alphaRule" class="org.passay.AlphabeticalCharacterRule"
+    p:numberOfCharacters="3"/>
+  <bean id="digitRule" class="org.passay.DigitCharacterRule"
+    p:numberOfCharacters="1"/>
+  <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
+    p:numberOfCharacteristics="2">
+    <property name="rules">
+      <list>
+        <ref bean="alphaRule"/>
+        <ref bean="digitRule"/>
+      </list>
+    </property>
+  </bean>
+
+  <bean id="dictRule" class="org.passay.DictionarySubstringRule"
+    p:dictionary-ref="dictionary"
+    p:wordLength="4"/>
+
+  <bean id="lenRule" class="org.passay.LengthRule"
+    p:minimumLength="5"/>
+
+  <bean id="qwertySeqRule" class="org.passay.QwertySequenceRule"/>
+
+  <bean id="alphaSeqRule" class="org.passay.AlphabeticalSequenceRule"/>
+
+  <bean id="numSeqRule" class="org.passay.NumericalSequenceRule"/>
+
+  <bean id="repeatRegexRule" class="org.passay.RepeatCharacterRegexRule"/>
+
+  <bean id="usernameRule" class="org.passay.UsernameRule"
+    p:ignoreCase="true"
+    p:matchBackwards="true"/>
+
+  <bean id="wsRule" class="org.passay.WhitespaceRule"/>
+ 
+</beans>

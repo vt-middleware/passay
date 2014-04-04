@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.0//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_0.dtd">
+
+<suppressions>
+  <!-- nothing magic about test data -->
+  <suppress checks="MagicNumber"
+            files=".*Test\.java" />
+
+  <!-- tests need lots of parameters -->
+  <suppress checks="ParameterNumber"
+            files=".*Test\.java" />
+</suppressions>

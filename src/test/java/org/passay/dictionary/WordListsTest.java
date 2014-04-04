@@ -1,0 +1,111 @@
+/* See LICENSE for licensing and NOTICE for copyright. */
+package org.passay.dictionary;
+
+import java.io.FileReader;
+import org.passay.dictionary.sort.ArraysSort;
+import org.testng.AssertJUnit;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Parameters;
+import org.testng.annotations.Test;
+
+/**
+ * Unit test for {@link WordLists}.
+ *
+ * @author  Middleware Services
+ */
+public class WordListsTest
+{
+
+  /** Case sensitive word list. */
+  private ArrayWordList caseSensitiveWordList;
+
+  /** Case insensitive word list. */
+  private ArrayWordList caseInsensitiveWordList;
+
+
+  /**
+   * @param  file1  dictionary to load.
+   * @param  file2  dictionary to load.
+   *
+   * @throws  Exception  On word list creation.
+   */
+  @Parameters({ "fbsdFile", "webFile" })
+  @BeforeClass(groups = {"wltest"})
+  public void createWordLists(final String file1, final String file2)
+    throws Exception
+  {
+    caseSensitiveWordList = WordLists.createFromReader(
+      new FileReader[] {new FileReader(file1)},
+      true,
+      new ArraysSort());
+
+    caseInsensitiveWordList = WordLists.createFromReader(
+      new FileReader[] {new FileReader(file2)},
+      false,
+      new ArraysSort());
+  }
+
+
+  /** @throws  Exception  On test failure. */
+  @AfterClass(groups = {"wltest"})
+  public void closeWordLists()
+    throws Exception
+  {
+    caseSensitiveWordList = null;
+    caseInsensitiveWordList = null;
+  }
+
+
+  /**
+   * @return  Test data for creating key pair entries.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "searchData")
+  public Object[][] createTestData()
+    throws Exception
+  {
+    final ArrayWordList oneWord = new ArrayWordList(new String[] {"a"});
+    final ArrayWordList twoWords = new ArrayWordList(new String[] {"a", "b"});
+    final ArrayWordList threeWords = new ArrayWordList(
+      new String[] {"a", "b", "c"});
+    return
+      new Object[][] {
+        {oneWord, "a", 0},
+        {oneWord, "b", WordLists.NOT_FOUND},
+        {twoWords, "a", 0},
+        {twoWords, "b", 1},
+        {twoWords, "c", WordLists.NOT_FOUND},
+        {threeWords, "a", 0},
+        {threeWords, "b", 1},
+        {threeWords, "c", 2},
+        {threeWords, "d", WordLists.NOT_FOUND},
+        {caseSensitiveWordList, "ISBN", 76},
+        {caseSensitiveWordList, "guacamole", WordLists.NOT_FOUND},
+        {caseInsensitiveWordList, "irresolute", 98323},
+        {caseInsensitiveWordList, "brujo", WordLists.NOT_FOUND},
+      };
+  }
+
+
+  /**
+   * Test for {@link WordLists.binarySearch(WordList, int)}.
+   *
+   * @param  wl  Test word list.
+   * @param  word  Word to search for.
+   * @param  expectedResult  Expected result of test.
+   */
+  @Test(
+    groups = {"wltest"},
+    dataProvider = "searchData"
+  )
+  public void binarySearchTest(
+    final WordList wl,
+    final String word,
+    final int expectedResult)
+  {
+    AssertJUnit.assertEquals(expectedResult, WordLists.binarySearch(wl, word));
+  }
+}

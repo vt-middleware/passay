@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="passay" verbose="1" parallel="tests" thread-count="1">
+
+  <!-- passay test parameters -->
+  <parameter name="dictionaryFile" value="src/test/resources/web2"/>
+
+  <!-- dictionary test parameters -->
+  <parameter name="webFile" value="src/test/resources/web2"/>
+  <parameter name="webFileSorted" value="src/test/resources/web2.sort"/>
+  <parameter name="webFileLowerCase" value="src/test/resources/web2.lc"/>
+  <parameter name="webFileLowerCaseSorted" value="src/test/resources/web2.lc.sort"/>
+  <parameter name="fbsdFile" value="src/test/resources/freebsd"/>
+  <parameter name="fbsdFileSorted" value="src/test/resources/freebsd.sort"/>
+  <parameter name="fbsdFileLowerCase" value="src/test/resources/freebsd.lc"/>
+  <parameter name="fbsdFileLowerCaseSorted" value="src/test/resources/freebsd.lc.sort"/>
+  <parameter name="eignFile" value="src/test/resources/eign"/>
+
+  <parameter name="partialSearchWord" value=".e.e.e.e"/>
+  <parameter name="partialSearchResults" value="Genevese|reserene|teleseme|terebene"/>
+
+  <parameter name="nearSearchWord" value="Jicaque"/>
+  <parameter name="nearSearchDistance" value="2"/>
+  <parameter name="nearSearchResults" value="Jicaque|Jicaquean|Xicaque|macaque"/>
+
+  <test name="coretests" parallel="methods" thread-count="2">
+    <groups>
+      <run>
+        <include name="passtest" />
+        <include name="passgentest" />
+        <include name="seqperftest" />
+      </run>
+    </groups>
+    <packages>
+      <package name="org.passay.*" />
+    </packages>
+  </test>
+  <test name="dicttests" parallel="methods" thread-count="6">
+    <groups>
+      <run>
+        <include name="wltest" />
+        <include name="tttest" />
+        <include name="sorttest" />
+        <include name="wldicttest" />
+        <include name="ttdicttest" />
+      </run>
+    </groups>
+    <packages>
+      <package name="org.passay.dictionary.*" />
+    </packages>
+  </test>
+  <!--
+  <test name="dictperftests" parallel="methods" thread-count="6">
+    <groups>
+      <run>
+        <include name="ttperftest" />
+        <include name="wlperftest" />
+      </run>
+    </groups>
+    <packages>
+      <package name="org.passay.dictionary.*" />
+    </packages>
+  </test>
+  -->
+</suite>
