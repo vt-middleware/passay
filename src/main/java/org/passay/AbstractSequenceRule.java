@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -209,8 +210,8 @@ public abstract class AbstractSequenceRule implements Rule
       length = count;
       lbound = start - length;
       ubound = start + length;
-      if (lbound < 0 && !wrap) {
-        lbound = 0;
+      if (lbound < -1 && !wrap) {
+        lbound = -1;
       }
       if (ubound >= characters.length && !wrap) {
         ubound = characters.length;
@@ -321,6 +322,30 @@ public abstract class AbstractSequenceRule implements Rule
     public String matchString()
     {
       return matches.toString();
+    }
+
+
+    @Override
+    public String toString()
+    {
+      final StringBuilder charsString = new StringBuilder();
+      for (int i = 0; i < chars.length; i++) {
+        charsString.append(
+          "[").append(i).append(Arrays.toString(chars[i])).append("]");
+      }
+      return
+        String.format(
+          "%s@%h::chars=%s,start=%s,length=%s,ubound=%s,lbound=%s," +
+          "position=%s,matches=%s",
+          getClass().getName(),
+          hashCode(),
+          charsString,
+          start,
+          length,
+          ubound,
+          lbound,
+          position,
+          matches);
     }
   }
 }

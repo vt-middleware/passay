@@ -67,6 +67,54 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
           new PasswordData(new Password("pcbazyxwv#n65")),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
+        // Has forward alphabetical sequence that ends with 'y'
+        {
+          new AlphabeticalSequenceRule(3, false),
+          new PasswordData(new Password("wxy")),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
+        // Has forward alphabetical sequence that ends with 'z'
+        {
+          new AlphabeticalSequenceRule(3, false),
+          new PasswordData(new Password("xyz")),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
+        // Has forward alphabetical sequence that ends with 'a' with wrap=false
+        {
+          new AlphabeticalSequenceRule(3, false),
+          new PasswordData(new Password("yza")),
+          null,
+        },
+        // Has forward alphabetical sequence that ends with 'a' with wrap=true
+        {
+          new AlphabeticalSequenceRule(3, true),
+          new PasswordData(new Password("yza")),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
+        // Has backward alphabetical sequence that ends with 'b'
+        {
+          new AlphabeticalSequenceRule(3, false),
+          new PasswordData(new Password("dcb")),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
+        // Has backward alphabetical sequence that ends with 'a'
+        {
+          new AlphabeticalSequenceRule(3, false),
+          new PasswordData(new Password("cba")),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
+        // Has backward alphabetical sequence that ends with 'z' with wrap=false
+        {
+          new AlphabeticalSequenceRule(3, false),
+          new PasswordData(new Password("baz")),
+          null,
+        },
+        // Has backward alphabetical sequence that ends with 'z' with wrap=true
+        {
+          new AlphabeticalSequenceRule(3, true),
+          new PasswordData(new Password("baz")),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
       };
   }
 
