@@ -33,7 +33,7 @@ public abstract class AbstractSequenceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    final String password = passwordData.getPassword().getText();
+    final String password = passwordData.getPassword();
     final int max = password.length() - sequenceLength + 1;
     Sequence sequence;
     int position;

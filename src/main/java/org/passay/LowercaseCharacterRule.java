@@ -10,6 +10,9 @@ package org.passay;
 public class LowercaseCharacterRule extends AbstractCharacterRule
 {
 
+  /** Lowercase characters. */
+  public static final String CHARS = "abcdefghijklmnopqrstuvwxyz";
+
   /** Character type. */
   private static final String CHARACTER_TYPE = "lowercase";
 
@@ -32,14 +35,14 @@ public class LowercaseCharacterRule extends AbstractCharacterRule
   @Override
   public String getValidCharacters()
   {
-    return "abcdefghijklmnopqrstuvwxyz";
+    return CHARS;
   }
 
 
   @Override
-  protected int getNumberOfCharacterType(final Password password)
+  protected int getNumberOfCharacterType(final String password)
   {
-    return password.getNumberOfLowercase();
+    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
   }
 
 

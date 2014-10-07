@@ -28,49 +28,49 @@ public class NumericalSequenceRuleTest extends AbstractRuleTest
         // Test valid password
         {
           new NumericalSequenceRule(),
-          new PasswordData(new Password("p4zRcv8#n65")),
+          new PasswordData("p4zRcv8#n65"),
           null,
         },
         // Has numerical sequence
         {
           new NumericalSequenceRule(4, false),
-          new PasswordData(new Password("p3456#n65")),
+          new PasswordData("p3456#n65"),
           codes(NumericalSequenceRule.ERROR_CODE),
         },
         // Has wrapping numerical sequence with wrap=false
         {
           new NumericalSequenceRule(7, false),
-          new PasswordData(new Password("p4zRcv2#n8901234")),
+          new PasswordData("p4zRcv2#n8901234"),
           null,
         },
         // Has wrapping numerical sequence with wrap=true
         {
           new NumericalSequenceRule(7, true),
-          new PasswordData(new Password("p4zRcv2#n8901234")),
+          new PasswordData("p4zRcv2#n8901234"),
           codes(NumericalSequenceRule.ERROR_CODE),
         },
         // Has backward numerical sequence
         {
           new NumericalSequenceRule(),
-          new PasswordData(new Password("p54321#n65")),
+          new PasswordData("p54321#n65"),
           codes(NumericalSequenceRule.ERROR_CODE),
         },
         // Has backward wrapping numerical sequence with wrap=false
         {
           new NumericalSequenceRule(5, false),
-          new PasswordData(new Password("p987#n32109")),
+          new PasswordData("p987#n32109"),
           null,
         },
         // Has backward wrapping numerical sequence with wrap=true
         {
           new NumericalSequenceRule(8, true),
-          new PasswordData(new Password("p54321098#n65")),
+          new PasswordData("p54321098#n65"),
           codes(NumericalSequenceRule.ERROR_CODE),
         },
         // Issue 135
         {
           new NumericalSequenceRule(5, true),
-          new PasswordData(new Password("1234567")),
+          new PasswordData("1234567"),
           codes(
             NumericalSequenceRule.ERROR_CODE,
             NumericalSequenceRule.ERROR_CODE,
@@ -87,7 +87,7 @@ public class NumericalSequenceRuleTest extends AbstractRuleTest
   {
     final Rule rule = new NumericalSequenceRule();
     final RuleResult result = rule.validate(
-      new PasswordData(new Password("p34567n65")));
+      new PasswordData("p34567n65"));
     AssertJUnit.assertEquals(1, result.getDetails().size());
     for (RuleResultDetail detail : result.getDetails()) {
       AssertJUnit.assertFalse(result.isValid());

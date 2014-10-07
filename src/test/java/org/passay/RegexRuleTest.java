@@ -28,19 +28,19 @@ public class RegexRuleTest extends AbstractRuleTest
         // test valid password
         {
           new RegexRule("\\d\\d\\d\\d"),
-          new PasswordData(new Password("p4zRcv8#n65")),
+          new PasswordData("p4zRcv8#n65"),
           null,
         },
         // test entire password
         {
           new RegexRule("^[\\p{Alpha}]+\\d\\d\\d\\d$"),
-          new PasswordData(new Password("pwUiNh0248")),
+          new PasswordData("pwUiNh0248"),
           codes(RegexRule.ERROR_CODE),
         },
         // test find password
         {
           new RegexRule("\\d\\d\\d\\d"),
-          new PasswordData(new Password("pwUi0248xwK")),
+          new PasswordData("pwUi0248xwK"),
           codes(RegexRule.ERROR_CODE),
         },
       };
@@ -54,7 +54,7 @@ public class RegexRuleTest extends AbstractRuleTest
   {
     final Rule rule = new RegexRule("\\d\\d\\d\\d");
     final RuleResult result = rule.validate(
-      new PasswordData(new Password("pwUiNh0248")));
+      new PasswordData("pwUiNh0248"));
     for (RuleResultDetail detail : result.getDetails()) {
       AssertJUnit.assertEquals(
         String.format("Password matches the illegal sequence '%s'.", "0248"),

@@ -2,20 +2,23 @@
 package org.passay;
 
 /**
- * Rule for determining if a password contains the correct number of
- * non-alphanumeric characters.
+ * Rule for determining if a password contains the correct number of special
+ * characters.
  *
  * @author  Middleware Services
  */
-public class NonAlphanumericCharacterRule extends AbstractCharacterRule
+public class SpecialCharacterRule extends AbstractCharacterRule
 {
+
+  /** Special characters. */
+  public static final String CHARS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
   /** Character type. */
   private static final String CHARACTER_TYPE = "non-alphanumeric";
 
 
   /** Default constructor. */
-  public NonAlphanumericCharacterRule() {}
+  public SpecialCharacterRule() {}
 
 
   /**
@@ -23,7 +26,7 @@ public class NonAlphanumericCharacterRule extends AbstractCharacterRule
    *
    * @param  num  number of non-alphanumeric characters to enforce
    */
-  public NonAlphanumericCharacterRule(final int num)
+  public SpecialCharacterRule(final int num)
   {
     setNumberOfCharacters(num);
   }
@@ -32,14 +35,14 @@ public class NonAlphanumericCharacterRule extends AbstractCharacterRule
   @Override
   public String getValidCharacters()
   {
-    return "`~!@#$%^&*()-_=+[{]}\\|;:'\"<,>./?";
+    return CHARS;
   }
 
 
   @Override
-  protected int getNumberOfCharacterType(final Password password)
+  protected int getNumberOfCharacterType(final String password)
   {
-    return password.getNumberOfNonAlphanumeric();
+    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
   }
 
 

@@ -15,19 +15,19 @@ public class LengthRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password MIN_VALID_PASS = new Password("p4T3#6Tu");
+  private static final String MIN_VALID_PASS = "p4T3#6Tu";
 
   /** Test password. */
-  private static final Password MID_VALID_PASS = new Password("p4T3t#6Tu");
+  private static final String MID_VALID_PASS = "p4T3t#6Tu";
 
   /** Test password. */
-  private static final Password MAX_VALID_PASS = new Password("p4T3to#6Tu");
+  private static final String MAX_VALID_PASS = "p4T3to#6Tu";
 
   /** Test password. */
-  private static final Password SHORT_PASS = new Password("p4T36");
+  private static final String SHORT_PASS = "p4T36";
 
   /** Test password. */
-  private static final Password LONG_PASS = new Password("p4T3j76rE@#");
+  private static final String LONG_PASS = "p4T3j76rE@#";
 
   /** For testing. */
   private final LengthRule rule = new LengthRule(8, 10);

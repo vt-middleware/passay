@@ -20,10 +20,10 @@ public class DigestSourceRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("t3stUs3r01");
+  private static final String VALID_PASS = "t3stUs3r01";
 
   /** Test password. */
-  private static final Password SOURCE_PASS = new Password("t3stUs3r04");
+  private static final String SOURCE_PASS = "t3stUs3r04";
 
   /** Test username. */
   private static final String USER = "testuser";

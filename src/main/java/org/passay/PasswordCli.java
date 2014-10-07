@@ -52,7 +52,7 @@ public final class PasswordCli
           rule.getRules().add(
             new AlphabeticalCharacterRule(Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new NonAlphanumericCharacterRule(Integer.parseInt(args[++i])));
+            new SpecialCharacterRule(Integer.parseInt(args[++i])));
           rule.getRules().add(
             new UppercaseCharacterRule(Integer.parseInt(args[++i])));
           rule.getRules().add(
@@ -86,7 +86,7 @@ public final class PasswordCli
         throw new ArrayIndexOutOfBoundsException();
       } else {
         RuleResult result;
-        final PasswordData pd = new PasswordData(new Password(password));
+        final PasswordData pd = new PasswordData(password);
         final PasswordValidator validator = new PasswordValidator(rules);
         if (username != null) {
           pd.setUsername(username);

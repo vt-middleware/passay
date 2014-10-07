@@ -21,22 +21,19 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("p4t3t#7wd5gew");
+  private static final String VALID_PASS = "p4t3t#7wd5gew";
 
   /** Test password. */
-  private static final Password DICT_PASS = new Password("p4tlancely5gew");
+  private static final String DICT_PASS = "p4tlancely5gew";
 
   /** Test password. */
-  private static final Password BACKWARDS_DICT_PASS = new Password(
-    "p4tylecnal5gew");
+  private static final String BACKWARDS_DICT_PASS =  "p4tylecnal5gew";
 
   /** Test password. */
-  private static final Password UPPERCASE_DICT_PASS = new Password(
-    "p4tlAnCeLy5gew");
+  private static final String UPPERCASE_DICT_PASS = "p4tlAnCeLy5gew";
 
   /** Test password. */
-  private static final Password BACKWARDS_UPPERCASE_DICT_PASS = new Password(
-    "p4tyLeCnAl5gew");
+  private static final String BACKWARDS_UPPERCASE_DICT_PASS = "p4tyLeCnAl5gew";
 
   /** For testing. */
   private final DictionarySubstringRule rule = new DictionarySubstringRule();

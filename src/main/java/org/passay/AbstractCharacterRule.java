@@ -45,7 +45,8 @@ public abstract class AbstractCharacterRule implements CharacterRule
    *
    * @return  number of characters
    */
-  protected abstract int getNumberOfCharacterType(final Password password);
+
+  protected abstract int getNumberOfCharacterType(final String password);
 
 
   /**
@@ -79,7 +80,7 @@ public abstract class AbstractCharacterRule implements CharacterRule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final Password p)
+  protected Map<String, ?> createRuleResultDetailParameters(final String p)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);

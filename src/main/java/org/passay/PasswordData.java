@@ -15,7 +15,7 @@ public class PasswordData
 {
 
   /** Stores the password. */
-  private Password password;
+  private String password;
 
   /** Stores the username. */
   private String username;
@@ -33,7 +33,7 @@ public class PasswordData
    *
    * @param  p  password
    */
-  public PasswordData(final Password p)
+  public PasswordData(final String p)
   {
     setPassword(p);
   }
@@ -44,7 +44,7 @@ public class PasswordData
    *
    * @param  p  password
    */
-  public void setPassword(final Password p)
+  public void setPassword(final String p)
   {
     if (p == null) {
       throw new NullPointerException("Password cannot be null");
@@ -58,7 +58,7 @@ public class PasswordData
    *
    * @return  password
    */
-  public Password getPassword()
+  public String getPassword()
   {
     return password;
   }
@@ -146,7 +146,7 @@ public class PasswordData
    * @return  password data
    */
   public static PasswordData newInstance(
-    final Password p,
+    final String p,
     final String u,
     final List<Reference> r)
   {

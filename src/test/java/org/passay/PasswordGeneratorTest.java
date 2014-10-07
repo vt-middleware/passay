@@ -45,7 +45,7 @@ public class PasswordGeneratorTest
     throws Exception
   {
     rules.add(new DigitCharacterRule(2));
-    rules.add(new NonAlphanumericCharacterRule(2));
+    rules.add(new SpecialCharacterRule(2));
     rules.add(new UppercaseCharacterRule(1));
     rules.add(new LowercaseCharacterRule(1));
 
@@ -56,7 +56,7 @@ public class PasswordGeneratorTest
     verifyCharRule.setNumberOfCharacteristics(3);
 
     failRules.add(new DigitCharacterRule(3));
-    failRules.add(new NonAlphanumericCharacterRule(3));
+    failRules.add(new SpecialCharacterRule(3));
     failRules.add(new UppercaseCharacterRule(3));
     failRules.add(new LowercaseCharacterRule(3));
 
@@ -80,7 +80,7 @@ public class PasswordGeneratorTest
       final String password = generator.generatePassword(length, rules);
       AssertJUnit.assertNotNull(password);
       AssertJUnit.assertTrue(password.length() >= length);
-      passwords[i] = new Object[] {new Password(password)};
+      passwords[i] = new Object[] {password};
     }
     return passwords;
   }
@@ -95,7 +95,7 @@ public class PasswordGeneratorTest
     groups = {"passgentest"},
     dataProvider = "randomPasswords"
   )
-  public void testGenerator(final Password pass)
+  public void testGenerator(final String pass)
     throws Exception
   {
     AssertJUnit.assertFalse(

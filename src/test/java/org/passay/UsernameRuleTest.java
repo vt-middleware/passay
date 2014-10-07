@@ -15,22 +15,20 @@ public class UsernameRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("p4t3stu$er#n65");
+  private static final String VALID_PASS = "p4t3stu$er#n65";
 
   /** Test password. */
-  private static final Password USERID_PASS = new Password("p4testuser#n65");
+  private static final String USERID_PASS = "p4testuser#n65";
 
   /** Test password. */
-  private static final Password BACKWARDS_USERID_PASS = new Password(
-    "p4resutset#n65");
+  private static final String BACKWARDS_USERID_PASS =  "p4resutset#n65";
 
   /** Test password. */
-  private static final Password UPPERCASE_USERID_PASS = new Password(
-    "p4TEStuSER#n65");
+  private static final String UPPERCASE_USERID_PASS = "p4TEStuSER#n65";
 
   /** Test password. */
-  private static final Password BACKWARDS_UPPERCASE_USERID_PASS = new Password(
-    "p4RESUTsET#n65");
+  private static final String BACKWARDS_UPPERCASE_USERID_PASS =
+    "p4RESUTsET#n65";
 
   /** Test username. */
   private static final String USER = "testuser";

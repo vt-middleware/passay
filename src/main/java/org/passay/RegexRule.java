@@ -36,7 +36,7 @@ public class RegexRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    final Matcher m = pattern.matcher(passwordData.getPassword().getText());
+    final Matcher m = pattern.matcher(passwordData.getPassword());
     if (m.find()) {
       result.setValid(false);
       result.getDetails().add(

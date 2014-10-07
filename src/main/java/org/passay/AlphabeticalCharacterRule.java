@@ -10,6 +10,10 @@ package org.passay;
 public class AlphabeticalCharacterRule extends AbstractCharacterRule
 {
 
+  /** Lowercase and uppercase characters. */
+  private static final String CHARS =
+    LowercaseCharacterRule.CHARS + UppercaseCharacterRule.CHARS;
+
   /** Character type. */
   private static final String CHARACTER_TYPE = "alphabetical";
 
@@ -32,14 +36,14 @@ public class AlphabeticalCharacterRule extends AbstractCharacterRule
   @Override
   public String getValidCharacters()
   {
-    return "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return CHARS;
   }
 
 
   @Override
-  protected int getNumberOfCharacterType(final Password password)
+  protected int getNumberOfCharacterType(final String password)
   {
-    return password.getNumberOfAlphabetical();
+    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
   }
 
 

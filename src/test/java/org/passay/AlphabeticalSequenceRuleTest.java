@@ -28,91 +28,91 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
         // Test valid password
         {
           new AlphabeticalSequenceRule(),
-          new PasswordData(new Password("p4zRcv8#n65")),
+          new PasswordData("p4zRcv8#n65"),
           null,
         },
         // Has alphabetical sequence
         {
           new AlphabeticalSequenceRule(7, false),
-          new PasswordData(new Password("phijklmn#n65")),
+          new PasswordData("phijklmn#n65"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has wrapping alphabetical sequence with wrap=false
         {
           new AlphabeticalSequenceRule(4, false),
-          new PasswordData(new Password("pXyza#n65")),
+          new PasswordData("pXyza#n65"),
           null,
         },
         // Has wrapping alphabetical sequence with wrap=true
         {
           new AlphabeticalSequenceRule(4, true),
-          new PasswordData(new Password("pxyzA#n65")),
+          new PasswordData("pxyzA#n65"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has backward alphabetical sequence
         {
           new AlphabeticalSequenceRule(),
-          new PasswordData(new Password("ptSrqp#n65")),
+          new PasswordData("ptSrqp#n65"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has backward wrapping alphabetical sequence with wrap=false
         {
           new AlphabeticalSequenceRule(8, false),
-          new PasswordData(new Password("pcBazyXwv#n65")),
+          new PasswordData("pcBazyXwv#n65"),
           null,
         },
         // Has backward wrapping alphabetical sequence with wrap=true
         {
           new AlphabeticalSequenceRule(8, true),
-          new PasswordData(new Password("pcbazyxwv#n65")),
+          new PasswordData("pcbazyxwv#n65"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has forward alphabetical sequence that ends with 'y'
         {
           new AlphabeticalSequenceRule(3, false),
-          new PasswordData(new Password("wxy")),
+          new PasswordData("wxy"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has forward alphabetical sequence that ends with 'z'
         {
           new AlphabeticalSequenceRule(3, false),
-          new PasswordData(new Password("xyz")),
+          new PasswordData("xyz"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has forward alphabetical sequence that ends with 'a' with wrap=false
         {
           new AlphabeticalSequenceRule(3, false),
-          new PasswordData(new Password("yza")),
+          new PasswordData("yza"),
           null,
         },
         // Has forward alphabetical sequence that ends with 'a' with wrap=true
         {
           new AlphabeticalSequenceRule(3, true),
-          new PasswordData(new Password("yza")),
+          new PasswordData("yza"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has backward alphabetical sequence that ends with 'b'
         {
           new AlphabeticalSequenceRule(3, false),
-          new PasswordData(new Password("dcb")),
+          new PasswordData("dcb"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has backward alphabetical sequence that ends with 'a'
         {
           new AlphabeticalSequenceRule(3, false),
-          new PasswordData(new Password("cba")),
+          new PasswordData("cba"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
         // Has backward alphabetical sequence that ends with 'z' with wrap=false
         {
           new AlphabeticalSequenceRule(3, false),
-          new PasswordData(new Password("baz")),
+          new PasswordData("baz"),
           null,
         },
         // Has backward alphabetical sequence that ends with 'z' with wrap=true
         {
           new AlphabeticalSequenceRule(3, true),
-          new PasswordData(new Password("baz")),
+          new PasswordData("baz"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
       };
@@ -126,7 +126,7 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
   {
     final Rule rule = new AlphabeticalSequenceRule();
     final RuleResult result = rule.validate(
-      new PasswordData(new Password("phijkl#n65")));
+      new PasswordData("phijkl#n65"));
     for (RuleResultDetail detail : result.getDetails()) {
       AssertJUnit.assertEquals(
         String.format("Password contains the illegal sequence '%s'.", "hijkl"),

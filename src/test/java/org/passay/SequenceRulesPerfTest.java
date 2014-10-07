@@ -54,7 +54,7 @@ public class SequenceRulesPerfTest
     final PasswordData[] passwords = new PasswordData[iterations];
     for (int i = 0; i < iterations; i++) {
       passwords[i] = new PasswordData();
-      passwords[i].setPassword(new Password(UUID.randomUUID().toString()));
+      passwords[i].setPassword(UUID.randomUUID().toString());
     }
 
     final long t = System.currentTimeMillis();

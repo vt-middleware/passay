@@ -14,10 +14,10 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("boepselwezz");
+  private static final String VALID_PASS = "boepselwezz";
 
   /** Test password. */
-  private static final Password INVALID_PASS = new Password("gbwersco4kk");
+  private static final String INVALID_PASS = "gbwersco4kk";
 
   /** For testing. */
   private final AllowedCharacterRule rule = new AllowedCharacterRule(
