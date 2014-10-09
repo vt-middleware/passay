@@ -14,12 +14,12 @@ public abstract class AbstractRuleTest
 {
 
   /** default message resolver. */
-  protected static final MessageResolver DEFAULT_RESOLVER =
-    new MessageResolver();
+  protected static final PropertiesMessageResolver DEFAULT_RESOLVER =
+    new PropertiesMessageResolver();
 
   /** empty message resolver. */
-  protected static final MessageResolver EMPTY_RESOLVER = new MessageResolver(
-    new Properties());
+  protected static final PropertiesMessageResolver EMPTY_RESOLVER =
+    new PropertiesMessageResolver(new Properties());
 
 
   /**
