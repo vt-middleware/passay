@@ -22,13 +22,14 @@ public class PasswordValidator implements Rule
 
 
   /**
-   * Creates a new password validator with the default message resolver.
+   * Creates a new password validator with a {@link
+   * PropertiesMessageResolver}.
    *
    * @param  rules  to validate
    */
   public PasswordValidator(final List<Rule> rules)
   {
-    this(new MessageResolver(), rules);
+    this(new PropertiesMessageResolver(), rules);
   }
 
 
