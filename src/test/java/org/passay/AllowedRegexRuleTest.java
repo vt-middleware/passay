@@ -6,11 +6,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
- * Unit test for {@link RegexRule}.
+ * Unit test for {@link AllowedRegexRule}.
  *
  * @author  Middleware Services
  */
-public class RegexRuleTest extends AbstractRuleTest
+public class AllowedRegexRuleTest extends AbstractRuleTest
 {
 
 
@@ -25,23 +25,23 @@ public class RegexRuleTest extends AbstractRuleTest
   {
     return
       new Object[][] {
-        // test valid password
+        // test invalid password
         {
-          new RegexRule("\\d\\d\\d\\d"),
+          new AllowedRegexRule("\\d\\d\\d\\d"),
           new PasswordData("p4zRcv8#n65"),
-          null,
+          codes(AllowedRegexRule.ERROR_CODE),
         },
         // test entire password
         {
-          new RegexRule("^[\\p{Alpha}]+\\d\\d\\d\\d$"),
+          new AllowedRegexRule("^[\\p{Alpha}]+\\d\\d\\d\\d$"),
           new PasswordData("pwUiNh0248"),
-          codes(RegexRule.ERROR_CODE),
+          null,
         },
         // test find password
         {
-          new RegexRule("\\d\\d\\d\\d"),
+          new AllowedRegexRule("\\d\\d\\d\\d"),
           new PasswordData("pwUi0248xwK"),
-          codes(RegexRule.ERROR_CODE),
+          null,
         },
       };
   }
@@ -52,12 +52,12 @@ public class RegexRuleTest extends AbstractRuleTest
   public void resolveMessage()
     throws Exception
   {
-    final Rule rule = new RegexRule("\\d\\d\\d\\d");
+    final Rule rule = new AllowedRegexRule("\\d\\d\\d\\d");
     final RuleResult result = rule.validate(
-      new PasswordData("pwUiNh0248"));
+      new PasswordData("p4zRcv8#n65"));
     for (RuleResultDetail detail : result.getDetails()) {
       AssertJUnit.assertEquals(
-        String.format("Password matches the illegal sequence '%s'.", "0248"),
+        String.format("Password must match pattern '%s'.", "\\d\\d\\d\\d"),
         DEFAULT_RESOLVER.resolve(detail));
       AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
     }
