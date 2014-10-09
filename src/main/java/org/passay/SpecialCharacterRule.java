@@ -3,14 +3,14 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of special
- * characters.
+ * characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class SpecialCharacterRule extends AbstractCharacterRule
 {
 
-  /** Special characters. */
+  /** Special characters, value is {@value}. */
   public static final String CHARS = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
   /** Character type. */

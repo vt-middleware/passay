@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.EncodingHashBean;
 
 /**
@@ -20,7 +21,7 @@ public class DigestSourceRule extends SourceRule
   private final EncodingHashBean hashBean;
 
   /** Character set to use for undigested passwords. */
-  private Charset charset = PasswordUtils.UTF8_CHARSET;
+  private Charset charset = StandardCharsets.UTF_8;
 
 
   /**

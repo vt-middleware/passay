@@ -3,14 +3,14 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of lowercase
- * characters.
+ * characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class LowercaseCharacterRule extends AbstractCharacterRule
 {
 
-  /** Lowercase characters. */
+  /** Lowercase characters, value is {@value}. */
   public static final String CHARS = "abcdefghijklmnopqrstuvwxyz";
 
   /** Character type. */

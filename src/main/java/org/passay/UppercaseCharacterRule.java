@@ -3,14 +3,14 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of uppercase
- * characters.
+ * characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class UppercaseCharacterRule extends AbstractCharacterRule
 {
 
-  /** Uppercase characters. */
+  /** Uppercase characters, value is {@value}. */
   public static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   /** Character type. */

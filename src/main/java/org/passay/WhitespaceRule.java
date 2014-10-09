@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Rule for determining if a password contains whitespace characters.
  *
@@ -16,7 +18,7 @@ public class WhitespaceRule implements Rule
         (byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D,
         (byte) 0x20,
       },
-      PasswordUtils.UTF8_CHARSET);
+      StandardCharsets.UTF_8);
 
   /** Error code for whitespace rule violation. */
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";

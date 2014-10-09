@@ -3,14 +3,14 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of
- * alphabetical characters.
+ * alphabetical characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class AlphabeticalCharacterRule extends AbstractCharacterRule
 {
 
-  /** Lowercase and uppercase characters. */
+  /** Lowercase and uppercase characters, value is {@value}. */
   private static final String CHARS =
     LowercaseCharacterRule.CHARS + UppercaseCharacterRule.CHARS;
 
