@@ -4,7 +4,9 @@ package org.passay;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Rule for determining if a password contains whitespace characters.
+ * Rule for determining if a password contains whitespace characters. Whitespace
+ * is defined as tab (0x09), line feed (0x0A), vertical tab (0x0B), form feed
+ * (0x0C), carriage return (0x0D), and space (0x20).
  *
  * @author  Middleware Services
  */
