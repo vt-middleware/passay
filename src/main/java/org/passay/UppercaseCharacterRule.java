@@ -13,8 +13,8 @@ public class UppercaseCharacterRule extends AbstractCharacterRule
   /** Uppercase characters, value is {@value}. */
   public static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-  /** Character type. */
-  private static final String CHARACTER_TYPE = "uppercase";
+  /** Error code for insufficient number of characters of particular class. */
+  public static final String ERROR_CODE = "INSUFFICIENT_UPPERCASE";
 
 
   /** Default constructor. */
@@ -40,15 +40,15 @@ public class UppercaseCharacterRule extends AbstractCharacterRule
 
 
   @Override
-  protected int getNumberOfCharacterType(final String password)
+  protected String getErrorCode()
   {
-    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
+    return ERROR_CODE;
   }
 
 
   @Override
-  protected String getCharacterType()
+  protected String getCharacterTypes(final String password)
   {
-    return CHARACTER_TYPE;
+    return PasswordUtils.getMatchingCharacters(CHARS, password);
   }
 }

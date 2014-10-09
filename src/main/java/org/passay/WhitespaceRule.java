@@ -27,8 +27,8 @@ public class WhitespaceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final int charCount = PasswordUtils.getMatchingCharacterCount(
-      CHARS, passwordData.getPassword());
+    final int charCount = PasswordUtils.getMatchingCharacters(
+      CHARS, passwordData.getPassword()).length();
     if (charCount == 0) {
       return new RuleResult(true);
     } else {

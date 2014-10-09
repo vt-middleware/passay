@@ -12,9 +12,6 @@ import java.util.Map;
 public abstract class AbstractCharacterRule implements CharacterRule
 {
 
-  /** Error code for insufficient number of characters of particular class. */
-  public static final String ERROR_CODE = "INSUFFICIENT_CHARACTERS";
-
   /** Number of characters to require. Default value is 1. */
   protected int numCharacters = 1;
 
@@ -38,37 +35,39 @@ public abstract class AbstractCharacterRule implements CharacterRule
 
 
   /**
-   * Returns the number of the type of characters in the supplied password for
+   * Returns the characters in the supplied password that matched the type for
    * the implementing class.
    *
-   * @param  password  to get character count from
+   * @param  password  to get characters from
    *
-   * @return  number of characters
+   * @return  characters
    */
-
-  protected abstract int getNumberOfCharacterType(final String password);
+  protected abstract String getCharacterTypes(final String password);
 
 
   /**
-   * Returns the type of character managed by this rule.
+   * Returns the error code used in the {@link RuleResultDetail}.
    *
-   * @return  name of a character type, e.g. "digits."
+   * @return  error code
    */
-  protected abstract String getCharacterType();
+  protected abstract String getErrorCode();
 
 
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    if (getNumberOfCharacterType(passwordData.getPassword()) >= numCharacters) {
+    final String matchingChars = getCharacterTypes(passwordData.getPassword());
+    if (matchingChars.length() >= numCharacters) {
       return new RuleResult(true);
     } else {
       return
         new RuleResult(
           false,
           new RuleResultDetail(
-            ERROR_CODE,
-            createRuleResultDetailParameters(passwordData.getPassword())));
+            getErrorCode(),
+            createRuleResultDetailParameters(
+              passwordData.getPassword(),
+              matchingChars)));
     }
   }
 
@@ -76,17 +75,20 @@ public abstract class AbstractCharacterRule implements CharacterRule
   /**
    * Creates the parameter data for the rule result detail.
    *
-   * @param  p  password
+   * @param  password  password
+   * @param  matchingChars  characters found in the password
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final String p)
+  protected Map<String, ?> createRuleResultDetailParameters(
+    final String password,
+    final String matchingChars)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
-    m.put("characterType", getCharacterType());
-    m.put("validCharacterCount", getNumberOfCharacterType(p));
+    m.put("matchingCharacterCount", matchingChars.length());
     m.put("validCharacters", getValidCharacters());
+    m.put("matchingCharacters", matchingChars);
     return m;
   }
 

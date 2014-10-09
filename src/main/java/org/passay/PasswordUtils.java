@@ -36,21 +36,4 @@ public final class PasswordUtils
     }
     return sb.toString();
   }
-
-
-  /**
-   * Returns a count of all the characters in the input string that are also in
-   * the pattern. See {@link #getMatchingCharacters(String, String)}.
-   *
-   * @param  characters  that contains characters to match
-   * @param  input  to search for matches
-   *
-   * @return  number of matching characters
-   */
-  public static int getMatchingCharacterCount(
-    final String characters,
-    final String input)
-  {
-    return getMatchingCharacters(characters, input).length();
-  }
 }

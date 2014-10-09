@@ -183,7 +183,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           String.format(
             "Password must contain at least %s %s characters.",
             1,
-            "non-alphanumeric"),
+            "special"),
           DEFAULT_RESOLVER.resolve(detail));
         break;
 
