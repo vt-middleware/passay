@@ -2,8 +2,8 @@
 package org.passay;
 
 /**
- * Resolves messages from rule result details in order to provide a facility for
- * customizing messages such as password rule validation failures.
+ * Strategy pattern interface for resolving messages from password validation
+ * failures described by a {@link RuleResultDetail} object.
  *
  * @author  Middleware Services
  */
