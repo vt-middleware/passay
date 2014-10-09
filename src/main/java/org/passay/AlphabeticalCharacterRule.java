@@ -11,11 +11,11 @@ public class AlphabeticalCharacterRule extends AbstractCharacterRule
 {
 
   /** Lowercase and uppercase characters, value is {@value}. */
-  private static final String CHARS =
+  public static final String CHARS =
     LowercaseCharacterRule.CHARS + UppercaseCharacterRule.CHARS;
 
-  /** Character type. */
-  private static final String CHARACTER_TYPE = "alphabetical";
+  /** Error code for insufficient number of characters of particular class. */
+  public static final String ERROR_CODE = "INSUFFICIENT_ALPHABETICAL";
 
 
   /** Default constructor. */
@@ -41,15 +41,15 @@ public class AlphabeticalCharacterRule extends AbstractCharacterRule
 
 
   @Override
-  protected int getNumberOfCharacterType(final String password)
+  protected String getErrorCode()
   {
-    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
+    return ERROR_CODE;
   }
 
 
   @Override
-  protected String getCharacterType()
+  protected String getCharacterTypes(final String password)
   {
-    return CHARACTER_TYPE;
+    return PasswordUtils.getMatchingCharacters(CHARS, password);
   }
 }

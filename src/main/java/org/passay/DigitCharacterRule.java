@@ -13,8 +13,8 @@ public class DigitCharacterRule extends AbstractCharacterRule
   /** Digit characters, value is {@value}. */
   public static final String CHARS = "0123456789";
 
-  /** Character type. */
-  private static final String CHARACTER_TYPE = "digit";
+  /** Error code for insufficient number of characters of particular class. */
+  public static final String ERROR_CODE = "INSUFFICIENT_DIGIT";
 
   /** Default constructor. */
   public DigitCharacterRule() {}
@@ -39,15 +39,15 @@ public class DigitCharacterRule extends AbstractCharacterRule
 
 
   @Override
-  protected int getNumberOfCharacterType(final String password)
+  protected String getErrorCode()
   {
-    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
+    return ERROR_CODE;
   }
 
 
   @Override
-  protected String getCharacterType()
+  protected String getCharacterTypes(final String password)
   {
-    return CHARACTER_TYPE;
+    return PasswordUtils.getMatchingCharacters(CHARS, password);
   }
 }
