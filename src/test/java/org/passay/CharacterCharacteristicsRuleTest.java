@@ -15,22 +15,22 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("r%scvEW2e93)");
+  private static final String VALID_PASS = "r%scvEW2e93)";
 
   /** Test password. */
-  private static final Password ALPHA_PASS = new Password("r%5#8EW2393)");
+  private static final String ALPHA_PASS = "r%5#8EW2393)";
 
   /** Test password. */
-  private static final Password DIGIT_PASS = new Password("r%scvEW2e9e)");
+  private static final String DIGIT_PASS = "r%scvEW2e9e)";
 
   /** Test password. */
-  private static final Password UPPERCASE_PASS = new Password("r%scv3W2e9)");
+  private static final String UPPERCASE_PASS = "r%scv3W2e9)";
 
   /** Test password. */
-  private static final Password LOWERCASE_PASS = new Password("R%s4VEW239)");
+  private static final String LOWERCASE_PASS = "R%s4VEW239)";
 
   /** Test password. */
-  private static final Password NONALPHA_PASS = new Password("r5scvEW2e9b");
+  private static final String NONALPHA_PASS = "r5scvEW2e9b";
 
   /** For testing. */
   private final CharacterCharacteristicsRule rule1 =
@@ -49,11 +49,11 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
     rule1.getRules().add(new DigitCharacterRule(3));
     rule1.getRules().add(new UppercaseCharacterRule(2));
     rule1.getRules().add(new LowercaseCharacterRule(2));
-    rule1.getRules().add(new NonAlphanumericCharacterRule(1));
+    rule1.getRules().add(new SpecialCharacterRule(1));
     rule1.setNumberOfCharacteristics(5);
 
     rule2.getRules().add(new DigitCharacterRule(1));
-    rule2.getRules().add(new NonAlphanumericCharacterRule(1));
+    rule2.getRules().add(new SpecialCharacterRule(1));
     rule2.getRules().add(new UppercaseCharacterRule(1));
     rule2.getRules().add(new LowercaseCharacterRule(1));
     rule2.setNumberOfCharacteristics(3);
@@ -107,7 +107,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           new PasswordData(NONALPHA_PASS),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            NonAlphanumericCharacterRule.ERROR_CODE),
+            SpecialCharacterRule.ERROR_CODE),
         },
         {rule2, new PasswordData(VALID_PASS), null, },
         {rule2, new PasswordData(ALPHA_PASS), null, },
@@ -141,7 +141,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   {
     // check messages for rule1
     RuleResult result = rule1.validate(
-      new PasswordData(new Password("r%scvEW2e3)")));
+      new PasswordData("r%scvEW2e3)"));
     for (int i = 0; i < result.getDetails().size(); i++) {
       final RuleResultDetail detail = result.getDetails().get(i);
       switch (i) {
@@ -173,7 +173,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
     }
 
     // check messages for rule2
-    result = rule2.validate(new PasswordData(new Password("rscvew2e3")));
+    result = rule2.validate(new PasswordData("rscvew2e3"));
     for (int i = 0; i < result.getDetails().size(); i++) {
       final RuleResultDetail detail = result.getDetails().get(i);
       switch (i) {

@@ -36,7 +36,7 @@ public class IllegalCharacterRule implements Rule
   {
     final RuleResult result = new RuleResult(true);
     for (char c : illegalChar) {
-      if (passwordData.getPassword().getText().indexOf(c) != -1) {
+      if (passwordData.getPassword().indexOf(c) != -1) {
         result.setValid(false);
         result.getDetails().add(
           new RuleResultDetail(

@@ -3,12 +3,15 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of lowercase
- * characters.
+ * characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class LowercaseCharacterRule extends AbstractCharacterRule
 {
+
+  /** Lowercase characters, value is {@value}. */
+  public static final String CHARS = "abcdefghijklmnopqrstuvwxyz";
 
   /** Character type. */
   private static final String CHARACTER_TYPE = "lowercase";
@@ -32,14 +35,14 @@ public class LowercaseCharacterRule extends AbstractCharacterRule
   @Override
   public String getValidCharacters()
   {
-    return "abcdefghijklmnopqrstuvwxyz";
+    return CHARS;
   }
 
 
   @Override
-  protected int getNumberOfCharacterType(final Password password)
+  protected int getNumberOfCharacterType(final String password)
   {
-    return password.getNumberOfLowercase();
+    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
   }
 
 

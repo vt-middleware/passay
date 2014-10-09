@@ -76,7 +76,7 @@ public abstract class AbstractDictionaryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    String text = passwordData.getPassword().getText();
+    String text = passwordData.getPassword();
     String matchingWord = doWordSearch(text);
     if (matchingWord != null) {
       result.setValid(false);
@@ -86,7 +86,7 @@ public abstract class AbstractDictionaryRule implements Rule
           createRuleResultDetailParameters(matchingWord)));
     }
     if (matchBackwards && text.length() > 1) {
-      text = new StringBuilder(passwordData.getPassword().getText()).reverse()
+      text = new StringBuilder(passwordData.getPassword()).reverse()
         .toString();
       matchingWord = doWordSearch(text);
       if (matchingWord != null) {

@@ -37,7 +37,7 @@ public class AllowedCharacterRule implements Rule
   {
     final RuleResult result = new RuleResult(true);
 
-    for (char c : passwordData.getPassword().getText().toCharArray()) {
+    for (char c : passwordData.getPassword().toCharArray()) {
       if (Arrays.binarySearch(allowedChar, c) < 0) {
         result.setValid(false);
         result.getDetails().add(

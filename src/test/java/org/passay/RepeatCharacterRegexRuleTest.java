@@ -28,38 +28,38 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
         // test valid password
         {
           new RepeatCharacterRegexRule(),
-          new PasswordData(new Password("p4zRcv8#n65")),
+          new PasswordData("p4zRcv8#n65"),
           null,
         },
         // test repeating character
         {
           new RepeatCharacterRegexRule(),
-          new PasswordData(new Password("p4&&&&&#n65")),
+          new PasswordData("p4&&&&&#n65"),
           codes(RepeatCharacterRegexRule.ERROR_CODE),
         },
         // test longer repeating character
         {
           new RepeatCharacterRegexRule(),
-          new PasswordData(new Password("p4vvvvvvv#n65")),
+          new PasswordData("p4vvvvvvv#n65"),
           codes(RepeatCharacterRegexRule.ERROR_CODE),
         },
 
         // test valid password for long regex
         {
           new RepeatCharacterRegexRule(7),
-          new PasswordData(new Password("p4zRcv8#n65")),
+          new PasswordData("p4zRcv8#n65"),
           null,
         },
         // test long regex with short repeat
         {
           new RepeatCharacterRegexRule(7),
-          new PasswordData(new Password("p4&&&&&#n65")),
+          new PasswordData("p4&&&&&#n65"),
           null,
         },
         // test long regex with long repeat
         {
           new RepeatCharacterRegexRule(7),
-          new PasswordData(new Password("p4vvvvvvv#n65")),
+          new PasswordData("p4vvvvvvv#n65"),
           codes(RepeatCharacterRegexRule.ERROR_CODE),
         },
       };
@@ -73,7 +73,7 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
   {
     final Rule rule = new RepeatCharacterRegexRule();
     final RuleResult result = rule.validate(
-      new PasswordData(new Password("p4&&&&&#n65")));
+      new PasswordData("p4&&&&&#n65"));
     for (RuleResultDetail detail : result.getDetails()) {
       AssertJUnit.assertEquals(
         String.format("Password matches the illegal sequence '%s'.", "&&&&&"),

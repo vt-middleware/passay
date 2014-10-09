@@ -17,16 +17,16 @@ public class HistoryRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("t3stUs3r00");
+  private static final String VALID_PASS = "t3stUs3r00";
 
   /** Test password. */
-  private static final Password HISTORY_PASS1 = new Password("t3stUs3r01");
+  private static final String HISTORY_PASS1 = "t3stUs3r01";
 
   /** Test password. */
-  private static final Password HISTORY_PASS2 = new Password("t3stUs3r02");
+  private static final String HISTORY_PASS2 = "t3stUs3r02";
 
   /** Test password. */
-  private static final Password HISTORY_PASS3 = new Password("t3stUs3r03");
+  private static final String HISTORY_PASS3 = "t3stUs3r03";
 
   /** Test username. */
   private static final String USER = "testuser";
@@ -45,12 +45,9 @@ public class HistoryRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    history.add(new PasswordData.HistoricalReference(
-      "history", HISTORY_PASS1.getText()));
-    history.add(new PasswordData.HistoricalReference(
-      "history", HISTORY_PASS2.getText()));
-    history.add(new PasswordData.HistoricalReference(
-      "history", HISTORY_PASS3.getText()));
+    history.add(new PasswordData.HistoricalReference("history", HISTORY_PASS1));
+    history.add(new PasswordData.HistoricalReference("history", HISTORY_PASS2));
+    history.add(new PasswordData.HistoricalReference("history", HISTORY_PASS3));
   }
 
 

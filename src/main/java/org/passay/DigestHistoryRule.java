@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.EncodingHashBean;
 
 /**
@@ -15,14 +16,11 @@ import org.cryptacular.bean.EncodingHashBean;
 public class DigestHistoryRule extends HistoryRule
 {
 
-  /** UTF-8 charset. */
-  private static final Charset UTF8 = Charset.forName("UTF-8");
-
   /** Hash bean to use for comparing hashed passwords. */
   private final EncodingHashBean hashBean;
 
   /** Character set to use for undigested passwords. */
-  private Charset charset = UTF8;
+  private Charset charset = StandardCharsets.UTF_8;
 
 
   /**

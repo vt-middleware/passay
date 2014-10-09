@@ -93,7 +93,7 @@ public class UsernameRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    String text = passwordData.getPassword().getText();
+    String text = passwordData.getPassword();
     String user = passwordData.getUsername();
     String reverseUser = new StringBuilder(user).reverse().toString();
     if (ignoreCase) {

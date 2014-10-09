@@ -14,19 +14,17 @@ public class WhitespaceRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("AycDPdsyz");
+  private static final String VALID_PASS = "AycDPdsyz";
 
   /** Test password. */
-  private static final Password SPACE_PASS = new Password(
-    "AycD" + " " + "Pdsyz");
+  private static final String SPACE_PASS = "AycD" + " " + "Pdsyz";
 
   /** Test password. */
-  private static final Password TAB_PASS = new Password(
-    "Ayc" + "\t" + "DPdsyz");
+  private static final String TAB_PASS = "Ayc" + "\t" + "DPdsyz";
 
   /** Test password. */
-  private static final Password LINE_SEP_PASS = new Password(
-    "AycDPs" + System.getProperty("line.separator") + "yz");
+  private static final String LINE_SEP_PASS =
+    "AycDPs" + System.getProperty("line.separator") + "yz";
 
   /** For testing. */
   private final WhitespaceRule rule = new WhitespaceRule();

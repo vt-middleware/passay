@@ -3,16 +3,18 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of digit
- * characters.
+ * characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class DigitCharacterRule extends AbstractCharacterRule
 {
 
+  /** Digit characters, value is {@value}. */
+  public static final String CHARS = "0123456789";
+
   /** Character type. */
   private static final String CHARACTER_TYPE = "digit";
-
 
   /** Default constructor. */
   public DigitCharacterRule() {}
@@ -32,14 +34,14 @@ public class DigitCharacterRule extends AbstractCharacterRule
   @Override
   public String getValidCharacters()
   {
-    return "0123456789";
+    return CHARS;
   }
 
 
   @Override
-  protected int getNumberOfCharacterType(final Password password)
+  protected int getNumberOfCharacterType(final String password)
   {
-    return password.getNumberOfDigits();
+    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
   }
 
 

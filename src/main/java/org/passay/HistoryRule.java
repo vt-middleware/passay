@@ -32,7 +32,7 @@ public class HistoryRule implements Rule
       return result;
     }
 
-    final String cleartext = passwordData.getPassword().getText();
+    final String cleartext = passwordData.getPassword();
     for (PasswordData.HistoricalReference reference : references) {
       if (matches(cleartext, reference)) {
         result.setValid(false);

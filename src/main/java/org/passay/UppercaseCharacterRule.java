@@ -3,12 +3,15 @@ package org.passay;
 
 /**
  * Rule for determining if a password contains the correct number of uppercase
- * characters.
+ * characters. Characters are defined in {@link #CHARS}.
  *
  * @author  Middleware Services
  */
 public class UppercaseCharacterRule extends AbstractCharacterRule
 {
+
+  /** Uppercase characters, value is {@value}. */
+  public static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
   /** Character type. */
   private static final String CHARACTER_TYPE = "uppercase";
@@ -32,14 +35,14 @@ public class UppercaseCharacterRule extends AbstractCharacterRule
   @Override
   public String getValidCharacters()
   {
-    return "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    return CHARS;
   }
 
 
   @Override
-  protected int getNumberOfCharacterType(final Password password)
+  protected int getNumberOfCharacterType(final String password)
   {
-    return password.getNumberOfUppercase();
+    return PasswordUtils.getMatchingCharacterCount(CHARS, password);
   }
 
 

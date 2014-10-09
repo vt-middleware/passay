@@ -21,25 +21,22 @@ public class DictionaryRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final Password VALID_PASS = new Password("Pullm@n1z3");
+  private static final String VALID_PASS = "Pullm@n1z3";
 
   /** Test password. */
-  private static final Password DICT_PASS = new Password("Pullmanize");
+  private static final String DICT_PASS = "Pullmanize";
 
   /** Test password. */
-  private static final Password BACKWARDS_DICT_PASS = new Password(
-    "ezinamlluP");
+  private static final String BACKWARDS_DICT_PASS =  "ezinamlluP";
 
   /** Test password. */
-  private static final Password UPPERCASE_DICT_PASS = new Password(
-    "PuLLmanIZE");
+  private static final String UPPERCASE_DICT_PASS = "PuLLmanIZE";
 
   /** Test password. */
-  private static final Password BACKWARDS_UPPERCASE_DICT_PASS = new Password(
-    "EZInamLLuP");
+  private static final String BACKWARDS_UPPERCASE_DICT_PASS =  "EZInamLLuP";
 
   /** Test password. */
-  private static final Password SINGLE_LETTER_DICT_PASS = new Password("a");
+  private static final String SINGLE_LETTER_DICT_PASS = "a";
 
   /** For testing. */
   private final DictionaryRule rule = new DictionaryRule();
