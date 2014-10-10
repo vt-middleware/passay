@@ -6,7 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Rule for determining if a password contains an illegal character.
+ * Rule for determining if a password contains an illegal character. Validation
+ * will fail if the password contains any of the illegal characters.
  *
  * @author  Middleware Services
  */

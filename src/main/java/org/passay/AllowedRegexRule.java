@@ -7,7 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Rule for determining if a password matches a regular expression.
+ * Rule for determining if a password matches an allowed regular expression.
+ * Passwords must match the expression or validation will fail.
  *
  * @author  Middleware Services
  */
