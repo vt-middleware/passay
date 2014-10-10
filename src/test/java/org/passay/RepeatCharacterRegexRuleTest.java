@@ -1,9 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link RepeatCharacterRegexRule}.
@@ -66,19 +64,25 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final Rule rule = new RepeatCharacterRegexRule();
-    final RuleResult result = rule.validate(
-      new PasswordData("p4&&&&&#n65"));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password matches the illegal sequence '%s'.", "&&&&&"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          new RepeatCharacterRegexRule(),
+          new PasswordData("p4&&&&&#n65"),
+          new String[] {
+            String.format(
+              "Password matches the illegal pattern '%s'.", "&&&&&"),
+          },
+        },
+      };
   }
 }

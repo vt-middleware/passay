@@ -54,6 +54,25 @@ public class NumericalSequenceRule extends AbstractSequenceRule
   }
 
 
+  /**
+   * Creates a new numerical sequence rule.
+   *
+   * @param  length  of sequence to search for.
+   * @param  wrap  true to wrap sequences when searching for matches, false
+   * otherwise.
+   * @param  count  number of failures to report
+   */
+  public NumericalSequenceRule(
+    final int length,
+    final boolean wrap,
+    final int count)
+  {
+    setSequenceLength(length);
+    wrapSequence = wrap;
+    reportFailureCount = count;
+  }
+
+
   @Override
   protected char[][] getSequence(final int n)
   {

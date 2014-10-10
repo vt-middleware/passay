@@ -3,10 +3,8 @@ package org.passay;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link HistoryRule}.
@@ -108,20 +106,26 @@ public class HistoryRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final RuleResult result = rule.validate(
-      PasswordData.newInstance(HISTORY_PASS1, USER, history));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format(
-          "Password matches one of %s previous passwords.",
-          history.size()),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          rule,
+          PasswordData.newInstance(HISTORY_PASS1, USER, history),
+          new String[] {
+            String.format(
+              "Password matches one of %s previous passwords.",
+              history.size()),
+          },
+        },
+      };
   }
 }

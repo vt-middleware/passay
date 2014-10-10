@@ -1,9 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link AllowedRegexRule}.
@@ -47,19 +45,24 @@ public class AllowedRegexRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final Rule rule = new AllowedRegexRule("\\d\\d\\d\\d");
-    final RuleResult result = rule.validate(
-      new PasswordData("p4zRcv8#n65"));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password must match pattern '%s'.", "\\d\\d\\d\\d"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          new AllowedRegexRule("\\d\\d\\d\\d"),
+          new PasswordData("p4zRcv8#n65"),
+          new String[] {
+            String.format("Password must match pattern '%s'.", "\\d\\d\\d\\d"),
+          },
+        },
+      };
   }
 }

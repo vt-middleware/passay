@@ -6,10 +6,8 @@ import java.util.List;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link DigestHistoryRule}.
@@ -161,20 +159,26 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final RuleResult result = digestRule.validate(
-      PasswordData.newInstance(HISTORY_PASS1, USER, digestRefs));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format(
-          "Password matches one of %s previous passwords.",
-          digestRefs.size()),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          digestRule,
+          PasswordData.newInstance(HISTORY_PASS1, USER, digestRefs),
+          new String[] {
+            String.format(
+              "Password matches one of %s previous passwords.",
+              digestRefs.size()),
+          },
+        },
+      };
   }
 }

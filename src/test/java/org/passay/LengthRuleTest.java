@@ -1,10 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link LengthRule}.
@@ -122,29 +120,35 @@ public class LengthRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    RuleResult result = rule.validate(new PasswordData(LONG_PASS));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format(
-          "Password must be no more than %s characters in length.",
-          rule.getMaximumLength()),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
-
-    result = rule.validate(new PasswordData(SHORT_PASS));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format(
-          "Password must be at least %s characters in length.",
-          rule.getMinimumLength()),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          rule,
+          new PasswordData(LONG_PASS),
+          new String[] {
+            String.format(
+              "Password must be no more than %s characters in length.",
+              rule.getMaximumLength()),
+          },
+        },
+        {
+          rule,
+          new PasswordData(SHORT_PASS),
+          new String[] {
+            String.format(
+              "Password must be at least %s characters in length.",
+              rule.getMinimumLength()),
+          },
+        },
+      };
   }
 }

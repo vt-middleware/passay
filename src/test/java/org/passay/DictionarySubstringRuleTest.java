@@ -6,11 +6,9 @@ import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link DictionarySubstringRule}.
@@ -171,27 +169,35 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    RuleResult result = rule.validate(new PasswordData(DICT_PASS));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password contains the dictionary word '%s'.", "lance"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
-
-    result = rule.validate(new PasswordData(BACKWARDS_DICT_PASS));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format(
-          "Password contains the reversed dictionary word '%s'.",
-          "lance"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          rule,
+          new PasswordData(DICT_PASS),
+          new String[] {
+            String.format(
+              "Password contains the dictionary word '%s'.",
+              "lance"),
+          },
+        },
+        {
+          backwardsRule,
+          new PasswordData(BACKWARDS_DICT_PASS),
+          new String[] {
+            String.format(
+              "Password contains the reversed dictionary word '%s'.",
+              "lance"),
+          },
+        },
+      };
   }
 }

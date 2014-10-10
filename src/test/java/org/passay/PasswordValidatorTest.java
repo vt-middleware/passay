@@ -552,4 +552,36 @@ public class PasswordValidatorTest extends AbstractRuleTest
       };
   }
   // CheckStyle:MethodLengthCheck ON
+
+
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
+    throws Exception
+  {
+    return
+      new Object[][] {
+        {
+          validator,
+          PasswordData.newInstance("ay3dop5zss", USER, references),
+          new String[] {
+            String.format(
+              "Password must contain at least %s special characters.",
+              1),
+            String.format(
+              "Password must contain at least %s uppercase characters.",
+              1),
+            String.format(
+              "Password matches %s of %s character rules, but %s are required.",
+              2,
+              4,
+              3),
+          },
+        },
+      };
+  }
 }

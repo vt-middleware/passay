@@ -1,9 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link IllegalRegexRule}.
@@ -47,19 +45,24 @@ public class IllegalRegexRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final Rule rule = new IllegalRegexRule("\\d\\d\\d\\d");
-    final RuleResult result = rule.validate(
-      new PasswordData("pwUiNh0248"));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password matches the illegal pattern '%s'.", "0248"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          new IllegalRegexRule("\\d\\d\\d\\d"),
+          new PasswordData("pwUiNh0248"),
+          new String[] {
+            String.format("Password matches the illegal pattern '%s'.", "0248"),
+          },
+        },
+      };
   }
 }

@@ -1,9 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link AlphabeticalSequenceRule}.
@@ -115,23 +113,61 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("baz"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
         },
+        // report single error
+        {
+          new AlphabeticalSequenceRule(5, false, 1),
+          new PasswordData("phijklmn#n65"),
+          codes(AlphabeticalSequenceRule.ERROR_CODE),
+        },
+        // report two errors
+        {
+          new AlphabeticalSequenceRule(5, false, 2),
+          new PasswordData("phijklmn#n65"),
+          codes(
+            AlphabeticalSequenceRule.ERROR_CODE,
+            AlphabeticalSequenceRule.ERROR_CODE),
+        },
       };
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final Rule rule = new AlphabeticalSequenceRule();
-    final RuleResult result = rule.validate(
-      new PasswordData("phijkl#n65"));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password contains the illegal sequence '%s'.", "hijkl"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          new AlphabeticalSequenceRule(),
+          new PasswordData("phijkl#n65"),
+          new String[] {
+            String.format(
+              "Password contains the illegal sequence '%s'.", "hijkl"),
+          },
+        },
+        {
+          new AlphabeticalSequenceRule(5, true, 1),
+          new PasswordData("phijklmno#n65"),
+          new String[] {
+            String.format(
+              "Password contains the illegal sequence '%s'.", "hijkl"),
+          },
+        },
+        {
+          new AlphabeticalSequenceRule(5, true, 2),
+          new PasswordData("phijklmno#n65"),
+          new String[] {
+            String.format(
+              "Password contains the illegal sequence '%s'.", "hijkl"),
+            String.format(
+              "Password contains the illegal sequence '%s'.", "ijklm"),
+          },
+        },
+      };
   }
 }
