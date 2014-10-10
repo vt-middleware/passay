@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
  *
  * @author  Middleware Services
  */
-public class RegexRule implements Rule
+public class IllegalRegexRule implements Rule
 {
 
   /** Error code for regex validation failures. */
@@ -22,11 +22,11 @@ public class RegexRule implements Rule
 
 
   /**
-   * Creates a new regex rule.
+   * Creates a new illegal regex rule.
    *
    * @param  regex  regular expression
    */
-  public RegexRule(final String regex)
+  public IllegalRegexRule(final String regex)
   {
     pattern = Pattern.compile(regex);
   }
