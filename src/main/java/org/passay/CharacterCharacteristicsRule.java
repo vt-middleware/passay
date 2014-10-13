@@ -25,6 +25,9 @@ public class CharacterCharacteristicsRule implements Rule
   /** Number of rules to enforce. Default value is 1. */
   private int numCharacteristics = 1;
 
+  /** Whether to report the details of each character rule failure. */
+  private boolean reportRuleFailures = true;
+
 
   /**
    * Returns the character rules used by this rule.
@@ -77,6 +80,30 @@ public class CharacterCharacteristicsRule implements Rule
   }
 
 
+  /**
+   * Returns whether to add the rule result detail for each character rule that
+   * fails to validate to the rule result.
+   *
+   * @return  whether to add character rule result details
+   */
+  public boolean getReportRuleFailures()
+  {
+    return reportRuleFailures;
+  }
+
+
+  /**
+   * Sets whether to add the rule result detail for each character rule that
+   * fails to validate to the rule result.
+   *
+   * @param  b  whether to add character rule result details
+   */
+  public void setReportRuleFailures(final boolean b)
+  {
+    reportRuleFailures = b;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
@@ -90,7 +117,9 @@ public class CharacterCharacteristicsRule implements Rule
     for (CharacterRule rule : rules) {
       final RuleResult rr = rule.validate(passwordData);
       if (!rr.isValid()) {
-        result.getDetails().addAll(rr.getDetails());
+        if (reportRuleFailures) {
+          result.getDetails().addAll(rr.getDetails());
+        }
       } else {
         successCount++;
       }
@@ -113,7 +142,8 @@ public class CharacterCharacteristicsRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final int success)
+  protected Map<String, Object> createRuleResultDetailParameters(
+    final int success)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("successCount", success);

@@ -116,4 +116,32 @@ public abstract class AbstractRuleTest
     }
     return false;
   }
+
+
+  /** Message resolver for testing. */
+  public static class TestMessageResolver extends AbstractMessageResolver
+  {
+
+    /** Properties for this resolver. */
+    private final Properties props = new Properties();
+
+
+    /**
+     * Creates a new test message resolver.
+     *
+     * @param  key  message key
+     * @param  value  message value
+     */
+    public TestMessageResolver(final String key, final String value)
+    {
+      props.setProperty(key, value);
+    }
+
+
+    @Override
+    protected String getMessage(final String key)
+    {
+      return props.getProperty(key);
+    }
+  }
 }

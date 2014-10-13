@@ -178,4 +178,37 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
         },
       };
   }
+
+
+  /** @throws  Exception  On test failure. */
+  @Test(groups = {"passtest"})
+  public void customResolver()
+    throws Exception
+  {
+    final CharacterCharacteristicsRule rule =
+      new CharacterCharacteristicsRule();
+    rule.getRules().add(new DigitCharacterRule(3));
+    rule.getRules().add(new UppercaseCharacterRule(2));
+    rule.getRules().add(new LowercaseCharacterRule(2));
+    rule.getRules().add(new SpecialCharacterRule(1));
+    rule.setNumberOfCharacteristics(2);
+    rule.setReportRuleFailures(false);
+
+    final TestMessageResolver resolver = new TestMessageResolver(
+      "INSUFFICIENT_CHARACTERISTICS",
+      "Passwords must contain at least %2$s of the following: " +
+        "three digits, two uppercase characters, two lowercase characters, " +
+        "and one special character");
+    final RuleResult result = rule.validate(
+      new PasswordData("rscvE2e3"));
+    AssertJUnit.assertEquals(1, result.getDetails().size());
+    final RuleResultDetail detail = result.getDetails().get(0);
+    AssertJUnit.assertEquals(
+      String.format(
+        "Passwords must contain at least %s of the following: " +
+          "three digits, two uppercase characters, two lowercase characters, " +
+          "and one special character",
+        2),
+      resolver.resolve(detail));
+  }
 }

@@ -69,7 +69,7 @@ public class HistoryRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final int size)
+  protected Map<String, Object> createRuleResultDetailParameters(final int size)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("historySize", size);
