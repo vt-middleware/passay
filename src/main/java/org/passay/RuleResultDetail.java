@@ -18,7 +18,7 @@ public class RuleResultDetail
   /**
    * Additional parameters that provide information about validation failure.
    */
-  protected final Map<String, ?> parameters;
+  protected final Map<String, Object> parameters;
 
 
   /**
@@ -27,16 +27,16 @@ public class RuleResultDetail
    * @param  code  error code.
    * @param  params  error details.
    */
-  public RuleResultDetail(final String code, final Map<String, ?> params)
+  public RuleResultDetail(final String code, final Map<String, Object> params)
   {
     if (code == null || code.length() == 0) {
       throw new IllegalArgumentException("Code cannot be null or empty.");
     }
     errorCode = code;
     if (params == null) {
-      parameters = new LinkedHashMap<String, Object>();
+      parameters = new LinkedHashMap<>();
     } else {
-      parameters = new LinkedHashMap<String, Object>(params);
+      parameters = new LinkedHashMap<>(params);
     }
   }
 
@@ -57,7 +57,7 @@ public class RuleResultDetail
    *
    * @return  map of parameter name to value.
    */
-  public Map<String, ?> getParameters()
+  public Map<String, Object> getParameters()
   {
     return parameters;
   }

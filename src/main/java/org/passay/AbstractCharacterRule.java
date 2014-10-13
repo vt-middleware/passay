@@ -80,7 +80,7 @@ public abstract class AbstractCharacterRule implements CharacterRule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(
+  protected Map<String, Object> createRuleResultDetailParameters(
     final String password,
     final String matchingChars)
   {

@@ -134,7 +134,7 @@ public class LengthRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters()
+  protected Map<String, Object> createRuleResultDetailParameters()
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumLength", minimumLength);

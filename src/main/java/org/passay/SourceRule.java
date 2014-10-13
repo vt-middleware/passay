@@ -67,7 +67,8 @@ public class SourceRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final String source)
+  protected Map<String, Object> createRuleResultDetailParameters(
+    final String source)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("source", source);

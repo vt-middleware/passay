@@ -108,7 +108,8 @@ public abstract class AbstractDictionaryRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final String word)
+  protected Map<String, Object> createRuleResultDetailParameters(
+    final String word)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("matchingWord", word);

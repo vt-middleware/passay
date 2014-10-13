@@ -126,7 +126,7 @@ public class UsernameRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(
+  protected Map<String, Object> createRuleResultDetailParameters(
     final String username)
   {
     final Map<String, Object> m = new LinkedHashMap<>();

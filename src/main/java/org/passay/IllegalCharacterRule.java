@@ -57,7 +57,7 @@ public class IllegalCharacterRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, ?> createRuleResultDetailParameters(final char c)
+  protected Map<String, Object> createRuleResultDetailParameters(final char c)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("illegalCharacter", c);
