@@ -2,6 +2,7 @@
 package org.passay.dictionary;
 
 import java.io.FileReader;
+import java.io.StringReader;
 import org.passay.dictionary.sort.ArraysSort;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
@@ -91,7 +92,7 @@ public class WordListsTest
 
 
   /**
-   * Test for {@link WordLists.binarySearch(WordList, int)}.
+   * Test for {@link WordLists#binarySearch(WordList, String)}.
    *
    * @param  wl  Test word list.
    * @param  word  Word to search for.
@@ -101,11 +102,42 @@ public class WordListsTest
     groups = {"wltest"},
     dataProvider = "searchData"
   )
-  public void binarySearchTest(
+  public void binarySearch(
     final WordList wl,
     final String word,
     final int expectedResult)
   {
     AssertJUnit.assertEquals(expectedResult, WordLists.binarySearch(wl, word));
+  }
+
+
+  /**
+   * Test for {@link WordLists#createFromReader(Reader[])}.
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"wltest"})
+  public void createFromReader()
+    throws Exception
+  {
+    // sorted list of words
+    final String[] words = new String[] {
+      " leading whitespace",
+      " surrounding whitespace ",
+      "bar",
+      "foo",
+      "trailing whitespace ",
+    };
+    final StringBuilder sb = new StringBuilder();
+    for (String word : words) {
+      sb.append(word).append("\n");
+    }
+    final ArrayWordList list = WordLists.createFromReader(
+      new StringReader[] {new StringReader(sb.toString())},
+      true,
+      new ArraysSort());
+    for (int i = 0; i < list.size(); i++) {
+      AssertJUnit.assertEquals(words[i], list.get(i));
+    }
   }
 }

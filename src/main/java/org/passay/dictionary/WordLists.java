@@ -137,7 +137,6 @@ public final class WordLists
       try (BufferedReader br = new BufferedReader(r)) {
         String word;
         while ((word = br.readLine()) != null) {
-          word = word.trim();
           if (!"".equals(word)) {
             words.add(word);
           }
