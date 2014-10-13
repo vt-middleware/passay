@@ -76,17 +76,9 @@ public class NumericalSequenceRuleTest extends AbstractRuleTest
         },
         // report single error
         {
-          new NumericalSequenceRule(5, true, 1),
+          new NumericalSequenceRule(5, true, false),
           new PasswordData("1234567"),
           codes(NumericalSequenceRule.ERROR_CODE),
-        },
-        // report two errors
-        {
-          new NumericalSequenceRule(5, true, 2),
-          new PasswordData("1234567"),
-          codes(
-            NumericalSequenceRule.ERROR_CODE,
-            NumericalSequenceRule.ERROR_CODE),
         },
       };
   }
@@ -112,21 +104,11 @@ public class NumericalSequenceRuleTest extends AbstractRuleTest
           },
         },
         {
-          new NumericalSequenceRule(5, false, 1),
+          new NumericalSequenceRule(5, false, false),
           new PasswordData("p3456789n65"),
           new String[] {
             String.format(
               "Password contains the illegal sequence '%s'.", "34567"),
-          },
-        },
-        {
-          new NumericalSequenceRule(5, false, 2),
-          new PasswordData("p3456789n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal sequence '%s'.", "34567"),
-            String.format(
-              "Password contains the illegal sequence '%s'.", "45678"),
           },
         },
       };

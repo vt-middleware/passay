@@ -60,16 +60,16 @@ public class NumericalSequenceRule extends AbstractSequenceRule
    * @param  length  of sequence to search for.
    * @param  wrap  true to wrap sequences when searching for matches, false
    * otherwise.
-   * @param  count  number of failures to report
+   * @param  b  whether to report all sequence matches or just the first
    */
   public NumericalSequenceRule(
     final int length,
     final boolean wrap,
-    final int count)
+    final boolean b)
   {
     setSequenceLength(length);
     wrapSequence = wrap;
-    reportFailureCount = count;
+    reportAllFailures = b;
   }
 
 

@@ -75,16 +75,16 @@ public class AlphabeticalSequenceRule extends AbstractSequenceRule
    *
    * @param  sl  sequence length
    * @param  wrap  whether to wrap search sequences
-   * @param  count  number of failures to report
+   * @param  b  whether to report all sequence matches or just the first
    */
   public AlphabeticalSequenceRule(
     final int sl,
     final boolean wrap,
-    final int count)
+    final boolean b)
   {
     setSequenceLength(sl);
     wrapSequence = wrap;
-    reportFailureCount = count;
+    reportAllFailures = b;
   }
 
 

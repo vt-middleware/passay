@@ -114,13 +114,13 @@ public class QwertySequenceRule extends AbstractSequenceRule
    *
    * @param  sl  sequence length
    * @param  wrap  whether to wrap sequences
-   * @param  count  number of failures to report
+   * @param  b  whether to report all sequence matches or just the first
    */
-  public QwertySequenceRule(final int sl, final boolean wrap, final int count)
+  public QwertySequenceRule(final int sl, final boolean wrap, final boolean b)
   {
     setSequenceLength(sl);
     wrapSequence = wrap;
-    reportFailureCount = count;
+    reportAllFailures = b;
   }
 
 

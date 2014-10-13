@@ -115,17 +115,9 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
         },
         // report single error
         {
-          new AlphabeticalSequenceRule(5, false, 1),
+          new AlphabeticalSequenceRule(5, false, false),
           new PasswordData("phijklmn#n65"),
           codes(AlphabeticalSequenceRule.ERROR_CODE),
-        },
-        // report two errors
-        {
-          new AlphabeticalSequenceRule(5, false, 2),
-          new PasswordData("phijklmn#n65"),
-          codes(
-            AlphabeticalSequenceRule.ERROR_CODE,
-            AlphabeticalSequenceRule.ERROR_CODE),
         },
       };
   }
@@ -151,21 +143,11 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
           },
         },
         {
-          new AlphabeticalSequenceRule(5, true, 1),
+          new AlphabeticalSequenceRule(5, true, false),
           new PasswordData("phijklmno#n65"),
           new String[] {
             String.format(
               "Password contains the illegal sequence '%s'.", "hijkl"),
-          },
-        },
-        {
-          new AlphabeticalSequenceRule(5, true, 2),
-          new PasswordData("phijklmno#n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal sequence '%s'.", "hijkl"),
-            String.format(
-              "Password contains the illegal sequence '%s'.", "ijklm"),
           },
         },
       };

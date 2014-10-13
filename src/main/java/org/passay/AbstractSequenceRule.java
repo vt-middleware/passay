@@ -28,8 +28,8 @@ public abstract class AbstractSequenceRule implements Rule
   /** Whether or not to wrap a sequence when searching for matches. */
   protected boolean wrapSequence;
 
-  /** Number of failures to report. */
-  protected int reportFailureCount = -1;
+  /** Whether to report all sequence matches or just the first. */
+  protected boolean reportAllFailures = true;
 
 
   @Override
@@ -156,8 +156,7 @@ public abstract class AbstractSequenceRule implements Rule
    */
   private void recordFailure(final RuleResult result, final String match)
   {
-    if (reportFailureCount == -1 ||
-        result.getDetails().size() < reportFailureCount) {
+    if (reportAllFailures || result.getDetails().size() == 0) {
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
       result.setValid(false);

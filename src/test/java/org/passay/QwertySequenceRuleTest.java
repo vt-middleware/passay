@@ -67,15 +67,9 @@ public class QwertySequenceRuleTest extends AbstractRuleTest
         },
         // report single error
         {
-          new QwertySequenceRule(6, false, 1),
+          new QwertySequenceRule(6, false, false),
           new PasswordData("pqwertyui#n65"),
           codes(QwertySequenceRule.ERROR_CODE),
-        },
-        // report two errors
-        {
-          new QwertySequenceRule(6, false, 2),
-          new PasswordData("pqwertyui#n65"),
-          codes(QwertySequenceRule.ERROR_CODE, QwertySequenceRule.ERROR_CODE),
         },
       };
   }
@@ -101,21 +95,11 @@ public class QwertySequenceRuleTest extends AbstractRuleTest
           },
         },
         {
-          new QwertySequenceRule(5, true, 1),
+          new QwertySequenceRule(5, true, false),
           new PasswordData("pkl;'asd65"),
           new String[] {
             String.format(
               "Password contains the illegal sequence '%s'.", "kl;'a"),
-          },
-        },
-        {
-          new QwertySequenceRule(5, true, 2),
-          new PasswordData("pkl;'asd65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal sequence '%s'.", "kl;'a"),
-            String.format(
-              "Password contains the illegal sequence '%s'.", "l;'as"),
           },
         },
       };
