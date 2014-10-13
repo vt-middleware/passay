@@ -1,9 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link AllowedCharacterRule}.
@@ -47,17 +45,24 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final RuleResult result = rule.validate(new PasswordData(INVALID_PASS));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password contains the illegal character '%s'.", "4"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          rule,
+          new PasswordData(INVALID_PASS),
+          new String[] {
+            String.format("Password contains the illegal character '%s'.", "4"),
+          },
+        },
+      };
   }
 }

@@ -134,83 +134,48 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    // check messages for rule1
-    RuleResult result = rule1.validate(
-      new PasswordData("r%scvEW2e3)"));
-    for (int i = 0; i < result.getDetails().size(); i++) {
-      final RuleResultDetail detail = result.getDetails().get(i);
-      switch (i) {
-
-      case 0:
-        AssertJUnit.assertEquals(
-          String.format(
-            "Password must contain at least %s %s characters.",
-            3,
-            "digit"),
-          DEFAULT_RESOLVER.resolve(detail));
-        break;
-
-      case 1:
-        AssertJUnit.assertEquals(
-          String.format(
-            "Password matches %s of %s character rules, but %s are required.",
-            4,
-            5,
-            5),
-          DEFAULT_RESOLVER.resolve(detail));
-        break;
-
-      default:
-        AssertJUnit.fail("Invalid index");
-        break;
-      }
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
-
-    // check messages for rule2
-    result = rule2.validate(new PasswordData("rscvew2e3"));
-    for (int i = 0; i < result.getDetails().size(); i++) {
-      final RuleResultDetail detail = result.getDetails().get(i);
-      switch (i) {
-
-      case 0:
-        AssertJUnit.assertEquals(
-          String.format(
-            "Password must contain at least %s %s characters.",
-            1,
-            "special"),
-          DEFAULT_RESOLVER.resolve(detail));
-        break;
-
-      case 1:
-        AssertJUnit.assertEquals(
-          String.format(
-            "Password must contain at least %s %s characters.",
-            1,
-            "uppercase"),
-          DEFAULT_RESOLVER.resolve(detail));
-        break;
-
-      case 2:
-        AssertJUnit.assertEquals(
-          String.format(
-            "Password matches %s of %s character rules, but %s are required.",
-            2,
-            4,
-            3),
-          DEFAULT_RESOLVER.resolve(detail));
-        break;
-
-      default:
-        AssertJUnit.fail("Invalid index");
-        break;
-      }
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          rule1,
+          new PasswordData("r%scvEW2e3)"),
+          new String[] {
+            String.format(
+              "Password must contain at least %s digit characters.",
+              3),
+            String.format(
+              "Password matches %s of %s character rules, but %s are required.",
+              4,
+              5,
+              5),
+          },
+        },
+        {
+          rule2,
+          new PasswordData("rscvew2e3"),
+          new String[] {
+            String.format(
+              "Password must contain at least %s special characters.",
+              1),
+            String.format(
+              "Password must contain at least %s uppercase characters.",
+              1),
+            String.format(
+              "Password matches %s of %s character rules, but %s are required.",
+              2,
+              4,
+              3),
+          },
+        },
+      };
   }
 }

@@ -70,6 +70,24 @@ public class AlphabeticalSequenceRule extends AbstractSequenceRule
   }
 
 
+  /**
+   * Creates a new alphabetical sequence rule.
+   *
+   * @param  sl  sequence length
+   * @param  wrap  whether to wrap search sequences
+   * @param  b  whether to report all sequence matches or just the first
+   */
+  public AlphabeticalSequenceRule(
+    final int sl,
+    final boolean wrap,
+    final boolean b)
+  {
+    setSequenceLength(sl);
+    wrapSequence = wrap;
+    reportAllFailures = b;
+  }
+
+
   @Override
   protected char[][] getSequence(final int n)
   {

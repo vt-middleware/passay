@@ -109,6 +109,21 @@ public class QwertySequenceRule extends AbstractSequenceRule
   }
 
 
+  /**
+   * Create a new qwerty sequence rule.
+   *
+   * @param  sl  sequence length
+   * @param  wrap  whether to wrap sequences
+   * @param  b  whether to report all sequence matches or just the first
+   */
+  public QwertySequenceRule(final int sl, final boolean wrap, final boolean b)
+  {
+    setSequenceLength(sl);
+    wrapSequence = wrap;
+    reportAllFailures = b;
+  }
+
+
   @Override
   protected char[][] getSequence(final int n)
   {

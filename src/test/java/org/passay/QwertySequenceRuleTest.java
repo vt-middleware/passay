@@ -1,9 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link QwertySequenceRule}.
@@ -67,23 +65,43 @@ public class QwertySequenceRuleTest extends AbstractRuleTest
           new PasswordData("p@1`+_0#n65"),
           codes(QwertySequenceRule.ERROR_CODE),
         },
+        // report single error
+        {
+          new QwertySequenceRule(6, false, false),
+          new PasswordData("pqwertyui#n65"),
+          codes(QwertySequenceRule.ERROR_CODE),
+        },
       };
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final Rule rule = new QwertySequenceRule();
-    final RuleResult result = rule.validate(
-      new PasswordData("pkl;'asd65"));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format("Password contains the illegal sequence '%s'.", ";'asd"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          new QwertySequenceRule(),
+          new PasswordData("pkwerty#n65"),
+          new String[] {
+            String.format(
+              "Password contains the illegal sequence '%s'.", "werty"),
+          },
+        },
+        {
+          new QwertySequenceRule(5, true, false),
+          new PasswordData("pkl;'asd65"),
+          new String[] {
+            String.format(
+              "Password contains the illegal sequence '%s'.", "kl;'a"),
+          },
+        },
+      };
   }
 }

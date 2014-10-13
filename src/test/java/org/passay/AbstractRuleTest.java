@@ -55,6 +55,35 @@ public abstract class AbstractRuleTest
 
 
   /**
+   * @param  rule  to check password with
+   * @param  passwordData  to check
+   * @param  messages  Array of messages to be produced on a failed
+   * password validation attempt
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Test(
+    groups = {"passtest"},
+    dataProvider = "messages"
+  )
+  public void checkMessage(
+    final Rule rule,
+    final PasswordData passwordData,
+    final String[] messages)
+    throws Exception
+  {
+    final RuleResult result = rule.validate(passwordData);
+    AssertJUnit.assertFalse(result.isValid());
+    AssertJUnit.assertEquals(messages.length, result.getDetails().size());
+    for (int i = 0; i < result.getDetails().size(); i++) {
+      final RuleResultDetail detail = result.getDetails().get(i);
+      AssertJUnit.assertEquals(messages[i], DEFAULT_RESOLVER.resolve(detail));
+      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
+    }
+  }
+
+
+  /**
    * Converts one or more error codes to a string array.
    *
    * @param  codes  One or more error codes.

@@ -6,10 +6,8 @@ import java.util.List;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link DigestSourceRule}.
@@ -87,20 +85,26 @@ public class DigestSourceRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
-  @Test(groups = {"passtest"})
-  public void resolveMessage()
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
     throws Exception
   {
-    final RuleResult result = digestRule.validate(
-      PasswordData.newInstance(SOURCE_PASS, USER, sourceRefs));
-    for (RuleResultDetail detail : result.getDetails()) {
-      AssertJUnit.assertEquals(
-        String.format(
-          "Password cannot be the same as your %s password.",
-          "System B"),
-        DEFAULT_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
-    }
+    return
+      new Object[][] {
+        {
+          digestRule,
+          PasswordData.newInstance(SOURCE_PASS, USER, sourceRefs),
+          new String[] {
+            String.format(
+              "Password cannot be the same as your %s password.",
+              "System B"),
+          },
+        },
+      };
   }
 }
