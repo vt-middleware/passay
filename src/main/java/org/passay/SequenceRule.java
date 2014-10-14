@@ -6,7 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Provide common implementation for keyboard sequence rules.
+ * Implementation for keyboard sequence rules. The character sequences represent
+ * rows of characters, where each row contains the lowercase and uppercase
+ * version of the character.
  *
  * @author  Middleware Services
  */
@@ -40,22 +42,22 @@ public class SequenceRule implements Rule
    *
    * @param  chars  for this sequence
    */
-  public SequenceRule(final char[][][] chars)
+  public SequenceRule(final char[][]... chars)
   {
-    this(chars, DEFAULT_SEQUENCE_LENGTH, false, true);
+    this(DEFAULT_SEQUENCE_LENGTH, false, true, chars);
   }
 
 
   /**
    * Creates a new sequence rule with the supplied list of characters.
    *
-   * @param  chars  for this sequence
    * @param  sl  sequence length
    * @param  wrap  whether to wrap sequences
+   * @param  chars  for this sequence
    */
-  public SequenceRule(final char[][][] chars, final int sl, final boolean wrap)
+  public SequenceRule(final int sl, final boolean wrap, final char[][]... chars)
   {
-    this(chars, sl, wrap, true);
+    this(sl, wrap, true, chars);
   }
 
 
@@ -68,12 +70,11 @@ public class SequenceRule implements Rule
    * @param  reportAll  whether to report all sequence matches or just the first
    */
   public SequenceRule(
-    final char[][][] chars,
     final int sl,
     final boolean wrap,
-    final boolean reportAll)
+    final boolean reportAll,
+    final char[][]... chars)
   {
-    seqCharacters = chars;
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
       throw new IllegalArgumentException(
         String.format(
@@ -83,6 +84,7 @@ public class SequenceRule implements Rule
     sequenceLength = sl;
     wrapSequence = wrap;
     reportAllFailures = reportAll;
+    seqCharacters = chars;
   }
 
 
