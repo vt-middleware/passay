@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public abstract class AbstractSequenceRule implements Rule
+public class SequenceRule implements Rule
 {
 
   /** Error code for sequence validation failures. */
@@ -31,6 +31,60 @@ public abstract class AbstractSequenceRule implements Rule
   /** Whether to report all sequence matches or just the first. */
   protected boolean reportAllFailures = true;
 
+  /** Characters in the sequence. */
+  protected final char[][][] seqCharacters;
+
+
+  /**
+   * Creates a new sequence rule with the supplied list of characters.
+   *
+   * @param  chars  for this sequence
+   */
+  public SequenceRule(final char[][][] chars)
+  {
+    this(chars, DEFAULT_SEQUENCE_LENGTH, false, true);
+  }
+
+
+  /**
+   * Creates a new sequence rule with the supplied list of characters.
+   *
+   * @param  chars  for this sequence
+   * @param  sl  sequence length
+   * @param  wrap  whether to wrap sequences
+   */
+  public SequenceRule(final char[][][] chars, final int sl, final boolean wrap)
+  {
+    this(chars, sl, wrap, true);
+  }
+
+
+  /**
+   * Creates a new sequence rule with the supplied list of characters.
+   *
+   * @param  chars  for this sequence
+   * @param  sl  sequence length
+   * @param  wrap  whether to wrap sequences
+   * @param  reportAll  whether to report all sequence matches or just the first
+   */
+  public SequenceRule(
+    final char[][][] chars,
+    final int sl,
+    final boolean wrap,
+    final boolean reportAll)
+  {
+    seqCharacters = chars;
+    if (sl < MINIMUM_SEQUENCE_LENGTH) {
+      throw new IllegalArgumentException(
+        String.format(
+          "sequence length must be >= %s",
+          MINIMUM_SEQUENCE_LENGTH));
+    }
+    sequenceLength = sl;
+    wrapSequence = wrap;
+    reportAllFailures = reportAll;
+  }
+
 
   @Override
   public RuleResult validate(final PasswordData passwordData)
@@ -41,9 +95,9 @@ public abstract class AbstractSequenceRule implements Rule
     Sequence sequence;
     int position;
     char c;
-    for (int i = 0; i < getSequenceCount(); i++) {
+    for (int i = 0; i < seqCharacters.length; i++) {
       for (int j = 0; j < max; j++) {
-        sequence = newSequence(getSequence(i), password.charAt(j));
+        sequence = newSequence(seqCharacters[i], password.charAt(j));
         if (sequence != null) {
           position = j;
           while (sequence.forward()) {
@@ -82,48 +136,13 @@ public abstract class AbstractSequenceRule implements Rule
   {
     return
       String.format(
-        "%s@%h::length=%d,wrap=%s",
+        "%s@%h::length=%d,wrap=%s,reportAllFailures=%s",
         getClass().getName(),
         hashCode(),
         sequenceLength,
-        wrapSequence);
+        wrapSequence,
+        reportAllFailures);
   }
-
-
-  /**
-   * Sets the sequence length.
-   *
-   * @param  sl  sequence length
-   */
-  protected void setSequenceLength(final int sl)
-  {
-    if (sl < MINIMUM_SEQUENCE_LENGTH) {
-      throw new IllegalArgumentException(
-        String.format(
-          "sequence length must be >= %s",
-          MINIMUM_SEQUENCE_LENGTH));
-    }
-    sequenceLength = sl;
-  }
-
-
-  /**
-   * Returns the sequence of character pairs for which to search.
-   *
-   * @param  n  provides support for multiple character sequences that are
-   * indexed from 0 to n.
-   *
-   * @return  character sequence.
-   */
-  protected abstract char[][] getSequence(final int n);
-
-
-  /**
-   * Returns the number of character sequences used in this implementation.
-   *
-   * @return  number of character sequences.
-   */
-  protected abstract int getSequenceCount();
 
 
   /**

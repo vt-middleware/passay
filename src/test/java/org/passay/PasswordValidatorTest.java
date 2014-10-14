@@ -17,6 +17,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+// CheckStyle:AvoidStaticImport OFF
+import static org.passay.CharacterSequences.EN_ALPHABETICAL;
+import static org.passay.CharacterSequences.EN_NUMERICAL;
+import static org.passay.CharacterSequences.EN_QWERTY;
+// CheckStyle:AvoidStaticImport ON
 
 /**
  * Unit test for {@link PasswordValidator}.
@@ -91,12 +96,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
     dictRule.setWordLength(4);
     dictRule.setMatchBackwards(true);
 
-    final QwertySequenceRule qwertySeqRule = new QwertySequenceRule();
+    final SequenceRule qwertySeqRule = new SequenceRule(EN_QWERTY);
 
-    final AlphabeticalSequenceRule alphaSeqRule =
-      new AlphabeticalSequenceRule();
+    final SequenceRule alphaSeqRule = new SequenceRule(EN_ALPHABETICAL);
 
-    final NumericalSequenceRule numSeqRule = new NumericalSequenceRule();
+    final SequenceRule numSeqRule = new SequenceRule(EN_NUMERICAL);
 
     final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
 
@@ -157,9 +161,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
     ccRule.setNumberOfCharacteristics(3);
     l.add(ccRule);
 
-    l.add(new QwertySequenceRule());
-    l.add(new AlphabeticalSequenceRule());
-    l.add(new NumericalSequenceRule());
+    l.add(new SequenceRule(EN_QWERTY));
+    l.add(new SequenceRule(EN_ALPHABETICAL));
+    l.add(new SequenceRule(EN_NUMERICAL));
     l.add(new RepeatCharacterRegexRule());
 
     final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
@@ -217,7 +221,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             UppercaseCharacterRule.ERROR_CODE,
             LowercaseCharacterRule.ERROR_CODE,
             SpecialCharacterRule.ERROR_CODE,
-            NumericalSequenceRule.ERROR_CODE),
+            SequenceRule.ERROR_CODE),
         },
 
         /** all non-alphanumeric */
@@ -398,7 +402,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "p4zxcvb#n65",
             USER,
             references),
-          codes(AlphabeticalSequenceRule.ERROR_CODE),
+          codes(SequenceRule.ERROR_CODE),
         },
 
         /**
@@ -412,7 +416,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             USER,
             references),
           codes(
-            QwertySequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
             DictionaryRule.ERROR_CODE_REVERSED),
         },
 
@@ -423,7 +427,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "p4iOP[]#n65",
             USER,
             references),
-          codes(QwertySequenceRule.ERROR_CODE),
+          codes(SequenceRule.ERROR_CODE),
         },
 
         /** invalid userid rule passwords. */
@@ -541,12 +545,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
             SpecialCharacterRule.ERROR_CODE,
             LowercaseCharacterRule.ERROR_CODE,
             UppercaseCharacterRule.ERROR_CODE,
-            NumericalSequenceRule.ERROR_CODE,
-            NumericalSequenceRule.ERROR_CODE,
-            NumericalSequenceRule.ERROR_CODE,
-            QwertySequenceRule.ERROR_CODE,
-            QwertySequenceRule.ERROR_CODE,
-            QwertySequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
+            SequenceRule.ERROR_CODE,
             LengthRule.ERROR_CODE_MIN),
         },
       };

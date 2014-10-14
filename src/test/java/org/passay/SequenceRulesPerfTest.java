@@ -4,6 +4,11 @@ package org.passay;
 import java.util.UUID;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+// CheckStyle:AvoidStaticImport OFF
+import static org.passay.CharacterSequences.EN_ALPHABETICAL;
+import static org.passay.CharacterSequences.EN_NUMERICAL;
+import static org.passay.CharacterSequences.EN_QWERTY;
+// CheckStyle:AvoidStaticImport ON
 
 /**
  * Reports the time it takes to execute many password validations using sequence
@@ -28,9 +33,9 @@ public class SequenceRulesPerfTest
       new Object[][] {
         new Object[] {
           new Rule[] {
-            new AlphabeticalSequenceRule(),
-            new NumericalSequenceRule(),
-            new QwertySequenceRule(),
+            new SequenceRule(EN_ALPHABETICAL),
+            new SequenceRule(EN_NUMERICAL),
+            new SequenceRule(EN_QWERTY),
           },
           5000,
         },

@@ -71,9 +71,9 @@ public final class PasswordCli
           rules.add(new UsernameRule(true, true));
           username = args[++i];
         } else if ("-s".equals(args[i])) {
-          rules.add(new QwertySequenceRule());
-          rules.add(new AlphabeticalSequenceRule());
-          rules.add(new NumericalSequenceRule());
+          rules.add(new SequenceRule(CharacterSequences.EN_QWERTY));
+          rules.add(new SequenceRule(CharacterSequences.EN_ALPHABETICAL));
+          rules.add(new SequenceRule(CharacterSequences.EN_NUMERICAL));
           rules.add(new RepeatCharacterRegexRule());
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();
