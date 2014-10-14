@@ -50,19 +50,19 @@
 
   <bean id="qwertySeqRule" class="org.passay.SequenceRule">
     <constructor-arg>
-      <util:constant static-field="org.passay.CharacterSequences.EN_QWERTY"/>
+      <util:constant static-field="org.passay.SequenceData.QWERTY"/>
     </constructor-arg>
   </bean>
 
   <bean id="alphaSeqRule" class="org.passay.SequenceRule">
     <constructor-arg>
-      <util:constant static-field="org.passay.CharacterSequences.EN_ALPHABETICAL"/>
+      <util:constant static-field="org.passay.SequenceData.ALPHABETICAL"/>
     </constructor-arg>
   </bean>
 
   <bean id="numSeqRule" class="org.passay.SequenceRule">
     <constructor-arg>
-      <util:constant static-field="org.passay.CharacterSequences.EN_NUMERICAL"/>
+      <util:constant static-field="org.passay.SequenceData.NUMERICAL"/>
     </constructor-arg>
   </bean>
 

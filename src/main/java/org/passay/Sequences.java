@@ -6,7 +6,7 @@ package org.passay;
  *
  * @author  Middleware Services
  */
-public final class CharacterSequences
+public final class Sequences
 {
 
   /** English QWERTY sequence. */
@@ -118,5 +118,5 @@ public final class CharacterSequences
 
 
   /** Default constructor. */
-  private CharacterSequences() {}
+  private Sequences() {}
 }

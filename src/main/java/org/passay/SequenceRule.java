@@ -24,6 +24,12 @@ public class SequenceRule implements Rule
   /** Minimum length of keyboard sequence, value is {@value}. */
   public static final int MINIMUM_SEQUENCE_LENGTH = 3;
 
+  /** Characters in the sequence. */
+  protected final char[][][] seqCharacters;
+
+  /** Message error code. */
+  protected final String errorCode;
+
   /** Number of characters in sequence to match. */
   protected int sequenceLength = DEFAULT_SEQUENCE_LENGTH;
 
@@ -33,47 +39,44 @@ public class SequenceRule implements Rule
   /** Whether to report all sequence matches or just the first. */
   protected boolean reportAllFailures = true;
 
-  /** Characters in the sequence. */
-  protected final char[][][] seqCharacters;
-
 
   /**
    * Creates a new sequence rule with the supplied list of characters.
    *
-   * @param  chars  for this sequence
+   * @param  data  sequence data for this rule
    */
-  public SequenceRule(final char[][]... chars)
+  public SequenceRule(final SequenceData data)
   {
-    this(DEFAULT_SEQUENCE_LENGTH, false, true, chars);
+    this(data, DEFAULT_SEQUENCE_LENGTH, false, true);
   }
 
 
   /**
    * Creates a new sequence rule with the supplied list of characters.
    *
+   * @param  data  sequence data for this rule
    * @param  sl  sequence length
    * @param  wrap  whether to wrap sequences
-   * @param  chars  for this sequence
    */
-  public SequenceRule(final int sl, final boolean wrap, final char[][]... chars)
+  public SequenceRule(final SequenceData data, final int sl, final boolean wrap)
   {
-    this(sl, wrap, true, chars);
+    this(data, sl, wrap, true);
   }
 
 
   /**
    * Creates a new sequence rule with the supplied list of characters.
    *
-   * @param  chars  for this sequence
+   * @param  data  sequence data for this rule
    * @param  sl  sequence length
    * @param  wrap  whether to wrap sequences
    * @param  reportAll  whether to report all sequence matches or just the first
    */
   public SequenceRule(
+    final SequenceData data,
     final int sl,
     final boolean wrap,
-    final boolean reportAll,
-    final char[][]... chars)
+    final boolean reportAll)
   {
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
       throw new IllegalArgumentException(
@@ -81,10 +84,11 @@ public class SequenceRule implements Rule
           "sequence length must be >= %s",
           MINIMUM_SEQUENCE_LENGTH));
     }
+    errorCode = data.getErrorCode();
+    seqCharacters = data.getCharacters();
     sequenceLength = sl;
     wrapSequence = wrap;
     reportAllFailures = reportAll;
-    seqCharacters = chars;
   }
 
 

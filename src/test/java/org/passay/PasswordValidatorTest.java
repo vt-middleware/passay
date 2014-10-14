@@ -17,11 +17,6 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
-// CheckStyle:AvoidStaticImport OFF
-import static org.passay.CharacterSequences.EN_ALPHABETICAL;
-import static org.passay.CharacterSequences.EN_NUMERICAL;
-import static org.passay.CharacterSequences.EN_QWERTY;
-// CheckStyle:AvoidStaticImport ON
 
 /**
  * Unit test for {@link PasswordValidator}.
@@ -96,11 +91,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
     dictRule.setWordLength(4);
     dictRule.setMatchBackwards(true);
 
-    final SequenceRule qwertySeqRule = new SequenceRule(EN_QWERTY);
+    final SequenceRule qwertySeqRule = new SequenceRule(SequenceData.QWERTY);
 
-    final SequenceRule alphaSeqRule = new SequenceRule(EN_ALPHABETICAL);
+    final SequenceRule alphaSeqRule = new SequenceRule(
+      SequenceData.ALPHABETICAL);
 
-    final SequenceRule numSeqRule = new SequenceRule(EN_NUMERICAL);
+    final SequenceRule numSeqRule = new SequenceRule(SequenceData.NUMERICAL);
 
     final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
 
@@ -161,9 +157,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
     ccRule.setNumberOfCharacteristics(3);
     l.add(ccRule);
 
-    l.add(new SequenceRule(EN_QWERTY));
-    l.add(new SequenceRule(EN_ALPHABETICAL));
-    l.add(new SequenceRule(EN_NUMERICAL));
+    l.add(new SequenceRule(SequenceData.QWERTY));
+    l.add(new SequenceRule(SequenceData.ALPHABETICAL));
+    l.add(new SequenceRule(SequenceData.NUMERICAL));
     l.add(new RepeatCharacterRegexRule());
 
     final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
