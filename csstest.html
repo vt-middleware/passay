@@ -1,0 +1,81 @@
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Passay: password validation and generation library for Java" />
+    <link rel="shortcut icon" href="assets/images/passay-favicon.png" type="image/png" />
+    <link rel="stylesheet" type="text/css"
+          href='http://fonts.googleapis.com/css?family=Source+Code+Pro:400,700'>
+    <link rel="stylesheet" type="text/css"
+          href='http://fonts.googleapis.com/css?family=Rosario:400,700,400italic,700italic'>
+    <link rel="stylesheet" type="text/css" media="screen"
+          href="assets/css/screen.css">
+    <title>{{ page.title }}</title>
+  </head>
+
+  <body>
+    <div id="page-wrapper">
+      <div id="header"></div>
+      <div id="menu">
+        <a href="reference/">Reference</a>
+        <a href="javadocs/">Javadocs</a>
+        <a href="https://github.com/vt-middleware/passay">Source</a>
+        <a href="https://github.com/vt-middleware/passay/issues">Issues</a>
+      </div>
+      <div id="content">
+<h1>Page Title</h1>
+<p>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tempus sagittis erat et facilisis. In quis eleifend 
+dolor. Duis sagittis porttitor risus non aliquam. Etiam malesuada purus et felis feugiat, et condimentum augue 
+sagittis. Donec posuere semper lacus eget sollicitudin. Ut feugiat diam ipsum, ut tempor turpis vehicula sed. Duis 
+euismod euismod rhoncus. Praesent vitae leo egestas neque pellentesque ultricies tincidunt et purus. Suspendisse 
+interdum blandit urna imperdiet euismod. Etiam et metus molestie nisl imperdiet <code>cursus</code>.
+</p>
+
+<pre><code>
+final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
+final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
+cipherBean.setNonce(nonce);
+cipherBean.setKeyAlias("vtcrypt");
+cipherBean.setKeyPassword("vtcrypt");
+cipherBean.setKeyStore(getTestKeyStore());
+cipherBean.setBlockCipherSpec(cipherSpec);
+final byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
+assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
+</code></pre>
+
+<h2>Section Title</h2>
+<p>
+Donec ullamcorper purus sed leo rutrum tincidunt. Pellentesque iaculis tristique pellentesque. Pellentesque cursus 
+porta nisl, at iaculis ligula dapibus quis. Morbi mattis, eros porta blandit ullamcorper, arcu dolor fermentum nunc, accursus magna arcu id nulla. Quisque urna urna, dapibus et blandit vitae, placerat quis nibh. Sed ac est eget nisl 
+ultrices gravida. Aliquam id suscipit ligula. Suspendisse sollicitudin fermentum turpis. Donec auctor consectetur
+purus eu bibendum. Pellentesque eget elit vitae augue bibendum lacinia. Quisque convallis tristique turpis id viverra.
+Mauris aliquet bibendum bibendum. Morbi volutpat id dolor non aliquam.
+</p>
+
+<blockquote>
+Aliquam ultrices dapibus diam, vel porttitor magna elementum et. Fusce eu dui quis dui malesuada tempor vel rhoncus 
+orci. Vestibulum id vestibulum augue. Aenean turpis felis, auctor vel neque eget, fermentum semper ante. Proin 
+imperdiet quis tellus vitae pulvinar. Phasellus est metus, molestie eget diam vel, consequat hendrerit erat. Donec 
+laoreet vitae quam eu sagittis. Vivamus quis tincidunt turpis. Integer venenatis turpis velit.
+</blockquote>
+
+<h2>Section Title</h2>
+<p>
+Morbi tempor elit mi, ac lacinia ligula interdum vel. Donec commodo erat vitae porta tincidunt. Quisque ullamcorper, 
+est non lacinia consequat, turpis nunc feugiat metus, quis tincidunt lectus augue et ipsum. Curabitur lobortis 
+facilisis luctus. Sed placerat ligula enim, at dignissim urna condimentum eget. Etiam tempus facilisis nibh, lobortis 
+tincidunt ante ultrices at. Integer sed purus nec dolor aliquet dictum ut id mi. Nulla vel sem ipsum. Aliquam nec 
+tincidunt metus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Sed suscipit ipsum a varius commodo. 
+Vestibulum bibendum at lectus sit amet vehicula. Pellentesque ullamcorper est eu purus iaculis laoreet. Nam nec neque 
+eget massa faucibus elementum eu quis eros.
+</p>
+
+      </div>
+    </div>
+    <div id="footer">
+      <p>Cryptacular is an open source project developed and supported by
+        <a href="http://www.middleware.vt.edu">Middleware Services</a>
+        at Virginia Tech</p>
+      <p>&copy; 2014 Virginia Tech</p></div>
+  </body>
+</html>
