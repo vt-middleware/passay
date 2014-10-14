@@ -13,6 +13,18 @@ Features at a glance:
 
 See the [reference manual](reference/) for complete documentation and usage examples.
 
+## Using
+Passay artifacts are available in Maven Central. If you would like to use this project in your maven build,
+include the following in your pom.xml:
+
+    <dependencies>
+      <dependency>
+          <groupId>org.passay</groupId>
+          <artifactId>passay</artifactId>
+          <version>1.0</version>
+      </dependency>
+    <dependencies>
+
 ## History
 Passay is the descendant of the venerable [vt-password](https://code.google.com/p/vt-middleware/wiki/vtpassword) Java
 library produced by the Middleware group at Virginia Tech. Passay builds on the lessons learned from vt-password,
