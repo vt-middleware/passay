@@ -6,10 +6,10 @@ title: Passay
 
 Features at a glance:
 
-- PasswordValidator: password policy enforcement with comprehensive built-in rule set
-- PasswordGenerator: password generation according to policy
-- PasswordCli: command line tools
-- Rule: simple interface to facilitate custom policies
+- [PasswordValidator](javadocs/org/passay/PasswordValidator.html) - password policy enforcement with comprehensive built-in rule set
+- [PasswordGenerator](javadocs/org/passay/PasswordGenerator.html) - password generation according to policy
+- [PasswordCli](javadocs/org/passay/PasswordCli.html) - command line tools
+- [Rule](javadocs/org/passay/Rule.html) - simple interface to facilitate custom policies
 
 See the [reference manual](reference/) for complete documentation and usage examples.
 
