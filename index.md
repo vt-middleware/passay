@@ -4,7 +4,8 @@ title: Passay
 ---
 ## Password validation and generation for Java
 
-Feature summary:
+Features at a glance:
+
 - PasswordValidator: password policy enforcement with comprehensive built-in rule set
 - PasswordGenerator: password generation according to policy
 - PasswordCli: command line tools
