@@ -2,7 +2,7 @@
 layout: default
 title: Passay
 ---
-## Password validation and generation for Java
+# Password validation and generation for Java
 
 Features at a glance:
 
