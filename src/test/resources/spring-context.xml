@@ -19,10 +19,18 @@
     </constructor-arg>
   </bean>
 
-  <bean id="alphaRule" class="org.passay.AlphabeticalCharacterRule"
-    p:numberOfCharacters="3"/>
-  <bean id="digitRule" class="org.passay.DigitCharacterRule"
-    p:numberOfCharacters="1"/>
+  <bean id="alphaRule" class="org.passay.CharacterRule"
+    p:numberOfCharacters="3">
+    <constructor-arg>
+      <util:constant static-field="org.passay.CharacterData.ALPHABETICAL"/>
+    </constructor-arg>
+  </bean>
+  <bean id="digitRule" class="org.passay.CharacterRule"
+    p:numberOfCharacters="1">
+    <constructor-arg>
+      <util:constant static-field="org.passay.CharacterData.DIGIT"/>
+    </constructor-arg>
+  </bean>
   <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
     p:numberOfCharacteristics="2">
     <property name="rules">

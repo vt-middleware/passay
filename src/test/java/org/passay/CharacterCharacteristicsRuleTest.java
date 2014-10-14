@@ -45,17 +45,17 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    rule1.getRules().add(new AlphabeticalCharacterRule(4));
-    rule1.getRules().add(new DigitCharacterRule(3));
-    rule1.getRules().add(new UppercaseCharacterRule(2));
-    rule1.getRules().add(new LowercaseCharacterRule(2));
-    rule1.getRules().add(new SpecialCharacterRule(1));
+    rule1.getRules().add(new CharacterRule(CharacterData.ALPHABETICAL, 4));
+    rule1.getRules().add(new CharacterRule(CharacterData.DIGIT, 3));
+    rule1.getRules().add(new CharacterRule(CharacterData.UPPER_CASE, 2));
+    rule1.getRules().add(new CharacterRule(CharacterData.LOWER_CASE, 2));
+    rule1.getRules().add(new CharacterRule(CharacterData.SPECIAL, 1));
     rule1.setNumberOfCharacteristics(5);
 
-    rule2.getRules().add(new DigitCharacterRule(1));
-    rule2.getRules().add(new SpecialCharacterRule(1));
-    rule2.getRules().add(new UppercaseCharacterRule(1));
-    rule2.getRules().add(new LowercaseCharacterRule(1));
+    rule2.getRules().add(new CharacterRule(CharacterData.DIGIT, 1));
+    rule2.getRules().add(new CharacterRule(CharacterData.SPECIAL, 1));
+    rule2.getRules().add(new CharacterRule(CharacterData.UPPER_CASE, 1));
+    rule2.getRules().add(new CharacterRule(CharacterData.LOWER_CASE, 1));
     rule2.setNumberOfCharacteristics(3);
   }
 
@@ -78,36 +78,36 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           new PasswordData(ALPHA_PASS),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            AlphabeticalCharacterRule.ERROR_CODE,
-            LowercaseCharacterRule.ERROR_CODE),
+            CharacterData.ALPHABETICAL.getErrorCode(),
+            CharacterData.LOWER_CASE.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(DIGIT_PASS),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            DigitCharacterRule.ERROR_CODE),
+            CharacterData.DIGIT.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(UPPERCASE_PASS),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            UppercaseCharacterRule.ERROR_CODE),
+            CharacterData.UPPER_CASE.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(LOWERCASE_PASS),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            LowercaseCharacterRule.ERROR_CODE),
+            CharacterData.LOWER_CASE.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(NONALPHA_PASS),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            SpecialCharacterRule.ERROR_CODE),
+            CharacterData.SPECIAL.getErrorCode()),
         },
         {rule2, new PasswordData(VALID_PASS), null, },
         {rule2, new PasswordData(ALPHA_PASS), null, },
@@ -187,10 +187,10 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   {
     final CharacterCharacteristicsRule rule =
       new CharacterCharacteristicsRule();
-    rule.getRules().add(new DigitCharacterRule(3));
-    rule.getRules().add(new UppercaseCharacterRule(2));
-    rule.getRules().add(new LowercaseCharacterRule(2));
-    rule.getRules().add(new SpecialCharacterRule(1));
+    rule.getRules().add(new CharacterRule(CharacterData.DIGIT, 3));
+    rule.getRules().add(new CharacterRule(CharacterData.UPPER_CASE, 2));
+    rule.getRules().add(new CharacterRule(CharacterData.LOWER_CASE, 2));
+    rule.getRules().add(new CharacterRule(CharacterData.SPECIAL, 1));
     rule.setNumberOfCharacteristics(2);
     rule.setReportRuleFailures(false);
 

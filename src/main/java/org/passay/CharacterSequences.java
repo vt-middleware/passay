@@ -68,7 +68,6 @@ public final class CharacterSequences
     },
   };
 
-
   /** English alphabetical sequence. */
   public static final char[][][] EN_ALPHABETICAL = new char[][][] {
     new char[][] {
@@ -100,7 +99,6 @@ public final class CharacterSequences
       new char[] {'z', 'Z'},
     },
   };
-
 
   /** English numerical squence. */
   public static final char[][][] EN_NUMERICAL = new char[][][] {

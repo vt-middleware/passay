@@ -48,15 +48,25 @@ public final class PasswordCli
           final CharacterCharacteristicsRule rule =
             new CharacterCharacteristicsRule();
           rule.getRules().add(
-            new DigitCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              CharacterData.DIGIT,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new AlphabeticalCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              CharacterData.ALPHABETICAL,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new SpecialCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              CharacterData.SPECIAL,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new UppercaseCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              CharacterData.UPPER_CASE,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new LowercaseCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              CharacterData.LOWER_CASE,
+              Integer.parseInt(args[++i])));
           rule.setNumberOfCharacteristics(Integer.parseInt(args[++i]));
           rules.add(rule);
         } else if ("-d".equals(args[i])) {
