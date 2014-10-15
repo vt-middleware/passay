@@ -65,7 +65,6 @@ public final class PasswordCli
           final DictionarySubstringRule rule = new DictionarySubstringRule(
             dict);
           rule.setMatchBackwards(true);
-          rule.setWordLength(Integer.parseInt(args[++i]));
           rules.add(rule);
         } else if ("-u".equals(args[i])) {
           rules.add(new UsernameRule(true, true));

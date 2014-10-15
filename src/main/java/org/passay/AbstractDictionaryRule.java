@@ -20,10 +20,10 @@ public abstract class AbstractDictionaryRule implements Rule
   public static final String ERROR_CODE_REVERSED = "ILLEGAL_WORD_REVERSED";
 
   /** Dictionary of words. */
-  protected Dictionary dictionary;
+  private Dictionary dictionary;
 
   /** Whether to search for dictionary words backwards. */
-  protected boolean matchBackwards;
+  private boolean matchBackwards;
 
 
   /**

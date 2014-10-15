@@ -27,14 +27,14 @@ public class DictionaryRule extends AbstractDictionaryRule
    */
   public DictionaryRule(final Dictionary dict)
   {
-    dictionary = dict;
+    setDictionary(dict);
   }
 
 
   @Override
   protected String doWordSearch(final String text)
   {
-    if (dictionary.search(text)) {
+    if (getDictionary().search(text)) {
       return text;
     }
     return null;
