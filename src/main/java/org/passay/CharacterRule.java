@@ -13,11 +13,8 @@ import java.util.Map;
 public class CharacterRule implements Rule
 {
 
-  /** Characters for this rule. */
-  protected final String characters;
-
-  /** Message error code. */
-  protected final String errorCode;
+  /** Character data for this rule. */
+  protected final CharacterData characterData;
 
   /** Number of characters to require. Default value is {@value}. */
   protected int numCharacters = 1;
@@ -43,8 +40,7 @@ public class CharacterRule implements Rule
   public CharacterRule(final CharacterData data, final int num)
   {
     setNumberOfCharacters(num);
-    errorCode = data.getErrorCode();
-    characters = new String(data.getCharacters());
+    characterData = data;
   }
 
 
@@ -82,7 +78,7 @@ public class CharacterRule implements Rule
    */
   public String getValidCharacters()
   {
-    return characters;
+    return String.valueOf(characterData.getCharacters());
   }
 
 
@@ -90,7 +86,7 @@ public class CharacterRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final String matchingChars = PasswordUtils.getMatchingCharacters(
-      characters,
+      String.valueOf(characterData.getCharacters()),
       passwordData.getPassword());
     if (matchingChars.length() >= numCharacters) {
       return new RuleResult(true);
@@ -99,7 +95,7 @@ public class CharacterRule implements Rule
         new RuleResult(
           false,
           new RuleResultDetail(
-            errorCode,
+            characterData.getErrorCode(),
             createRuleResultDetailParameters(matchingChars)));
     }
   }
@@ -118,7 +114,7 @@ public class CharacterRule implements Rule
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
     m.put("matchingCharacterCount", matchingChars.length());
-    m.put("validCharacters", characters);
+    m.put("validCharacters", String.valueOf(characterData.getCharacters()));
     m.put("matchingCharacters", matchingChars);
     return m;
   }

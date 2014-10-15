@@ -34,7 +34,7 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.QWERTY, 6, false),
           new PasswordData("pqwerty#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.QWERTY.getErrorCode()),
         },
         // Has wrapping qwerty sequence with wrap=false
         {
@@ -46,13 +46,15 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.QWERTY, 8, true),
           new PasswordData("piop{}|qw#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.QWERTY.getErrorCode()),
         },
         // Has backward qwerty sequence
         {
           new SequenceRule(SequenceData.QWERTY, 4, false),
           new PasswordData("p7^54#n65"),
-          codes(SequenceRule.ERROR_CODE, SequenceRule.ERROR_CODE),
+          codes(
+            SequenceData.QWERTY.getErrorCode(),
+            SequenceData.QWERTY.getErrorCode()),
         },
         // Has backward wrapping qwerty sequence with wrap=false
         {
@@ -64,13 +66,13 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.QWERTY, 6, true),
           new PasswordData("p@1`+_0#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.QWERTY.getErrorCode()),
         },
         // report single error
         {
           new SequenceRule(SequenceData.QWERTY, 6, false, false),
           new PasswordData("pqwertyui#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.QWERTY.getErrorCode()),
         },
         /* ALPHABETICAL SEQUENCE */
         // Test valid password
@@ -83,7 +85,7 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 7, false),
           new PasswordData("phijklmn#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has wrapping alphabetical sequence with wrap=false
         {
@@ -95,13 +97,13 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 4, true),
           new PasswordData("pxyzA#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has backward alphabetical sequence
         {
           new SequenceRule(SequenceData.ALPHABETICAL),
           new PasswordData("ptSrqp#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has backward wrapping alphabetical sequence with wrap=false
         {
@@ -113,19 +115,19 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 8, true),
           new PasswordData("pcbazyxwv#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has forward alphabetical sequence that ends with 'y'
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 3, false),
           new PasswordData("wxy"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has forward alphabetical sequence that ends with 'z'
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 3, false),
           new PasswordData("xyz"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has forward alphabetical sequence that ends with 'a' with wrap=false
         {
@@ -137,19 +139,19 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 3, true),
           new PasswordData("yza"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has backward alphabetical sequence that ends with 'b'
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 3, false),
           new PasswordData("dcb"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has backward alphabetical sequence that ends with 'a'
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 3, false),
           new PasswordData("cba"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // Has backward alphabetical sequence that ends with 'z' with wrap=false
         {
@@ -161,13 +163,13 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 3, true),
           new PasswordData("baz"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         // report single error
         {
           new SequenceRule(SequenceData.ALPHABETICAL, 5, false, false),
           new PasswordData("phijklmn#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.ALPHABETICAL.getErrorCode()),
         },
         /* NUMERICAL SEQUENCE */
         // Test valid password
@@ -180,7 +182,7 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.NUMERICAL, 4, false),
           new PasswordData("p3456#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.NUMERICAL.getErrorCode()),
         },
         // Has wrapping numerical sequence with wrap=false
         {
@@ -192,13 +194,13 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.NUMERICAL, 7, true),
           new PasswordData("p4zRcv2#n8901234"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.NUMERICAL.getErrorCode()),
         },
         // Has backward numerical sequence
         {
           new SequenceRule(SequenceData.NUMERICAL),
           new PasswordData("p54321#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.NUMERICAL.getErrorCode()),
         },
         // Has backward wrapping numerical sequence with wrap=false
         {
@@ -210,22 +212,22 @@ public class SequenceRuleTest extends AbstractRuleTest
         {
           new SequenceRule(SequenceData.NUMERICAL, 8, true),
           new PasswordData("p54321098#n65"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.NUMERICAL.getErrorCode()),
         },
         // Issue 135
         {
           new SequenceRule(SequenceData.NUMERICAL, 5, true),
           new PasswordData("1234567"),
           codes(
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE),
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode()),
         },
         // report single error
         {
           new SequenceRule(SequenceData.NUMERICAL, 5, true, false),
           new PasswordData("1234567"),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.NUMERICAL.getErrorCode()),
         },
       };
   }
@@ -247,7 +249,7 @@ public class SequenceRuleTest extends AbstractRuleTest
           new PasswordData("pkwerty#n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "werty"),
+              "Password contains the illegal QWERTY sequence '%s'.", "werty"),
           },
         },
         {
@@ -255,7 +257,7 @@ public class SequenceRuleTest extends AbstractRuleTest
           new PasswordData("pkl;'asd65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "kl;'a"),
+              "Password contains the illegal QWERTY sequence '%s'.", "kl;'a"),
           },
         },
         {
@@ -263,7 +265,8 @@ public class SequenceRuleTest extends AbstractRuleTest
           new PasswordData("phijkl#n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "hijkl"),
+              "Password contains the illegal alphabetical sequence '%s'.",
+              "hijkl"),
           },
         },
         {
@@ -271,7 +274,8 @@ public class SequenceRuleTest extends AbstractRuleTest
           new PasswordData("phijklmno#n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "hijkl"),
+              "Password contains the illegal alphabetical sequence '%s'.",
+              "hijkl"),
           },
         },
         {
@@ -279,7 +283,8 @@ public class SequenceRuleTest extends AbstractRuleTest
           new PasswordData("p34567n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "34567"),
+              "Password contains the illegal numerical sequence '%s'.",
+              "34567"),
           },
         },
         {
@@ -287,7 +292,8 @@ public class SequenceRuleTest extends AbstractRuleTest
           new PasswordData("p3456789n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "34567"),
+              "Password contains the illegal numerical sequence '%s'.",
+              "34567"),
           },
         },
       };

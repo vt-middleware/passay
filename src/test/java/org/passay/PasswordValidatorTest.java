@@ -217,7 +217,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             CharacterData.UPPER_CASE.getErrorCode(),
             CharacterData.LOWER_CASE.getErrorCode(),
             CharacterData.SPECIAL.getErrorCode(),
-            SequenceRule.ERROR_CODE),
+            SequenceData.QWERTY.getErrorCode()),
         },
 
         /** all non-alphanumeric */
@@ -398,7 +398,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "p4zxcvb#n65",
             USER,
             references),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.QWERTY.getErrorCode()),
         },
 
         /**
@@ -412,7 +412,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             USER,
             references),
           codes(
-            SequenceRule.ERROR_CODE,
+            SequenceData.QWERTY.getErrorCode(),
             DictionaryRule.ERROR_CODE_REVERSED),
         },
 
@@ -423,7 +423,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "p4iOP[]#n65",
             USER,
             references),
-          codes(SequenceRule.ERROR_CODE),
+          codes(SequenceData.QWERTY.getErrorCode()),
         },
 
         /** invalid userid rule passwords. */
@@ -541,12 +541,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
             CharacterData.SPECIAL.getErrorCode(),
             CharacterData.LOWER_CASE.getErrorCode(),
             CharacterData.UPPER_CASE.getErrorCode(),
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE,
-            SequenceRule.ERROR_CODE,
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode(),
+            SequenceData.NUMERICAL.getErrorCode(),
             LengthRule.ERROR_CODE_MIN),
         },
       };

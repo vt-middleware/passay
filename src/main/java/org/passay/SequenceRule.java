@@ -15,20 +15,14 @@ import java.util.Map;
 public class SequenceRule implements Rule
 {
 
-  /** Error code for sequence validation failures. */
-  public static final String ERROR_CODE = "ILLEGAL_SEQUENCE";
-
   /** Default length of keyboard sequence, value is {@value}. */
   public static final int DEFAULT_SEQUENCE_LENGTH = 5;
 
   /** Minimum length of keyboard sequence, value is {@value}. */
   public static final int MINIMUM_SEQUENCE_LENGTH = 3;
 
-  /** Characters in the sequence. */
-  protected final char[][][] seqCharacters;
-
-  /** Message error code. */
-  protected final String errorCode;
+  /** Sequence data for this rule. */
+  protected final SequenceData sequenceData;
 
   /** Number of characters in sequence to match. */
   protected int sequenceLength = DEFAULT_SEQUENCE_LENGTH;
@@ -84,8 +78,7 @@ public class SequenceRule implements Rule
           "sequence length must be >= %s",
           MINIMUM_SEQUENCE_LENGTH));
     }
-    errorCode = data.getErrorCode();
-    seqCharacters = data.getCharacters();
+    sequenceData = data;
     sequenceLength = sl;
     wrapSequence = wrap;
     reportAllFailures = reportAll;
@@ -101,9 +94,10 @@ public class SequenceRule implements Rule
     Sequence sequence;
     int position;
     char c;
-    for (int i = 0; i < seqCharacters.length; i++) {
+    for (int i = 0; i < sequenceData.getCharacters().length; i++) {
       for (int j = 0; j < max; j++) {
-        sequence = newSequence(seqCharacters[i], password.charAt(j));
+        sequence = newSequence(
+          sequenceData.getCharacters()[i], password.charAt(j));
         if (sequence != null) {
           position = j;
           while (sequence.forward()) {
@@ -185,7 +179,8 @@ public class SequenceRule implements Rule
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
       result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, m));
+      result.getDetails().add(
+        new RuleResultDetail(sequenceData.getErrorCode(), m));
     }
   }
 

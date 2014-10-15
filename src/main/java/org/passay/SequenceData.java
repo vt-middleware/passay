@@ -17,7 +17,7 @@ public interface SequenceData
     @Override
     public String getErrorCode()
     {
-      return "ILLEGAL_SEQUENCE";
+      return "ILLEGAL_QWERTY_SEQUENCE";
     }
 
 
@@ -36,7 +36,7 @@ public interface SequenceData
     @Override
     public String getErrorCode()
     {
-      return "ILLEGAL_SEQUENCE";
+      return "ILLEGAL_ALPHABETICAL_SEQUENCE";
     }
 
 
@@ -55,7 +55,7 @@ public interface SequenceData
     @Override
     public String getErrorCode()
     {
-      return "ILLEGAL_SEQUENCE";
+      return "ILLEGAL_NUMERICAL_SEQUENCE";
     }
 
 
