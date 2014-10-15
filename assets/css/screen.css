@@ -20,21 +20,33 @@ body {
   padding: 0;
 }
 
+p {
+  margin:0 0 0.4em 0;
+  padding:0;
+}
+
 h1, h2, h3, h4, h5, h6 {
   font-family: Nauman, Verdana, Sans-Serif;
   font-size: 110%;
   font-weight: normal;
   font-style: normal;
+  padding:0;
+  margin:0.6em 0 0.1em 0;
 }
 
 h1 {
-  font-size: 130%;
+  font-size: 140%;
+  font-variant: small-caps;
+}
+
+h2 {
+  font-size: 120%;
+  font-style: italic;
 }
 
 pre, code {
   font-family: Source Code Pro, monospace;
-  font-size: 15px;
-  line-height: 140%;
+  line-height: 130%;
 }
 
 fieldset, pre {
@@ -53,17 +65,15 @@ pre code {
 }
 
 code {
-  font-size: 18px;
+  font-size: 16px;
   color: #296643;
-  margin: 0;
-  padding: 0;
 }
 
 /******************************************
  * Specific page elements
  ******************************************/
 #page-wrapper {
-  margin:0 auto;
+  margin: 24px auto;
   padding: 0 8% 8% 8%;
   width: 70%;
   background-color: #fff;
@@ -75,15 +85,21 @@ code {
 }
 
 #header {
-  background: #fff url('../images/passay.png') no-repeat 50% 10px;
-  height: 130px;
+  background: #fff url('../images/tagline.png') no-repeat 50% 36px;
+  padding: 2px 0 8px 0;
+}
+
+#header img {
+  border: none;
+  display: block;
+  margin: auto auto;
 }
 
 #menu {
-  margin: -40px 0 30px 0;
+  margin: 0 0 30px 0;
   border-top: 1px solid #cec6d4;
   font-family: Nauman, Verdana, Sans-Serif;
-  font-size: 18px;
+  font-size: 16px;
   text-align: center;
 }
 
@@ -96,7 +112,14 @@ code {
 #content {
   line-height: 125%;
   font-family: Rosario, Helvetica, Sans-Serif;
-  font-size: 20px;
+  font-size: 18px;
+}
+
+#title {
+  font-family: Nauman, Verdana, Sans-Serif;
+  font-size: 150%;
+  font-weight: bold;
+  margin-bottom: 20px;
 }
 
 #footer {

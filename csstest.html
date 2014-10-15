@@ -9,12 +9,14 @@
           href='http://fonts.googleapis.com/css?family=Rosario:400,700,400italic,700italic'>
     <link rel="stylesheet" type="text/css" media="screen"
           href="assets/css/screen.css">
-    <title>{{ page.title }}</title>
+    <title>CSS test page</title>
   </head>
-
+  
   <body>
     <div id="page-wrapper">
-      <div id="header"></div>
+      <div id="header">
+        <a href="/"><img src="assets/images/passay.png"></a>
+      </div>
       <div id="menu">
         <a href="reference/">Reference</a>
         <a href="javadocs/">Javadocs</a>
@@ -22,7 +24,7 @@
         <a href="https://github.com/vt-middleware/passay/issues">Issues</a>
       </div>
       <div id="content">
-<h1>Page Title</h1>
+        <div id="title">CSS test page</div>
 <p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent tempus sagittis erat et facilisis. In quis eleifend 
 dolor. Duis sagittis porttitor risus non aliquam. Etiam malesuada purus et felis feugiat, et condimentum augue 
@@ -30,9 +32,14 @@ sagittis. Donec posuere semper lacus eget sollicitudin. Ut feugiat diam ipsum, u
 euismod euismod rhoncus. Praesent vitae leo egestas neque pellentesque ultricies tincidunt et purus. Suspendisse 
 interdum blandit urna imperdiet euismod. Etiam et metus molestie nisl imperdiet <code>cursus</code>.
 </p>
+<p>
+Aliquam ultrices dapibus diam, vel porttitor magna elementum et. Fusce eu dui quis dui malesuada tempor vel rhoncus 
+orci. Vestibulum id vestibulum augue. Aenean turpis felis, auctor vel neque eget, fermentum semper ante. Proin 
+imperdiet quis tellus vitae pulvinar. Phasellus est metus, molestie eget diam vel, consequat hendrerit erat. Donec 
+laoreet vitae quam eu sagittis. Vivamus quis tincidunt turpis. Integer venenatis turpis velit.
+</p>
 
-<pre><code>
-final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
+<pre><code>final BufferedBlockCipherBean cipherBean = new BufferedBlockCipherBean();
 final BufferedBlockCipherSpec cipherSpec = BufferedBlockCipherSpec.parse(cipherSpecString);
 cipherBean.setNonce(nonce);
 cipherBean.setKeyAlias("vtcrypt");
@@ -43,7 +50,7 @@ final byte[] ciphertext = cipherBean.encrypt(ByteUtil.toBytes(input));
 assertEquals(ByteUtil.toString(cipherBean.decrypt(ciphertext)), input);
 </code></pre>
 
-<h2>Section Title</h2>
+<h2>Section donec</h2>
 <p>
 Donec ullamcorper purus sed leo rutrum tincidunt. Pellentesque iaculis tristique pellentesque. Pellentesque cursus 
 porta nisl, at iaculis ligula dapibus quis. Morbi mattis, eros porta blandit ullamcorper, arcu dolor fermentum nunc, accursus magna arcu id nulla. Quisque urna urna, dapibus et blandit vitae, placerat quis nibh. Sed ac est eget nisl 
@@ -59,7 +66,9 @@ imperdiet quis tellus vitae pulvinar. Phasellus est metus, molestie eget diam ve
 laoreet vitae quam eu sagittis. Vivamus quis tincidunt turpis. Integer venenatis turpis velit.
 </blockquote>
 
-<h2>Section Title</h2>
+<h2>Section morbi</h2>
+<p>Brief intructory statement</p>
+<h3>Subsection morbi mundi</h3>
 <p>
 Morbi tempor elit mi, ac lacinia ligula interdum vel. Donec commodo erat vitae porta tincidunt. Quisque ullamcorper, 
 est non lacinia consequat, turpis nunc feugiat metus, quis tincidunt lectus augue et ipsum. Curabitur lobortis 

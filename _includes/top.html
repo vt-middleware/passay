@@ -18,7 +18,9 @@
 
   <body>
     <div id="page-wrapper">
-      <div id="header"></div>
+      <div id="header">
+        <a href="{{ relative }}"><img src="{{ relative }}assets/images/passay.png"></a>
+      </div>
       <div id="menu">
         <a href="{{ relative }}reference/">Reference</a>
         <a href="{{ relative }}javadocs/">Javadocs</a>
@@ -26,3 +28,4 @@
         <a href="https://github.com/vt-middleware/passay/issues">Issues</a>
       </div>
       <div id="content">
+        <div id="title">{{ page.title }}</div>

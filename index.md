@@ -1,19 +1,23 @@
 ---
 layout: default
-title: Passay
+title: Password policy enforcement for Java
 ---
-# Password validation and generation for Java
+Passay builds on the success of [vt-password](https://code.google.com/p/vt-middleware/wiki/vtpassword) and provides
+a comprehensive and extensible feature set.
 
-Features at a glance:
+## Password validation
+Enforce password policy by validating candidate passwords against a configurable rule set.
+Passay provides a comprehensive set of rules for common cases and supports extension through a simple
+[rule interface](javadocs/org/passay/Rule.html).
 
-- [PasswordValidator](javadocs/org/passay/PasswordValidator.html) - password policy enforcement with comprehensive built-in rule set
-- [PasswordGenerator](javadocs/org/passay/PasswordGenerator.html) - password generation according to policy
-- [PasswordCli](javadocs/org/passay/PasswordCli.html) - command line tools
-- [Rule](javadocs/org/passay/Rule.html) - simple interface to facilitate custom policies
+## Password generation
+Generate passwords using a configurable rule set. The [password generator](javadocs/org/passay/PasswordGenerator.html)
+is extensible like all Passay components.
 
-See the [reference manual](reference/) for complete documentation and usage examples.
+## Command line tools
+Automate password policy enforcement and support tooling scenarios using the command line interface.
 
-## Using
+# Using
 Passay artifacts are available in Maven Central. If you would like to use this project in your maven build,
 include the following in your pom.xml:
 
@@ -25,7 +29,7 @@ include the following in your pom.xml:
       </dependency>
     <dependencies>
 
-## History
+# History
 Passay is the descendant of the venerable [vt-password](https://code.google.com/p/vt-middleware/wiki/vtpassword) Java
 library produced by the Middleware group at Virginia Tech. Passay builds on the lessons learned from vt-password,
 which was [well-regarded](http://stackoverflow.com/questions/3200292/password-strength-checking-library) in its own
