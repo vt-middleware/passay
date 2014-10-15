@@ -86,7 +86,7 @@ code {
 
 #header {
   background: #fff url('../images/tagline.png') no-repeat 50% 36px;
-  padding: 2px 0 8px 0;
+  padding: 2px 0 10px 0;
 }
 
 #header img {
@@ -98,21 +98,22 @@ code {
 #menu {
   margin: 0 0 30px 0;
   border-top: 1px solid #cec6d4;
-  font-family: Nauman, Verdana, Sans-Serif;
-  font-size: 16px;
+  font-family: Oswald, Helvetica, Sans-Serif;
+  font-size: 14px;
   text-align: center;
+  letter-spacing: 0.1em;
 }
 
 #menu a {
   color: #6e6881;
   text-decoration: none;
-  padding: 5px 18px;
+  padding: 5px 20px;
 }
 
 #content {
   line-height: 125%;
-  font-family: Rosario, Helvetica, Sans-Serif;
-  font-size: 18px;
+  font-family: 'Open Sans', Helvetica, Sans-Serif;
+  font-size: 16px;
 }
 
 #title {
