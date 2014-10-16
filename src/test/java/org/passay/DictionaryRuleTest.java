@@ -33,9 +33,6 @@ public class DictionaryRuleTest extends AbstractRuleTest
   /** Test password. */
   private static final String BACKWARDS_UPPERCASE_DICT_PASS =  "EZInamLLuP";
 
-  /** Test password. */
-  private static final String SINGLE_LETTER_DICT_PASS = "a";
-
   /** For testing. */
   private final DictionaryRule rule = new DictionaryRule();
 
@@ -165,11 +162,6 @@ public class DictionaryRuleTest extends AbstractRuleTest
           allRule,
           new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
-        },
-        {
-          allRule,
-          new PasswordData(SINGLE_LETTER_DICT_PASS),
-          codes(DictionaryRule.ERROR_CODE),
         },
       };
   }
