@@ -1,11 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.io.FileReader;
-import org.passay.dictionary.ArrayWordList;
-import org.passay.dictionary.WordListDictionary;
-import org.passay.dictionary.WordLists;
-import org.passay.dictionary.sort.ArraysSort;
+import org.passay.dictionary.Dictionary;
+import org.passay.dictionary.DictionaryBuilder;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
@@ -58,19 +55,10 @@ public class DictionaryRuleTest extends AbstractRuleTest
   public void createRules(final String dictFile)
     throws Exception
   {
-    final ArrayWordList caseSensitiveWordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(dictFile)},
-      true,
-      new ArraysSort());
-    final WordListDictionary caseSensitiveDict = new WordListDictionary(
-      caseSensitiveWordList);
-
-    final ArrayWordList caseInsensitiveWordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(dictFile)},
-      false,
-      new ArraysSort());
-    final WordListDictionary caseInsensitiveDict = new WordListDictionary(
-      caseInsensitiveWordList);
+    final Dictionary caseSensitiveDict =
+      new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
+    final Dictionary caseInsensitiveDict =
+      new DictionaryBuilder().addFile(dictFile).build();
 
     rule.setDictionary(caseSensitiveDict);
 

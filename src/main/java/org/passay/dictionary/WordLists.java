@@ -134,19 +134,44 @@ public final class WordLists
   {
     final List<String> words = new ArrayList<>();
     for (Reader r : readers) {
-      try (BufferedReader br = new BufferedReader(r)) {
-        String word;
-        while ((word = br.readLine()) != null) {
-          if (!"".equals(word)) {
-            words.add(word);
-          }
-        }
-      }
+      readWordList(r, words);
     }
     return
       new ArrayWordList(
         words.toArray(new String[words.size()]),
         caseSensitive,
         sorter);
+  }
+
+
+  /**
+   * Reads words, one per line, from a reader into the given word list.
+   *
+   * @param  reader  Reader containing words, one per line. The reader is closed
+   *                 on completion.
+   * @param  wordList  Destination word list.
+   * @throws  IOException  on IO errors reading from reader.
+   */
+  public static void readWordList(
+    final Reader reader,
+    final List<String> wordList)
+    throws IOException
+  {
+    try {
+      final BufferedReader bufferedReader;
+      if (reader instanceof BufferedReader) {
+        bufferedReader = (BufferedReader) reader;
+      } else {
+        bufferedReader = new BufferedReader(reader);
+      }
+      String word;
+      while ((word = bufferedReader.readLine()) != null) {
+        if (!word.isEmpty()) {
+          wordList.add(word);
+        }
+      }
+    } finally {
+      reader.close();
+    }
   }
 }
