@@ -49,23 +49,23 @@ public final class PasswordCli
             new CharacterCharacteristicsRule();
           rule.getRules().add(
             new CharacterRule(
-              CharacterData.DIGIT,
+              EnCharacterData.Digit,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              CharacterData.ALPHABETICAL,
+              EnCharacterData.Alphabetical,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              CharacterData.SPECIAL,
+              EnCharacterData.Special,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              CharacterData.UPPER_CASE,
+              EnCharacterData.UpperCase,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              CharacterData.LOWER_CASE,
+              EnCharacterData.LowerCase,
               Integer.parseInt(args[++i])));
           rule.setNumberOfCharacteristics(Integer.parseInt(args[++i]));
           rules.add(rule);

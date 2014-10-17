@@ -77,10 +77,10 @@ public class PasswordValidatorTest extends AbstractRuleTest
   {
     final CharacterCharacteristicsRule charRule =
       new CharacterCharacteristicsRule();
-    charRule.getRules().add(new CharacterRule(CharacterData.DIGIT, 1));
-    charRule.getRules().add(new CharacterRule(CharacterData.SPECIAL, 1));
-    charRule.getRules().add(new CharacterRule(CharacterData.UPPER_CASE, 1));
-    charRule.getRules().add(new CharacterRule(CharacterData.LOWER_CASE, 1));
+    charRule.getRules().add(new CharacterRule(EnCharacterData.Digit, 1));
+    charRule.getRules().add(new CharacterRule(EnCharacterData.Special, 1));
+    charRule.getRules().add(new CharacterRule(EnCharacterData.UpperCase, 1));
+    charRule.getRules().add(new CharacterRule(EnCharacterData.LowerCase, 1));
     charRule.setNumberOfCharacteristics(3);
 
     final WhitespaceRule whitespaceRule = new WhitespaceRule();
@@ -150,10 +150,10 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     final CharacterCharacteristicsRule ccRule =
       new CharacterCharacteristicsRule();
-    ccRule.getRules().add(new CharacterRule(CharacterData.DIGIT, 1));
-    ccRule.getRules().add(new CharacterRule(CharacterData.SPECIAL, 1));
-    ccRule.getRules().add(new CharacterRule(CharacterData.UPPER_CASE, 1));
-    ccRule.getRules().add(new CharacterRule(CharacterData.LOWER_CASE, 1));
+    ccRule.getRules().add(new CharacterRule(EnCharacterData.Digit, 1));
+    ccRule.getRules().add(new CharacterRule(EnCharacterData.Special, 1));
+    ccRule.getRules().add(new CharacterRule(EnCharacterData.UpperCase, 1));
+    ccRule.getRules().add(new CharacterRule(EnCharacterData.LowerCase, 1));
     ccRule.setNumberOfCharacteristics(3);
     l.add(ccRule);
 
@@ -214,9 +214,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "4326789032", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.UPPER_CASE.getErrorCode(),
-            CharacterData.LOWER_CASE.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode(),
+            EnCharacterData.UpperCase.getErrorCode(),
+            EnCharacterData.LowerCase.getErrorCode(),
+            EnCharacterData.Special.getErrorCode(),
             SequenceData.QWERTY.getErrorCode()),
         },
 
@@ -227,9 +227,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "$&!$#@*{{>", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.UPPER_CASE.getErrorCode(),
-            CharacterData.LOWER_CASE.getErrorCode()),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.UpperCase.getErrorCode(),
+            EnCharacterData.LowerCase.getErrorCode()),
         },
 
         /** all lowercase */
@@ -239,9 +239,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "aycdopezss", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.UPPER_CASE.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode(),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.UpperCase.getErrorCode(),
+            EnCharacterData.Special.getErrorCode(),
             DictionarySubstringRule.ERROR_CODE),
         },
 
@@ -252,9 +252,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "AYCDOPEZSS", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.LOWER_CASE.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode(),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.LowerCase.getErrorCode(),
+            EnCharacterData.Special.getErrorCode(),
             DictionarySubstringRule.ERROR_CODE),
         },
 
@@ -265,8 +265,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "@&3*(%5{}^", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.UPPER_CASE.getErrorCode(),
-            CharacterData.LOWER_CASE.getErrorCode()),
+            EnCharacterData.UpperCase.getErrorCode(),
+            EnCharacterData.LowerCase.getErrorCode()),
         },
 
         /** digits and lowercase */
@@ -276,8 +276,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "ay3dop5zss", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.UPPER_CASE.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode()),
+            EnCharacterData.UpperCase.getErrorCode(),
+            EnCharacterData.Special.getErrorCode()),
         },
 
         /** digits and uppercase */
@@ -287,8 +287,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "AY3DOP5ZSS", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.LOWER_CASE.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode()),
+            EnCharacterData.LowerCase.getErrorCode(),
+            EnCharacterData.Special.getErrorCode()),
         },
 
         /** non-alphanumeric and lowercase */
@@ -298,8 +298,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "a&c*o%ea}s", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.UPPER_CASE.getErrorCode()),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.UpperCase.getErrorCode()),
         },
 
         /** non-alphanumeric and uppercase */
@@ -309,8 +309,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "A&C*O%EA}S", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.LOWER_CASE.getErrorCode()),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.LowerCase.getErrorCode()),
         },
 
         /** uppercase and lowercase */
@@ -320,8 +320,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "AycDOPdsyz", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode()),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.Special.getErrorCode()),
         },
 
         /** invalid whitespace rule passwords. */
@@ -333,8 +333,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "AycD Pdsyz", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode(),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.Special.getErrorCode(),
             WhitespaceRule.ERROR_CODE),
         },
 
@@ -347,8 +347,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
             references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.DIGIT.getErrorCode(),
-            CharacterData.SPECIAL.getErrorCode(),
+            EnCharacterData.Digit.getErrorCode(),
+            EnCharacterData.Special.getErrorCode(),
             WhitespaceRule.ERROR_CODE),
         },
 
@@ -538,9 +538,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
           PasswordData.newInstance("1234567", USER, references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
-            CharacterData.SPECIAL.getErrorCode(),
-            CharacterData.LOWER_CASE.getErrorCode(),
-            CharacterData.UPPER_CASE.getErrorCode(),
+            EnCharacterData.Special.getErrorCode(),
+            EnCharacterData.LowerCase.getErrorCode(),
+            EnCharacterData.UpperCase.getErrorCode(),
             SequenceData.NUMERICAL.getErrorCode(),
             SequenceData.NUMERICAL.getErrorCode(),
             SequenceData.NUMERICAL.getErrorCode(),

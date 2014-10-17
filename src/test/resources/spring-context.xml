@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:c="http://www.springframework.org/schema/c"
   xmlns:p="http://www.springframework.org/schema/p"
   xmlns:util="http://www.springframework.org/schema/util"
   xsi:schemaLocation="http://www.springframework.org/schema/beans http://schema.spring.io/beans/spring-beans.xsd
@@ -20,17 +21,11 @@
   </bean>
 
   <bean id="alphaRule" class="org.passay.CharacterRule"
-    p:numberOfCharacters="3">
-    <constructor-arg>
-      <util:constant static-field="org.passay.CharacterData.ALPHABETICAL"/>
-    </constructor-arg>
-  </bean>
+    c:data="#{T(org.passay.EnCharacterData).Alphabetical}"
+    p:numberOfCharacters="3" />
   <bean id="digitRule" class="org.passay.CharacterRule"
-    p:numberOfCharacters="1">
-    <constructor-arg>
-      <util:constant static-field="org.passay.CharacterData.DIGIT"/>
-    </constructor-arg>
-  </bean>
+    c:data="#{T(org.passay.EnCharacterData).Digit}"
+    p:numberOfCharacters="1" />
   <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
     p:numberOfCharacteristics="2">
     <property name="rules">
