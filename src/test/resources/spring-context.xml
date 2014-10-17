@@ -33,8 +33,7 @@
   </bean>
 
   <bean id="dictRule" class="org.passay.DictionarySubstringRule"
-    p:dictionary-ref="dictionary"
-    p:wordLength="4"/>
+    p:dictionary-ref="dictionary" />
 
   <bean id="lenRule" class="org.passay.LengthRule"
     p:minimumLength="5"/>
