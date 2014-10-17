@@ -78,7 +78,7 @@ public class CharacterRule implements Rule
    */
   public String getValidCharacters()
   {
-    return String.valueOf(characterData.getCharacters());
+    return characterData.getCharacters();
   }
 
 
