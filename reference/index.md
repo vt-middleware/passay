@@ -39,7 +39,7 @@ PasswordValidator validator = new PasswordValidator(Arrays.asList(
   new WhitespaceRule()));
 
 final char[] password = System.console().readPassword("Password: ");
-RuleResult result = validator.validate(new String(password));
+RuleResult result = validator.validate(new PasswordData(new String(password)));
 if (result.isValid()) {
   System.out.println("Password is valid");
 } else {
@@ -71,7 +71,7 @@ r2.getRules().add(new UppercaseCharacterRule(1));
 r2.getRules().add(new LowercaseCharacterRule(1));
 r2.getRules().add(new DigitCharacterRule(1));
 r2.getRules().add(new SpecialCharacterRule(1));
-WhiteSpaceRule r3 = new WhiteSpaceRule();
+WhitespaceRule r3 = new WhitespaceRule();
 PasswordValidator validator = new PasswordValidator(Arrays.asList(r1, r2, r3));
 {% endhighlight %}
 
