@@ -23,7 +23,7 @@ public class DictionaryBuilder
   private static final ArraySorter SORTER = new ArraysSort();
 
   /** List of word list files. */
-  private List<File> files = new ArrayList<>();
+  private final List<File> files = new ArrayList<>();
 
   /** Dictionary case sensitivity flag. */
   private boolean caseSensitive;
