@@ -45,7 +45,7 @@ public class NumericalSequenceRule extends AbstractSequenceRule
    *
    * @param  length  of sequence to search for.
    * @param  wrap  true to wrap sequences when searching for matches, false
-   * otherwise.
+   *               otherwise.
    */
   public NumericalSequenceRule(final int length, final boolean wrap)
   {
@@ -59,7 +59,7 @@ public class NumericalSequenceRule extends AbstractSequenceRule
    *
    * @param  length  of sequence to search for.
    * @param  wrap  true to wrap sequences when searching for matches, false
-   * otherwise.
+   *               otherwise.
    * @param  b  whether to report all sequence matches or just the first
    */
   public NumericalSequenceRule(

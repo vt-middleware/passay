@@ -100,7 +100,8 @@ public class NumericalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("p34567n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "34567"),
+              "Password contains the illegal sequence '%s'.",
+              "34567"),
           },
         },
         {
@@ -108,7 +109,8 @@ public class NumericalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("p3456789n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "34567"),
+              "Password contains the illegal sequence '%s'.",
+              "34567"),
           },
         },
       };

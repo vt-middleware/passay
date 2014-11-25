@@ -11,8 +11,8 @@ public class AlphabeticalCharacterRule extends AbstractCharacterRule
 {
 
   /** Lowercase and uppercase characters, value is {@value}. */
-  public static final String CHARS =
-    LowercaseCharacterRule.CHARS + UppercaseCharacterRule.CHARS;
+  public static final String CHARS = LowercaseCharacterRule.CHARS +
+    UppercaseCharacterRule.CHARS;
 
   /** Error code for insufficient number of characters of particular class. */
   public static final String ERROR_CODE = "INSUFFICIENT_ALPHABETICAL";

@@ -22,13 +22,13 @@ public class DictionaryRuleTest extends AbstractRuleTest
   private static final String DICT_PASS = "Pullmanize";
 
   /** Test password. */
-  private static final String BACKWARDS_DICT_PASS =  "ezinamlluP";
+  private static final String BACKWARDS_DICT_PASS = "ezinamlluP";
 
   /** Test password. */
   private static final String UPPERCASE_DICT_PASS = "PuLLmanIZE";
 
   /** Test password. */
-  private static final String BACKWARDS_UPPERCASE_DICT_PASS =  "EZInamLLuP";
+  private static final String BACKWARDS_UPPERCASE_DICT_PASS = "EZInamLLuP";
 
   /** For testing. */
   private final DictionaryRule rule = new DictionaryRule();
@@ -55,10 +55,10 @@ public class DictionaryRuleTest extends AbstractRuleTest
   public void createRules(final String dictFile)
     throws Exception
   {
-    final Dictionary caseSensitiveDict =
-      new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
-    final Dictionary caseInsensitiveDict =
-      new DictionaryBuilder().addFile(dictFile).build();
+    final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(
+      dictFile).setCaseSensitive(true).build();
+    final Dictionary caseInsensitiveDict = new DictionaryBuilder().addFile(
+      dictFile).build();
 
     rule.setDictionary(caseSensitiveDict);
 

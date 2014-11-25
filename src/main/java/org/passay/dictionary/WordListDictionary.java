@@ -24,10 +24,10 @@ public class WordListDictionary implements Dictionary
    * Creates a new dictionary instance from the supplied {@link WordList}.
    *
    * @param  wl  list of words sorted according to {@link
-   * WordList#getComparator()}.
+   *             WordList#getComparator()}.
    *
-   * <p><strong>NOTE</strong> Failure to provide a sorted word list will produce
-   * incorrect results.</p>
+   *             <p><strong>NOTE</strong> Failure to provide a sorted word list
+   *             will produce incorrect results.</p>
    */
   public WordListDictionary(final WordList wl)
   {

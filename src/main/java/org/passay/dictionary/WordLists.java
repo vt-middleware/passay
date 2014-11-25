@@ -98,7 +98,7 @@ public final class WordLists
    *
    * @param  readers  array of readers
    * @param  caseSensitive  set to true to create case-sensitive word list
-   * (default), false otherwise
+   *                        (default), false otherwise
    *
    * @return  word list read from the given readers
    *
@@ -119,7 +119,7 @@ public final class WordLists
    *
    * @param  readers  array of readers
    * @param  caseSensitive  set to true to create case-sensitive word list
-   * (default), false otherwise
+   *                        (default), false otherwise
    * @param  sorter  to sort the input array with
    *
    * @return  word list read from given readers
@@ -150,6 +150,7 @@ public final class WordLists
    * @param  reader  Reader containing words, one per line. The reader is closed
    *                 on completion.
    * @param  wordList  Destination word list.
+   *
    * @throws  IOException  on IO errors reading from reader.
    */
   public static void readWordList(
@@ -164,6 +165,7 @@ public final class WordLists
       } else {
         bufferedReader = new BufferedReader(reader);
       }
+
       String word;
       while ((word = bufferedReader.readLine()) != null) {
         if (!word.isEmpty()) {

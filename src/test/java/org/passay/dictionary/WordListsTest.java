@@ -132,6 +132,7 @@ public class WordListsTest
     for (String word : words) {
       sb.append(word).append("\n");
     }
+
     final ArrayWordList list = WordLists.createFromReader(
       new StringReader[] {new StringReader(sb.toString())},
       true,

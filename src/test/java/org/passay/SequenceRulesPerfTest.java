@@ -19,7 +19,8 @@ public class SequenceRulesPerfTest
    * Gets performance test data.
    *
    * @return  Array of test parameters including rules to test and number of
-   * iterations for which rule should be evaluated on a random password.
+   *          iterations for which rule should be evaluated on a random
+   *          password.
    */
   @DataProvider(name = "perf-data")
   public Object[][] perfData()

@@ -22,8 +22,7 @@ public class PasswordValidator implements Rule
 
 
   /**
-   * Creates a new password validator with a {@link
-   * PropertiesMessageResolver}.
+   * Creates a new password validator with a {@link PropertiesMessageResolver}.
    *
    * @param  rules  to validate
    */
@@ -77,7 +76,7 @@ public class PasswordValidator implements Rule
    * @param  result  failed rule result.
    *
    * @return  list of human-readable messages describing the reason(s) for
-   * validation failure.
+   *          validation failure.
    */
   public List<String> getMessages(final RuleResult result)
   {

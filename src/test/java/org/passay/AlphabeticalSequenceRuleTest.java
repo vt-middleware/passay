@@ -139,7 +139,8 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("phijkl#n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "hijkl"),
+              "Password contains the illegal sequence '%s'.",
+              "hijkl"),
           },
         },
         {
@@ -147,7 +148,8 @@ public class AlphabeticalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("phijklmno#n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "hijkl"),
+              "Password contains the illegal sequence '%s'.",
+              "hijkl"),
           },
         },
       };

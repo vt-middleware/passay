@@ -111,7 +111,7 @@ public abstract class AbstractSequenceRule implements Rule
    * Returns the sequence of character pairs for which to search.
    *
    * @param  n  provides support for multiple character sequences that are
-   * indexed from 0 to n.
+   *            indexed from 0 to n.
    *
    * @return  character sequence.
    */

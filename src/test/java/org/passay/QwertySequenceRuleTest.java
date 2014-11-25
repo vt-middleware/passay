@@ -91,7 +91,8 @@ public class QwertySequenceRuleTest extends AbstractRuleTest
           new PasswordData("pkwerty#n65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "werty"),
+              "Password contains the illegal sequence '%s'.",
+              "werty"),
           },
         },
         {
@@ -99,7 +100,8 @@ public class QwertySequenceRuleTest extends AbstractRuleTest
           new PasswordData("pkl;'asd65"),
           new String[] {
             String.format(
-              "Password contains the illegal sequence '%s'.", "kl;'a"),
+              "Password contains the illegal sequence '%s'.",
+              "kl;'a"),
           },
         },
       };

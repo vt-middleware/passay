@@ -25,7 +25,7 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
   private static final String DICT_PASS = "p4tlancely5gew";
 
   /** Test password. */
-  private static final String BACKWARDS_DICT_PASS =  "p4tylecnal5gew";
+  private static final String BACKWARDS_DICT_PASS = "p4tylecnal5gew";
 
   /** Test password. */
   private static final String UPPERCASE_DICT_PASS = "p4tlAnCeLy5gew";

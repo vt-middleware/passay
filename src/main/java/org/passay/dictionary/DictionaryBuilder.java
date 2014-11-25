@@ -6,7 +6,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.passay.dictionary.sort.ArraySorter;
 import org.passay.dictionary.sort.ArraysSort;
 
@@ -19,6 +18,7 @@ import org.passay.dictionary.sort.ArraysSort;
  */
 public class DictionaryBuilder
 {
+
   /** Singleton array sorter, must be thread safe. */
   private static final ArraySorter SORTER = new ArraysSort();
 
@@ -44,8 +44,8 @@ public class DictionaryBuilder
 
 
   /**
-   * Sets the case sensitivity flag on the dictionary to be built.
-   * Dictionaries are built case <em>in</em>sensitive by default.
+   * Sets the case sensitivity flag on the dictionary to be built. Dictionaries
+   * are built case <em>in</em>sensitive by default.
    *
    * @param  flag  True for case sensitive, false otherwise.
    *
@@ -73,10 +73,11 @@ public class DictionaryBuilder
         }
         WordLists.readWordList(new FileReader(f), wordList);
       }
+
       final String[] words = new String[wordList.size()];
       wordList.toArray(words);
-      return new WordListDictionary(
-        new ArrayWordList(words, caseSensitive, SORTER));
+      return
+        new WordListDictionary(new ArrayWordList(words, caseSensitive, SORTER));
     } catch (IOException e) {
       throw new RuntimeException("IO error building dictionary", e);
     }

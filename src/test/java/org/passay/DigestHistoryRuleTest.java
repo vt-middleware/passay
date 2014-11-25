@@ -58,13 +58,16 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
   {
     digestRefs.add(
       new PasswordData.HistoricalReference(
-        "history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
+        "history",
+        "safx/LW8+SsSy/o3PmCNy4VEm5s="));
     digestRefs.add(
       new PasswordData.HistoricalReference(
-        "history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
+        "history",
+        "zurb9DyQ5nooY1la8h86Bh0n1iw="));
     digestRefs.add(
       new PasswordData.HistoricalReference(
-        "history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
+        "history",
+        "bhqabXwE3S8E6xNJfX/d76MFOCs="));
 
     saltedDigestRefs.add(
       new PasswordData.HistoricalReference(
