@@ -112,7 +112,7 @@ r2.getRules().add(new UppercaseCharacterRule(1));
 r2.getRules().add(new LowercaseCharacterRule(1));
 r2.getRules().add(new DigitCharacterRule(1));
 r2.getRules().add(new SpecialCharacterRule(1));
-WhiteSpaceRule r3 = new WhiteSpaceRule();
+WhitespaceRule r3 = new WhitespaceRule();
 PasswordValidator validator = new PasswordValidator(Arrays.asList(r1, r2, r3));
 {% endhighlight %}
 
