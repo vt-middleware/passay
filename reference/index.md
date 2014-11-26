@@ -127,7 +127,7 @@ PasswordValidator validator = new PasswordValidator(resolver, ruleList);
 {% endhighlight %}
 
 ## Advanced validation: M of N rules
-Many password policies contain a rule of the form _password must contain at least M of the following N_.
+Many password policies contain a rule of the form _password must contain at least M of the following N categories_.
 The [`CharacterCharacteristicsRule`](../javadocs/org/passay/CharacterCharacteristicsRule.html) component supports
 this use case. Consider the following policy:
 
@@ -139,15 +139,20 @@ This policy is implemented in the following code excerpt.
 
 {% highlight java %}
 LengthRule r1 = new LengthRule(8, 16);
+
 CharacterCharacteristicsRule r2 = new CharacterCharacteristicsRule();
+
 // Define M (3 in this case)
 r2.setNumberOfCharacteristics(3);
+
 // Define elements of N (upper, lower, digit, symbol)
 r2.getRules().add(new UppercaseCharacterRule(1));
 r2.getRules().add(new LowercaseCharacterRule(1));
 r2.getRules().add(new DigitCharacterRule(1));
 r2.getRules().add(new SpecialCharacterRule(1));
+
 WhitespaceRule r3 = new WhitespaceRule();
+
 PasswordValidator validator = new PasswordValidator(Arrays.asList(r1, r2, r3));
 {% endhighlight %}
 
