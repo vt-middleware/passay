@@ -91,6 +91,41 @@ if (result.isValid()) {
 }
 {% endhighlight %}
 
+## Advanced validation: customizing messages
+Passay provides the [`MessageResolver`](../javadocs/org/passay/MessageResolver.html) interface to allow arbitrary
+conversion of password validation results to meaningful text intended for display to users. The default mechanism
+uses a message bundle to define validation messages whose default values are shown below.
+
+    HISTORY_VIOLATION=Password matches one of %1$s previous passwords.
+    ILLEGAL_WORD=Password contains the dictionary word '%1$s'.
+    ILLEGAL_WORD_REVERSED=Password contains the reversed dictionary word '%1$s'.
+    ILLEGAL_MATCH=Password matches the illegal pattern '%1$s'.
+    ALLOWED_MATCH=Password must match pattern '%1$s'.
+    ILLEGAL_CHAR=Password contains the illegal character '%1$s'.
+    ALLOWED_CHAR=Password contains the illegal character '%1$s'.
+    ILLEGAL_SEQUENCE=Password contains the illegal sequence '%1$s'.
+    ILLEGAL_USERNAME=Password contains the user id '%1$s'.
+    ILLEGAL_USERNAME_REVERSED=Password contains the user id '%1$s' in reverse.
+    ILLEGAL_WHITESPACE=Password cannot contain whitespace characters.
+    INSUFFICIENT_UPPERCASE=Password must contain at least %1$s uppercase characters.
+    INSUFFICIENT_LOWERCASE=Password must contain at least %1$s lowercase characters.
+    INSUFFICIENT_ALPHABETICAL=Password must contain at least %1$s alphabetical characters.
+    INSUFFICIENT_DIGIT=Password must contain at least %1$s digit characters.
+    INSUFFICIENT_SPECIAL=Password must contain at least %1$s special characters.
+    INSUFFICIENT_CHARACTERISTICS=Password matches %1$s of %3$s character rules, but %2$s are required.
+    SOURCE_VIOLATION=Password cannot be the same as your %1$s password.
+    TOO_LONG=Password must be no more than %2$s characters in length.
+    TOO_SHORT=Password must be at least %1$s characters in length.
+
+The following example demonstrates how to replace the default message bundle with a custom/localized properties file.
+
+{% highlight java %}
+Properties props = new Properties();
+props.load(new FileInputStream("/path/to/messages.properties"));
+MessageResolver resolver = new PropertiesMessageResolver(props);
+PasswordValidator validator = new PasswordValidator(resolver, ruleList);
+{% endhighlight %}
+
 ## Advanced validation: M of N rules
 Many password policies contain a rule of the form _password must contain at least M of the following N_.
 The [`CharacterCharacteristicsRule`](../javadocs/org/passay/CharacterCharacteristicsRule.html) component supports
