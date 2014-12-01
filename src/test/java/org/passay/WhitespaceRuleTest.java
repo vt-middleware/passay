@@ -21,8 +21,8 @@ public class WhitespaceRuleTest extends AbstractRuleTest
   private static final String TAB_PASS = "Ayc" + "\t" + "DPdsyz";
 
   /** Test password. */
-  private static final String LINE_SEP_PASS =
-    "AycDPs" + System.getProperty("line.separator") + "yz";
+  private static final String LINE_SEP_PASS = "AycDPs" +
+    System.getProperty("line.separator") + "yz";
 
   /** For testing. */
   private final WhitespaceRule rule = new WhitespaceRule();
@@ -74,9 +74,7 @@ public class WhitespaceRuleTest extends AbstractRuleTest
         {
           rule,
           new PasswordData(SPACE_PASS),
-          new String[] {
-            "Password cannot contain whitespace characters.",
-          },
+          new String[] {"Password cannot contain whitespace characters.", },
         },
       };
   }

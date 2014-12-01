@@ -19,7 +19,7 @@ public class UsernameRuleTest extends AbstractRuleTest
   private static final String USERID_PASS = "p4testuser#n65";
 
   /** Test password. */
-  private static final String BACKWARDS_USERID_PASS =  "p4resutset#n65";
+  private static final String BACKWARDS_USERID_PASS = "p4resutset#n65";
 
   /** Test password. */
   private static final String UPPERCASE_USERID_PASS = "p4TEStuSER#n65";

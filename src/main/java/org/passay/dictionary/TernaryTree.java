@@ -150,7 +150,7 @@ public class TernaryTree
    * @return  array of matching words
    *
    * @throws  UnsupportedOperationException  if this is a case insensitive
-   * ternary tree
+   *                                         ternary tree
    */
   public String[] partialSearch(final String word)
   {
@@ -192,7 +192,7 @@ public class TernaryTree
    * @return  array of matching words
    *
    * @throws  UnsupportedOperationException  if this is a case insensitive
-   * ternary tree
+   *                                         ternary tree
    */
   public String[] nearSearch(final String word, final int distance)
   {

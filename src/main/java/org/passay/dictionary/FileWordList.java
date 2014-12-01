@@ -61,7 +61,7 @@ public class FileWordList extends AbstractWordList
    *
    * @param  raf  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list,
-   * false otherwise.
+   *                        false otherwise.
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
@@ -81,9 +81,9 @@ public class FileWordList extends AbstractWordList
    *
    * @param  raf  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list,
-   * false otherwise.
+   *                        false otherwise.
    * @param  cachePercent  Percent (0-100) of file to cache in memory for
-   * improved read performance.
+   *                       improved read performance.
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
@@ -200,7 +200,7 @@ public class FileWordList extends AbstractWordList
    * @return  word at the supplied index
    *
    * @throws  IllegalStateException  if an error occurs reading the supplied
-   * file
+   *                                 file
    */
   private String readFile(final int index)
   {

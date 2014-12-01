@@ -23,7 +23,7 @@ public class ArrayWordList extends AbstractWordList
    * @param  array  Array of words.
    *
    * @throws  IllegalArgumentException  If array is null or contains any null
-   * entries.
+   *                                    entries.
    */
   public ArrayWordList(final String[] array)
   {
@@ -36,10 +36,10 @@ public class ArrayWordList extends AbstractWordList
    *
    * @param  array  Array of words.
    * @param  caseSensitive  Set to true to create case-sensitive word list,
-   * false otherwise.
+   *                        false otherwise.
    *
    * @throws  IllegalArgumentException  If array is null or contains any null
-   * entries.
+   *                                    entries.
    */
   public ArrayWordList(final String[] array, final boolean caseSensitive)
   {
@@ -53,13 +53,13 @@ public class ArrayWordList extends AbstractWordList
    *
    * @param  array  Array of words.
    * @param  caseSensitive  Set to true to create case-sensitive word list,
-   * false otherwise.
+   *                        false otherwise.
    * @param  sorter  To sort the input array with. The sort routine is
-   * consistent with {@link #getComparator()}, which respects the case
-   * sensitivity of the word list.
+   *                 consistent with {@link #getComparator()}, which respects
+   *                 the case sensitivity of the word list.
    *
    * @throws  IllegalArgumentException  If array is null or contains any null
-   * entries.
+   *                                    entries.
    */
   public ArrayWordList(
     final String[] array,

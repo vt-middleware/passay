@@ -7,13 +7,13 @@
   <groupId>org.passay</groupId>
   <artifactId>passay</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0.1-SNAPSHOT</version>
   <name>Passay Library</name>
   <description>Library for checking that a password complies with a custom set of rules</description>
   <url>http://www.passay.org</url>
   <issueManagement>
     <system>GitHub</system>
-    <url>https://github.com/organizations/vt-middleware/dashboard/issues</url>
+    <url>https://github.com/vt-middleware/passay/issues</url>
   </issueManagement>
   <mailingLists>
     <mailingList>
@@ -77,7 +77,7 @@
     <dependency>
       <groupId>org.cryptacular</groupId>
       <artifactId>cryptacular</artifactId>
-      <version>1.0-RC5-SNAPSHOT</version>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

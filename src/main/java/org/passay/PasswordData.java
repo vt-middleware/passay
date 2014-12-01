@@ -178,6 +178,20 @@ public class PasswordData
   }
 
 
+  /** Reference to another password. */
+  public interface Reference
+  {
+
+
+    /**
+     * Returns the password associated with this reference.
+     *
+     * @return  password string
+     */
+    String getPassword();
+  }
+
+
   /** Reference to an historical password. */
   public static class HistoricalReference extends AbstractReference
   {
@@ -289,19 +303,5 @@ public class PasswordData
           label,
           password);
     }
-  }
-
-
-  /** Reference to another password. */
-  public interface Reference
-  {
-
-
-    /**
-     * Returns the password associated with this reference.
-     *
-     * @return  password string
-     */
-    String getPassword();
   }
 }

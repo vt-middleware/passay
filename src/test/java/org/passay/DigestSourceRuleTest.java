@@ -44,7 +44,8 @@ public class DigestSourceRuleTest extends AbstractRuleTest
   {
     sourceRefs.add(
       new PasswordData.SourceReference(
-        "System B", "CJGTDMQRP+rmHApkcijC80aDV0o="));
+        "System B",
+        "CJGTDMQRP+rmHApkcijC80aDV0o="));
   }
 
 

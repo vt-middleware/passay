@@ -26,8 +26,8 @@ public abstract class AbstractRuleTest
    * @param  rule  to check password with
    * @param  passwordData  to check
    * @param  errorCodes  Array of error codes to be produced on a failed
-   * password validation attempt. A null value indicates that password
-   * validation should succeed.
+   *                     password validation attempt. A null value indicates
+   *                     that password validation should succeed.
    *
    * @throws  Exception  On test failure.
    */
@@ -57,8 +57,8 @@ public abstract class AbstractRuleTest
   /**
    * @param  rule  to check password with
    * @param  passwordData  to check
-   * @param  messages  Array of messages to be produced on a failed
-   * password validation attempt
+   * @param  messages  Array of messages to be produced on a failed password
+   *                   validation attempt
    *
    * @throws  Exception  On test failure.
    */

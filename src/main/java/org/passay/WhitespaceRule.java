@@ -14,13 +14,16 @@ public class WhitespaceRule implements Rule
 {
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */
-  public static final String CHARS =
-    new String(
-      new byte[] {
-        (byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D,
-        (byte) 0x20,
-      },
-      StandardCharsets.UTF_8);
+  public static final String CHARS = new String(
+    new byte[] {
+      (byte) 0x09,
+      (byte) 0x0A,
+      (byte) 0x0B,
+      (byte) 0x0C,
+      (byte) 0x0D,
+      (byte) 0x20,
+    },
+    StandardCharsets.UTF_8);
 
   /** Error code for whitespace rule violation. */
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";
@@ -30,7 +33,8 @@ public class WhitespaceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final int charCount = PasswordUtils.getMatchingCharacters(
-      CHARS, passwordData.getPassword()).length();
+      CHARS,
+      passwordData.getPassword()).length();
     if (charCount == 0) {
       return new RuleResult(true);
     } else {

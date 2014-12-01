@@ -38,8 +38,9 @@ public class TernaryTreeDictionary implements Dictionary
    * list is recommended.</p>
    *
    * @param  wordList  list of words used to back the dictionary. This list is
-   * used exclusively to initialize the internal {@link TernaryTree} used by the
-   * dictionary, and may be safely discarded after dictionary creation.
+   *                   used exclusively to initialize the internal {@link
+   *                   TernaryTree} used by the dictionary, and may be safely
+   *                   discarded after dictionary creation.
    */
   public TernaryTreeDictionary(final WordList wordList)
   {
@@ -51,16 +52,19 @@ public class TernaryTreeDictionary implements Dictionary
    * Creates a new dictionary instance from the given {@link WordList}.
    *
    * @param  wordList  list of words used to back the dictionary. This list is
-   * used exclusively to initialize the internal {@link TernaryTree} used by the
-   * dictionary, and may be safely discarded after dictionary creation.
+   *                   used exclusively to initialize the internal {@link
+   *                   TernaryTree} used by the dictionary, and may be safely
+   *                   discarded after dictionary creation.
    *
-   * <p><strong>NOTE</strong> While using an unsorted word list produces correct
-   * results, it may dramatically reduce search efficiency. Using a sorted word
-   * list is recommended.</p>
+   *                   <p><strong>NOTE</strong> While using an unsorted word
+   *                   list produces correct results, it may dramatically reduce
+   *                   search efficiency. Using a sorted word list is
+   *                   recommended.</p>
    * @param  useMedian  set to true to force creation of a balanced tree by
-   * inserting into the tree from the median of the {@link WordList} outward.
-   * Depending on the word list implementation, this may require additional work
-   * to access the median element on each insert.
+   *                    inserting into the tree from the median of the {@link
+   *                    WordList} outward. Depending on the word list
+   *                    implementation, this may require additional work to
+   *                    access the median element on each insert.
    */
   public TernaryTreeDictionary(final WordList wordList, final boolean useMedian)
   {
