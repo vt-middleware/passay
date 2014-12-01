@@ -2,11 +2,11 @@
 package org.passay;
 
 /**
- * Input data used by {@link IllegalSequenceRule}.
+ * Container for one or more {@link CharacterSequence}.
  *
  * @author  Middleware Services
  */
-public interface IllegalSequenceData
+public interface SequenceData
 {
   /**
    * Return the error code used for message resolution.
@@ -19,5 +19,5 @@ public interface IllegalSequenceData
   /**
    * @return  one or more illegal character sequences.
    */
-  IllegalSequence[] getSequences();
+  CharacterSequence[] getSequences();
 }

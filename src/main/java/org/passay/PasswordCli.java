@@ -82,11 +82,11 @@ public final class PasswordCli
           username = args[++i];
         } else if ("-s".equals(args[i])) {
           rules.add(
-            new IllegalSequenceRule(EnIllegalSequenceData.Qwerty));
+            new IllegalSequenceRule(EnSequenceData.Qwerty));
           rules.add(
-            new IllegalSequenceRule(EnIllegalSequenceData.Alphabetical));
+            new IllegalSequenceRule(EnSequenceData.Alphabetical));
           rules.add(
-            new IllegalSequenceRule(EnIllegalSequenceData.Numerical));
+            new IllegalSequenceRule(EnSequenceData.Numerical));
           rules.add(new RepeatCharacterRegexRule());
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();

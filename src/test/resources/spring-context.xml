@@ -42,13 +42,13 @@
     p:minimumLength="5"/>
 
   <bean id="qwertySeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnIllegalSequenceData).Qwerty}" />
+    c:data="#{T(org.passay.EnSequenceData).Qwerty}" />
 
   <bean id="alphaSeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnIllegalSequenceData).Alphabetical}" />
+    c:data="#{T(org.passay.EnSequenceData).Alphabetical}" />
 
   <bean id="numSeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnIllegalSequenceData).Numerical}" />
+    c:data="#{T(org.passay.EnSequenceData).Numerical}" />
 
   <bean id="repeatRegexRule" class="org.passay.RepeatCharacterRegexRule"/>
 

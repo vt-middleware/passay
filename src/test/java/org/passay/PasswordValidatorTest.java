@@ -92,13 +92,13 @@ public class PasswordValidatorTest extends AbstractRuleTest
     dictRule.setMatchBackwards(true);
 
     final IllegalSequenceRule qwertySeqRule = new IllegalSequenceRule(
-      EnIllegalSequenceData.Qwerty);
+      EnSequenceData.Qwerty);
 
     final IllegalSequenceRule alphaSeqRule = new IllegalSequenceRule(
-      EnIllegalSequenceData.Alphabetical);
+      EnSequenceData.Alphabetical);
 
     final IllegalSequenceRule numSeqRule = new IllegalSequenceRule(
-      EnIllegalSequenceData.Numerical);
+      EnSequenceData.Numerical);
 
     final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
 
@@ -159,9 +159,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
     ccRule.setNumberOfCharacteristics(3);
     l.add(ccRule);
 
-    l.add(new IllegalSequenceRule(EnIllegalSequenceData.Qwerty));
-    l.add(new IllegalSequenceRule(EnIllegalSequenceData.Alphabetical));
-    l.add(new IllegalSequenceRule(EnIllegalSequenceData.Numerical));
+    l.add(new IllegalSequenceRule(EnSequenceData.Qwerty));
+    l.add(new IllegalSequenceRule(EnSequenceData.Alphabetical));
+    l.add(new IllegalSequenceRule(EnSequenceData.Numerical));
     l.add(new RepeatCharacterRegexRule());
 
     final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
@@ -219,7 +219,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnCharacterData.UpperCase.getErrorCode(),
             EnCharacterData.LowerCase.getErrorCode(),
             EnCharacterData.Special.getErrorCode(),
-            EnIllegalSequenceData.Qwerty.getErrorCode()),
+            EnSequenceData.Qwerty.getErrorCode()),
         },
 
         /** all non-alphanumeric */
@@ -400,7 +400,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "p4zxcvb#n65",
             USER,
             references),
-          codes(EnIllegalSequenceData.Qwerty.getErrorCode()),
+          codes(EnSequenceData.Qwerty.getErrorCode()),
         },
 
         /**
@@ -414,7 +414,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             USER,
             references),
           codes(
-            EnIllegalSequenceData.Qwerty.getErrorCode(),
+            EnSequenceData.Qwerty.getErrorCode(),
             DictionaryRule.ERROR_CODE_REVERSED),
         },
 
@@ -425,7 +425,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             "p4iOP[]#n65",
             USER,
             references),
-          codes(EnIllegalSequenceData.Qwerty.getErrorCode()),
+          codes(EnSequenceData.Qwerty.getErrorCode()),
         },
 
         /** invalid userid rule passwords. */
@@ -543,12 +543,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnCharacterData.Special.getErrorCode(),
             EnCharacterData.LowerCase.getErrorCode(),
             EnCharacterData.UpperCase.getErrorCode(),
-            EnIllegalSequenceData.Numerical.getErrorCode(),
-            EnIllegalSequenceData.Numerical.getErrorCode(),
-            EnIllegalSequenceData.Numerical.getErrorCode(),
-            EnIllegalSequenceData.Numerical.getErrorCode(),
-            EnIllegalSequenceData.Numerical.getErrorCode(),
-            EnIllegalSequenceData.Numerical.getErrorCode(),
+            EnSequenceData.Numerical.getErrorCode(),
+            EnSequenceData.Numerical.getErrorCode(),
+            EnSequenceData.Numerical.getErrorCode(),
+            EnSequenceData.Numerical.getErrorCode(),
+            EnSequenceData.Numerical.getErrorCode(),
+            EnSequenceData.Numerical.getErrorCode(),
             LengthRule.ERROR_CODE_MIN),
         },
       };

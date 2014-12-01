@@ -20,7 +20,7 @@ public class IllegalSequenceRule implements Rule
   public static final int MINIMUM_SEQUENCE_LENGTH = 3;
 
   /** Sequence data for this rule. */
-  protected final IllegalSequenceData sequenceData;
+  protected final SequenceData sequenceData;
 
   /** Number of characters in sequence to match. */
   protected int sequenceLength = DEFAULT_SEQUENCE_LENGTH;
@@ -37,7 +37,7 @@ public class IllegalSequenceRule implements Rule
    *
    * @param  data  sequence data for this rule
    */
-  public IllegalSequenceRule(final IllegalSequenceData data)
+  public IllegalSequenceRule(final SequenceData data)
   {
     this(data, DEFAULT_SEQUENCE_LENGTH, false, true);
   }
@@ -51,7 +51,7 @@ public class IllegalSequenceRule implements Rule
    * @param  wrap  whether to wrap sequences
    */
   public IllegalSequenceRule(
-    final IllegalSequenceData data, final int sl, final boolean wrap)
+    final SequenceData data, final int sl, final boolean wrap)
   {
     this(data, sl, wrap, true);
   }
@@ -66,7 +66,7 @@ public class IllegalSequenceRule implements Rule
    * @param  reportAll  whether to report all sequence matches or just the first
    */
   public IllegalSequenceRule(
-    final IllegalSequenceData data,
+    final SequenceData data,
     final int sl,
     final boolean wrap,
     final boolean reportAll)
@@ -90,12 +90,12 @@ public class IllegalSequenceRule implements Rule
     final RuleResult result = new RuleResult(true);
     final String password = passwordData.getPassword();
     final int max = password.length() - sequenceLength + 1;
-    Sequence sequence;
+    SequenceIterator sequence;
     int position;
     char c;
     for (int i = 0; i < sequenceData.getSequences().length; i++) {
       for (int j = 0; j < max; j++) {
-        sequence = newSequence(
+        sequence = newSequenceIterator(
           sequenceData.getSequences()[i], password.charAt(j));
         if (sequence != null) {
           position = j;
@@ -153,11 +153,12 @@ public class IllegalSequenceRule implements Rule
    *
    * @return  forward sequence iterator.
    */
-  private Sequence newSequence(final IllegalSequence sequence, final char first)
+  private SequenceIterator newSequenceIterator(
+    final CharacterSequence sequence, final char first)
   {
     for (int i = 0; i < sequence.length(); i++) {
       if (sequence.matches(i, first)) {
-        final Sequence s = new Sequence(
+        final SequenceIterator s = new SequenceIterator(
           sequence, i, sequenceLength, wrapSequence);
         s.addMatchCharacter(first);
         return s;
@@ -186,16 +187,15 @@ public class IllegalSequenceRule implements Rule
 
 
   /**
-   * Contains convenience methods for iterating over an {@link IllegalSequence}
-   * and storing matched characters.
+   * Iterates over a {@link CharacterSequence} and stores matched characters.
    *
    * @author  Middleware Services
    */
-  private class Sequence
+  private class SequenceIterator
   {
 
     /** Defined illegal character sequence. */
-    private final IllegalSequence illegal;
+    private final CharacterSequence illegal;
 
     /** 0-based iterator start position. */
     private final int start;
@@ -224,8 +224,8 @@ public class IllegalSequenceRule implements Rule
      * @param  count  length of this sequence
      * @param  wrap  whether this sequence wraps
      */
-    public Sequence(
-      final IllegalSequence sequence,
+    public SequenceIterator(
+      final CharacterSequence sequence,
       final int startIndex,
       final int count,
       final boolean wrap)
