@@ -7,7 +7,7 @@
   <groupId>org.passay</groupId>
   <artifactId>passay</artifactId>
   <packaging>jar</packaging>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0</version>
   <name>Passay Library</name>
   <description>Library for checking that a password complies with a custom set of rules</description>
   <url>http://www.passay.org</url>
@@ -77,7 +77,7 @@
     <dependency>
       <groupId>org.cryptacular</groupId>
       <artifactId>cryptacular</artifactId>
-      <version>1.0-RC5-SNAPSHOT</version>
+      <version>1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
