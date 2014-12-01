@@ -1,18 +1,16 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Implementation for keyboard sequence rules. The character sequences represent
- * rows of characters, where each row contains the lowercase and uppercase
- * version of the character.
+ * Password validation rule that prevents illegal sequences of characters, e.g.
+ * keyboard, alphabetical, numeric.
  *
  * @author  Middleware Services
  */
-public class SequenceRule implements Rule
+public class IllegalSequenceRule implements Rule
 {
 
   /** Default length of keyboard sequence, value is {@value}. */
@@ -22,7 +20,7 @@ public class SequenceRule implements Rule
   public static final int MINIMUM_SEQUENCE_LENGTH = 3;
 
   /** Sequence data for this rule. */
-  protected final SequenceData sequenceData;
+  protected final IllegalSequenceData sequenceData;
 
   /** Number of characters in sequence to match. */
   protected int sequenceLength = DEFAULT_SEQUENCE_LENGTH;
@@ -39,7 +37,7 @@ public class SequenceRule implements Rule
    *
    * @param  data  sequence data for this rule
    */
-  public SequenceRule(final SequenceData data)
+  public IllegalSequenceRule(final IllegalSequenceData data)
   {
     this(data, DEFAULT_SEQUENCE_LENGTH, false, true);
   }
@@ -52,7 +50,8 @@ public class SequenceRule implements Rule
    * @param  sl  sequence length
    * @param  wrap  whether to wrap sequences
    */
-  public SequenceRule(final SequenceData data, final int sl, final boolean wrap)
+  public IllegalSequenceRule(
+    final IllegalSequenceData data, final int sl, final boolean wrap)
   {
     this(data, sl, wrap, true);
   }
@@ -66,8 +65,8 @@ public class SequenceRule implements Rule
    * @param  wrap  whether to wrap sequences
    * @param  reportAll  whether to report all sequence matches or just the first
    */
-  public SequenceRule(
-    final SequenceData data,
+  public IllegalSequenceRule(
+    final IllegalSequenceData data,
     final int sl,
     final boolean wrap,
     final boolean reportAll)
@@ -94,15 +93,15 @@ public class SequenceRule implements Rule
     Sequence sequence;
     int position;
     char c;
-    for (int i = 0; i < sequenceData.getCharacters().length; i++) {
+    for (int i = 0; i < sequenceData.getSequences().length; i++) {
       for (int j = 0; j < max; j++) {
         sequence = newSequence(
-          sequenceData.getCharacters()[i], password.charAt(j));
+          sequenceData.getSequences()[i], password.charAt(j));
         if (sequence != null) {
           position = j;
           while (sequence.forward()) {
             c = password.charAt(++position);
-            if (c == sequence.currentLower() || c == sequence.currentUpper()) {
+            if (sequence.matches(c)) {
               sequence.addMatchCharacter(c);
             } else {
               break;
@@ -115,7 +114,7 @@ public class SequenceRule implements Rule
           position = j;
           while (sequence.backward()) {
             c = password.charAt(++position);
-            if (c == sequence.currentLower() || c == sequence.currentUpper()) {
+            if (sequence.matches(c)) {
               sequence.addMatchCharacter(c);
             } else {
               break;
@@ -149,16 +148,17 @@ public class SequenceRule implements Rule
    * Creates an iterator that iterates over a character sequence positioned at
    * the first matching character, if any, in the given password.
    *
-   * @param  chars  sequence of upper/lowercase character pairs.
+   * @param  sequence  defined sequence of illegal characters.
    * @param  first  first character to match in character sequence.
    *
    * @return  forward sequence iterator.
    */
-  private Sequence newSequence(final char[][] chars, final char first)
+  private Sequence newSequence(final IllegalSequence sequence, final char first)
   {
-    for (int i = 0; i < chars.length; i++) {
-      if (first == chars[i][0] || first == chars[i][1]) {
-        final Sequence s = new Sequence(chars, i, sequenceLength, wrapSequence);
+    for (int i = 0; i < sequence.length(); i++) {
+      if (sequence.matches(i, first)) {
+        final Sequence s = new Sequence(
+          sequence, i, sequenceLength, wrapSequence);
         s.addMatchCharacter(first);
         return s;
       }
@@ -186,16 +186,16 @@ public class SequenceRule implements Rule
 
 
   /**
-   * Contains convenience methods for iterating over a sequence of
-   * upper/lowercase pairs of characters and stores matched characters.
+   * Contains convenience methods for iterating over an {@link IllegalSequence}
+   * and storing matched characters.
    *
    * @author  Middleware Services
    */
   private class Sequence
   {
 
-    /** Sequence of upper/lower character pairs. */
-    private final char[][] chars;
+    /** Defined illegal character sequence. */
+    private final IllegalSequence illegal;
 
     /** 0-based iterator start position. */
     private final int start;
@@ -219,18 +219,18 @@ public class SequenceRule implements Rule
     /**
      * Creates a new sequence.
      *
-     * @param  characters  sequence of characters
+     * @param  sequence  Illegal sequence of characters.
      * @param  startIndex  in the characters array
      * @param  count  length of this sequence
      * @param  wrap  whether this sequence wraps
      */
     public Sequence(
-      final char[][] characters,
+      final IllegalSequence sequence,
       final int startIndex,
       final int count,
       final boolean wrap)
     {
-      chars = characters;
+      illegal = sequence;
       start = startIndex;
       length = count;
       lbound = start - length;
@@ -238,8 +238,8 @@ public class SequenceRule implements Rule
       if (lbound < -1 && !wrap) {
         lbound = -1;
       }
-      if (ubound >= characters.length && !wrap) {
-        ubound = characters.length;
+      if (ubound >= sequence.length() && !wrap) {
+        ubound = sequence.length();
       }
       position = start;
       matches = new StringBuilder(length);
@@ -280,40 +280,24 @@ public class SequenceRule implements Rule
 
 
     /**
-     * Returns the lowercase character at the current iterator position.
+     * Determines whether the character at the current iterator position in the
+     * illegal sequence matches the given character.
      *
-     * @return  lowercase character at current position.
+     * @param  c  Character to check for.
+     *
+     * @return  True if character matches, false otherwise.
      */
-    public char currentLower()
+    public boolean matches(final char c)
     {
       final int i;
       if (position < 0) {
-        i = chars.length + position;
-      } else if (position >= chars.length) {
-        i = position - chars.length;
+        i = illegal.length() + position;
+      } else if (position >= illegal.length()) {
+        i = position - illegal.length();
       } else {
         i = position;
       }
-      return chars[i][0];
-    }
-
-
-    /**
-     * Returns the uppercase character at the current iterator position.
-     *
-     * @return  uppercase character at current position.
-     */
-    public char currentUpper()
-    {
-      final int i;
-      if (position < 0) {
-        i = chars.length + position;
-      } else if (position >= chars.length) {
-        i = position - chars.length;
-      } else {
-        i = position;
-      }
-      return chars[i][1];
+      return illegal.matches(i, c);
     }
 
 
@@ -347,30 +331,6 @@ public class SequenceRule implements Rule
     public String matchString()
     {
       return matches.toString();
-    }
-
-
-    @Override
-    public String toString()
-    {
-      final StringBuilder charsString = new StringBuilder();
-      for (int i = 0; i < chars.length; i++) {
-        charsString.append(
-          "[").append(i).append(Arrays.toString(chars[i])).append("]");
-      }
-      return
-        String.format(
-          "%s@%h::chars=%s,start=%s,length=%s,ubound=%s,lbound=%s," +
-          "position=%s,matches=%s",
-          getClass().getName(),
-          hashCode(),
-          charsString,
-          start,
-          length,
-          ubound,
-          lbound,
-          position,
-          matches);
     }
   }
 }

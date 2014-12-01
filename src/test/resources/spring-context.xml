@@ -3,9 +3,7 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:c="http://www.springframework.org/schema/c"
   xmlns:p="http://www.springframework.org/schema/p"
-  xmlns:util="http://www.springframework.org/schema/util"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://schema.spring.io/beans/spring-beans.xsd
-                      http://www.springframework.org/schema/util  http://schema.spring.io/util/spring-util.xsd">
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://schema.spring.io/beans/spring-beans.xsd">
 
   <bean id="dictionary" class="org.passay.dictionary.WordListDictionary">
     <constructor-arg>
@@ -43,23 +41,14 @@
   <bean id="lenRule" class="org.passay.LengthRule"
     p:minimumLength="5"/>
 
-  <bean id="qwertySeqRule" class="org.passay.SequenceRule">
-    <constructor-arg>
-      <util:constant static-field="org.passay.SequenceData.QWERTY"/>
-    </constructor-arg>
-  </bean>
+  <bean id="qwertySeqRule" class="org.passay.IllegalSequenceRule"
+    c:data="#{T(org.passay.EnIllegalSequenceData).Qwerty}" />
 
-  <bean id="alphaSeqRule" class="org.passay.SequenceRule">
-    <constructor-arg>
-      <util:constant static-field="org.passay.SequenceData.ALPHABETICAL"/>
-    </constructor-arg>
-  </bean>
+  <bean id="alphaSeqRule" class="org.passay.IllegalSequenceRule"
+    c:data="#{T(org.passay.EnIllegalSequenceData).Alphabetical}" />
 
-  <bean id="numSeqRule" class="org.passay.SequenceRule">
-    <constructor-arg>
-      <util:constant static-field="org.passay.SequenceData.NUMERICAL"/>
-    </constructor-arg>
-  </bean>
+  <bean id="numSeqRule" class="org.passay.IllegalSequenceRule"
+    c:data="#{T(org.passay.EnIllegalSequenceData).Numerical}" />
 
   <bean id="repeatRegexRule" class="org.passay.RepeatCharacterRegexRule"/>
 
