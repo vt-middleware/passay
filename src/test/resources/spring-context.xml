@@ -19,10 +19,10 @@
   </bean>
 
   <bean id="alphaRule" class="org.passay.CharacterRule"
-    c:data="#{T(org.passay.EnCharacterData).Alphabetical}"
+    c:data="#{T(org.passay.EnglishCharacterData).Alphabetical}"
     p:numberOfCharacters="3" />
   <bean id="digitRule" class="org.passay.CharacterRule"
-    c:data="#{T(org.passay.EnCharacterData).Digit}"
+    c:data="#{T(org.passay.EnglishCharacterData).Digit}"
     p:numberOfCharacters="1" />
   <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
     p:numberOfCharacteristics="2">
@@ -41,13 +41,13 @@
     p:minimumLength="5"/>
 
   <bean id="qwertySeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnSequenceData).Qwerty}" />
+    c:data="#{T(org.passay.EnglishSequenceData).Qwerty}" />
 
   <bean id="alphaSeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnSequenceData).Alphabetical}" />
+    c:data="#{T(org.passay.EnglishSequenceData).Alphabetical}" />
 
   <bean id="numSeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnSequenceData).Numerical}" />
+    c:data="#{T(org.passay.EnglishSequenceData).Numerical}" />
 
   <bean id="repeatRegexRule" class="org.passay.RepeatCharacterRegexRule"/>
 

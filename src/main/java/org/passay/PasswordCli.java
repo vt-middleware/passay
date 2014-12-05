@@ -49,23 +49,23 @@ public final class PasswordCli
             new CharacterCharacteristicsRule();
           rule.getRules().add(
             new CharacterRule(
-              EnCharacterData.Digit,
+              EnglishCharacterData.Digit,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              EnCharacterData.Alphabetical,
+              EnglishCharacterData.Alphabetical,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              EnCharacterData.Special,
+              EnglishCharacterData.Special,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              EnCharacterData.UpperCase,
+              EnglishCharacterData.UpperCase,
               Integer.parseInt(args[++i])));
           rule.getRules().add(
             new CharacterRule(
-              EnCharacterData.LowerCase,
+              EnglishCharacterData.LowerCase,
               Integer.parseInt(args[++i])));
           rule.setNumberOfCharacteristics(Integer.parseInt(args[++i]));
           rules.add(rule);
@@ -81,11 +81,11 @@ public final class PasswordCli
           username = args[++i];
         } else if ("-s".equals(args[i])) {
           rules.add(
-            new IllegalSequenceRule(EnSequenceData.Qwerty));
+            new IllegalSequenceRule(EnglishSequenceData.Qwerty));
           rules.add(
-            new IllegalSequenceRule(EnSequenceData.Alphabetical));
+            new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
           rules.add(
-            new IllegalSequenceRule(EnSequenceData.Numerical));
+            new IllegalSequenceRule(EnglishSequenceData.Numerical));
           rules.add(new RepeatCharacterRegexRule());
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();

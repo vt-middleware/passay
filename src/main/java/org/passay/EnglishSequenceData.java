@@ -6,7 +6,7 @@ package org.passay;
  *
  * @author  Middleware Services
  */
-public enum EnSequenceData implements SequenceData
+public enum EnglishSequenceData implements SequenceData
 {
   /** Alphabetical sequence. */
   Alphabetical("ILLEGAL_ALPHABETICAL_SEQUENCE", new CharacterSequence[] {
@@ -40,7 +40,7 @@ public enum EnSequenceData implements SequenceData
    * @param  code  Error code used for message resolution.
    * @param  seqs  One or more character sequences.
    */
-  private EnSequenceData(final String code, final CharacterSequence[] seqs)
+  private EnglishSequenceData(final String code, final CharacterSequence[] seqs)
   {
     this.errorCode = code;
     this.sequences = seqs;

@@ -44,10 +44,10 @@ public class PasswordGeneratorTest
   public void initializeRules()
     throws Exception
   {
-    rules.add(new CharacterRule(EnCharacterData.Digit, 2));
-    rules.add(new CharacterRule(EnCharacterData.Special, 2));
-    rules.add(new CharacterRule(EnCharacterData.UpperCase, 1));
-    rules.add(new CharacterRule(EnCharacterData.LowerCase, 1));
+    rules.add(new CharacterRule(EnglishCharacterData.Digit, 2));
+    rules.add(new CharacterRule(EnglishCharacterData.Special, 2));
+    rules.add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
+    rules.add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
 
     genCharRule.getRules().addAll(rules);
     genCharRule.setNumberOfCharacteristics(3);
@@ -55,10 +55,10 @@ public class PasswordGeneratorTest
     verifyCharRule.getRules().addAll(rules);
     verifyCharRule.setNumberOfCharacteristics(3);
 
-    failRules.add(new CharacterRule(EnCharacterData.Digit, 3));
-    failRules.add(new CharacterRule(EnCharacterData.Special, 3));
-    failRules.add(new CharacterRule(EnCharacterData.UpperCase, 3));
-    failRules.add(new CharacterRule(EnCharacterData.LowerCase, 3));
+    failRules.add(new CharacterRule(EnglishCharacterData.Digit, 3));
+    failRules.add(new CharacterRule(EnglishCharacterData.Special, 3));
+    failRules.add(new CharacterRule(EnglishCharacterData.UpperCase, 3));
+    failRules.add(new CharacterRule(EnglishCharacterData.LowerCase, 3));
 
     failCharRule.getRules().addAll(failRules);
     failCharRule.setNumberOfCharacteristics(4);

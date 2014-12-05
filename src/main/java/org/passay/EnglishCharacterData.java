@@ -6,7 +6,7 @@ package org.passay;
  *
  * @author Marvin S. Addison
  */
-public enum EnCharacterData implements CharacterData
+public enum EnglishCharacterData implements CharacterData
 {
   /** Lower case characters. */
   LowerCase("INSUFFICIENT_LOWERCASE", "abcdefghijklmnopqrstuvwxyz"),
@@ -39,7 +39,7 @@ public enum EnCharacterData implements CharacterData
    * @param  code  Error code.
    * @param  charString  Characters as string.
    */
-  private EnCharacterData(final String code, final String charString)
+  private EnglishCharacterData(final String code, final String charString)
   {
     errorCode = code;
     characters = charString;
