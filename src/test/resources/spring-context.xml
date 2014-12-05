@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:c="http://www.springframework.org/schema/c"
   xmlns:p="http://www.springframework.org/schema/p"
-  xmlns:util="http://www.springframework.org/schema/util"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://schema.spring.io/beans/spring-beans.xsd">
 
   <bean id="dictionary" class="org.passay.dictionary.WordListDictionary">
     <constructor-arg>
@@ -18,10 +18,12 @@
     </constructor-arg>
   </bean>
 
-  <bean id="alphaRule" class="org.passay.AlphabeticalCharacterRule"
-    p:numberOfCharacters="3"/>
-  <bean id="digitRule" class="org.passay.DigitCharacterRule"
-    p:numberOfCharacters="1"/>
+  <bean id="alphaRule" class="org.passay.CharacterRule"
+    c:data="#{T(org.passay.EnglishCharacterData).Alphabetical}"
+    p:numberOfCharacters="3" />
+  <bean id="digitRule" class="org.passay.CharacterRule"
+    c:data="#{T(org.passay.EnglishCharacterData).Digit}"
+    p:numberOfCharacters="1" />
   <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
     p:numberOfCharacteristics="2">
     <property name="rules">
@@ -38,11 +40,14 @@
   <bean id="lenRule" class="org.passay.LengthRule"
     p:minimumLength="5"/>
 
-  <bean id="qwertySeqRule" class="org.passay.QwertySequenceRule"/>
+  <bean id="qwertySeqRule" class="org.passay.IllegalSequenceRule"
+    c:data="#{T(org.passay.EnglishSequenceData).Qwerty}" />
 
-  <bean id="alphaSeqRule" class="org.passay.AlphabeticalSequenceRule"/>
+  <bean id="alphaSeqRule" class="org.passay.IllegalSequenceRule"
+    c:data="#{T(org.passay.EnglishSequenceData).Alphabetical}" />
 
-  <bean id="numSeqRule" class="org.passay.NumericalSequenceRule"/>
+  <bean id="numSeqRule" class="org.passay.IllegalSequenceRule"
+    c:data="#{T(org.passay.EnglishSequenceData).Numerical}" />
 
   <bean id="repeatRegexRule" class="org.passay.RepeatCharacterRegexRule"/>
 

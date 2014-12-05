@@ -48,15 +48,25 @@ public final class PasswordCli
           final CharacterCharacteristicsRule rule =
             new CharacterCharacteristicsRule();
           rule.getRules().add(
-            new DigitCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              EnglishCharacterData.Digit,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new AlphabeticalCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              EnglishCharacterData.Alphabetical,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new SpecialCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              EnglishCharacterData.Special,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new UppercaseCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              EnglishCharacterData.UpperCase,
+              Integer.parseInt(args[++i])));
           rule.getRules().add(
-            new LowercaseCharacterRule(Integer.parseInt(args[++i])));
+            new CharacterRule(
+              EnglishCharacterData.LowerCase,
+              Integer.parseInt(args[++i])));
           rule.setNumberOfCharacteristics(Integer.parseInt(args[++i]));
           rules.add(rule);
         } else if ("-d".equals(args[i])) {
@@ -70,9 +80,12 @@ public final class PasswordCli
           rules.add(new UsernameRule(true, true));
           username = args[++i];
         } else if ("-s".equals(args[i])) {
-          rules.add(new QwertySequenceRule());
-          rules.add(new AlphabeticalSequenceRule());
-          rules.add(new NumericalSequenceRule());
+          rules.add(
+            new IllegalSequenceRule(EnglishSequenceData.Qwerty));
+          rules.add(
+            new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
+          rules.add(
+            new IllegalSequenceRule(EnglishSequenceData.Numerical));
           rules.add(new RepeatCharacterRegexRule());
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();
