@@ -2,8 +2,10 @@
 package org.passay.dictionary;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import org.passay.dictionary.sort.ArraySorter;
@@ -23,7 +25,7 @@ public class DictionaryBuilder
   private static final ArraySorter SORTER = new ArraysSort();
 
   /** List of word list files. */
-  private final List<File> files = new ArrayList<>();
+  private final List<Reader> sources = new ArrayList<>();
 
   /** Dictionary case sensitivity flag. */
   private boolean caseSensitive;
@@ -38,10 +40,25 @@ public class DictionaryBuilder
    */
   public DictionaryBuilder addFile(final String path)
   {
-    files.add(new File(path));
-    return this;
+    try {
+      return addReader(new FileReader(new File(path)));
+    } catch (FileNotFoundException e) {
+      throw new IllegalArgumentException(path + " does not exist", e);
+    }
   }
 
+  /**
+   * Adds a word list to the dictionary to be built.
+   *
+   * @param  reader  Reader which returns a word list, one word per line.
+   *
+   * @return  This builder.
+   */
+  public DictionaryBuilder addReader(final Reader reader)
+  {
+    sources.add(reader);
+    return this;
+  }
 
   /**
    * Sets the case sensitivity flag on the dictionary to be built. Dictionaries
@@ -67,11 +84,8 @@ public class DictionaryBuilder
   {
     try {
       final List<String> wordList = new ArrayList<>();
-      for (File f : files) {
-        if (!f.exists()) {
-          throw new IllegalArgumentException(f + " does not exist");
-        }
-        WordLists.readWordList(new FileReader(f), wordList);
+      for (Reader reader : sources) {
+        WordLists.readWordList(reader, wordList);
       }
 
       final String[] words = new String[wordList.size()];
