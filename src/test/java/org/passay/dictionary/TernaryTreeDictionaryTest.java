@@ -83,8 +83,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   @Test(
     groups = {"ttdicttest"},
     dataProvider = "all-web-words",
-    enabled = false
-  )
+    enabled = false)
   public void searchAll(final String word)
     throws Exception
   {

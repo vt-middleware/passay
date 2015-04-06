@@ -70,8 +70,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   /** @throws  Exception  On test failure. */
   @BeforeClass(
     groups = {"passtest"},
-    dependsOnMethods = {"createDictionary"}
-  )
+    dependsOnMethods = {"createDictionary"})
   public void createChecker()
     throws Exception
   {

@@ -66,8 +66,7 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
    */
   @Test(
     groups = {"ttperftest"},
-    dataProvider = "search-words-web-large"
-  )
+    dataProvider = "search-words-web-large")
   public void ternaryTreeSearch(final String word)
     throws Exception
   {

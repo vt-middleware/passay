@@ -100,8 +100,7 @@ public class WordListsTest
    */
   @Test(
     groups = {"wltest"},
-    dataProvider = "searchData"
-  )
+    dataProvider = "searchData")
   public void binarySearch(
     final WordList wl,
     final String word,

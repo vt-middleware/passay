@@ -93,8 +93,7 @@ public class PasswordGeneratorTest
    */
   @Test(
     groups = {"passgentest"},
-    dataProvider = "randomPasswords"
-  )
+    dataProvider = "randomPasswords")
   public void testGenerator(final String pass)
     throws Exception
   {

@@ -33,8 +33,7 @@ public abstract class AbstractRuleTest
    */
   @Test(
     groups = {"passtest"},
-    dataProvider = "passwords"
-  )
+    dataProvider = "passwords")
   public void checkPassword(
     final Rule rule,
     final PasswordData passwordData,
@@ -64,8 +63,7 @@ public abstract class AbstractRuleTest
    */
   @Test(
     groups = {"passtest"},
-    dataProvider = "messages"
-  )
+    dataProvider = "messages")
   public void checkMessage(
     final Rule rule,
     final PasswordData passwordData,

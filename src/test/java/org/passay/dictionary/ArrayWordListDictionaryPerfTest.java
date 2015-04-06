@@ -69,8 +69,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
    */
   @Test(
     groups = {"wlperftest"},
-    dataProvider = "search-words-web-large"
-  )
+    dataProvider = "search-words-web-large")
   public void wordListSearch(final String word)
     throws Exception
   {

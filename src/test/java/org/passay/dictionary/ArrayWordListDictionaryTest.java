@@ -71,8 +71,7 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
    */
   @Test(
     groups = {"wldicttest"},
-    dataProvider = "all-fbsd-words"
-  )
+    dataProvider = "all-fbsd-words")
   public void searchAll(final String word)
     throws Exception
   {

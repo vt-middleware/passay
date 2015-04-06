@@ -134,8 +134,7 @@ public abstract class AbstractDictionaryTest
       "fbsdFileSorted",
       "fbsdFileLowerCase",
       "fbsdFileLowerCaseSorted"
-    }
-  )
+    })
   @BeforeClass(groups = {"ttdicttest", "wldicttest"})
   public void createDictionaries(
     final String dict1,

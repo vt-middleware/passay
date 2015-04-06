@@ -132,8 +132,7 @@ public class TernaryTreeTest
    */
   @Test(
     groups = {"tttest"},
-    dataProvider = "searchData"
-  )
+    dataProvider = "searchData")
   public void search(
     final TernaryTree tt,
     final String word,
@@ -153,8 +152,7 @@ public class TernaryTreeTest
    */
   @Test(
     groups = {"tttest"},
-    dataProvider = "partialSearchData"
-  )
+    dataProvider = "partialSearchData")
   public void partialSearch(
     final TernaryTree tt,
     final String searchTerm,
@@ -178,8 +176,7 @@ public class TernaryTreeTest
    */
   @Test(
     groups = {"tttest"},
-    dataProvider = "nearSearchData"
-  )
+    dataProvider = "nearSearchData")
   public void nearSearch(
     final TernaryTree tt,
     final String word,
