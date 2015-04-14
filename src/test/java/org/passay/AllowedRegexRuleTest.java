@@ -59,9 +59,7 @@ public class AllowedRegexRuleTest extends AbstractRuleTest
         {
           new AllowedRegexRule("\\d\\d\\d\\d"),
           new PasswordData("p4zRcv8#n65"),
-          new String[] {
-            String.format("Password must match pattern '%s'.", "\\d\\d\\d\\d"),
-          },
+          new String[] {String.format("Password must match pattern '%s'.", "\\d\\d\\d\\d"), },
         },
       };
   }

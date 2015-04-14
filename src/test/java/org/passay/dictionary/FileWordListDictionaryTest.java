@@ -27,16 +27,10 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
   public void createDictionary()
     throws Exception
   {
-    final FileWordList fwl1 = new FileWordList(
-      new RandomAccessFile(fbsdFileSorted, "r"),
-      true,
-      25);
+    final FileWordList fwl1 = new FileWordList(new RandomAccessFile(fbsdFileSorted, "r"), true, 25);
     caseSensitive = new WordListDictionary(fwl1);
 
-    final FileWordList fwl2 = new FileWordList(
-      new RandomAccessFile(fbsdFileLowerCaseSorted, "r"),
-      false,
-      25);
+    final FileWordList fwl2 = new FileWordList(new RandomAccessFile(fbsdFileLowerCaseSorted, "r"), false, 25);
     caseInsensitive = new WordListDictionary(fwl2);
   }
 
@@ -68,9 +62,7 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"wldicttest"},
-    dataProvider = "all-fbsd-words")
+  @Test(groups = {"wldicttest"}, dataProvider = "all-fbsd-words")
   public void searchAll(final String word)
     throws Exception
   {

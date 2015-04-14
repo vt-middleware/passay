@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Rule for determining if a password matches an allowed regular expression.
- * Passwords must match the expression or validation will fail.
+ * Rule for determining if a password matches an allowed regular expression. Passwords must match the expression or
+ * validation will fail.
  *
  * @author  Middleware Services
  */
@@ -40,8 +40,7 @@ public class AllowedRegexRule implements Rule
     final Matcher m = pattern.matcher(passwordData.getPassword());
     if (!m.find()) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
     }
     return result;
   }
@@ -63,11 +62,6 @@ public class AllowedRegexRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::pattern=%s",
-        getClass().getName(),
-        hashCode(),
-        pattern);
+    return String.format("%s@%h::pattern=%s", getClass().getName(), hashCode(), pattern);
   }
 }

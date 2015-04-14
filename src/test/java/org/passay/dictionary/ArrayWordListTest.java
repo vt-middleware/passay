@@ -28,8 +28,7 @@ public class ArrayWordListTest extends AbstractWordListTest
   public void createWordList(final String file)
     throws Exception
   {
-    wordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(file)});
+    wordList = WordLists.createFromReader(new FileReader[] {new FileReader(file)});
   }
 
 
@@ -53,8 +52,7 @@ public class ArrayWordListTest extends AbstractWordListTest
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
 
     final String[] arrayWithNull = new String[] {"a", "b", null, "c"};
@@ -64,8 +62,7 @@ public class ArrayWordListTest extends AbstractWordListTest
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
   }
 
@@ -88,8 +85,6 @@ public class ArrayWordListTest extends AbstractWordListTest
     final ArrayWordList wl = new ArrayWordList(arrayWithSpaces, true);
     AssertJUnit.assertEquals(arrayWithSpaces.length, wl.size());
     AssertJUnit.assertEquals(arrayWithSpaces[0], wl.get(0));
-    AssertJUnit.assertEquals(
-      arrayWithSpaces[arrayWithSpaces.length - 1],
-      wl.get(wl.size() - 1));
+    AssertJUnit.assertEquals(arrayWithSpaces[arrayWithSpaces.length - 1], wl.get(wl.size() - 1));
   }
 }

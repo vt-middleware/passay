@@ -55,10 +55,8 @@ public class DictionaryRuleTest extends AbstractRuleTest
   public void createRules(final String dictFile)
     throws Exception
   {
-    final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(
-      dictFile).setCaseSensitive(true).build();
-    final Dictionary caseInsensitiveDict = new DictionaryBuilder().addFile(
-      dictFile).build();
+    final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
+    final Dictionary caseInsensitiveDict = new DictionaryBuilder().addFile(dictFile).build();
 
     rule.setDictionary(caseSensitiveDict);
 
@@ -169,20 +167,12 @@ public class DictionaryRuleTest extends AbstractRuleTest
         {
           rule,
           new PasswordData(DICT_PASS),
-          new String[] {
-            String.format(
-              "Password contains the dictionary word '%s'.",
-              "Pullmanize"),
-          },
+          new String[] {String.format("Password contains the dictionary word '%s'.", "Pullmanize"), },
         },
         {
           backwardsRule,
           new PasswordData(BACKWARDS_DICT_PASS),
-          new String[] {
-            String.format(
-              "Password contains the reversed dictionary word '%s'.",
-              "Pullmanize"),
-          },
+          new String[] {String.format("Password contains the reversed dictionary word '%s'.", "Pullmanize"), },
         },
       };
   }

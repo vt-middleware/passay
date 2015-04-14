@@ -38,23 +38,21 @@ public abstract class AbstractWordList implements WordList
 
 
   /**
-   * Throws an {@link IndexOutOfBoundsException} if the supplied index is less
-   * than 0 or greater than or equal to the size of this word list.
+   * Throws an {@link IndexOutOfBoundsException} if the supplied index is less than 0 or greater than or equal to the
+   * size of this word list.
    *
    * @param  index  to check
    */
   protected void checkRange(final int index)
   {
     if (index < 0 || index >= size()) {
-      throw new IndexOutOfBoundsException(
-        "Supplied index (" + index + ") does not exist");
+      throw new IndexOutOfBoundsException("Supplied index (" + index + ") does not exist");
     }
   }
 
 
   /**
-   * Throws a {@link ClassCastException} if the supplied object is not an
-   * instance of {@link String}.
+   * Throws a {@link ClassCastException} if the supplied object is not an instance of {@link String}.
    *
    * @param  o  object to check
    */
@@ -87,8 +85,8 @@ public abstract class AbstractWordList implements WordList
 
 
   /**
-   * Iterator implementation that iterates over a {@link WordList} by
-   * incrementing an index from 0 to {@link WordList#size()} - 1.
+   * Iterator implementation that iterates over a {@link WordList} by incrementing an index from 0 to {@link
+   * WordList#size()} - 1.
    *
    * @author  Middleware Services
    */
@@ -112,10 +110,9 @@ public abstract class AbstractWordList implements WordList
 
 
   /**
-   * Iterator that iterates over a word list from the median outward to either
-   * end. In particular, for a word list of N elements whose median index is M,
-   * and for each i such that M-i >= 0 and M+i < N, the M-i element is visited
-   * before the M+i element.
+   * Iterator that iterates over a word list from the median outward to either end. In particular, for a word list of N
+   * elements whose median index is M, and for each i such that M-i >= 0 and M+i < N, the M-i element is visited before
+   * the M+i element.
    *
    * @author  Middleware Services
    */

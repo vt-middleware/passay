@@ -7,9 +7,8 @@ import java.util.List;
 import org.passay.dictionary.sort.ArraysSort;
 
 /**
- * Provides fast searching for dictionary words using a word list. It's critical
- * that the word list provided to this dictionary be sorted according to the
- * natural ordering of {@link java.lang.String}.
+ * Provides fast searching for dictionary words using a word list. It's critical that the word list provided to this
+ * dictionary be sorted according to the natural ordering of {@link java.lang.String}.
  *
  * @author  Middleware Services
  */
@@ -23,11 +22,9 @@ public class WordListDictionary implements Dictionary
   /**
    * Creates a new dictionary instance from the supplied {@link WordList}.
    *
-   * @param  wl  list of words sorted according to {@link
-   *             WordList#getComparator()}.
+   * @param  wl  list of words sorted according to {@link WordList#getComparator()}.
    *
-   *             <p><strong>NOTE</strong> Failure to provide a sorted word list
-   *             will produce incorrect results.</p>
+   *             <p><strong>NOTE</strong> Failure to provide a sorted word list will produce incorrect results.</p>
    */
   public WordListDictionary(final WordList wl)
   {
@@ -102,11 +99,9 @@ public class WordListDictionary implements Dictionary
       // perform operation
       if (search) {
         if (dict.search(word)) {
-          System.out.println(
-            String.format("%s was found in this dictionary", word));
+          System.out.println(String.format("%s was found in this dictionary", word));
         } else {
-          System.out.println(
-            String.format("%s was not found in this dictionary", word));
+          System.out.println(String.format("%s was not found in this dictionary", word));
         }
       } else if (print) {
         System.out.println(dict.getWordList());
@@ -115,10 +110,8 @@ public class WordListDictionary implements Dictionary
       }
 
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.out.println(
-        "Usage: java " + WordListDictionary.class.getName() + " \\");
-      System.out.println(
-        "       <dictionary1> <dictionary2> ... " +
+      System.out.println("Usage: java " + WordListDictionary.class.getName() + " \\");
+      System.out.println("       <dictionary1> <dictionary2> ... " +
         "<options> <operation> \\");
       System.out.println("");
       System.out.println("where <options> includes:");

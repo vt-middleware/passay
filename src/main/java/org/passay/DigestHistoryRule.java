@@ -6,9 +6,8 @@ import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.EncodingHashBean;
 
 /**
- * Rule for determining if a password matches one of any previous digested
- * password a user has chosen. If no password reference has been set that
- * matches the label on the rule, then passwords will meet this rule. See {@link
+ * Rule for determining if a password matches one of any previous digested password a user has chosen. If no password
+ * reference has been set that matches the label on the rule, then passwords will meet this rule. See {@link
  * PasswordData#setPasswordReferences(List)}.
  *
  * @author  Middleware Services
@@ -24,8 +23,7 @@ public class DigestHistoryRule extends HistoryRule
 
 
   /**
-   * Creates new digest history rule which operates on password references with
-   * the supplied label.
+   * Creates new digest history rule which operates on password references with the supplied label.
    *
    * @param  bean  encoding hash bean
    */
@@ -58,11 +56,8 @@ public class DigestHistoryRule extends HistoryRule
    * @return  true if passwords match, false otherwise.
    */
   @Override
-  protected boolean matches(
-    final String undigested,
-    final PasswordData.Reference reference)
+  protected boolean matches(final String undigested, final PasswordData.Reference reference)
   {
-    return
-      hashBean.compare(reference.getPassword(), undigested.getBytes(charset));
+    return hashBean.compare(reference.getPassword(), undigested.getBytes(charset));
   }
 }

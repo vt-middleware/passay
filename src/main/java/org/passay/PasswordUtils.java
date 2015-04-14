@@ -17,17 +17,14 @@ public final class PasswordUtils
 
 
   /**
-   * Returns all the characters in the input string that are also in the
-   * characters array.
+   * Returns all the characters in the input string that are also in the characters array.
    *
    * @param  characters  that contains characters to match
    * @param  input  to search for matches
    *
    * @return  matching characters or empty string
    */
-  public static String getMatchingCharacters(
-    final String characters,
-    final String input)
+  public static String getMatchingCharacters(final String characters, final String input)
   {
     final StringBuilder sb = new StringBuilder(input.length());
     for (int i = 0; i < input.length(); i++) {

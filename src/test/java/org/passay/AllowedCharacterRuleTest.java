@@ -59,9 +59,7 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
         {
           rule,
           new PasswordData(INVALID_PASS),
-          new String[] {
-            String.format("Password contains the illegal character '%s'.", "4"),
-          },
+          new String[] {String.format("Password contains the illegal character '%s'.", "4"), },
         },
       };
   }

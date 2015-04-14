@@ -52,9 +52,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         {
           new IllegalSequenceRule(EnglishSequenceData.Qwerty, 4, false),
           new PasswordData("p7^54#n65"),
-          codes(
-            EnglishSequenceData.Qwerty.getErrorCode(),
-            EnglishSequenceData.Qwerty.getErrorCode()),
+          codes(EnglishSequenceData.Qwerty.getErrorCode(), EnglishSequenceData.Qwerty.getErrorCode()),
         },
         // Has backward wrapping qwerty sequence with wrap=false
         {
@@ -70,8 +68,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // report single error
         {
-          new IllegalSequenceRule(
-            EnglishSequenceData.Qwerty, 6, false, false),
+          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 6, false, false),
           new PasswordData("pqwertyui#n65"),
           codes(EnglishSequenceData.Qwerty.getErrorCode()),
         },
@@ -168,8 +165,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // report single error
         {
-          new IllegalSequenceRule(
-            EnglishSequenceData.Alphabetical, 5, false, false),
+          new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false, false),
           new PasswordData("phijklmn#n65"),
           codes(EnglishSequenceData.Alphabetical.getErrorCode()),
         },
@@ -227,8 +223,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // report single error
         {
-          new IllegalSequenceRule(
-            EnglishSequenceData.Numerical, 5, true, false),
+          new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, true, false),
           new PasswordData("1234567"),
           codes(EnglishSequenceData.Numerical.getErrorCode()),
         },
@@ -250,56 +245,32 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         {
           new IllegalSequenceRule(EnglishSequenceData.Qwerty),
           new PasswordData("pkwerty#n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal QWERTY sequence '%s'.", "werty"),
-          },
+          new String[] {String.format("Password contains the illegal QWERTY sequence '%s'.", "werty"), },
         },
         {
           new IllegalSequenceRule(EnglishSequenceData.Qwerty, 5, true, false),
           new PasswordData("pkl;'asd65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal QWERTY sequence '%s'.", "kl;'a"),
-          },
+          new String[] {String.format("Password contains the illegal QWERTY sequence '%s'.", "kl;'a"), },
         },
         {
           new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
           new PasswordData("phijkl#n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal alphabetical sequence '%s'.",
-              "hijkl"),
-          },
+          new String[] {String.format("Password contains the illegal alphabetical sequence '%s'.", "hijkl"), },
         },
         {
-          new IllegalSequenceRule(
-            EnglishSequenceData.Alphabetical, 5, true, false),
+          new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
           new PasswordData("phijklmno#n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal alphabetical sequence '%s'.",
-              "hijkl"),
-          },
+          new String[] {String.format("Password contains the illegal alphabetical sequence '%s'.", "hijkl"), },
         },
         {
           new IllegalSequenceRule(EnglishSequenceData.Numerical),
           new PasswordData("p34567n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal numerical sequence '%s'.",
-              "34567"),
-          },
+          new String[] {String.format("Password contains the illegal numerical sequence '%s'.", "34567"), },
         },
         {
-          new IllegalSequenceRule(
-            EnglishSequenceData.Numerical, 5, false, false),
+          new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, false, false),
           new PasswordData("p3456789n65"),
-          new String[] {
-            String.format(
-              "Password contains the illegal numerical sequence '%s'.",
-              "34567"),
-          },
+          new String[] {String.format("Password contains the illegal numerical sequence '%s'.", "34567"), },
         },
       };
   }

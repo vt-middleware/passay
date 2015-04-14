@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Rule for determining if a password contains allowed characters. Validation
- * will fail unless the password contains all of the allowed characters.
+ * Rule for determining if a password contains allowed characters. Validation will fail unless the password contains all
+ * of the allowed characters.
  *
  * @author  Middleware Services
  */
@@ -41,10 +41,7 @@ public class AllowedCharacterRule implements Rule
     for (char c : passwordData.getPassword().toCharArray()) {
       if (Arrays.binarySearch(allowedChar, c) < 0) {
         result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE,
-            createRuleResultDetailParameters(c)));
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
         break;
       }
     }

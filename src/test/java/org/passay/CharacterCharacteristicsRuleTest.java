@@ -33,20 +33,17 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   private static final String NONALPHA_PASS = "r5scvEW2e9b";
 
   /** For testing. */
-  private final CharacterCharacteristicsRule rule1 =
-    new CharacterCharacteristicsRule();
+  private final CharacterCharacteristicsRule rule1 = new CharacterCharacteristicsRule();
 
   /** For testing. */
-  private final CharacterCharacteristicsRule rule2 =
-    new CharacterCharacteristicsRule();
+  private final CharacterCharacteristicsRule rule2 = new CharacterCharacteristicsRule();
 
 
   /** Initialize rules for this test. */
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    rule1.getRules().add(
-      new CharacterRule(EnglishCharacterData.Alphabetical, 4));
+    rule1.getRules().add(new CharacterRule(EnglishCharacterData.Alphabetical, 4));
     rule1.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 3));
     rule1.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 2));
     rule1.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 2));
@@ -85,30 +82,22 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
         {
           rule1,
           new PasswordData(DIGIT_PASS),
-          codes(
-            CharacterCharacteristicsRule.ERROR_CODE,
-            EnglishCharacterData.Digit.getErrorCode()),
+          codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Digit.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(UPPERCASE_PASS),
-          codes(
-            CharacterCharacteristicsRule.ERROR_CODE,
-            EnglishCharacterData.UpperCase.getErrorCode()),
+          codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.UpperCase.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(LOWERCASE_PASS),
-          codes(
-            CharacterCharacteristicsRule.ERROR_CODE,
-            EnglishCharacterData.LowerCase.getErrorCode()),
+          codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.LowerCase.getErrorCode()),
         },
         {
           rule1,
           new PasswordData(NONALPHA_PASS),
-          codes(
-            CharacterCharacteristicsRule.ERROR_CODE,
-            EnglishCharacterData.Special.getErrorCode()),
+          codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Special.getErrorCode()),
         },
         {rule2, new PasswordData(VALID_PASS), null, },
         {rule2, new PasswordData(ALPHA_PASS), null, },
@@ -150,31 +139,17 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("r%scvEW2e3)"),
           new String[] {
-            String.format(
-              "Password must contain at least %s digit characters.",
-              3),
-            String.format(
-              "Password matches %s of %s character rules, but %s are required.",
-              4,
-              5,
-              5),
+            String.format("Password must contain at least %s digit characters.", 3),
+            String.format("Password matches %s of %s character rules, but %s are required.", 4, 5, 5),
           },
         },
         {
           rule2,
           new PasswordData("rscvew2e3"),
           new String[] {
-            String.format(
-              "Password must contain at least %s special characters.",
-              1),
-            String.format(
-              "Password must contain at least %s uppercase characters.",
-              1),
-            String.format(
-              "Password matches %s of %s character rules, but %s are required.",
-              2,
-              4,
-              3),
+            String.format("Password must contain at least %s special characters.", 1),
+            String.format("Password must contain at least %s uppercase characters.", 1),
+            String.format("Password matches %s of %s character rules, but %s are required.", 2, 4, 3),
           },
         },
       };
@@ -186,8 +161,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   public void customResolver()
     throws Exception
   {
-    final CharacterCharacteristicsRule rule =
-      new CharacterCharacteristicsRule();
+    final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule();
     rule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 3));
     rule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 2));
     rule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 2));

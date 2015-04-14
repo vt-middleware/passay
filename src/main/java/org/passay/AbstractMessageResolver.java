@@ -2,9 +2,8 @@
 package org.passay;
 
 /**
- * Provides a baseline implementation of {@link #resolve(RuleResultDetail)}
- * which uses {@link String#format(String, Object...)} to resolve messages. When
- * no message is found for a particular key, the key and the {@link
+ * Provides a baseline implementation of {@link #resolve(RuleResultDetail)} which uses {@link String#format(String,
+ * Object...)} to resolve messages. When no message is found for a particular key, the key and the {@link
  * RuleResultDetail#getParameters()} are used to construct a message.
  *
  * @author  Middleware Services

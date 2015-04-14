@@ -15,9 +15,7 @@ public class RuleResultDetail
   /** Detail error code. */
   protected final String errorCode;
 
-  /**
-   * Additional parameters that provide information about validation failure.
-   */
+  /** Additional parameters that provide information about validation failure. */
   protected final Map<String, Object> parameters;
 
 

@@ -130,13 +130,8 @@ public class TernaryTreeTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"tttest"},
-    dataProvider = "searchData")
-  public void search(
-    final TernaryTree tt,
-    final String word,
-    final boolean expected)
+  @Test(groups = {"tttest"}, dataProvider = "searchData")
+  public void search(final TernaryTree tt, final String word, final boolean expected)
     throws Exception
   {
     AssertJUnit.assertEquals(expected, tt.search(word));
@@ -150,13 +145,8 @@ public class TernaryTreeTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"tttest"},
-    dataProvider = "partialSearchData")
-  public void partialSearch(
-    final TernaryTree tt,
-    final String searchTerm,
-    final String[] expected)
+  @Test(groups = {"tttest"}, dataProvider = "partialSearchData")
+  public void partialSearch(final TernaryTree tt, final String searchTerm, final String[] expected)
     throws Exception
   {
     final String[] actual = tt.partialSearch(searchTerm);
@@ -174,14 +164,8 @@ public class TernaryTreeTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"tttest"},
-    dataProvider = "nearSearchData")
-  public void nearSearch(
-    final TernaryTree tt,
-    final String word,
-    final int distance,
-    final String[] expected)
+  @Test(groups = {"tttest"}, dataProvider = "nearSearchData")
+  public void nearSearch(final TernaryTree tt, final String word, final int distance, final String[] expected)
     throws Exception
   {
     final String[] actual = tt.nearSearch(word, distance);

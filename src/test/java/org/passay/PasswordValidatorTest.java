@@ -68,20 +68,15 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
 
   /** @throws  Exception  On test failure. */
-  @BeforeClass(
-    groups = {"passtest"},
-    dependsOnMethods = {"createDictionary"})
+  @BeforeClass(groups = {"passtest"}, dependsOnMethods = {"createDictionary"})
   public void createChecker()
     throws Exception
   {
-    final CharacterCharacteristicsRule charRule =
-      new CharacterCharacteristicsRule();
+    final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
     charRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
     charRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    charRule.getRules().add(
-      new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    charRule.getRules().add(
-      new CharacterRule(EnglishCharacterData.LowerCase, 1));
+    charRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
+    charRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
     charRule.setNumberOfCharacteristics(3);
 
     final WhitespaceRule whitespaceRule = new WhitespaceRule();
@@ -91,14 +86,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
     final DictionarySubstringRule dictRule = new DictionarySubstringRule(dict);
     dictRule.setMatchBackwards(true);
 
-    final IllegalSequenceRule qwertySeqRule = new IllegalSequenceRule(
-      EnglishSequenceData.Qwerty);
+    final IllegalSequenceRule qwertySeqRule = new IllegalSequenceRule(EnglishSequenceData.Qwerty);
 
-    final IllegalSequenceRule alphaSeqRule = new IllegalSequenceRule(
-      EnglishSequenceData.Alphabetical);
+    final IllegalSequenceRule alphaSeqRule = new IllegalSequenceRule(EnglishSequenceData.Alphabetical);
 
-    final IllegalSequenceRule numSeqRule = new IllegalSequenceRule(
-      EnglishSequenceData.Numerical);
+    final IllegalSequenceRule numSeqRule = new IllegalSequenceRule(EnglishSequenceData.Numerical);
 
     final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
 
@@ -111,24 +103,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
     sha1Bean.setCodecSpec(new CodecSpec("Base64"));
 
     final DigestHistoryRule historyRule = new DigestHistoryRule(sha1Bean);
-    references.add(
-      new PasswordData.HistoricalReference(
-        "history",
-        "safx/LW8+SsSy/o3PmCNy4VEm5s="));
-    references.add(
-      new PasswordData.HistoricalReference(
-        "history",
-        "zurb9DyQ5nooY1la8h86Bh0n1iw="));
-    references.add(
-      new PasswordData.HistoricalReference(
-        "history",
-        "bhqabXwE3S8E6xNJfX/d76MFOCs="));
+    references.add(new PasswordData.HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
+    references.add(new PasswordData.HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
+    references.add(new PasswordData.HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
 
     final DigestSourceRule sourceRule = new DigestSourceRule(sha1Bean);
-    references.add(
-      new PasswordData.SourceReference(
-        "source",
-        "CJGTDMQRP+rmHApkcijC80aDV0o="));
+    references.add(new PasswordData.SourceReference("source", "CJGTDMQRP+rmHApkcijC80aDV0o="));
 
     rules.add(charRule);
     rules.add(whitespaceRule);
@@ -154,8 +134,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     l.add(new LengthRule(8, 16));
 
-    final CharacterCharacteristicsRule ccRule =
-      new CharacterCharacteristicsRule();
+    final CharacterCharacteristicsRule ccRule = new CharacterCharacteristicsRule();
     ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
     ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
     ccRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
@@ -184,8 +163,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     } catch (NullPointerException e) {
       AssertJUnit.assertEquals(e.getClass(), NullPointerException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown NullPointerException, threw " + e.getMessage());
+      AssertJUnit.fail("Should have thrown NullPointerException, threw " + e.getMessage());
     }
 
     final PasswordData valid = new PasswordData(VALID_PASS);
@@ -381,10 +359,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** matches sequence 'zxcvb' */
         {
           validator,
-          PasswordData.newInstance(
-            "p4zxcvb#n65",
-            USER,
-            references),
+          PasswordData.newInstance("p4zxcvb#n65", USER, references),
           codes(EnglishSequenceData.Qwerty.getErrorCode()),
         },
 
@@ -395,18 +370,13 @@ public class PasswordValidatorTest extends AbstractRuleTest
         {
           validator,
           PasswordData.newInstance("p4ytrew#n65", USER, references),
-          codes(
-            EnglishSequenceData.Qwerty.getErrorCode(),
-            DictionaryRule.ERROR_CODE_REVERSED),
+          codes(EnglishSequenceData.Qwerty.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
         },
 
         /** matches sequence 'iop[]' ignore case */
         {
           validator,
-          PasswordData.newInstance(
-            "p4iOP[]#n65",
-            USER,
-            references),
+          PasswordData.newInstance("p4iOP[]#n65", USER, references),
           codes(EnglishSequenceData.Qwerty.getErrorCode()),
         },
 
@@ -429,9 +399,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         {
           validator,
           PasswordData.newInstance("p4resutset#n65", USER, references),
-          codes(
-            UsernameRule.ERROR_CODE_REVERSED,
-            DictionaryRule.ERROR_CODE_REVERSED),
+          codes(UsernameRule.ERROR_CODE_REVERSED, DictionaryRule.ERROR_CODE_REVERSED),
         },
 
         /**
@@ -541,17 +509,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
           validator,
           PasswordData.newInstance("ay3dop5zss", USER, references),
           new String[] {
-            String.format(
-              "Password must contain at least %s special characters.",
-              1),
-            String.format(
-              "Password must contain at least %s uppercase characters.",
-              1),
-            String.format(
-              "Password matches %s of %s character rules, but %s are required.",
-              2,
-              4,
-              3),
+            String.format("Password must contain at least %s special characters.", 1),
+            String.format("Password must contain at least %s uppercase characters.", 1),
+            String.format("Password matches %s of %s character rules, but %s are required.", 2, 4, 3),
           },
         },
       };

@@ -36,11 +36,9 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
     super.initialize(dict1, dict2);
 
     long t = System.currentTimeMillis();
-    ttd = new TernaryTreeDictionary(
-      new FileWordList(new RandomAccessFile(webFile, "r")));
+    ttd = new TernaryTreeDictionary(new FileWordList(new RandomAccessFile(webFile, "r")));
     t = System.currentTimeMillis() - t;
-    System.out.println(
-      ttd.getClass().getSimpleName() + " time to construct: " + t + "ms");
+    System.out.println(ttd.getClass().getSimpleName() + " time to construct: " + t + "ms");
   }
 
 
@@ -49,12 +47,8 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
   public void closeDictionary()
     throws Exception
   {
-    System.out.println(
-      ttd.getClass().getSimpleName() + " search time: " +
-      (ttdSearchTime / 1000 / 1000) + "ms");
-    System.out.println(
-      ttd.getClass().getSimpleName() + " avg time per search: " +
-      (ttdSearchTime / 10000) + "ns");
+    System.out.println(ttd.getClass().getSimpleName() + " search time: " + (ttdSearchTime / 1000 / 1000) + "ms");
+    System.out.println(ttd.getClass().getSimpleName() + " avg time per search: " + (ttdSearchTime / 10000) + "ns");
     ttd = null;
   }
 
@@ -64,9 +58,7 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"ttperftest"},
-    dataProvider = "search-words-web-large")
+  @Test(groups = {"ttperftest"}, dataProvider = "search-words-web-large")
   public void ternaryTreeSearch(final String word)
     throws Exception
   {

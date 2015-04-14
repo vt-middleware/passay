@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Rule for determining if a password matches a password from a different
- * source. Useful for when separate systems cannot have matching passwords. If
- * no source password reference has been set, then passwords will meet this
- * rule. See {@link PasswordData#setPasswordReferences(List)}
+ * Rule for determining if a password matches a password from a different source. Useful for when separate systems
+ * cannot have matching passwords. If no source password reference has been set, then passwords will meet this rule. See
+ * {@link PasswordData#setPasswordReferences(List)}
  *
  * @author  Middleware Services
  */
@@ -24,8 +23,8 @@ public class SourceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    final List<PasswordData.SourceReference> references =
-      passwordData.getPasswordReferences(PasswordData.SourceReference.class);
+    final List<PasswordData.SourceReference> references = passwordData.getPasswordReferences(
+      PasswordData.SourceReference.class);
     if (references.isEmpty()) {
       return result;
     }
@@ -35,9 +34,7 @@ public class SourceRule implements Rule
       if (matches(cleartext, reference)) {
         result.setValid(false);
         result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE,
-            createRuleResultDetailParameters(reference.getLabel())));
+          new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
       }
     }
     return result;
@@ -52,9 +49,7 @@ public class SourceRule implements Rule
    *
    * @return  true if passwords match, false otherwise.
    */
-  protected boolean matches(
-    final String password,
-    final PasswordData.Reference reference)
+  protected boolean matches(final String password, final PasswordData.Reference reference)
   {
     return password.equals(reference.getPassword());
   }
@@ -67,8 +62,7 @@ public class SourceRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final String source)
+  protected Map<String, Object> createRuleResultDetailParameters(final String source)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("source", source);

@@ -78,10 +78,7 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
         {
           new RepeatCharacterRegexRule(),
           new PasswordData("p4&&&&&#n65"),
-          new String[] {
-            String.format(
-              "Password matches the illegal pattern '%s'.", "&&&&&"),
-          },
+          new String[] {String.format("Password matches the illegal pattern '%s'.", "&&&&&"), },
         },
       };
   }

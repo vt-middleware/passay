@@ -82,8 +82,7 @@ public abstract class AbstractDictionaryPerfTest
 
 
   /**
-   * Returns an array of random words from the supplied file of the supplied
-   * size.
+   * Returns an array of random words from the supplied file of the supplied size.
    *
    * @param  dictFile  path to the file to read
    * @param  size  of array to return
@@ -95,8 +94,7 @@ public abstract class AbstractDictionaryPerfTest
   private Object[][] createRandomWords(final String dictFile, final int size)
     throws IOException
   {
-    final FileWordList fwl = new FileWordList(
-      new RandomAccessFile(dictFile, "r"));
+    final FileWordList fwl = new FileWordList(new RandomAccessFile(dictFile, "r"));
     final Object[][] allWords = new Object[size][1];
     final Random r = new Random();
     for (int i = 0; i < size; i++) {

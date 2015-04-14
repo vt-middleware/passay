@@ -10,11 +10,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Implementation of a ternary tree. Methods are provided for inserting strings
- * and searching for strings. The algorithms in this class are all recursive,
- * and have not been optimized for any particular purpose. Data which is
- * inserted is not sorted before insertion, however data can be inserted
- * beginning with the median of the supplied data.
+ * Implementation of a ternary tree. Methods are provided for inserting strings and searching for strings. The
+ * algorithms in this class are all recursive, and have not been optimized for any particular purpose. Data which is
+ * inserted is not sorted before insertion, however data can be inserted beginning with the median of the supplied data.
  *
  * @author  Middleware Services
  */
@@ -23,44 +21,41 @@ public class TernaryTree
 {
 
   /** Case sensitive comparator. */
-  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR =
-    new Comparator<Character>() {
-      @Override
-      public int compare(final Character a, final Character b)
-      {
-        int result = 0;
-        final char c1 = a;
-        final char c2 = b;
-        if (c1 < c2) {
-          result = -1;
-        } else if (c1 > c2) {
-          result = 1;
-        }
-        return result;
+  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR = new Comparator<Character>() {
+    @Override
+    public int compare(final Character a, final Character b)
+    {
+      int result = 0;
+      final char c1 = a;
+      final char c2 = b;
+      if (c1 < c2) {
+        result = -1;
+      } else if (c1 > c2) {
+        result = 1;
       }
-    };
+      return result;
+    }
+  };
 
   /** Case insensitive comparator. */
-  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR =
-    new Comparator<Character>() {
-      @Override
-      public int compare(final Character a, final Character b)
-      {
-        int result = 0;
-        final char c1 = Character.toLowerCase(a.charValue());
-        final char c2 = Character.toLowerCase(b.charValue());
-        if (c1 < c2) {
-          result = -1;
-        } else if (c1 > c2) {
-          result = 1;
-        }
-        return result;
+  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR = new Comparator<Character>() {
+    @Override
+    public int compare(final Character a, final Character b)
+    {
+      int result = 0;
+      final char c1 = Character.toLowerCase(a.charValue());
+      final char c2 = Character.toLowerCase(b.charValue());
+      if (c1 < c2) {
+        result = -1;
+      } else if (c1 > c2) {
+        result = 1;
       }
-    };
+      return result;
+    }
+  };
 
   /** File system line separator. */
-  private static final String LINE_SEPARATOR = System.getProperty(
-    "line.separator");
+  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
   /** Character comparator. */
   protected final Comparator<Character> comparator;
@@ -133,39 +128,28 @@ public class TernaryTree
 
 
   /**
-   * Returns an array of strings which partially match the supplied word. word\
-   * should be of the format '.e.e.e' Where the '.' character represents any
-   * valid character. Possible results from this query include: Helene, delete,
-   * or severe Note that no substring matching occurs, results only include
-   * strings of the same length. If the supplied word does not contain the '.'
-   * character, then a regular search is performed.
+   * Returns an array of strings which partially match the supplied word. word\ should be of the format '.e.e.e' Where
+   * the '.' character represents any valid character. Possible results from this query include: Helene, delete, or
+   * severe Note that no substring matching occurs, results only include strings of the same length. If the supplied
+   * word does not contain the '.' character, then a regular search is performed.
    *
-   * <p><strong>NOTE</strong> This method is not supported for case insensitive
-   * ternary trees. Since the tree is built without regard to case any words
-   * returned from the tree may or may not match the case of the supplied word.
-   * </p>
+   * <p><strong>NOTE</strong> This method is not supported for case insensitive ternary trees. Since the tree is built
+   * without regard to case any words returned from the tree may or may not match the case of the supplied word.</p>
    *
    * @param  word  to search for
    *
    * @return  array of matching words
    *
-   * @throws  UnsupportedOperationException  if this is a case insensitive
-   *                                         ternary tree
+   * @throws  UnsupportedOperationException  if this is a case insensitive ternary tree
    */
   public String[] partialSearch(final String word)
   {
     if (comparator == CASE_INSENSITIVE_COMPARATOR) {
-      throw new UnsupportedOperationException(
-        "Partial search is not supported for case insensitive ternary trees");
+      throw new UnsupportedOperationException("Partial search is not supported for case insensitive ternary trees");
     }
 
     String[] results;
-    final List<String> matches = partialSearchNode(
-      root,
-      new ArrayList<String>(),
-      "",
-      word,
-      0);
+    final List<String> matches = partialSearchNode(root, new ArrayList<String>(), "", word, 0);
     if (matches == null) {
       results = new String[] {};
     } else {
@@ -176,39 +160,28 @@ public class TernaryTree
 
 
   /**
-   * Return an array of strings which are near to the supplied word by the
-   * supplied distance. For the query nearSearch("fisher", 2): Possible results
-   * include: cipher, either, fishery, kosher, sister. If the supplied distance
-   * is not > 0, then a regular search is performed.
+   * Return an array of strings which are near to the supplied word by the supplied distance. For the query
+   * nearSearch("fisher", 2): Possible results include: cipher, either, fishery, kosher, sister. If the supplied
+   * distance is not > 0, then a regular search is performed.
    *
-   * <p><strong>NOTE</strong> This method is not supported for case insensitive
-   * ternary trees. Since the tree is built without regard to case any words
-   * returned from the tree may or may not match the case of the supplied word.
-   * </p>
+   * <p><strong>NOTE</strong> This method is not supported for case insensitive ternary trees. Since the tree is built
+   * without regard to case any words returned from the tree may or may not match the case of the supplied word.</p>
    *
    * @param  word  to search for
    * @param  distance  for valid match
    *
    * @return  array of matching words
    *
-   * @throws  UnsupportedOperationException  if this is a case insensitive
-   *                                         ternary tree
+   * @throws  UnsupportedOperationException  if this is a case insensitive ternary tree
    */
   public String[] nearSearch(final String word, final int distance)
   {
     if (comparator == CASE_INSENSITIVE_COMPARATOR) {
-      throw new UnsupportedOperationException(
-        "Near search is not supported for case insensitive ternary trees");
+      throw new UnsupportedOperationException("Near search is not supported for case insensitive ternary trees");
     }
 
     String[] results;
-    final List<String> matches = nearSearchNode(
-      root,
-      distance,
-      new ArrayList<String>(),
-      "",
-      word,
-      0);
+    final List<String> matches = nearSearchNode(root, distance, new ArrayList<String>(), "", word, 0);
     if (matches == null) {
       results = new String[] {};
     } else {
@@ -219,9 +192,8 @@ public class TernaryTree
 
 
   /**
-   * Returns a list of all the words in this ternary tree. This is a very
-   * expensive operation, every node in the tree is traversed. The returned list
-   * cannot be modified.
+   * Returns a list of all the words in this ternary tree. This is a very expensive operation, every node in the tree is
+   * traversed. The returned list cannot be modified.
    *
    * @return  unmodifiable list of words
    */
@@ -233,9 +205,8 @@ public class TernaryTree
 
 
   /**
-   * Prints an ASCII representation of this ternary tree to the supplied writer.
-   * This is a very expensive operation, every node in the tree is traversed.
-   * The output produced is hard to read, but it should give an indication of
+   * Prints an ASCII representation of this ternary tree to the supplied writer. This is a very expensive operation,
+   * every node in the tree is traversed. The output produced is hard to read, but it should give an indication of
    * whether or not your tree is balanced.
    *
    * @param  out  to print to
@@ -250,8 +221,7 @@ public class TernaryTree
 
 
   /**
-   * Recursively inserts a word into the ternary tree one node at a time
-   * beginning at the supplied node.
+   * Recursively inserts a word into the ternary tree one node at a time beginning at the supplied node.
    *
    * @param  node  to put character in
    * @param  word  to be inserted
@@ -293,8 +263,7 @@ public class TernaryTree
 
 
   /**
-   * Recursively searches for a word in the ternary tree one node at a time
-   * beginning at the supplied node.
+   * Recursively searches for a word in the ternary tree one node at a time beginning at the supplied node.
    *
    * @param  node  to search in
    * @param  word  to search for
@@ -303,10 +272,7 @@ public class TernaryTree
    * @return  whether or not the word was found
    */
   // CheckStyle:ReturnCount OFF
-  private boolean searchNode(
-    final TernaryNode node,
-    final String word,
-    final int index)
+  private boolean searchNode(final TernaryNode node, final String word, final int index)
   {
     boolean success = false;
     if (node != null && index < word.length()) {
@@ -333,8 +299,7 @@ public class TernaryTree
 
 
   /**
-   * Recursively searches for a partial word in the ternary tree one node at a
-   * time beginning at the supplied node.
+   * Recursively searches for a partial word in the ternary tree one node at a time beginning at the supplied node.
    *
    * @param  node  to search in
    * @param  matches  of partial matches
@@ -359,12 +324,7 @@ public class TernaryTree
       final int cmp = comparator.compare(c, split);
       if (c == '.' || cmp < 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = partialSearchNode(
-          node.getLokid(),
-          matches,
-          match,
-          word,
-          index);
+        matches = partialSearchNode(node.getLokid(), matches, match, word, index);
         // CheckStyle:ParameterAssignmentCheck ON
       }
       if (c == '.' || cmp == 0) {
@@ -374,23 +334,13 @@ public class TernaryTree
           }
         } else {
           // CheckStyle:ParameterAssignmentCheck OFF
-          matches = partialSearchNode(
-            node.getEqkid(),
-            matches,
-            match + split,
-            word,
-            index + 1);
+          matches = partialSearchNode(node.getEqkid(), matches, match + split, word, index + 1);
           // CheckStyle:ParameterAssignmentCheck ON
         }
       }
       if (c == '.' || cmp > 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = partialSearchNode(
-          node.getHikid(),
-          matches,
-          match,
-          word,
-          index);
+        matches = partialSearchNode(node.getHikid(), matches, match, word, index);
         // CheckStyle:ParameterAssignmentCheck ON
       }
     }
@@ -399,8 +349,7 @@ public class TernaryTree
 
 
   /**
-   * Recursively searches for a near match word in the ternary tree one node at
-   * a time beginning at the supplied node.
+   * Recursively searches for a near match word in the ternary tree one node at a time beginning at the supplied node.
    *
    * @param  node  to search in
    * @param  distance  of a valid match, must be > 0
@@ -435,64 +384,34 @@ public class TernaryTree
 
       if (distance > 0 || cmp < 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = nearSearchNode(
-          node.getLokid(),
-          distance,
-          matches,
-          match,
-          word,
-          index);
+        matches = nearSearchNode(node.getLokid(), distance, matches, match, word, index);
         // CheckStyle:ParameterAssignmentCheck ON
       }
 
       final String newMatch = match + split;
       if (cmp == 0) {
 
-        if (
-          node.isEndOfWord() &&
-            distance >= 0 &&
-            newMatch.length() + distance >= word.length()) {
+        if (node.isEndOfWord() && distance >= 0 && newMatch.length() + distance >= word.length()) {
           matches.add(newMatch);
         }
 
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = nearSearchNode(
-          node.getEqkid(),
-          distance,
-          matches,
-          newMatch,
-          word,
-          index + 1);
+        matches = nearSearchNode(node.getEqkid(), distance, matches, newMatch, word, index + 1);
         // CheckStyle:ParameterAssignmentCheck ON
       } else {
 
-        if (
-          node.isEndOfWord() &&
-            distance - 1 >= 0 &&
-            newMatch.length() + distance - 1 >= word.length()) {
+        if (node.isEndOfWord() && distance - 1 >= 0 && newMatch.length() + distance - 1 >= word.length()) {
           matches.add(newMatch);
         }
 
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = nearSearchNode(
-          node.getEqkid(),
-          distance - 1,
-          matches,
-          newMatch,
-          word,
-          index + 1);
+        matches = nearSearchNode(node.getEqkid(), distance - 1, matches, newMatch, word, index + 1);
         // CheckStyle:ParameterAssignmentCheck ON
       }
 
       if (distance > 0 || cmp > 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = nearSearchNode(
-          node.getHikid(),
-          distance,
-          matches,
-          match,
-          word,
-          index);
+        matches = nearSearchNode(node.getHikid(), distance, matches, match, word, index);
         // CheckStyle:ParameterAssignmentCheck ON
       }
     }
@@ -501,9 +420,8 @@ public class TernaryTree
 
 
   /**
-   * Recursively traverses every node in the ternary tree one node at a time
-   * beginning at the supplied node. The result is a string representing every
-   * word, which is delimited by the LINE_SEPARATOR character.
+   * Recursively traverses every node in the ternary tree one node at a time beginning at the supplied node. The result
+   * is a string representing every word, which is delimited by the LINE_SEPARATOR character.
    *
    * @param  node  to begin traversing
    * @param  s  string of words found at the supplied node
@@ -544,9 +462,8 @@ public class TernaryTree
 
 
   /**
-   * Recursively traverses every node in the ternary tree one node at a time
-   * beginning at the supplied node. The result is an ASCII string
-   * representation of the tree beginning at the supplied node.
+   * Recursively traverses every node in the ternary tree one node at a time beginning at the supplied node. The result
+   * is an ASCII string representation of the tree beginning at the supplied node.
    *
    * @param  node  to begin traversing
    * @param  s  string of words found at the supplied node
@@ -554,10 +471,7 @@ public class TernaryTree
    *
    * @return  string containing all words from the supplied node
    */
-  private String printNode(
-    final TernaryNode node,
-    final String s,
-    final int depth)
+  private String printNode(final TernaryNode node, final String s, final int depth)
   {
     final StringBuilder buffer = new StringBuilder();
     if (node != null) {

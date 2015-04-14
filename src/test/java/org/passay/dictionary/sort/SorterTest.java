@@ -140,8 +140,6 @@ public class SorterTest
     long t = System.nanoTime();
     s.sort(array);
     t = System.nanoTime() - t;
-    System.out.println(
-      s.getClass().getSimpleName() + " sort time (" + array.length + "): " + t +
-      "ns");
+    System.out.println(s.getClass().getSimpleName() + " sort time (" + array.length + "): " + t + "ns");
   }
 }

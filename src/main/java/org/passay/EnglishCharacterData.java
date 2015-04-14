@@ -4,10 +4,10 @@ package org.passay;
 /**
  * English language character data.
  *
- * @author Marvin S. Addison
+ * @author  Middleware Services
  */
-public enum EnglishCharacterData implements CharacterData
-{
+public enum EnglishCharacterData implements CharacterData {
+
   /** Lower case characters. */
   LowerCase("INSUFFICIENT_LOWERCASE", "abcdefghijklmnopqrstuvwxyz"),
 
@@ -17,12 +17,10 @@ public enum EnglishCharacterData implements CharacterData
   /** Digit characters. */
   Digit("INSUFFICIENT_DIGIT", "0123456789"),
 
-  /** Alphabetical characters (upper and lower case) */
-  Alphabetical(
-    "INSUFFICIENT_ALPHABETICAL",
-    UpperCase.getCharacters() + LowerCase.getCharacters()),
+  /** Alphabetical characters (upper and lower case). */
+  Alphabetical("INSUFFICIENT_ALPHABETICAL", UpperCase.getCharacters() + LowerCase.getCharacters()),
 
-  /** Alphabetical characters (upper and lower case) */
+  /** Alphabetical characters (upper and lower case). */
   Special("INSUFFICIENT_SPECIAL", "`~@#$%^&*()-_=+[{]}\\|;:'\",<.>/?");
 
 

@@ -37,12 +37,10 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
   private final DictionarySubstringRule rule = new DictionarySubstringRule();
 
   /** For testing. */
-  private final DictionarySubstringRule backwardsRule =
-    new DictionarySubstringRule();
+  private final DictionarySubstringRule backwardsRule = new DictionarySubstringRule();
 
   /** For testing. */
-  private final DictionarySubstringRule ignoreCaseRule =
-    new DictionarySubstringRule();
+  private final DictionarySubstringRule ignoreCaseRule = new DictionarySubstringRule();
 
   /** For testing. */
   private final DictionarySubstringRule allRule = new DictionarySubstringRule();
@@ -64,15 +62,13 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
       new FileReader[] {new FileReader(dictFile)},
       true,
       new ArraysSort());
-    final WordListDictionary caseSensitiveDict = new WordListDictionary(
-      caseSensitiveWordList);
+    final WordListDictionary caseSensitiveDict = new WordListDictionary(caseSensitiveWordList);
 
     final ArrayWordList caseInsensitiveWordList = WordLists.createFromReader(
       new FileReader[] {new FileReader(dictFile)},
       false,
       new ArraysSort());
-    final WordListDictionary caseInsensitiveDict = new WordListDictionary(
-      caseInsensitiveWordList);
+    final WordListDictionary caseInsensitiveDict = new WordListDictionary(caseInsensitiveWordList);
 
     rule.setDictionary(caseSensitiveDict);
 
@@ -183,20 +179,12 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
         {
           rule,
           new PasswordData(DICT_PASS),
-          new String[] {
-            String.format(
-              "Password contains the dictionary word '%s'.",
-              "lance"),
-          },
+          new String[] {String.format("Password contains the dictionary word '%s'.", "lance"), },
         },
         {
           backwardsRule,
           new PasswordData(BACKWARDS_DICT_PASS),
-          new String[] {
-            String.format(
-              "Password contains the reversed dictionary word '%s'.",
-              "lance"),
-          },
+          new String[] {String.format("Password contains the reversed dictionary word '%s'.", "lance"), },
         },
       };
   }

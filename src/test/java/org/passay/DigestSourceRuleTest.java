@@ -42,10 +42,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    sourceRefs.add(
-      new PasswordData.SourceReference(
-        "System B",
-        "CJGTDMQRP+rmHApkcijC80aDV0o="));
+    sourceRefs.add(new PasswordData.SourceReference("System B", "CJGTDMQRP+rmHApkcijC80aDV0o="));
   }
 
 
@@ -100,11 +97,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
         {
           digestRule,
           PasswordData.newInstance(SOURCE_PASS, USER, sourceRefs),
-          new String[] {
-            String.format(
-              "Password cannot be the same as your %s password.",
-              "System B"),
-          },
+          new String[] {String.format("Password cannot be the same as your %s password.", "System B"), },
         },
       };
   }

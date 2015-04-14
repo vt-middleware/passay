@@ -25,8 +25,7 @@ public class UsernameRuleTest extends AbstractRuleTest
   private static final String UPPERCASE_USERID_PASS = "p4TEStuSER#n65";
 
   /** Test password. */
-  private static final String BACKWARDS_UPPERCASE_USERID_PASS =
-    "p4RESUTsET#n65";
+  private static final String BACKWARDS_UPPERCASE_USERID_PASS = "p4RESUTsET#n65";
 
   /** Test username. */
   private static final String USER = "testuser";
@@ -188,18 +187,12 @@ public class UsernameRuleTest extends AbstractRuleTest
         {
           rule,
           PasswordData.newInstance(USERID_PASS, USER, null),
-          new String[] {
-            String.format("Password contains the user id '%s'.", USER),
-          },
+          new String[] {String.format("Password contains the user id '%s'.", USER), },
         },
         {
           backwardsRule,
           PasswordData.newInstance(BACKWARDS_USERID_PASS, USER, null),
-          new String[] {
-            String.format(
-              "Password contains the user id '%s' in reverse.",
-              USER),
-          },
+          new String[] {String.format("Password contains the user id '%s' in reverse.", USER), },
         },
       };
   }

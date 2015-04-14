@@ -42,8 +42,7 @@ public class FileWordListTest extends AbstractWordListTest
   {
     AssertJUnit.assertTrue(((FileWordList) wordList).getFile().getFD().valid());
     ((FileWordList) wordList).close();
-    AssertJUnit.assertFalse(
-      ((FileWordList) wordList).getFile().getFD().valid());
+    AssertJUnit.assertFalse(((FileWordList) wordList).getFile().getFD().valid());
   }
 
 
@@ -64,8 +63,7 @@ public class FileWordListTest extends AbstractWordListTest
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
 
     try {
@@ -74,14 +72,10 @@ public class FileWordListTest extends AbstractWordListTest
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
 
-    FileWordList fwl = new FileWordList(
-      new RandomAccessFile(file1, "r"),
-      true,
-      0);
+    FileWordList fwl = new FileWordList(new RandomAccessFile(file1, "r"), true, 0);
     fwl.close();
 
     fwl = new FileWordList(new RandomAccessFile(file2, "r"), false, 0);

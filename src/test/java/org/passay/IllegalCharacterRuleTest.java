@@ -18,8 +18,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
   private static final String INVALID_PASS = "AycD@Pdsyz";
 
   /** For testing. */
-  private final IllegalCharacterRule rule = new IllegalCharacterRule(
-    new char[] {'@'});
+  private final IllegalCharacterRule rule = new IllegalCharacterRule(new char[] {'@'});
 
 
   /**
@@ -58,9 +57,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
         {
           rule,
           new PasswordData(INVALID_PASS),
-          new String[] {
-            String.format("Password contains the illegal character '%s'.", "@"),
-          },
+          new String[] {String.format("Password contains the illegal character '%s'.", "@"), },
         },
       };
   }

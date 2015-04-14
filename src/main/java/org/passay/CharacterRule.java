@@ -5,8 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Validates whether a password contains a certain number of a type of
- * character.
+ * Validates whether a password contains a certain number of a type of character.
  *
  * @author  Middleware Services
  */
@@ -60,8 +59,7 @@ public class CharacterRule implements Rule
 
 
   /**
-   * Returns the number of characters which must exist in order for a password
-   * to meet the requirements of this rule.
+   * Returns the number of characters which must exist in order for a password to meet the requirements of this rule.
    *
    * @return  number of characters to require
    */
@@ -94,9 +92,7 @@ public class CharacterRule implements Rule
       return
         new RuleResult(
           false,
-          new RuleResultDetail(
-            characterData.getErrorCode(),
-            createRuleResultDetailParameters(matchingChars)));
+          new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)));
     }
   }
 
@@ -108,8 +104,7 @@ public class CharacterRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final String matchingChars)
+  protected Map<String, Object> createRuleResultDetailParameters(final String matchingChars)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
@@ -123,11 +118,6 @@ public class CharacterRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::numberOfCharacters=%s",
-        getClass().getName(),
-        hashCode(),
-        numCharacters);
+    return String.format("%s@%h::numberOfCharacters=%s", getClass().getName(), hashCode(), numCharacters);
   }
 }

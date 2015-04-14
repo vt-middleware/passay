@@ -94,12 +94,6 @@ public class RuleResult
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::valid=%s,details=%s",
-        getClass().getName(),
-        hashCode(),
-        valid,
-        details);
+    return String.format("%s@%h::valid=%s,details=%s", getClass().getName(), hashCode(), valid, details);
   }
 }

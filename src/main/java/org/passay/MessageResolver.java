@@ -2,8 +2,8 @@
 package org.passay;
 
 /**
- * Strategy pattern interface for resolving messages from password validation
- * failures described by a {@link RuleResultDetail} object.
+ * Strategy pattern interface for resolving messages from password validation failures described by a {@link
+ * RuleResultDetail} object.
  *
  * @author  Middleware Services
  */

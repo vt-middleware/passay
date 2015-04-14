@@ -5,8 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Rule for determining if a password contains the username associated with that
- * password.
+ * Rule for determining if a password contains the username associated with that password.
  *
  * @author  Middleware Services
  */
@@ -44,8 +43,7 @@ public class UsernameRule implements Rule
 
 
   /**
-   * Sets whether the verify method will search the password for the username
-   * spelled backwards as well as forwards.
+   * Sets whether the verify method will search the password for the username spelled backwards as well as forwards.
    *
    * @param  b  whether to match username backwards
    */
@@ -67,8 +65,7 @@ public class UsernameRule implements Rule
 
 
   /**
-   * Sets whether the verify method will ignore case when searching the for a
-   * username.
+   * Sets whether the verify method will ignore case when searching the for a username.
    *
    * @param  b  whether to ignore case
    */
@@ -103,17 +100,11 @@ public class UsernameRule implements Rule
     }
     if (text.contains(user)) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(
-          ERROR_CODE,
-          createRuleResultDetailParameters(user)));
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
     }
     if (matchBackwards && text.contains(reverseUser)) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(
-          ERROR_CODE_REVERSED,
-          createRuleResultDetailParameters(user)));
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
     }
     return result;
   }
@@ -126,8 +117,7 @@ public class UsernameRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final String username)
+  protected Map<String, Object> createRuleResultDetailParameters(final String username)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("username", username);

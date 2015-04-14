@@ -6,10 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Rule for determining if a password matches one of any previous password a
- * user has chosen. If no historical password reference has been set, then
- * passwords will meet this rule. See {@link
- * PasswordData#setPasswordReferences(List)}.
+ * Rule for determining if a password matches one of any previous password a user has chosen. If no historical password
+ * reference has been set, then passwords will meet this rule. See {@link PasswordData#setPasswordReferences(List)}.
  *
  * @author  Middleware Services
  */
@@ -24,9 +22,8 @@ public class HistoryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    final List<PasswordData.HistoricalReference> references =
-      passwordData.getPasswordReferences(
-        PasswordData.HistoricalReference.class);
+    final List<PasswordData.HistoricalReference> references = passwordData.getPasswordReferences(
+      PasswordData.HistoricalReference.class);
     final int size = references.size();
     if (size == 0) {
       return result;
@@ -36,10 +33,7 @@ public class HistoryRule implements Rule
     for (PasswordData.HistoricalReference reference : references) {
       if (matches(cleartext, reference)) {
         result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE,
-            createRuleResultDetailParameters(size)));
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
       }
     }
     return result;
@@ -54,9 +48,7 @@ public class HistoryRule implements Rule
    *
    * @return  true if passwords match, false otherwise.
    */
-  protected boolean matches(
-    final String password,
-    final PasswordData.Reference reference)
+  protected boolean matches(final String password, final PasswordData.Reference reference)
   {
     return password.equals(reference.getPassword());
   }

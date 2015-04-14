@@ -14,9 +14,8 @@ public interface WordList
 
 
   /**
-   * Returns the comparator that should be used to compare a search term with
-   * candidate words in the list. The comparator naturally respects ordering and
-   * case sensitivity of the word list.
+   * Returns the comparator that should be used to compare a search term with candidate words in the list. The
+   * comparator naturally respects ordering and case sensitivity of the word list.
    *
    * @return  comparator for words in the list.
    */

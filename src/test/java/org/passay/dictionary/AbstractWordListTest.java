@@ -41,9 +41,7 @@ public abstract class AbstractWordListTest
     } catch (IndexOutOfBoundsException e) {
       AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown IndexOutOfBoundsException, threw " +
-        e.getMessage());
+      AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
     }
 
     try {
@@ -52,9 +50,7 @@ public abstract class AbstractWordListTest
     } catch (IndexOutOfBoundsException e) {
       AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown IndexOutOfBoundsException, threw " +
-        e.getMessage());
+      AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
     }
 
     AssertJUnit.assertEquals("ABI", wordList.get(0));

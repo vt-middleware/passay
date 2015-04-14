@@ -120,11 +120,7 @@ public class HistoryRuleTest extends AbstractRuleTest
         {
           rule,
           PasswordData.newInstance(HISTORY_PASS1, USER, history),
-          new String[] {
-            String.format(
-              "Password matches one of %s previous passwords.",
-              history.size()),
-          },
+          new String[] {String.format("Password matches one of %s previous passwords.", history.size()), },
         },
       };
   }

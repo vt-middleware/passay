@@ -4,9 +4,8 @@ package org.passay.dictionary;
 import org.passay.dictionary.sort.ArraySorter;
 
 /**
- * Provides a {@link WordList} backed by a string array. Since the entire word
- * list is stored in memory java heap settings may need to be modified in order
- * to store large word lists.
+ * Provides a {@link WordList} backed by a string array. Since the entire word list is stored in memory java heap
+ * settings may need to be modified in order to store large word lists.
  *
  * @author  Middleware Services
  */
@@ -22,8 +21,7 @@ public class ArrayWordList extends AbstractWordList
    *
    * @param  array  Array of words.
    *
-   * @throws  IllegalArgumentException  If array is null or contains any null
-   *                                    entries.
+   * @throws  IllegalArgumentException  If array is null or contains any null entries.
    */
   public ArrayWordList(final String[] array)
   {
@@ -35,11 +33,9 @@ public class ArrayWordList extends AbstractWordList
    * Creates a new word list backed by the given array.
    *
    * @param  array  Array of words.
-   * @param  caseSensitive  Set to true to create case-sensitive word list,
-   *                        false otherwise.
+   * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    *
-   * @throws  IllegalArgumentException  If array is null or contains any null
-   *                                    entries.
+   * @throws  IllegalArgumentException  If array is null or contains any null entries.
    */
   public ArrayWordList(final String[] array, final boolean caseSensitive)
   {
@@ -48,23 +44,16 @@ public class ArrayWordList extends AbstractWordList
 
 
   /**
-   * Creates a new word list backed by the given array with optional sorting of
-   * the input string array.
+   * Creates a new word list backed by the given array with optional sorting of the input string array.
    *
    * @param  array  Array of words.
-   * @param  caseSensitive  Set to true to create case-sensitive word list,
-   *                        false otherwise.
-   * @param  sorter  To sort the input array with. The sort routine is
-   *                 consistent with {@link #getComparator()}, which respects
-   *                 the case sensitivity of the word list.
+   * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
+   * @param  sorter  To sort the input array with. The sort routine is consistent with {@link #getComparator()}, which
+   *                 respects the case sensitivity of the word list.
    *
-   * @throws  IllegalArgumentException  If array is null or contains any null
-   *                                    entries.
+   * @throws  IllegalArgumentException  If array is null or contains any null entries.
    */
-  public ArrayWordList(
-    final String[] array,
-    final boolean caseSensitive,
-    final ArraySorter sorter)
+  public ArrayWordList(final String[] array, final boolean caseSensitive, final ArraySorter sorter)
   {
     if (array == null) {
       throw new IllegalArgumentException("Array cannot be null.");
@@ -79,12 +68,10 @@ public class ArrayWordList extends AbstractWordList
     }
     for (int i = 0; i < array.length; i++) {
       if (array[i] == null) {
-        throw new IllegalArgumentException(
-          "Word list cannot contain null entries.");
+        throw new IllegalArgumentException("Word list cannot contain null entries.");
       }
       if (i > 0 && comparator.compare(array[i], array[i - 1]) < 0) {
-        throw new IllegalArgumentException(
-          "Array is not sorted correctly for this comparator");
+        throw new IllegalArgumentException("Array is not sorted correctly for this comparator");
       }
     }
     words = array;

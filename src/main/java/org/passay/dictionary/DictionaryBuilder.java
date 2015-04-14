@@ -12,9 +12,8 @@ import org.passay.dictionary.sort.ArraySorter;
 import org.passay.dictionary.sort.ArraysSort;
 
 /**
- * Builder for common dictionary usage. Creates a {@link WordListDictionary}
- * backed by an {@link ArrayWordList} from one or more files containing a list
- * of words, one per line.
+ * Builder for common dictionary usage. Creates a {@link WordListDictionary} backed by an {@link ArrayWordList} from one
+ * or more files containing a list of words, one per line.
  *
  * @author  Middleware Services
  */
@@ -61,8 +60,8 @@ public class DictionaryBuilder
   }
 
   /**
-   * Sets the case sensitivity flag on the dictionary to be built. Dictionaries
-   * are built case <em>in</em>sensitive by default.
+   * Sets the case sensitivity flag on the dictionary to be built. Dictionaries are built case <em>in</em>sensitive by
+   * default.
    *
    * @param  flag  True for case sensitive, false otherwise.
    *
@@ -90,8 +89,7 @@ public class DictionaryBuilder
 
       final String[] words = new String[wordList.size()];
       wordList.toArray(words);
-      return
-        new WordListDictionary(new ArrayWordList(words, caseSensitive, SORTER));
+      return new WordListDictionary(new ArrayWordList(words, caseSensitive, SORTER));
     } catch (IOException e) {
       throw new RuntimeException("IO error building dictionary", e);
     }

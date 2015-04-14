@@ -5,8 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The central component for evaluating multiple password rules against a
- * candidate password.
+ * The central component for evaluating multiple password rules against a candidate password.
  *
  * @author  Middleware Services
  */
@@ -38,9 +37,7 @@ public class PasswordValidator implements Rule
    * @param  resolver  message resolver.
    * @param  rules  to validate
    */
-  public PasswordValidator(
-    final MessageResolver resolver,
-    final List<Rule> rules)
+  public PasswordValidator(final MessageResolver resolver, final List<Rule> rules)
   {
     messageResolver = resolver;
     passwordRules = rules;
@@ -70,13 +67,11 @@ public class PasswordValidator implements Rule
 
 
   /**
-   * Returns a list of human-readable messages by iterating over the details in
-   * a failed rule result.
+   * Returns a list of human-readable messages by iterating over the details in a failed rule result.
    *
    * @param  result  failed rule result.
    *
-   * @return  list of human-readable messages describing the reason(s) for
-   *          validation failure.
+   * @return  list of human-readable messages describing the reason(s) for validation failure.
    */
   public List<String> getMessages(final RuleResult result)
   {

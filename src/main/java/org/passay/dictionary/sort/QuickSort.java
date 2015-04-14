@@ -30,19 +30,15 @@ public class QuickSort implements ArraySorter
 
 
   /**
-   * This will sort the supplied array beginning at the lo index and ending at
-   * the hi index, using the quick sort algorithm.
+   * This will sort the supplied array beginning at the lo index and ending at the hi index, using the quick sort
+   * algorithm.
    *
    * @param  array  to sort
    * @param  c  comparator to sort with
    * @param  lo  index to beginning sorting at
    * @param  hi  index to stop sorting at
    */
-  public static void sort(
-    final String[] array,
-    final Comparator<String> c,
-    final int lo,
-    final int hi)
+  public static void sort(final String[] array, final Comparator<String> c, final int lo, final int hi)
   {
     final int m = (lo + hi) / 2;
     final String x = array[m];

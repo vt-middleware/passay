@@ -6,8 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Rule for determining if a password contains an illegal character. Validation
- * will fail if the password contains any of the illegal characters.
+ * Rule for determining if a password contains an illegal character. Validation will fail if the password contains any
+ * of the illegal characters.
  *
  * @author  Middleware Services
  */
@@ -39,10 +39,7 @@ public class IllegalCharacterRule implements Rule
     for (char c : illegalChar) {
       if (passwordData.getPassword().indexOf(c) != -1) {
         result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE,
-            createRuleResultDetailParameters(c)));
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
         break;
       }
     }

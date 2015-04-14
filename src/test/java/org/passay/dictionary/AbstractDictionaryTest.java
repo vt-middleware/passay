@@ -35,12 +35,10 @@ public abstract class AbstractDictionaryTest
   public static final String ANIMAL_PARTIAL_SEARCH = ".a..us";
 
   /** Partial animal search results. */
-  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CS =
-    new String[] {"Walrus", "Xantus"};
+  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CS = new String[] {"Walrus", "Xantus"};
 
   /** Partial animal search results. */
-  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CI =
-    new String[] {"walrus", "xantus"};
+  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CI = new String[] {"walrus", "xantus"};
 
   /** Initialization lock. */
   private static final Object LOCK = new Object();
@@ -189,8 +187,7 @@ public abstract class AbstractDictionaryTest
   private Object[][] createWords(final String dictFile)
     throws IOException
   {
-    final FileWordList fwl = new FileWordList(
-      new RandomAccessFile(dictFile, "r"));
+    final FileWordList fwl = new FileWordList(new RandomAccessFile(dictFile, "r"));
     final Object[][] allWords = new Object[fwl.size()][1];
     for (int i = 0; i < fwl.size(); i++) {
       allWords[i] = new Object[] {fwl.get(i), };

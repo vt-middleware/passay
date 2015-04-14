@@ -7,9 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Rule for determining if a password contains the desired mix of character
- * types. In order to meet the criteria of this rule, passwords must meet any
- * number of supplied character rules.
+ * Rule for determining if a password contains the desired mix of character types. In order to meet the criteria of this
+ * rule, passwords must meet any number of supplied character rules.
  *
  * @author  Middleware Services
  */
@@ -52,9 +51,8 @@ public class CharacterCharacteristicsRule implements Rule
 
 
   /**
-   * Sets the number of characteristics which must be satisfied in order for a
-   * password to meet the requirements of this rule. The default is one. i.e.
-   * you may wish to enforce any three of five supplied character rules.
+   * Sets the number of characteristics which must be satisfied in order for a password to meet the requirements of this
+   * rule. The default is one. i.e. you may wish to enforce any three of five supplied character rules.
    *
    * @param  n  number of characteristics to enforce, where n > 0
    */
@@ -69,8 +67,8 @@ public class CharacterCharacteristicsRule implements Rule
 
 
   /**
-   * Returns the number of characteristics which currently must be satisfied in
-   * order for a password to meet the requirements of this rule.
+   * Returns the number of characteristics which currently must be satisfied in order for a password to meet the
+   * requirements of this rule.
    *
    * @return  number of characteristics to enforce
    */
@@ -81,8 +79,7 @@ public class CharacterCharacteristicsRule implements Rule
 
 
   /**
-   * Returns whether to add the rule result detail for each character rule that
-   * fails to validate to the rule result.
+   * Returns whether to add the rule result detail for each character rule that fails to validate to the rule result.
    *
    * @return  whether to add character rule result details
    */
@@ -93,8 +90,7 @@ public class CharacterCharacteristicsRule implements Rule
 
 
   /**
-   * Sets whether to add the rule result detail for each character rule that
-   * fails to validate to the rule result.
+   * Sets whether to add the rule result detail for each character rule that fails to validate to the rule result.
    *
    * @param  b  whether to add character rule result details
    */
@@ -108,8 +104,7 @@ public class CharacterCharacteristicsRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     if (numCharacteristics > rules.size()) {
-      throw new IllegalStateException(
-        "Number of characteristics must be <= to the number of rules");
+      throw new IllegalStateException("Number of characteristics must be <= to the number of rules");
     }
 
     int successCount = 0;
@@ -126,10 +121,7 @@ public class CharacterCharacteristicsRule implements Rule
     }
     if (successCount < numCharacteristics) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(
-          ERROR_CODE,
-          createRuleResultDetailParameters(successCount)));
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount)));
     }
     return result;
   }
@@ -142,8 +134,7 @@ public class CharacterCharacteristicsRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final int success)
+  protected Map<String, Object> createRuleResultDetailParameters(final int success)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("successCount", success);

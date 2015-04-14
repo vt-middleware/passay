@@ -92,11 +92,7 @@ public class SourceRuleTest extends AbstractRuleTest
         {
           rule,
           PasswordData.newInstance(SOURCE_PASS, USER, sources),
-          new String[] {
-            String.format(
-              "Password cannot be the same as your %s password.",
-              "System A"),
-          },
+          new String[] {String.format("Password cannot be the same as your %s password.", "System A"), },
         },
       };
   }

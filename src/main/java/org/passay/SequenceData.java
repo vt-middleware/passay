@@ -8,6 +8,8 @@ package org.passay;
  */
 public interface SequenceData
 {
+
+
   /**
    * Return the error code used for message resolution.
    *
@@ -16,8 +18,6 @@ public interface SequenceData
   String getErrorCode();
 
 
-  /**
-   * @return  one or more illegal character sequences.
-   */
+  /** @return  one or more illegal character sequences. */
   CharacterSequence[] getSequences();
 }

@@ -6,9 +6,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 /**
- * Resolves messages from rule result details from a properties file. The
- * default properties file is loaded from the classpath, see {@link
- * #DEFAULT_MESSAGE_PATH}.
+ * Resolves messages from rule result details from a properties file. The default properties file is loaded from the
+ * classpath, see {@link #DEFAULT_MESSAGE_PATH}.
  *
  * @author  Middleware Services
  */
@@ -60,13 +59,10 @@ public class PropertiesMessageResolver extends AbstractMessageResolver
     final Properties props = new Properties();
     InputStream in = null;
     try {
-      in = PropertiesMessageResolver.class.getResourceAsStream(
-        DEFAULT_MESSAGE_PATH);
+      in = PropertiesMessageResolver.class.getResourceAsStream(DEFAULT_MESSAGE_PATH);
       props.load(in);
     } catch (Exception e) {
-      throw new IllegalStateException(
-        "Error loading default message properties.",
-        e);
+      throw new IllegalStateException("Error loading default message properties.", e);
     } finally {
       try {
         if (in != null) {

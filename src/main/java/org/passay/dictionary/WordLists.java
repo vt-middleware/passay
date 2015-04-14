@@ -18,24 +18,22 @@ public final class WordLists
 {
 
   /** Case sensitive comparator. */
-  public static final Comparator<String> CASE_SENSITIVE_COMPARATOR =
-    new Comparator<String>() {
-      @Override
-      public int compare(final String a, final String b)
-      {
-        return a.compareTo(b);
-      }
-    };
+  public static final Comparator<String> CASE_SENSITIVE_COMPARATOR = new Comparator<String>() {
+    @Override
+    public int compare(final String a, final String b)
+    {
+      return a.compareTo(b);
+    }
+  };
 
   /** Case insensitive comparator. */
-  public static final Comparator<String> CASE_INSENSITIVE_COMPARATOR =
-    new Comparator<String>() {
-      @Override
-      public int compare(final String a, final String b)
-      {
-        return a.compareToIgnoreCase(b);
-      }
-    };
+  public static final Comparator<String> CASE_INSENSITIVE_COMPARATOR = new Comparator<String>() {
+    @Override
+    public int compare(final String a, final String b)
+    {
+      return a.compareToIgnoreCase(b);
+    }
+  };
 
   /** Index returned when word not found by binary search. */
   public static final int NOT_FOUND = -1;
@@ -76,8 +74,7 @@ public final class WordLists
 
 
   /**
-   * Creates a case-sensitive {@link ArrayWordList} by reading the contents of
-   * the given readers.
+   * Creates a case-sensitive {@link ArrayWordList} by reading the contents of the given readers.
    *
    * @param  readers  array of readers
    *
@@ -93,20 +90,16 @@ public final class WordLists
 
 
   /**
-   * Creates an {@link ArrayWordList} by reading the contents of the given
-   * readers.
+   * Creates an {@link ArrayWordList} by reading the contents of the given readers.
    *
    * @param  readers  array of readers
-   * @param  caseSensitive  set to true to create case-sensitive word list
-   *                        (default), false otherwise
+   * @param  caseSensitive  set to true to create case-sensitive word list (default), false otherwise
    *
    * @return  word list read from the given readers
    *
    * @throws  IOException  if an error occurs reading from a reader
    */
-  public static ArrayWordList createFromReader(
-    final Reader[] readers,
-    final boolean caseSensitive)
+  public static ArrayWordList createFromReader(final Reader[] readers, final boolean caseSensitive)
     throws IOException
   {
     return createFromReader(readers, caseSensitive, null);
@@ -114,12 +107,10 @@ public final class WordLists
 
 
   /**
-   * Creates an {@link ArrayWordList} by reading the contents of the given file
-   * with support for sorting file contents.
+   * Creates an {@link ArrayWordList} by reading the contents of the given file with support for sorting file contents.
    *
    * @param  readers  array of readers
-   * @param  caseSensitive  set to true to create case-sensitive word list
-   *                        (default), false otherwise
+   * @param  caseSensitive  set to true to create case-sensitive word list (default), false otherwise
    * @param  sorter  to sort the input array with
    *
    * @return  word list read from given readers
@@ -136,26 +127,19 @@ public final class WordLists
     for (Reader r : readers) {
       readWordList(r, words);
     }
-    return
-      new ArrayWordList(
-        words.toArray(new String[words.size()]),
-        caseSensitive,
-        sorter);
+    return new ArrayWordList(words.toArray(new String[words.size()]), caseSensitive, sorter);
   }
 
 
   /**
    * Reads words, one per line, from a reader into the given word list.
    *
-   * @param  reader  Reader containing words, one per line. The reader is closed
-   *                 on completion.
+   * @param  reader  Reader containing words, one per line. The reader is closed on completion.
    * @param  wordList  Destination word list.
    *
    * @throws  IOException  on IO errors reading from reader.
    */
-  public static void readWordList(
-    final Reader reader,
-    final List<String> wordList)
+  public static void readWordList(final Reader reader, final List<String> wordList)
     throws IOException
   {
     try {

@@ -6,9 +6,8 @@ import java.io.RandomAccessFile;
 import java.util.TreeMap;
 
 /**
- * Provides an implementation of a {@link WordList} that is backed by a file.
- * Each word is read from the file for every get, though the implementation
- * supports a simple memory cache to improve read performance.
+ * Provides an implementation of a {@link WordList} that is backed by a file. Each word is read from the file for every
+ * get, though the implementation supports a simple memory cache to improve read performance.
  *
  * @author  Middleware Services
  */
@@ -35,11 +34,11 @@ public class FileWordList extends AbstractWordList
 
 
   /**
-   * Creates a new case-sensitive word list from the supplied file. The input
-   * file is read on initialization and is maintained by this class.
+   * Creates a new case-sensitive word list from the supplied file. The input file is read on initialization and is
+   * maintained by this class.
    *
-   * <p><strong>NOTE</strong> Attempts to close the source file will cause
-   * {@link IOException} when {@link #get(int)} is called subsequently.</p>
+   * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
+   * called subsequently.</p>
    *
    * @param  raf  File containing words, one per line.
    *
@@ -53,15 +52,14 @@ public class FileWordList extends AbstractWordList
 
 
   /**
-   * Creates a new word list from the supplied file. The input file is read on
-   * initialization and is maintained by this class.
+   * Creates a new word list from the supplied file. The input file is read on initialization and is maintained by this
+   * class.
    *
-   * <p><strong>NOTE</strong> Attempts to close the source file will cause
-   * {@link IOException} when {@link #get(int)} is called subsequently.</p>
+   * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
+   * called subsequently.</p>
    *
    * @param  raf  File containing words, one per line.
-   * @param  caseSensitive  Set to true to create case-sensitive word list,
-   *                        false otherwise.
+   * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
@@ -73,30 +71,24 @@ public class FileWordList extends AbstractWordList
 
 
   /**
-   * Creates a new word list from the supplied file. The input file is read on
-   * initialization and is maintained by this class.
+   * Creates a new word list from the supplied file. The input file is read on initialization and is maintained by this
+   * class.
    *
-   * <p><strong>NOTE</strong> Attempts to close the source file will cause
-   * {@link IOException} when {@link #get(int)} is called subsequently.</p>
+   * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
+   * called subsequently.</p>
    *
    * @param  raf  File containing words, one per line.
-   * @param  caseSensitive  Set to true to create case-sensitive word list,
-   *                        false otherwise.
-   * @param  cachePercent  Percent (0-100) of file to cache in memory for
-   *                       improved read performance.
+   * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
+   * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(
-    final RandomAccessFile raf,
-    final boolean caseSensitive,
-    final int cachePercent)
+  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
     throws IOException
   {
     if (cachePercent < 0 || cachePercent > HUNDRED_PERCENT) {
-      throw new IllegalArgumentException(
-        "cachePercent must be between 0 and 100 inclusive");
+      throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
     }
     file = raf;
     if (caseSensitive) {
@@ -111,8 +103,7 @@ public class FileWordList extends AbstractWordList
       String b = null;
       while ((a = file.readLine()) != null) {
         if (a != null && b != null && comparator.compare(a, b) < 0) {
-          throw new IllegalArgumentException(
-            "File is not sorted correctly for this comparator");
+          throw new IllegalArgumentException("File is not sorted correctly for this comparator");
         }
         b = a;
         size++;
@@ -123,8 +114,7 @@ public class FileWordList extends AbstractWordList
 
 
   /**
-   * Reads the underlying file to cache the supplied percentage of line
-   * positions.
+   * Reads the underlying file to cache the supplied percentage of line positions.
    *
    * @param  cacheSize  Number of entries in cache.
    *
@@ -175,8 +165,7 @@ public class FileWordList extends AbstractWordList
 
 
   /**
-   * Closes the underlying file and make the cache available for garbage
-   * collection.
+   * Closes the underlying file and make the cache available for garbage collection.
    *
    * @throws  IOException  if an error occurs closing the file
    */
@@ -191,16 +180,14 @@ public class FileWordList extends AbstractWordList
 
 
   /**
-   * Reads the file line by line and returns the word at the supplied index.
-   * Returns null if the index cannot be read. This method leverages the cache
-   * to seek to the closest position of the supplied index.
+   * Reads the file line by line and returns the word at the supplied index. Returns null if the index cannot be read.
+   * This method leverages the cache to seek to the closest position of the supplied index.
    *
    * @param  index  to read word at
    *
    * @return  word at the supplied index
    *
-   * @throws  IllegalStateException  if an error occurs reading the supplied
-   *                                 file
+   * @throws  IllegalStateException  if an error occurs reading the supplied file
    */
   private String readFile(final int index)
   {

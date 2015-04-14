@@ -7,8 +7,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Rule for determining if a password matches an illegal regular expression.
- * Passwords which match the expression will fail validation.
+ * Rule for determining if a password matches an illegal regular expression. Passwords which match the expression will
+ * fail validation.
  *
  * @author  Middleware Services
  */
@@ -40,10 +40,7 @@ public class IllegalRegexRule implements Rule
     final Matcher m = pattern.matcher(passwordData.getPassword());
     if (m.find()) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(
-          ERROR_CODE,
-          createRuleResultDetailParameters(m.group())));
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(m.group())));
     }
     return result;
   }
@@ -56,8 +53,7 @@ public class IllegalRegexRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final String match)
+  protected Map<String, Object> createRuleResultDetailParameters(final String match)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("match", match);
@@ -69,11 +65,6 @@ public class IllegalRegexRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::pattern=%s",
-        getClass().getName(),
-        hashCode(),
-        pattern);
+    return String.format("%s@%h::pattern=%s", getClass().getName(), hashCode(), pattern);
   }
 }

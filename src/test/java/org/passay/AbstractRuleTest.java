@@ -14,30 +14,22 @@ public abstract class AbstractRuleTest
 {
 
   /** default message resolver. */
-  protected static final PropertiesMessageResolver DEFAULT_RESOLVER =
-    new PropertiesMessageResolver();
+  protected static final PropertiesMessageResolver DEFAULT_RESOLVER = new PropertiesMessageResolver();
 
   /** empty message resolver. */
-  protected static final PropertiesMessageResolver EMPTY_RESOLVER =
-    new PropertiesMessageResolver(new Properties());
+  protected static final PropertiesMessageResolver EMPTY_RESOLVER = new PropertiesMessageResolver(new Properties());
 
 
   /**
    * @param  rule  to check password with
    * @param  passwordData  to check
-   * @param  errorCodes  Array of error codes to be produced on a failed
-   *                     password validation attempt. A null value indicates
-   *                     that password validation should succeed.
+   * @param  errorCodes  Array of error codes to be produced on a failed password validation attempt. A null value
+   *                     indicates that password validation should succeed.
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"passtest"},
-    dataProvider = "passwords")
-  public void checkPassword(
-    final Rule rule,
-    final PasswordData passwordData,
-    final String[] errorCodes)
+  @Test(groups = {"passtest"}, dataProvider = "passwords")
+  public void checkPassword(final Rule rule, final PasswordData passwordData, final String[] errorCodes)
     throws Exception
   {
     final RuleResult result = rule.validate(passwordData);
@@ -56,18 +48,12 @@ public abstract class AbstractRuleTest
   /**
    * @param  rule  to check password with
    * @param  passwordData  to check
-   * @param  messages  Array of messages to be produced on a failed password
-   *                   validation attempt
+   * @param  messages  Array of messages to be produced on a failed password validation attempt
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"passtest"},
-    dataProvider = "messages")
-  public void checkMessage(
-    final Rule rule,
-    final PasswordData passwordData,
-    final String[] messages)
+  @Test(groups = {"passtest"}, dataProvider = "messages")
+  public void checkMessage(final Rule rule, final PasswordData passwordData, final String[] messages)
     throws Exception
   {
     final RuleResult result = rule.validate(passwordData);
@@ -95,17 +81,14 @@ public abstract class AbstractRuleTest
 
 
   /**
-   * Determines whether the given error code is found among the details of the
-   * give rule validation result.
+   * Determines whether the given error code is found among the details of the give rule validation result.
    *
    * @param  code  to search for in result details.
    * @param  result  to search for given code.
    *
    * @return  True if code is found among result details, false otherwise.
    */
-  protected static boolean hasErrorCode(
-    final String code,
-    final RuleResult result)
+  protected static boolean hasErrorCode(final String code, final RuleResult result)
   {
     for (RuleResultDetail detail : result.getDetails()) {
       if (code.equals(detail.getErrorCode())) {

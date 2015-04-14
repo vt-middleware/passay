@@ -6,8 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Contains password related information used by rules to perform password
- * validation.
+ * Contains password related information used by rules to perform password validation.
  *
  * @author  Middleware Services
  */
@@ -109,8 +108,7 @@ public class PasswordData
    * @return  unmodifiable list of password references
    */
   @SuppressWarnings("unchecked")
-  public <T extends Reference> List<T> getPasswordReferences(
-    final Class<T> type)
+  public <T extends Reference> List<T> getPasswordReferences(final Class<T> type)
   {
     final List<T> l = new ArrayList<>();
     if (passwordReferences != null) {
@@ -136,8 +134,8 @@ public class PasswordData
 
 
   /**
-   * Convenience method for creating a password data with all of it's
-   * properties. Properties are ignored if they are null.
+   * Convenience method for creating a password data with all of it's properties. Properties are ignored if they are
+   * null.
    *
    * @param  p  password
    * @param  u  username
@@ -145,10 +143,7 @@ public class PasswordData
    *
    * @return  password data
    */
-  public static PasswordData newInstance(
-    final String p,
-    final String u,
-    final List<Reference> r)
+  public static PasswordData newInstance(final String p, final String u, final List<Reference> r)
   {
     final PasswordData pd = new PasswordData();
     if (p != null) {
@@ -295,13 +290,7 @@ public class PasswordData
     @Override
     public String toString()
     {
-      return
-        String.format(
-          "%s@%h::label=%s,password=%s",
-          getClass().getName(),
-          hashCode(),
-          label,
-          password);
+      return String.format("%s@%h::label=%s,password=%s", getClass().getName(), hashCode(), label, password);
     }
   }
 }

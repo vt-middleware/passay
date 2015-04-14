@@ -59,9 +59,7 @@ public class IllegalRegexRuleTest extends AbstractRuleTest
         {
           new IllegalRegexRule("\\d\\d\\d\\d"),
           new PasswordData("pwUiNh0248"),
-          new String[] {
-            String.format("Password matches the illegal pattern '%s'.", "0248"),
-          },
+          new String[] {String.format("Password matches the illegal pattern '%s'.", "0248"), },
         },
       };
   }

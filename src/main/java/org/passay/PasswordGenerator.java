@@ -20,9 +20,7 @@ public class PasswordGenerator
   private final Random random;
 
 
-  /**
-   * Default constructor. Instantiates a secure random for password generation.
-   */
+  /** Default constructor. Instantiates a secure random for password generation. */
   public PasswordGenerator()
   {
     this(new SecureRandom());
@@ -41,18 +39,15 @@ public class PasswordGenerator
 
 
   /**
-   * Generates a password of the supplied length which meets the requirements of
-   * the supplied character rules. For length to be evaluated it must be greater
-   * than the number of characters defined in the character rule.
+   * Generates a password of the supplied length which meets the requirements of the supplied character rules. For
+   * length to be evaluated it must be greater than the number of characters defined in the character rule.
    *
    * @param  length  of password to generate
    * @param  rules  to generate compliant password from
    *
    * @return  generated password
    */
-  public String generatePassword(
-    final int length,
-    final List<CharacterRule> rules)
+  public String generatePassword(final int length, final List<CharacterRule> rules)
   {
     if (length <= 0) {
       throw new IllegalArgumentException("length must be greater than 0");
@@ -63,10 +58,7 @@ public class PasswordGenerator
     final CharBuffer buffer = CharBuffer.allocate(length);
     if (rules != null) {
       for (CharacterRule rule : rules) {
-        fillRandomCharacters(
-          rule.getValidCharacters(),
-          rule.getNumberOfCharacters(),
-          buffer);
+        fillRandomCharacters(rule.getValidCharacters(), rule.getNumberOfCharacters(), buffer);
         allChars.append(rule.getValidCharacters());
       }
     }
@@ -84,10 +76,7 @@ public class PasswordGenerator
    * @param  count  number of random characters.
    * @param  target  character sequence that will hold characters.
    */
-  protected void fillRandomCharacters(
-    final CharSequence source,
-    final int count,
-    final Appendable target)
+  protected void fillRandomCharacters(final CharSequence source, final int count, final Appendable target)
   {
     for (int i = 0; i < count; i++) {
       try {

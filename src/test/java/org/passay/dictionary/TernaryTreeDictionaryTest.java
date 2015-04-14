@@ -73,17 +73,13 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * This test is disabled by default. It produces a lot of testng report data
-   * which runs the process OOM.
+   * This test is disabled by default. It produces a lot of testng report data which runs the process OOM.
    *
    * @param  word  to search for.
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"ttdicttest"},
-    dataProvider = "all-web-words",
-    enabled = false)
+  @Test(groups = {"ttdicttest"}, dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
     throws Exception
   {
@@ -105,24 +101,16 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   public void partialSearch(final String word, final String results)
     throws Exception
   {
-    AssertJUnit.assertTrue(
-      Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(word)));
-    AssertJUnit.assertFalse(
-      Arrays.equals(
-        results.split("\\|"),
-        caseSensitive.partialSearch(FALSE_SEARCH)));
+    AssertJUnit.assertTrue(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(word)));
+    AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(FALSE_SEARCH)));
 
     try {
       caseInsensitive.partialSearch(word);
       AssertJUnit.fail("Should have thrown UnsupportedOperationException");
     } catch (UnsupportedOperationException e) {
-      AssertJUnit.assertEquals(
-        e.getClass(),
-        UnsupportedOperationException.class);
+      AssertJUnit.assertEquals(e.getClass(), UnsupportedOperationException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown UnsupportedOperationException, threw " +
-        e.getMessage());
+      AssertJUnit.fail("Should have thrown UnsupportedOperationException, threw " + e.getMessage());
     }
   }
 
@@ -136,32 +124,19 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
    */
   @Parameters({ "nearSearchWord", "nearSearchDistance", "nearSearchResults" })
   @Test(groups = {"ttdicttest"})
-  public void nearSearch(
-    final String word,
-    final int distance,
-    final String results)
+  public void nearSearch(final String word, final int distance, final String results)
     throws Exception
   {
-    AssertJUnit.assertTrue(
-      Arrays.equals(
-        results.split("\\|"),
-        caseSensitive.nearSearch(word, distance)));
-    AssertJUnit.assertFalse(
-      Arrays.equals(
-        results.split("\\|"),
-        caseSensitive.nearSearch(FALSE_SEARCH, distance)));
+    AssertJUnit.assertTrue(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(word, distance)));
+    AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(FALSE_SEARCH, distance)));
 
     try {
       caseInsensitive.nearSearch(word, distance);
       AssertJUnit.fail("Should have thrown UnsupportedOperationException");
     } catch (UnsupportedOperationException e) {
-      AssertJUnit.assertEquals(
-        e.getClass(),
-        UnsupportedOperationException.class);
+      AssertJUnit.assertEquals(e.getClass(), UnsupportedOperationException.class);
     } catch (Exception e) {
-      AssertJUnit.fail(
-        "Should have thrown UnsupportedOperationException, threw " +
-        e.getMessage());
+      AssertJUnit.fail("Should have thrown UnsupportedOperationException, threw " + e.getMessage());
     }
   }
 
@@ -215,13 +190,9 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
     AssertJUnit.assertTrue(sortCS.search(ANIMAL_SEARCH_CS));
     AssertJUnit.assertFalse(sortCS.search(ANIMAL_SEARCH_CI));
     AssertJUnit.assertTrue(
-      Arrays.equals(
-        ANIMAL_PARTIAL_SEARCH_RESULTS_CS,
-        sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
+      Arrays.equals(ANIMAL_PARTIAL_SEARCH_RESULTS_CS, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
     AssertJUnit.assertFalse(
-      Arrays.equals(
-        ANIMAL_PARTIAL_SEARCH_RESULTS_CI,
-        sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
+      Arrays.equals(ANIMAL_PARTIAL_SEARCH_RESULTS_CI, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
 
     awl = new ArrayWordList(ANIMALS, false, sorter);
 

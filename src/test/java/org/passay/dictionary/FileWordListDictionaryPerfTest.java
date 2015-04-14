@@ -36,12 +36,10 @@ public class FileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
     super.initialize(dict1, dict2);
 
     long t = System.currentTimeMillis();
-    wld = new WordListDictionary(
-      new FileWordList(new RandomAccessFile(webFile, "r")));
+    wld = new WordListDictionary(new FileWordList(new RandomAccessFile(webFile, "r")));
     t = System.currentTimeMillis() - t;
     System.out.println(
-      wld.getClass().getSimpleName() + " (" +
-      FileWordList.class.getSimpleName() + ") time to construct: " + t + "ms");
+      wld.getClass().getSimpleName() + " (" + FileWordList.class.getSimpleName() + ") time to construct: " + t + "ms");
   }
 
 
@@ -51,12 +49,10 @@ public class FileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
     throws Exception
   {
     System.out.println(
-      wld.getClass().getSimpleName() + " (" +
-      FileWordList.class.getSimpleName() + ") search time: " +
+      wld.getClass().getSimpleName() + " (" + FileWordList.class.getSimpleName() + ") search time: " +
       (wldSearchTime / 1000 / 1000) + "ms");
     System.out.println(
-      wld.getClass().getSimpleName() + " (" +
-      FileWordList.class.getSimpleName() + ") avg time per search: " +
+      wld.getClass().getSimpleName() + " (" + FileWordList.class.getSimpleName() + ") avg time per search: " +
       (wldSearchTime / 1000 / 1000 / 10) + "ms");
     wld = null;
   }
@@ -67,9 +63,7 @@ public class FileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(
-    groups = {"wlperftest"},
-    dataProvider = "search-words-web-small")
+  @Test(groups = {"wlperftest"}, dataProvider = "search-words-web-small")
   public void wordListSearch(final String word)
     throws Exception
   {

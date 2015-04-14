@@ -2,9 +2,8 @@
 package org.passay;
 
 /**
- * Rule for determining if a password contains a duplicate ASCII keyboard
- * sequence. See {@link java.util.regex.Pattern} /p{ASCII}. The default sequence
- * length is 5 characters.
+ * Rule for determining if a password contains a duplicate ASCII keyboard sequence. See {@link java.util.regex.Pattern}
+ * /p{ASCII}. The default sequence length is 5 characters.
  *
  * <ul>
  *   <li>Sequences are of the form: 'bbbbb' or '#####'</li>
@@ -25,9 +24,7 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
   private static final String REPEAT_CHAR_REGEX = "([^\\x00-\\x1F])\\1{%d}";
 
 
-  /**
-   * Creates a new repeat character regex rule with the default sequence length.
-   */
+  /** Creates a new repeat character regex rule with the default sequence length. */
   public RepeatCharacterRegexRule()
   {
     this(DEFAULT_SEQUENCE_LENGTH);
@@ -43,10 +40,7 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
   {
     super(String.format(REPEAT_CHAR_REGEX, sl - 1));
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
-      throw new IllegalArgumentException(
-        String.format(
-          "sequence length must be >= %s",
-          MINIMUM_SEQUENCE_LENGTH));
+      throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
     }
   }
 }

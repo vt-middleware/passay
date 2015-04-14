@@ -8,6 +8,8 @@ package org.passay;
  */
 public interface CharacterData
 {
+
+
   /**
    * Return the error code used for message resolution.
    *

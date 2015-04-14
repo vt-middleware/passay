@@ -70,8 +70,7 @@ public class WordListsTest
   {
     final ArrayWordList oneWord = new ArrayWordList(new String[] {"a"});
     final ArrayWordList twoWords = new ArrayWordList(new String[] {"a", "b"});
-    final ArrayWordList threeWords = new ArrayWordList(
-      new String[] {"a", "b", "c"});
+    final ArrayWordList threeWords = new ArrayWordList(new String[] {"a", "b", "c"});
     return
       new Object[][] {
         {oneWord, "a", 0},
@@ -98,13 +97,8 @@ public class WordListsTest
    * @param  word  Word to search for.
    * @param  expectedResult  Expected result of test.
    */
-  @Test(
-    groups = {"wltest"},
-    dataProvider = "searchData")
-  public void binarySearch(
-    final WordList wl,
-    final String word,
-    final int expectedResult)
+  @Test(groups = {"wltest"}, dataProvider = "searchData")
+  public void binarySearch(final WordList wl, final String word, final int expectedResult)
   {
     AssertJUnit.assertEquals(expectedResult, WordLists.binarySearch(wl, word));
   }

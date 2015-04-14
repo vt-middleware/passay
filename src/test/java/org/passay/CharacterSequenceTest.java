@@ -13,9 +13,7 @@ import org.testng.annotations.Test;
 public class CharacterSequenceTest
 {
 
-  /**
-   * Tests no arg constructor.
-   */
+  /** Tests no arg constructor. */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNoSequencesFailure()
   {
@@ -23,9 +21,7 @@ public class CharacterSequenceTest
   }
 
 
-  /**
-   * Tests failure condition where constructor arguments are not same length.
-   */
+  /** Tests failure condition where constructor arguments are not same length. */
   @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUnequalSequenceFailure()
   {
@@ -36,13 +32,13 @@ public class CharacterSequenceTest
   /**
    * Tests the {@link org.passay.CharacterSequence#matches(int, char)} method.
    *
-   * @throws Exception On errors.
+   * @throws  Exception  On errors.
    */
   @Test
-  public void testMatches() throws Exception
+  public void testMatches()
+    throws Exception
   {
-    final CharacterSequence sequence = new CharacterSequence(
-      "12345", "ABCDE", "abcde");
+    final CharacterSequence sequence = new CharacterSequence("12345", "ABCDE", "abcde");
     Assert.assertTrue(sequence.matches(0, '1'));
     Assert.assertTrue(sequence.matches(0, 'A'));
     Assert.assertTrue(sequence.matches(0, 'a'));

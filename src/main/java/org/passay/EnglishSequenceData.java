@@ -6,27 +6,27 @@ package org.passay;
  *
  * @author  Middleware Services
  */
-public enum EnglishSequenceData implements SequenceData
-{
+public enum EnglishSequenceData implements SequenceData {
+
   /** Alphabetical sequence. */
-  Alphabetical("ILLEGAL_ALPHABETICAL_SEQUENCE", new CharacterSequence[] {
-    new CharacterSequence(
-      "abcdefghijklmnopqrstuvwxyz",
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-  }),
+  Alphabetical(
+    "ILLEGAL_ALPHABETICAL_SEQUENCE",
+    new CharacterSequence[] {new CharacterSequence("abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"), }),
 
   /** Numerical sequence. */
-  Numerical("ILLEGAL_NUMERICAL_SEQUENCE", new CharacterSequence[] {
-    new CharacterSequence("0123456789"),
-  }),
+  Numerical(
+    "ILLEGAL_NUMERICAL_SEQUENCE",
+    new CharacterSequence[] {new CharacterSequence("0123456789"), }),
 
   /** QWERTY keyboard sequence. */
-  Qwerty("ILLEGAL_QWERTY_SEQUENCE", new CharacterSequence[] {
-    new CharacterSequence("`1234567890-=", "~!@#$%^&*()_+"),
-    new CharacterSequence("qwertyuiop[]\\", "QWERTYUIOP{}|"),
-    new CharacterSequence("asdfghjkl;'", "ASDFGHJKL:\""),
-    new CharacterSequence("zxcvbnm,./", "ZXCVBNM<>?"),
-  });
+  Qwerty(
+    "ILLEGAL_QWERTY_SEQUENCE",
+    new CharacterSequence[] {
+      new CharacterSequence("`1234567890-=", "~!@#$%^&*()_+"),
+      new CharacterSequence("qwertyuiop[]\\", "QWERTYUIOP{}|"),
+      new CharacterSequence("asdfghjkl;'", "ASDFGHJKL:\""),
+      new CharacterSequence("zxcvbnm,./", "ZXCVBNM<>?"),
+    });
 
   /** Error code. */
   private String errorCode;

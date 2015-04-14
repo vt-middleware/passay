@@ -4,8 +4,7 @@ package org.passay;
 import org.passay.dictionary.Dictionary;
 
 /**
- * Rule for determining if a password contains a dictionary word with optional
- * checking for reversed words.
+ * Rule for determining if a password contains a dictionary word with optional checking for reversed words.
  *
  * @author  Middleware Services
  */
@@ -13,15 +12,14 @@ public class DictionarySubstringRule extends AbstractDictionaryRule
 {
 
   /**
-   * Creates a new dictionary substring rule. The dictionary should be set using
-   * the {@link #setDictionary(Dictionary)} method.
+   * Creates a new dictionary substring rule. The dictionary should be set using the {@link #setDictionary(Dictionary)}
+   * method.
    */
   public DictionarySubstringRule() {}
 
 
   /**
-   * Creates a new dictionary substring rule. The dictionary should be ready to
-   * use when passed to this constructor.
+   * Creates a new dictionary substring rule. The dictionary should be ready to use when passed to this constructor.
    *
    * @param  dict  to use for searching
    */

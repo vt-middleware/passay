@@ -5,8 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Password validation rule that prevents illegal sequences of characters, e.g.
- * keyboard, alphabetical, numeric.
+ * Password validation rule that prevents illegal sequences of characters, e.g. keyboard, alphabetical, numeric.
  *
  * @author  Middleware Services
  */
@@ -50,8 +49,7 @@ public class IllegalSequenceRule implements Rule
    * @param  sl  sequence length
    * @param  wrap  whether to wrap sequences
    */
-  public IllegalSequenceRule(
-    final SequenceData data, final int sl, final boolean wrap)
+  public IllegalSequenceRule(final SequenceData data, final int sl, final boolean wrap)
   {
     this(data, sl, wrap, true);
   }
@@ -65,17 +63,10 @@ public class IllegalSequenceRule implements Rule
    * @param  wrap  whether to wrap sequences
    * @param  reportAll  whether to report all sequence matches or just the first
    */
-  public IllegalSequenceRule(
-    final SequenceData data,
-    final int sl,
-    final boolean wrap,
-    final boolean reportAll)
+  public IllegalSequenceRule(final SequenceData data, final int sl, final boolean wrap, final boolean reportAll)
   {
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
-      throw new IllegalArgumentException(
-        String.format(
-          "sequence length must be >= %s",
-          MINIMUM_SEQUENCE_LENGTH));
+      throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
     }
     sequenceData = data;
     sequenceLength = sl;
@@ -95,8 +86,7 @@ public class IllegalSequenceRule implements Rule
     char c;
     for (int i = 0; i < sequenceData.getSequences().length; i++) {
       for (int j = 0; j < max; j++) {
-        sequence = newSequenceIterator(
-          sequenceData.getSequences()[i], password.charAt(j));
+        sequence = newSequenceIterator(sequenceData.getSequences()[i], password.charAt(j));
         if (sequence != null) {
           position = j;
           while (sequence.forward()) {
@@ -145,21 +135,19 @@ public class IllegalSequenceRule implements Rule
 
 
   /**
-   * Creates an iterator that iterates over a character sequence positioned at
-   * the first matching character, if any, in the given password.
+   * Creates an iterator that iterates over a character sequence positioned at the first matching character, if any, in
+   * the given password.
    *
    * @param  sequence  defined sequence of illegal characters.
    * @param  first  first character to match in character sequence.
    *
    * @return  forward sequence iterator.
    */
-  private SequenceIterator newSequenceIterator(
-    final CharacterSequence sequence, final char first)
+  private SequenceIterator newSequenceIterator(final CharacterSequence sequence, final char first)
   {
     for (int i = 0; i < sequence.length(); i++) {
       if (sequence.matches(i, first)) {
-        final SequenceIterator s = new SequenceIterator(
-          sequence, i, sequenceLength, wrapSequence);
+        final SequenceIterator s = new SequenceIterator(sequence, i, sequenceLength, wrapSequence);
         s.addMatchCharacter(first);
         return s;
       }
@@ -180,8 +168,7 @@ public class IllegalSequenceRule implements Rule
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(sequenceData.getErrorCode(), m));
+      result.getDetails().add(new RuleResultDetail(sequenceData.getErrorCode(), m));
     }
   }
 
@@ -224,11 +211,7 @@ public class IllegalSequenceRule implements Rule
      * @param  count  length of this sequence
      * @param  wrap  whether this sequence wraps
      */
-    public SequenceIterator(
-      final CharacterSequence sequence,
-      final int startIndex,
-      final int count,
-      final boolean wrap)
+    public SequenceIterator(final CharacterSequence sequence, final int startIndex, final int count, final boolean wrap)
     {
       illegal = sequence;
       start = startIndex;
@@ -268,10 +251,7 @@ public class IllegalSequenceRule implements Rule
     }
 
 
-    /**
-     * Resets the sequence to its original position and discards all but the
-     * initial match character.
-     */
+    /** Resets the sequence to its original position and discards all but the initial match character. */
     public void reset()
     {
       position = start;
@@ -280,8 +260,8 @@ public class IllegalSequenceRule implements Rule
 
 
     /**
-     * Determines whether the character at the current iterator position in the
-     * illegal sequence matches the given character.
+     * Determines whether the character at the current iterator position in the illegal sequence matches the given
+     * character.
      *
      * @param  c  Character to check for.
      *

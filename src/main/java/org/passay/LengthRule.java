@@ -5,9 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Rule for determining if a password is within a desired length. The minimum
- * and maximum lengths are used inclusively to determine if a password meets
- * this rule.
+ * Rule for determining if a password is within a desired length. The minimum and maximum lengths are used inclusively
+ * to determine if a password meets this rule.
  *
  * @author  Middleware Services
  */
@@ -27,16 +26,13 @@ public class LengthRule implements Rule
   private int maximumLength = Integer.MAX_VALUE;
 
 
-  /**
-   * Creates a new length rule with lengths unset. The defaults are 0 and
-   * Integer.MAX_VALUE respectively.
-   */
+  /** Creates a new length rule with lengths unset. The defaults are 0 and Integer.MAX_VALUE respectively. */
   public LengthRule() {}
 
 
   /**
-   * Creates a new length rule with the supplied length. Both the minimum and
-   * the maximum length will be set to this value.
+   * Creates a new length rule with the supplied length. Both the minimum and the maximum length will be set to this
+   * value.
    *
    * @param  length  length of password
    */
@@ -114,15 +110,9 @@ public class LengthRule implements Rule
     } else {
       result.setValid(false);
       if (length < minimumLength) {
-        result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE_MIN,
-            createRuleResultDetailParameters()));
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE_MIN, createRuleResultDetailParameters()));
       } else {
-        result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE_MAX,
-            createRuleResultDetailParameters()));
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE_MAX, createRuleResultDetailParameters()));
       }
     }
     return result;

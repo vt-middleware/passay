@@ -49,8 +49,7 @@ public abstract class AbstractDictionaryRule implements Rule
 
 
   /**
-   * This causes the verify method to search the password for dictionary words
-   * spelled backwards as well as forwards.
+   * This causes the verify method to search the password for dictionary words spelled backwards as well as forwards.
    *
    * @param  b  whether to match dictionary words backwards
    */
@@ -61,8 +60,8 @@ public abstract class AbstractDictionaryRule implements Rule
 
 
   /**
-   * Returns true if the verify method will search the password for dictionary
-   * words spelled backwards as well as forwards.
+   * Returns true if the verify method will search the password for dictionary words spelled backwards as well as
+   * forwards.
    *
    * @return  whether to match dictionary words backwards
    */
@@ -80,10 +79,7 @@ public abstract class AbstractDictionaryRule implements Rule
     String matchingWord = doWordSearch(text);
     if (matchingWord != null) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(
-          ERROR_CODE,
-          createRuleResultDetailParameters(matchingWord)));
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(matchingWord)));
     }
     if (matchBackwards && text.length() > 1) {
       text = new StringBuilder(passwordData.getPassword()).reverse().toString();
@@ -91,9 +87,7 @@ public abstract class AbstractDictionaryRule implements Rule
       if (matchingWord != null) {
         result.setValid(false);
         result.getDetails().add(
-          new RuleResultDetail(
-            ERROR_CODE_REVERSED,
-            createRuleResultDetailParameters(matchingWord)));
+          new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(matchingWord)));
       }
     }
     return result;
@@ -107,8 +101,7 @@ public abstract class AbstractDictionaryRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final String word)
+  protected Map<String, Object> createRuleResultDetailParameters(final String word)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("matchingWord", word);

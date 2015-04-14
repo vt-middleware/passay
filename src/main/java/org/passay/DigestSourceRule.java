@@ -6,11 +6,9 @@ import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.EncodingHashBean;
 
 /**
- * Rule for determining if a password matches a digested password from a
- * different source. Useful for when separate systems cannot have matching
- * passwords. If no password reference has been set that matches the label on
- * the rule, then passwords will meet this rule. See {@link
- * PasswordData#setPasswordReferences(List)}
+ * Rule for determining if a password matches a digested password from a different source. Useful for when separate
+ * systems cannot have matching passwords. If no password reference has been set that matches the label on the rule,
+ * then passwords will meet this rule. See {@link PasswordData#setPasswordReferences(List)}
  *
  * @author  Middleware Services
  */
@@ -25,8 +23,7 @@ public class DigestSourceRule extends SourceRule
 
 
   /**
-   * Creates new digest source rule which operates on password references with
-   * the supplied label.
+   * Creates new digest source rule which operates on password references with the supplied label.
    *
    * @param  bean  encoding hash bean
    */
@@ -59,11 +56,8 @@ public class DigestSourceRule extends SourceRule
    * @return  true if passwords match, false otherwise.
    */
   @Override
-  protected boolean matches(
-    final String undigested,
-    final PasswordData.Reference reference)
+  protected boolean matches(final String undigested, final PasswordData.Reference reference)
   {
-    return
-      hashBean.compare(reference.getPassword(), undigested.getBytes(charset));
+    return hashBean.compare(reference.getPassword(), undigested.getBytes(charset));
   }
 }
