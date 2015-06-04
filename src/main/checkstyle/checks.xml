@@ -102,7 +102,7 @@
     <module name="NoWhitespaceBefore">
       <property name="allowLineBreaks" value="true"/>
       <property name="tokens"
-                value="SEMI,DOT,POST_DEC,POST_INC,PLUS"/>
+                value="SEMI,DOT,POST_DEC,POST_INC"/>
     </module>
     <module name="OperatorWrap">
       <property name="option" value="eol"/>
@@ -155,9 +155,6 @@
     <module name="InnerAssignment"/>
     <module name="MagicNumber"/>
     <module name="MissingSwitchDefault"/>
-    <module name="RedundantThrows">
-      <property name="allowUnchecked" value="true"/>
-    </module>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="StringLiteralEquality"/>
