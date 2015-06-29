@@ -15,7 +15,10 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 {
 
   /** Test password. */
-  private static final String VALID_PASS = "r%scvEW2e93)";
+  private static final String VALID_PASS_1 = "r%scvEW2e93)";
+
+  /** Test password. */
+  private static final String VALID_PASS_2 = "r£scvEW2e93";
 
   /** Test password. */
   private static final String ALPHA_PASS = "r%5#8EW2393)";
@@ -70,7 +73,16 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {rule1, new PasswordData(VALID_PASS), null, },
+        {rule1, new PasswordData(VALID_PASS_1), null, },
+        {
+          rule1,
+          new PasswordData(ALPHA_PASS),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Alphabetical.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode()),
+        },
+        {rule1, new PasswordData(VALID_PASS_2), null, },
         {
           rule1,
           new PasswordData(ALPHA_PASS),
@@ -99,7 +111,8 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           new PasswordData(NONALPHA_PASS),
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Special.getErrorCode()),
         },
-        {rule2, new PasswordData(VALID_PASS), null, },
+        {rule2, new PasswordData(VALID_PASS_1), null, },
+        {rule2, new PasswordData(VALID_PASS_2), null, },
         {rule2, new PasswordData(ALPHA_PASS), null, },
         {rule2, new PasswordData(DIGIT_PASS), null, },
         {rule2, new PasswordData(UPPERCASE_PASS), null, },
@@ -116,7 +129,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   {
     final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule();
     try {
-      ccr.validate(new PasswordData(VALID_PASS));
+      ccr.validate(new PasswordData(VALID_PASS_1));
       AssertJUnit.fail("Should have thrown IllegalStateException");
     } catch (Exception e) {
       AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
