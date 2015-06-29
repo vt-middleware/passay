@@ -21,7 +21,7 @@ public enum EnglishCharacterData implements CharacterData {
   Alphabetical("INSUFFICIENT_ALPHABETICAL", UpperCase.getCharacters() + LowerCase.getCharacters()),
 
   /** Alphabetical characters (upper and lower case). */
-  Special("INSUFFICIENT_SPECIAL", "`~@#$%^&*()-_=+[{]}\\|;:'\",<.>/?");
+  Special("INSUFFICIENT_SPECIAL", "§¬±`~@#$¢£€%^&*()-_=+[{]}\\|;:'\",<.>/?¼½¾");
 
 
   /** Error code. */
