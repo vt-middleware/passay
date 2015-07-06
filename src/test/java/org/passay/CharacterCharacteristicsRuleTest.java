@@ -18,6 +18,9 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   private static final String VALID_PASS = "r%scvEW2e93)";
 
   /** Test password. */
+  private static final String VALID_PASS_ALT = "r¢sCvE±2e93";
+
+  /** Test password. */
   private static final String ALPHA_PASS = "r%5#8EW2393)";
 
   /** Test password. */
@@ -71,6 +74,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
       new Object[][] {
 
         {rule1, new PasswordData(VALID_PASS), null, },
+        {rule1, new PasswordData(VALID_PASS_ALT), null, },
         {
           rule1,
           new PasswordData(ALPHA_PASS),
@@ -100,6 +104,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Special.getErrorCode()),
         },
         {rule2, new PasswordData(VALID_PASS), null, },
+        {rule2, new PasswordData(VALID_PASS_ALT), null, },
         {rule2, new PasswordData(ALPHA_PASS), null, },
         {rule2, new PasswordData(DIGIT_PASS), null, },
         {rule2, new PasswordData(UPPERCASE_PASS), null, },
@@ -140,6 +145,14 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           new PasswordData("r%scvEW2e3)"),
           new String[] {
             String.format("Password must contain at least %s digit characters.", 3),
+            String.format("Password matches %s of %s character rules, but %s are required.", 4, 5, 5),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("R»S7VEW2e3)"),
+          new String[] {
+            String.format("Password must contain at least %s lowercase characters.", 2),
             String.format("Password matches %s of %s character rules, but %s are required.", 4, 5, 5),
           },
         },

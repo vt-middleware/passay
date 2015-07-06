@@ -26,51 +26,89 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         /* QWERTY SEQUENCE */
         // Test valid password
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY),
           new PasswordData("p4zRcv8#n65"),
           null,
         },
         // Has qwerty sequence
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 6, false),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 6, false),
           new PasswordData("pqwerty#n65"),
-          codes(EnglishSequenceData.Qwerty.getErrorCode()),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
         },
         // Has wrapping qwerty sequence with wrap=false
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY),
           new PasswordData("pkl;'a#n65"),
           null,
         },
         // Has wrapping qwerty sequence with wrap=true
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 8, true),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 8, true),
           new PasswordData("piop{}|qw#n65"),
-          codes(EnglishSequenceData.Qwerty.getErrorCode()),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
         },
         // Has backward qwerty sequence
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 4, false),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 4, false),
           new PasswordData("p7^54#n65"),
-          codes(EnglishSequenceData.Qwerty.getErrorCode(), EnglishSequenceData.Qwerty.getErrorCode()),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode(), EnglishSequenceData.US_QWERTY.getErrorCode()),
         },
         // Has backward wrapping qwerty sequence with wrap=false
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 8, false),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 8, false),
           new PasswordData("phgfdsa\";#n65"),
           null,
         },
         // Has backward wrapping qwerty sequence with wrap=true
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 6, true),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 6, true),
           new PasswordData("p@1`+_0#n65"),
-          codes(EnglishSequenceData.Qwerty.getErrorCode()),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
         },
+
+        // Has alt qwerty sequence
+        {
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 6, false),
+          new PasswordData("pQ∑eR†y#n65"),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
+        },
+        // Has wrapping alt qwerty sequence with wrap=false
+        {
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY),
+          new PasswordData("pK¬;æA#n65"),
+          null,
+        },
+        // Has wrapping qwerty sequence with wrap=true
+        {
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 8, true),
+          new PasswordData("pIøp“}|œW#n65"),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
+        },
+        // Has backwards alt qwerty sequence
+        {
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 4, false),
+          new PasswordData("p7§5›#n65"),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode(), EnglishSequenceData.US_QWERTY.getErrorCode()),
+        },
+        // Has backward alt wrapping qwerty sequence with wrap=false
+        {
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 8, false),
+          new PasswordData("ph©fÎßa\"…#n65"),
+          null,
+        },
+        // Has backward alt wrapping qwerty sequence with wrap=true
+        {
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 6, true),
+          new PasswordData("p@1~≠_º#n65"),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
+        },
+
         // report single error
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 6, false, false),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 6, false, false),
           new PasswordData("pqwertyui#n65"),
-          codes(EnglishSequenceData.Qwerty.getErrorCode()),
+          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
         },
         /* ALPHABETICAL SEQUENCE */
         // Test valid password
@@ -243,12 +281,12 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY),
           new PasswordData("pkwerty#n65"),
           new String[] {String.format("Password contains the illegal QWERTY sequence '%s'.", "werty"), },
         },
         {
-          new IllegalSequenceRule(EnglishSequenceData.Qwerty, 5, true, false),
+          new IllegalSequenceRule(EnglishSequenceData.US_QWERTY, 5, true, false),
           new PasswordData("pkl;'asd65"),
           new String[] {String.format("Password contains the illegal QWERTY sequence '%s'.", "kl;'a"), },
         },
