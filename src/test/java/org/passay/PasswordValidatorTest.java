@@ -86,7 +86,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     final DictionarySubstringRule dictRule = new DictionarySubstringRule(dict);
     dictRule.setMatchBackwards(true);
 
-    final IllegalSequenceRule qwertySeqRule = new IllegalSequenceRule(EnglishSequenceData.US_QWERTY);
+    final IllegalSequenceRule qwertySeqRule = new IllegalSequenceRule(EnglishSequenceData.USQwerty);
 
     final IllegalSequenceRule alphaSeqRule = new IllegalSequenceRule(EnglishSequenceData.Alphabetical);
 
@@ -142,7 +142,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     ccRule.setNumberOfCharacteristics(3);
     l.add(ccRule);
 
-    l.add(new IllegalSequenceRule(EnglishSequenceData.US_QWERTY));
+    l.add(new IllegalSequenceRule(EnglishSequenceData.USQwerty));
     l.add(new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
     l.add(new IllegalSequenceRule(EnglishSequenceData.Numerical));
     l.add(new RepeatCharacterRegexRule());
@@ -200,7 +200,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.UpperCase.getErrorCode(),
             EnglishCharacterData.LowerCase.getErrorCode(),
             EnglishCharacterData.Special.getErrorCode(),
-            EnglishSequenceData.US_QWERTY.getErrorCode()),
+            EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
         /** all non-alphanumeric */
@@ -360,7 +360,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         {
           validator,
           PasswordData.newInstance("p4zxcvb#n65", USER, references),
-          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
+          codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
         /**
@@ -370,14 +370,14 @@ public class PasswordValidatorTest extends AbstractRuleTest
         {
           validator,
           PasswordData.newInstance("p4ytrew#n65", USER, references),
-          codes(EnglishSequenceData.US_QWERTY.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
+          codes(EnglishSequenceData.USQwerty.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
         },
 
         /** matches sequence 'iop[]' ignore case */
         {
           validator,
           PasswordData.newInstance("p4iOP[]#n65", USER, references),
-          codes(EnglishSequenceData.US_QWERTY.getErrorCode()),
+          codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
         /** invalid userid rule passwords. */

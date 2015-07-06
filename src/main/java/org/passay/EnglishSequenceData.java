@@ -19,7 +19,7 @@ public enum EnglishSequenceData implements SequenceData {
     new CharacterSequence[] {new CharacterSequence("0123456789"), }),
 
   /** US QWERTY keyboard sequence. */
-  US_QWERTY(
+  USQwerty(
     "ILLEGAL_QWERTY_SEQUENCE",
     // rows are no-modifier, shift, alt, shift+alt
     // dead keys are denoted with the null character /u0000

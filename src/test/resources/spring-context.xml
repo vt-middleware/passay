@@ -41,7 +41,7 @@
     p:minimumLength="5"/>
 
   <bean id="qwertySeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnglishSequenceData).US_QWERTY}" />
+    c:data="#{T(org.passay.EnglishSequenceData).USQwerty}" />
 
   <bean id="alphaSeqRule" class="org.passay.IllegalSequenceRule"
     c:data="#{T(org.passay.EnglishSequenceData).Alphabetical}" />

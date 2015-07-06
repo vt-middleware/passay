@@ -63,7 +63,7 @@ public final class PasswordCli
           rules.add(new UsernameRule(true, true));
           username = args[++i];
         } else if ("-s".equals(args[i])) {
-          rules.add(new IllegalSequenceRule(EnglishSequenceData.US_QWERTY));
+          rules.add(new IllegalSequenceRule(EnglishSequenceData.USQwerty));
           rules.add(new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
           rules.add(new IllegalSequenceRule(EnglishSequenceData.Numerical));
           rules.add(new RepeatCharacterRegexRule());
