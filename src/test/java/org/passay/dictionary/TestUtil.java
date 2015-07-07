@@ -34,7 +34,7 @@ public final class TestUtil
   {
     final List<String> words = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-      String word = null;
+      String word;
       while ((word = br.readLine()) != null) {
         words.add(word);
       }

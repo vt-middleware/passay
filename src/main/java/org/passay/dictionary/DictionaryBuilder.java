@@ -69,7 +69,7 @@ public class DictionaryBuilder
    */
   public DictionaryBuilder setCaseSensitive(final boolean flag)
   {
-    this.caseSensitive = flag;
+    caseSensitive = flag;
     return this;
   }
 

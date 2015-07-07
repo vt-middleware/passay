@@ -47,10 +47,10 @@ public enum EnglishSequenceData implements SequenceData {
     });
 
   /** Error code. */
-  private String errorCode;
+  private final String errorCode;
 
   /** Character sequences. */
-  private CharacterSequence[] sequences;
+  private final CharacterSequence[] sequences;
 
   /**
    * Creates a new instance with given parameters.
@@ -58,10 +58,10 @@ public enum EnglishSequenceData implements SequenceData {
    * @param  code  Error code used for message resolution.
    * @param  seqs  One or more character sequences.
    */
-  private EnglishSequenceData(final String code, final CharacterSequence[] seqs)
+  EnglishSequenceData(final String code, final CharacterSequence[] seqs)
   {
-    this.errorCode = code;
-    this.sequences = seqs;
+    errorCode = code;
+    sequences = seqs;
   }
 
   @Override

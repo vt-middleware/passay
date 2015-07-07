@@ -21,7 +21,7 @@ public class FileWordList extends AbstractWordList
   private static final int HUNDRED_PERCENT = 100;
 
   /** file containing words. */
-  protected RandomAccessFile file;
+  protected final RandomAccessFile file;
 
   /** size of the file. */
   protected int size;
@@ -102,7 +102,7 @@ public class FileWordList extends AbstractWordList
       String a;
       String b = null;
       while ((a = file.readLine()) != null) {
-        if (a != null && b != null && comparator.compare(a, b) < 0) {
+        if (b != null && comparator.compare(a, b) < 0) {
           throw new IllegalArgumentException("File is not sorted correctly for this comparator");
         }
         b = a;

@@ -39,10 +39,10 @@ public enum EnglishCharacterData implements CharacterData {
 
 
   /** Error code. */
-  private String errorCode;
+  private final String errorCode;
 
   /** Characters. */
-  private String characters;
+  private final String characters;
 
 
   /**
@@ -51,7 +51,7 @@ public enum EnglishCharacterData implements CharacterData {
    * @param  code  Error code.
    * @param  charString  Characters as string.
    */
-  private EnglishCharacterData(final String code, final String charString)
+  EnglishCharacterData(final String code, final String charString)
   {
     errorCode = code;
     characters = charString;
