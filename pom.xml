@@ -83,13 +83,13 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.8.21</version>
+      <version>6.9.4</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>4.1.6.RELEASE</version>
+      <version>4.1.7.RELEASE</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -191,7 +191,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>2.10.2</version>
+        <version>2.10.3</version>
         <configuration>
           <links>
             <link>http://download.oracle.com/javase/7/docs/api</link>
@@ -244,7 +244,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.5.3</version>
+        <version>2.5.4</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
@@ -258,7 +258,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.5.3</version>
+        <version>2.5.5</version>
         <configuration>
           <appendAssemblyId>true</appendAssemblyId>
           <attach>false</attach>
