@@ -40,15 +40,15 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
 
   /** For testing. */
   private final DigestHistoryRule digestRule = new DigestHistoryRule(
-    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1));
+    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1, false));
 
   /** For testing. */
   private final DigestHistoryRule saltedDigestRule = new DigestHistoryRule(
-    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1));
+    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1, false));
 
   /** For testing. */
   private final DigestHistoryRule emptyDigestRule = new DigestHistoryRule(
-    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1));
+    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1, false));
 
 
   /** Initialize rules for this test. */

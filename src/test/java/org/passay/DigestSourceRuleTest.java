@@ -31,11 +31,11 @@ public class DigestSourceRuleTest extends AbstractRuleTest
 
   /** For testing. */
   private final DigestSourceRule digestRule = new DigestSourceRule(
-    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1));
+    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1, false));
 
   /** For testing. */
   private final DigestSourceRule emptyRule = new DigestSourceRule(
-    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1));
+    new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1, false));
 
 
   /** Initialize rules for this test. */
