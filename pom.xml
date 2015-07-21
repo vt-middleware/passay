@@ -77,13 +77,13 @@
     <dependency>
       <groupId>org.cryptacular</groupId>
       <artifactId>cryptacular</artifactId>
-      <version>1.0</version>
+      <version>1.1.0</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.9.4</version>
+      <version>6.9.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -157,7 +157,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.15</version>
+        <version>2.16</version>
         <configuration>
           <configLocation>${checkstyle.dir}/checks.xml</configLocation>
           <headerLocation>${checkstyle.dir}/header.txt</headerLocation>
