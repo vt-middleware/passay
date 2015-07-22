@@ -15,7 +15,7 @@ public class CharacterRule implements Rule
   /** Character data for this rule. */
   protected final CharacterData characterData;
 
-  /** Number of characters to require. Default value is {@value}. */
+  /** Number of characters to require. Default value is 1. */
   protected int numCharacters = 1;
 
 
