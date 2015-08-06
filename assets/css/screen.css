@@ -15,38 +15,34 @@
  * General elements
  ******************************************/
 body {
-  background-color: #adc4b2;
+  background-color: #cec6d4;
   margin: 0;
   padding: 0;
 }
 
-p {
-  margin:0 0 0.4em 0;
-  padding:0;
-}
-
 h1, h2, h3, h4, h5, h6 {
   font-family: Nauman, Verdana, Sans-Serif;
-  font-size: 110%;
+  font-size: 100%;
   font-weight: normal;
   font-style: normal;
-  padding:0;
-  margin:0.6em 0 0.1em 0;
 }
 
 h1 {
-  font-size: 140%;
-  font-variant: small-caps;
+  font-size: 150%;
 }
 
 h2 {
-  font-size: 120%;
-  font-style: italic;
+  font-size: 130%;
+}
+
+h3 {
+  font-size: 110%;
 }
 
 pre, code {
   font-family: Source Code Pro, monospace;
-  line-height: 130%;
+  font-size: 15px;
+  line-height: 140%;
 }
 
 fieldset, pre {
@@ -65,15 +61,17 @@ pre code {
 }
 
 code {
-  font-size: 16px;
+  font-size: 18px;
   color: #296643;
+  margin: 0;
+  padding: 0;
 }
 
 /******************************************
  * Specific page elements
  ******************************************/
 #page-wrapper {
-  margin: 24px auto;
+  margin:0 auto;
   padding: 0 8% 8% 8%;
   width: 70%;
   background-color: #fff;
@@ -93,34 +91,26 @@ code {
   border: none;
   display: block;
   margin: auto auto;
-}
+ }
 
 #menu {
   margin: 0 0 30px 0;
   border-top: 1px solid #cec6d4;
-  font-family: Oswald, Helvetica, Sans-Serif;
-  font-size: 14px;
+  font-family: Nauman, Verdana, Sans-Serif;
+  font-size: 18px;
   text-align: center;
-  letter-spacing: 0.1em;
 }
 
 #menu a {
   color: #6e6881;
   text-decoration: none;
-  padding: 5px 20px;
+  padding: 5px 18px;
 }
 
 #content {
   line-height: 125%;
-  font-family: 'Open Sans', Helvetica, Sans-Serif;
-  font-size: 16px;
-}
-
-#title {
-  font-family: Nauman, Verdana, Sans-Serif;
-  font-size: 150%;
-  font-weight: bold;
-  margin-bottom: 20px;
+  font-family: Rosario, Helvetica, Sans-Serif;
+  font-size: 20px;
 }
 
 #footer {
