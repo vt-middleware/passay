@@ -18,36 +18,64 @@ passay provides out of the box. There are two broad categories of rules:
 The following sections briefly describe the available rules in both categories.
 
 ## Positive matching rules
-1. `AllowedCharacterRule` - requires passwords to contain _all_ of a set of characters
-2. `AllowedRegexRule` - requires passwords to conform to a regular expression
-3. `AlphabeticalCharacterRule` - requires passwords to contain at least N alphabetical characters
-4. `CharacterCharacteristicsRule` - requires passwords to contain M of N classes of characters; for example, 3 of 4
-of the following: digit, alphabetical, uppercase, lowercase
-5. `DigitCharacterRule` - requires passwords to contain at least N digits
-6. `LengthRule` - requires passwords to meet a minimum required length
-7. `LowercaseCharacterRule` - requires passwords to contain at least N lower case characters
-8. `SpecialCharacterRule` - requires passwords to contain at least N special characters (symbols)
-9. `UppercaseCharacterRule` - requires passwords to contain at least N upper case characters
+1. [`AllowedCharacterRule`](../javadocs/org/passay/AllowedCharacterRule.html) -
+requires passwords to contain _all_ of a set of characters
+2. [`AllowedRegexRule`](../javadocs/org/passay/AllowedRegexRule.html) -
+requires passwords to conform to a regular expression
+3. [`CharacterCharacteristicsRule`](../javadocs/org/passay/CharacterCharacteristicsRule.html) -
+requires passwords to contain M of N classes of characters; for example, 3 of 4 of the following: digit, upper-case
+letters, lower-case letters, symbols
+4. [`CharacterRule`](../javadocs/org/passay/CharacterRule.html) -
+requires passwords to contain at least N characters from a given character set (e.g. digits, upper-case letters,
+lowercase-letters, symbols)
+5. [`LengthRule`](../javadocs/org/passay/LengthRule.html) - requires passwords to meet a minimum required length
 
 ## Negative matching rules
-1. `AlphabeticalSequenceRule` - rejects passwords that contain an alphabetical sequence of N characters (e.g. _abcde_)
-2. Dictionary rules
-   1. `DictionaryRule` - rejects passwords that _match_ an entry in a dictionary (exact match semantics)
-   2. `DictionarySubstringRule` - rejects passwords that _contain_ an entry in a dictionary (substring match semantics)
-3. History rules
-   1. `HistoryRule` - rejects passwords that match previous passwords (cleartext comparison)
-   2. `DigestHistoryRule` - rejects passwords that match previous password digests (hash/digest comparison)
-4. `IllegalCharacterRule` - rejects passwords that contain _any_ of a set of characters
-5. `IllegalRegexRule` - rejects passwords that conform to a regular expression
-6. `NumericalSequenceRule` - rejects passwords that contain a numerical sequence of N characters (e.g. _12345_)
-7. `QwertySequenceRule` - rejects passwords that contain a sequence of N characters in a row on a traditional
-US-layout [QWERTY](http://en.wikipedia.org/wiki/QWERTY) keyboard (e.g. _asdfgh_)
-8. Source rules
-   1. `SourceRule` - rejects passwords that match those from another source (cleartext comparison)
-   2. `DigestSourceRule` - rejects passwords that match the digest of those from another source (hash/digest comparison)
-9. `RepeatCharacterRegexRule` - rejects passwords that contain a repeated ASCII character
-10. `UsernameRule` - rejects passwords that contain the username of the user providing the password
-11. `WhitespaceRule` - rejects passwords that contain whitespace characters
+1. Dictionary rules
+   1. [`DictionaryRule`](../javadocs/org/passay/DictionaryRule.html) -
+   rejects passwords that _match_ an entry in a dictionary (exact match semantics)
+   2. [`DictionarySubstringRule`](../javadocs/org/passay/DictionarySubstringRule.html) -
+   rejects passwords that _contain_ an entry in a dictionary (substring match semantics)
+2. History rules
+   1. [`HistoryRule`](../javadocs/org/passay/HistoryRule.html) -
+   rejects passwords that match previous passwords (cleartext comparison)
+   2. [`DigestHistoryRule`](../javadocs/org/passay/DigestHistoryRule.html) -
+   rejects passwords that match previous password digests (hash/digest comparison)
+3. [`IllegalCharacterRule`](../javadocs/org/passay/IllegalCharacterRule.html) -
+rejects passwords that contain _any_ of a set of characters
+4. [`IllegalRegexRule`](../javadocs/org/passay/IllegalRegexRule.html) -
+rejects passwords that conform to a regular expression
+5. [`IllegalSequenceRule`](../javadocs/org/passay/IllegalSequenceRule.html) -
+rejects passwords that contain a sequence of N characters (e.g. _12345_)
+6. Source rules
+   1. [`SourceRule`](../javadocs/org/passay/SourceRule.html) -
+   rejects passwords that match those from another source (cleartext comparison)
+   2. [`DigestSourceRule`](../javadocs/org/passay/DigestSourceRule.html) -
+   rejects passwords that match the digest of those from another source (hash/digest comparison)
+7. [`RepeatCharacterRegexRule`](../javadocs/org/passay/RepeatCharacterRegexRule.html) -
+rejects passwords that contain a repeated ASCII character
+8. [`UsernameRule`](../javadocs/org/passay/UsernameRule.html) -
+rejects passwords that contain the username of the user providing the password
+9. [`WhitespaceRule`](../javadocs/org/passay/WhitespaceRule.html) -
+rejects passwords that contain whitespace characters
+
+## API changes from 1.0 to 1.1.0
+Required character and invalid sequence rules have been consolidated in 1.1.0 to facilitate extension to arbitrary
+character sets.
+
+`CharacterRule` replaces the following 1.0 components:
+
+1. `AlphabeticalCharacterRule` -> `CharacterRule(EnglishCharacterData.Alphabetical)`
+2. `DigitCharacterRule` -> `CharacterRule(EnglishCharacterData.Digit)`
+3. `LowercaseCharacterRule` -> `CharacterRule(EnglishCharacterData.LowerCase)`
+4. `SpecialCharacterRule` -> `CharacterRule(EnglishCharacterData.Special)`
+5. `UppercaseCharacterRule` -> `CharacterRule(EnglishCharacterData.UpperCase)`
+
+`IllegalSequenceRule` replaces the following 1.0 components:
+
+1. `AlphabeticalSequenceRule` -> `SequenceRule(EnglishSequenceData.Alphabetical)`
+2. `NumericSequenceRule` -> `SequenceRule(EnglishSequenceData.Numerical)`
+3. `QwertySequenceRule` -> `SequenceRule(EnglishSequenceData.USQwerty)`
 
 # Password validation
 Password validation involves creating a `PasswordValidator` from a rule set, which is simply a list of `Rule` objects.
@@ -65,16 +93,16 @@ PasswordValidator validator = new PasswordValidator(Arrays.asList(
   new LengthRule(8, 16),
 
   // at least one upper-case character
-  new UppercaseCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.UpperCase, 1),
 
   // at least one lower-case character
-  new LowercaseCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.LowerCase, 1),
 
   // at least one digit character
-  new DigitCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.Digit, 1),
 
   // at least one symbol (special character)
-  new SpecialCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.Special, 1),
 
   // no whitespace
   new WhitespaceRule()));
@@ -146,10 +174,10 @@ CharacterCharacteristicsRule r2 = new CharacterCharacteristicsRule();
 r2.setNumberOfCharacteristics(3);
 
 // Define elements of N (upper, lower, digit, symbol)
-r2.getRules().add(new UppercaseCharacterRule(1));
-r2.getRules().add(new LowercaseCharacterRule(1));
-r2.getRules().add(new DigitCharacterRule(1));
-r2.getRules().add(new SpecialCharacterRule(1));
+r2.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
+r2.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
+r2.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
+r2.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
 
 WhitespaceRule r3 = new WhitespaceRule();
 
@@ -231,14 +259,10 @@ List<PasswordData.Reference> history = Arrays.asList(
 // org.cryptacular.spec.CodecSpec;
 // org.cryptacular.spec.DigestSpec;
 EncodingHashBean hasher = new EncodingHashBean(
-  // Handles base64 encoding
-  new CodecSpec("Base64"),
-
-  // Digest algorithm
-  new DigestSpec("SHA256"),
-
-  // Number of hash rounds
-  1);
+  new CodecSpec("Base64"), // Handles base64 encoding
+  new DigestSpec("SHA256"), // Digest algorithm
+  1, // Number of hash rounds
+  false); // Salted hash == false
 
 List<Rule> rules = Arrays.asList(
   // ...
@@ -263,16 +287,16 @@ password generation for the following policy:
 {% highlight java %}
 List<CharacterRule> rules = Arrays.asList(
   // at least one upper-case character
-  new UppercaseCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.UpperCase, 1),
 
   // at least one lower-case character
-  new LowercaseCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.LowerCase, 1),
 
   // at least one digit character
-  new DigitCharacterRule(1),
+  new CharacterRule(EnglishCharacterData.Digit, 1),
 
   // at least one symbol (special character)
-  new SpecialCharacterRule(1));
+  new CharacterRule(EnglishCharacterData.Special, 1));
 
 PasswordGenerator generator = new PasswordGenerator();
 
@@ -280,7 +304,20 @@ PasswordGenerator generator = new PasswordGenerator();
 String password = generator.generatePassword(12, rules);
 {% endhighlight %}
 
-Note that generated passwords in the above example don't contain whitespace
-since there is no `CharacterRule` that defines whitespace characters, though
-one could easily be developed.
+Note that generated passwords in the above example don't contain spaces since none of the character sets above
+includes a space character. It is trivial to add support for generating passwords with spaces by including an
+additional `CharacterRule` with a custom character set as follows.
 
+{% highlight java %}
+new CharacterRule(new CharacterData() {
+  @Override
+  public String getErrorCode() {
+    return "ERR_SPACE";
+  }
+
+  @Override
+  public String getCharacters() {
+    return " ";
+  }
+}, 1);
+{% endhighlight %}
