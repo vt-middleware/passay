@@ -73,9 +73,9 @@ character sets.
 
 `IllegalSequenceRule` replaces the following 1.0 components:
 
-1. `AlphabeticalSequenceRule` -> `SequenceRule(EnglishSequenceData.Alphabetical)`
-2. `NumericSequenceRule` -> `SequenceRule(EnglishSequenceData.Numerical)`
-3. `QwertySequenceRule` -> `SequenceRule(EnglishSequenceData.USQwerty)`
+1. `AlphabeticalSequenceRule` -> `IllegalSequenceRule(EnglishSequenceData.Alphabetical)`
+2. `NumericSequenceRule` -> `IllegalSequenceRule(EnglishSequenceData.Numerical)`
+3. `QwertySequenceRule` -> `IllegalSequenceRule(EnglishSequenceData.USQwerty)`
 
 # Password validation
 Password validation involves creating a `PasswordValidator` from a rule set, which is simply a list of `Rule` objects.
