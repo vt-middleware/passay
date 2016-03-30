@@ -216,7 +216,7 @@
           <links>
             <link>http://download.oracle.com/javase/7/docs/api</link>
           </links>
-          <bottom><![CDATA[<i>Copyright &#169; 2003-2015 Virginia Tech. All Rights Reserved.</i>]]></bottom>
+          <bottom><![CDATA[<i>Copyright &#169; 2003-2016 Virginia Tech. All Rights Reserved.</i>]]></bottom>
         </configuration>
         <executions>
           <execution>
