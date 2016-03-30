@@ -211,7 +211,7 @@ public class IllegalSequenceRule implements Rule
      * @param  count  length of this sequence
      * @param  wrap  whether this sequence wraps
      */
-    public SequenceIterator(final CharacterSequence sequence, final int startIndex, final int count, final boolean wrap)
+    SequenceIterator(final CharacterSequence sequence, final int startIndex, final int count, final boolean wrap)
     {
       illegal = sequence;
       start = startIndex;
