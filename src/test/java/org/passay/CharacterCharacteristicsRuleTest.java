@@ -21,6 +21,9 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   private static final String VALID_PASS_ALT = "r¢sCvE±2e93";
 
   /** Test password. */
+  private static final String VALID_PASS_ISSUE32 = "r~scvEW2e93b";
+
+  /** Test password. */
   private static final String ALPHA_PASS = "r%5#8EW2393)";
 
   /** Test password. */
@@ -75,6 +78,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 
         {rule1, new PasswordData(VALID_PASS), null, },
         {rule1, new PasswordData(VALID_PASS_ALT), null, },
+        {rule1, new PasswordData(VALID_PASS_ISSUE32), null, },
         {
           rule1,
           new PasswordData(ALPHA_PASS),

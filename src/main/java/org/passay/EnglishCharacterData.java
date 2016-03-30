@@ -24,7 +24,7 @@ public enum EnglishCharacterData implements CharacterData {
   Special(
     "INSUFFICIENT_SPECIAL",
     // ASCII symbols
-    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}`" +
+    "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~" +
     // Latin-1 symbols
     "\u00a1\u00a2\u00a3\u00a4\u00a5\u00a6\u00a7\u00a8\u00a9\u00aa\u00ab\u00ac\u00ad\u00ae\u00af" +
     "\u00b0\u00b1\u00b2\u00b3\u00b4\u00b5\u00b6\u00b7\u00b8\u00b9\u00ba\u00bb\u00bc\u00bd\u00be\u00bf" +
