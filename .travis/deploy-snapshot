@@ -41,6 +41,8 @@ mvn deploy -DskipTests -DaltDeploymentRepository=snapshot::default::file://${REP
 
 # Push changes to the maven repo
 cd $REPO_NAME
+git config user.name "Travis CI"
+git config user.email "travis@travis-ci.org"
 git add .
 git commit -m "Deploy snapshot: ${SHA}"
 git push origin master
