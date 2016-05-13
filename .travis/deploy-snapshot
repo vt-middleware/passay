@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# Exit with nonzero exit code if anything fails
+set -e
+
+# Variables
+REPO_NAME="maven-repo"
+REPO_URL="https://${GH_TOKEN}@github.com/vt-middleware/${REPO_NAME}.git"
+
+# Do not run for pull requests
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+  echo "Skipping snapshot deploy for PULL_REQUEST=${TRAVIS_PULL_REQUEST}."
+  exit 0
+fi
+
+# Do not run for tags
+if [ ! -z "$TRAVIS_TAG" ]; then
+  echo "Skipping snapshot deploy for TAG=${TRAVIS_TAG}."
+  exit 0
+fi
+
+# Only run this script against master
+if [ "$TRAVIS_BRANCH" != "master" ]; then
+  echo "Skipping snapshot deploy for BRANCH=${TRAVIS_BRANCH}."
+  exit 0
+fi
+
+# Only run this script for snapshots
+VERSION=`cat target/maven-archiver/pom.properties |grep version`
+if [[ "$VERSION" != *-SNAPSHOT ]]; then
+  echo "Skipping non-snapshot version for VERSION=${VERSION}."
+  exit 0
+fi
+
+# Clone the maven repo
+SHA=`git rev-parse --verify HEAD`
+git clone $REPO_URL
+
+# Deploy the artifact to the maven repo
+mvn deploy -DskipTests -DaltDeploymentRepository=snapshot::default::file://${REPO_NAME}
+
+# Push changes to the maven repo
+cd $REPO_NAME
+git add .
+git commit -m "Deploy snapshot: ${SHA}"
+git push origin master
+
+echo "Successfully deployed SNAPSHOT artifacts for job ${TRAVIS_JOB_NUMBER}"
+
