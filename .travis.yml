@@ -1,6 +1,9 @@
 language: java
 jdk:
 - oraclejdk7
+branches:
+  only:
+  - master
 after_success:
 - bash .travis/deploy-snapshot
 env:
