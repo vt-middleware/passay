@@ -36,7 +36,7 @@ PWD=`pwd`
 git config --global user.name "Travis CI"
 git config --global user.email "travis@travis-ci.org"
 git config --global credential.helper "store --file=${PWD}/.git/credentials"
-echo "https://${GH_TOKEN}:@github.com" >"${PWD}/.git/credentials"
+echo "https://${GH_TOKEN}:x-oauth-basic@github.com" >"${PWD}/.git/credentials"
 
 # Repo variables
 REPO_NAME="maven-repo"
