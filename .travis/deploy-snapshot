@@ -34,6 +34,7 @@ fi
 
 # Clone the maven repo
 SHA=`git rev-parse --verify HEAD`
+echo "Publishing snapshot jar for revision ${SHA}"
 git clone $REPO_URL
 
 # Deploy the artifact to the maven repo
@@ -43,6 +44,8 @@ mvn deploy -DskipTests -DaltDeploymentRepository=snapshot::default::file://${REP
 cd $REPO_NAME
 git config user.name "Travis CI"
 git config user.email "travis@travis-ci.org"
+git config credential.helper "store --file=.git/credentials"
+echo "https://${GH_TOKEN}:@github.com" >.git/credentials
 git add .
 git commit -m "Deploy snapshot: ${SHA}"
 git push origin master
