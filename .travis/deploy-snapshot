@@ -3,10 +3,6 @@
 # Exit with nonzero exit code if anything fails
 set -e
 
-# Variables
-REPO_NAME="maven-repo"
-REPO_URL="https://${GH_TOKEN}@github.com/vt-middleware/${REPO_NAME}.git"
-
 # Do not run for pull requests
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
   echo "Skipping snapshot deploy for PULL_REQUEST=${TRAVIS_PULL_REQUEST}."
@@ -32,9 +28,18 @@ if [[ "$VERSION" != *-SNAPSHOT ]]; then
   exit 0
 fi
 
-# Clone the maven repo
 SHA=`git rev-parse --verify HEAD`
 echo "Publishing snapshot jar for revision ${SHA}"
+
+# Git configuration
+git config --global user.name "Travis CI"
+git config --global user.email "travis@travis-ci.org"
+
+# Repo variables
+REPO_NAME="maven-repo"
+REPO_URL="https://${GH_TOKEN}@github.com/vt-middleware/${REPO_NAME}.git"
+
+# Clone the maven repo
 git clone $REPO_URL
 
 # Deploy the artifact to the maven repo
@@ -42,10 +47,6 @@ mvn deploy -DskipTests -DaltDeploymentRepository=snapshot::default::file://${REP
 
 # Push changes to the maven repo
 cd $REPO_NAME
-git config user.name "Travis CI"
-git config user.email "travis@travis-ci.org"
-git config credential.helper "store --file=.git/credentials"
-echo "https://${GH_TOKEN}:@github.com" >.git/credentials
 git add .
 git commit -m "Deploy snapshot: ${SHA}"
 git push origin master
