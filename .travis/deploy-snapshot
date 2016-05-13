@@ -32,15 +32,12 @@ SHA=`git rev-parse --verify HEAD`
 echo "Publishing snapshot jar for revision ${SHA}"
 
 # Git configuration
-PWD=`pwd`
 git config --global user.name "Travis CI"
 git config --global user.email "travis@travis-ci.org"
-git config --global credential.helper "store --file=${PWD}/.git/credentials"
-echo "https://${GH_TOKEN}:x-oauth-basic@github.com" >"${PWD}/.git/credentials"
 
 # Repo variables
 REPO_NAME="maven-repo"
-REPO_URL="https://github.com/vt-middleware/${REPO_NAME}.git"
+REPO_URL="https://${GH_TOKEN}@github.com/vt-middleware/${REPO_NAME}.git"
 
 # Clone the maven repo
 git clone $REPO_URL
