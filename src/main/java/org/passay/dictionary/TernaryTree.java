@@ -20,39 +20,32 @@ import java.util.StringTokenizer;
 public class TernaryTree
 {
 
+  // CheckStyle:JavadocVariable OFF
   /** Case sensitive comparator. */
-  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR = new Comparator<Character>() {
-    @Override
-    public int compare(final Character a, final Character b)
-    {
-      int result = 0;
-      final char c1 = a;
-      final char c2 = b;
-      if (c1 < c2) {
-        result = -1;
-      } else if (c1 > c2) {
-        result = 1;
-      }
-      return result;
+  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR = (a, b) -> {
+    int result = 0;
+    final char c1 = a;
+    final char c2 = b;
+    if (c1 < c2) {
+      result = -1;
+    } else if (c1 > c2) {
+      result = 1;
     }
+    return result;
   };
-
   /** Case insensitive comparator. */
-  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR = new Comparator<Character>() {
-    @Override
-    public int compare(final Character a, final Character b)
-    {
-      int result = 0;
-      final char c1 = Character.toLowerCase(a.charValue());
-      final char c2 = Character.toLowerCase(b.charValue());
-      if (c1 < c2) {
-        result = -1;
-      } else if (c1 > c2) {
-        result = 1;
-      }
-      return result;
+  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR = (a, b) -> {
+    int result = 0;
+    final char c1 = Character.toLowerCase(a.charValue());
+    final char c2 = Character.toLowerCase(b.charValue());
+    if (c1 < c2) {
+      result = -1;
+    } else if (c1 > c2) {
+      result = 1;
     }
+    return result;
   };
+  // CheckStyle:JavadocVariable ON
 
   /** File system line separator. */
   private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -149,7 +142,7 @@ public class TernaryTree
     }
 
     String[] results;
-    final List<String> matches = partialSearchNode(root, new ArrayList<String>(), "", word, 0);
+    final List<String> matches = partialSearchNode(root, new ArrayList<>(), "", word, 0);
     if (matches == null) {
       results = new String[] {};
     } else {
@@ -181,7 +174,7 @@ public class TernaryTree
     }
 
     String[] results;
-    final List<String> matches = nearSearchNode(root, distance, new ArrayList<String>(), "", word, 0);
+    final List<String> matches = nearSearchNode(root, distance, new ArrayList<>(), "", word, 0);
     if (matches == null) {
       results = new String[] {};
     } else {
@@ -199,7 +192,7 @@ public class TernaryTree
    */
   public List<String> getWords()
   {
-    final List<String> words = traverseNode(root, "", new ArrayList<String>());
+    final List<String> words = traverseNode(root, "", new ArrayList<>());
     return Collections.unmodifiableList(words);
   }
 

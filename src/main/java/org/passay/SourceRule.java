@@ -30,13 +30,11 @@ public class SourceRule implements Rule
     }
 
     final String cleartext = passwordData.getPassword();
-    for (PasswordData.SourceReference reference : references) {
-      if (matches(cleartext, reference)) {
-        result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
-      }
-    }
+    references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
+      result.setValid(false);
+      result.getDetails().add(
+        new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
+    });
     return result;
   }
 

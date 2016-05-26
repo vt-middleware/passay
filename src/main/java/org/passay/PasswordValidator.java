@@ -1,8 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * The central component for evaluating multiple password rules against a candidate password.
@@ -75,10 +75,8 @@ public class PasswordValidator implements Rule
    */
   public List<String> getMessages(final RuleResult result)
   {
-    final List<String> messages = new ArrayList<>();
-    for (RuleResultDetail detail : result.getDetails()) {
-      messages.add(messageResolver.resolve(detail));
-    }
+    final List<String> messages = result.getDetails().stream().map(
+      messageResolver::resolve).collect(Collectors.toList());
     return messages;
   }
 

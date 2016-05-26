@@ -87,9 +87,7 @@ public final class PasswordCli
         if (result.isValid()) {
           System.out.println("Valid password");
         } else {
-          for (String s : validator.getMessages(result)) {
-            System.out.println(s);
-          }
+          validator.getMessages(result).forEach(System.out::println);
         }
       }
 

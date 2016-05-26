@@ -4,6 +4,7 @@ package org.passay;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Contains password related information used by rules to perform password validation.
@@ -112,11 +113,8 @@ public class PasswordData
   {
     final List<T> l = new ArrayList<>();
     if (passwordReferences != null) {
-      for (Reference r : passwordReferences) {
-        if (type.isInstance(r)) {
-          l.add((T) r);
-        }
-      }
+      l.addAll(passwordReferences.stream().filter(
+        r -> type.isInstance(r)).map(r -> (T) r).collect(Collectors.toList()));
     }
     return Collections.unmodifiableList(l);
   }
