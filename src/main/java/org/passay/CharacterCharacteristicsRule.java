@@ -54,7 +54,7 @@ public class CharacterCharacteristicsRule implements Rule
    * Sets the number of characteristics which must be satisfied in order for a password to meet the requirements of this
    * rule. The default is one. i.e. you may wish to enforce any three of five supplied character rules.
    *
-   * @param  n  number of characteristics to enforce, where n > 0
+   * @param  n  number of characteristics to enforce, where n &gt; 0
    */
   public void setNumberOfCharacteristics(final int n)
   {

@@ -46,7 +46,7 @@ public class CharacterRule implements Rule
   /**
    * Sets the number of characters to require in a password.
    *
-   * @param  n  number of characters to require where n > 0
+   * @param  n  number of characters to require where n &gt; 0
    */
   public void setNumberOfCharacters(final int n)
   {

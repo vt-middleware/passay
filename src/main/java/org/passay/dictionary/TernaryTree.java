@@ -162,7 +162,7 @@ public class TernaryTree
   /**
    * Return an array of strings which are near to the supplied word by the supplied distance. For the query
    * nearSearch("fisher", 2): Possible results include: cipher, either, fishery, kosher, sister. If the supplied
-   * distance is not > 0, then a regular search is performed.
+   * distance is not &gt; 0, then a regular search is performed.
    *
    * <p><strong>NOTE</strong> This method is not supported for case insensitive ternary trees. Since the tree is built
    * without regard to case any words returned from the tree may or may not match the case of the supplied word.</p>

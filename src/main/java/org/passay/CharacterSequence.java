@@ -21,7 +21,7 @@ public class CharacterSequence
    * first row of a QWERTY keyboard:
    *
    * <pre>
-       new CharacterSequence("`1234567890-=", "~!@#$%^&*()_+");
+       new CharacterSequence("`1234567890-=", "~!@#$%^&amp;*()_+");
    * </pre>
    *
    * @param  strings  One or more characters strings, one for each form. At least one sequence MUST be defined. If
