@@ -75,7 +75,7 @@ public abstract class AbstractDictionaryTest
     animals.add("Rhinoceros");
     animals.add("Skunk");
     animals.add("Tortoise");
-    animals.add("Uakari ");
+    animals.add("Uakari");
     animals.add("Vulture");
     animals.add("Walrus");
     animals.add("Xantus");
