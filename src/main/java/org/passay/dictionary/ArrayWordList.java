@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
+import java.util.Arrays;
 import org.passay.dictionary.sort.ArraySorter;
 
 /**
@@ -68,10 +69,11 @@ public class ArrayWordList extends AbstractWordList
     }
     for (int i = 0; i < array.length; i++) {
       if (array[i] == null) {
-        throw new IllegalArgumentException("Word list cannot contain null entries.");
+        throw new IllegalArgumentException(Arrays.toString(array) + " cannot contain null entry at index " + i);
       }
       if (i > 0 && comparator.compare(array[i], array[i - 1]) < 0) {
-        throw new IllegalArgumentException("Array is not sorted correctly for this comparator");
+        throw new IllegalArgumentException(
+          Arrays.toString(array) + " sorted by " + sorter + " is not correct for " + comparator + " at index " + i);
       }
     }
     words = array;
@@ -90,5 +92,12 @@ public class ArrayWordList extends AbstractWordList
   public int size()
   {
     return words.length;
+  }
+
+
+  @Override
+  public String toString()
+  {
+    return Arrays.toString(words);
   }
 }

@@ -24,6 +24,11 @@ public final class WordLists
     {
       return a.compareTo(b);
     }
+    @Override
+    public String toString()
+    {
+      return String.format("%s-%s@%d", getClass().getName(), "CASE_SENSITIVE", hashCode());
+    }
   };
 
   /** Case insensitive comparator. */
@@ -32,6 +37,11 @@ public final class WordLists
     public int compare(final String a, final String b)
     {
       return a.compareToIgnoreCase(b);
+    }
+    @Override
+    public String toString()
+    {
+      return String.format("%s-%s@%d", getClass().getName(), "CASE_INSENSITIVE", hashCode());
     }
   };
 
