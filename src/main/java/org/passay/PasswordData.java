@@ -114,7 +114,7 @@ public class PasswordData
     final List<T> l = new ArrayList<>();
     if (passwordReferences != null) {
       l.addAll(passwordReferences.stream().filter(
-        r -> type.isInstance(r)).map(r -> (T) r).collect(Collectors.toList()));
+        type::isInstance).map(r -> (T) r).collect(Collectors.toList()));
     }
     return Collections.unmodifiableList(l);
   }
