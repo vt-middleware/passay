@@ -22,9 +22,6 @@ public abstract class AbstractDictionaryTest
   /** Missing search. */
   public static final String FALSE_SEARCH = "not-found-in-the-dictionary";
 
-  /** Animal names for sorting. */
-  public static final String[] ANIMALS;
-
   /** Case sensitive animal search. */
   public static final String ANIMAL_SEARCH_CS = "Kangaroo";
 
@@ -42,6 +39,9 @@ public abstract class AbstractDictionaryTest
 
   /** Initialization lock. */
   private static final Object LOCK = new Object();
+
+  /** Animal names for sorting. */
+  private static final String[] ANIMALS;
 
   /** store words from {@link #webFile}. */
   private static Object[][] webWords;
@@ -224,5 +224,18 @@ public abstract class AbstractDictionaryTest
     throws IOException
   {
     return fbsdWords;
+  }
+
+
+  /**
+   * Returns a copy of {@link #ANIMALS}.
+   *
+   * @return  unsorted array of animal names
+   */
+  protected static String[] getAnimals()
+  {
+    final String[] s = new String[ANIMALS.length];
+    System.arraycopy(ANIMALS, 0, s, 0, s.length);
+    return s;
   }
 }

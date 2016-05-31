@@ -101,7 +101,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   public void partialSearch(final String word, final String results)
     throws Exception
   {
-    AssertJUnit.assertTrue(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(word)));
+    AssertJUnit.assertArrayEquals(results.split("\\|"), caseSensitive.partialSearch(word));
     AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(FALSE_SEARCH)));
 
     try {
@@ -127,7 +127,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   public void nearSearch(final String word, final int distance, final String results)
     throws Exception
   {
-    AssertJUnit.assertTrue(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(word, distance)));
+    AssertJUnit.assertArrayEquals(results.split("\\|"), caseSensitive.nearSearch(word, distance));
     AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(FALSE_SEARCH, distance)));
 
     try {
@@ -185,16 +185,15 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   public void testSort(final ArraySorter sorter)
     throws Exception
   {
-    ArrayWordList awl = new ArrayWordList(ANIMALS, true, sorter);
+    ArrayWordList awl = new ArrayWordList(getAnimals(), true, sorter);
     final TernaryTreeDictionary sortCS = new TernaryTreeDictionary(awl);
     AssertJUnit.assertTrue(sortCS.search(ANIMAL_SEARCH_CS));
     AssertJUnit.assertFalse(sortCS.search(ANIMAL_SEARCH_CI));
-    AssertJUnit.assertTrue(
-      Arrays.equals(ANIMAL_PARTIAL_SEARCH_RESULTS_CS, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
+    AssertJUnit.assertArrayEquals(ANIMAL_PARTIAL_SEARCH_RESULTS_CS, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH));
     AssertJUnit.assertFalse(
       Arrays.equals(ANIMAL_PARTIAL_SEARCH_RESULTS_CI, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
 
-    awl = new ArrayWordList(ANIMALS, false, sorter);
+    awl = new ArrayWordList(getAnimals(), false, sorter);
 
     final TernaryTreeDictionary sortCI = new TernaryTreeDictionary(awl);
     AssertJUnit.assertTrue(sortCI.search(ANIMAL_SEARCH_CS));
