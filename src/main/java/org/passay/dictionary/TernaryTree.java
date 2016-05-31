@@ -121,7 +121,7 @@ public class TernaryTree
 
 
   /**
-   * Returns an array of strings which partially match the supplied word. word\ should be of the format '.e.e.e' Where
+   * Returns an array of strings which partially match the supplied word. word should be of the format '.e.e.e' Where
    * the '.' character represents any valid character. Possible results from this query include: Helene, delete, or
    * severe Note that no substring matching occurs, results only include strings of the same length. If the supplied
    * word does not contain the '.' character, then a regular search is performed.
