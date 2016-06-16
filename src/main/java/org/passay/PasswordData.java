@@ -23,6 +23,8 @@ public class PasswordData
   /** Password references. */
   private List<Reference> passwordReferences = new ArrayList<>();
 
+  /** Stores the origin of this password. */
+  private PasswordOrigin origin = PasswordOrigin.USER_GENERATED;
 
   /** Default constructor. */
   public PasswordData() {}
@@ -30,6 +32,7 @@ public class PasswordData
 
   /**
    * Creates a new password data.
+   * The origin of this data is assumed to be {@link PasswordOrigin#USER_GENERATED} by default.
    *
    * @param  p  password
    */
@@ -40,11 +43,53 @@ public class PasswordData
 
 
   /**
+   * Creates a new password data.
+   * The origin of this data is assumed to be {@link PasswordOrigin#USER_GENERATED} by default.
+   *
+   * @param  u  username
+   * @param  p  password
+   */
+  public PasswordData(final String u, final String p)
+  {
+    setUsername(u);
+    setPassword(p);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  p  password
+   * @param  o  origin
+   */
+  public PasswordData(final String p, final PasswordOrigin o)
+  {
+    setPassword(p);
+    setOrigin(o);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  u  username
+   * @param  p  password
+   * @param  o  origin
+   */
+  public PasswordData(final String u, final String p, final PasswordOrigin o)
+  {
+    setUsername(u);
+    setPassword(p);
+    setOrigin(o);
+  }
+
+
+  /**
    * Sets the password.
    *
    * @param  p  password
    */
-  public void setPassword(final String p)
+  public final void setPassword(final String p)
   {
     if (p == null) {
       throw new NullPointerException("Password cannot be null");
@@ -65,11 +110,36 @@ public class PasswordData
 
 
   /**
+   * Sets the origin.
+   *
+   * @param  o  origin
+   */
+  public final void setOrigin(final PasswordOrigin o)
+  {
+    if (o == null) {
+      throw new NullPointerException("Origin cannot be null");
+    }
+    origin = o;
+  }
+
+
+  /**
+   * Returns the origin.
+   *
+   * @return  origin
+   */
+  public PasswordOrigin getOrigin()
+  {
+    return origin;
+  }
+
+
+  /**
    * Sets the username.
    *
    * @param  s  username
    */
-  public void setUsername(final String s)
+  public final void setUsername(final String s)
   {
     if (s == null) {
       throw new NullPointerException("Username cannot be null");

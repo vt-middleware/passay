@@ -20,10 +20,10 @@
 
   <bean id="alphaRule" class="org.passay.CharacterRule"
     c:data="#{T(org.passay.EnglishCharacterData).Alphabetical}"
-    p:numberOfCharacters="3" />
+    c:num="3" />
   <bean id="digitRule" class="org.passay.CharacterRule"
     c:data="#{T(org.passay.EnglishCharacterData).Digit}"
-    p:numberOfCharacters="1" />
+    c:num="1" />
   <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
     p:numberOfCharacteristics="2">
     <property name="rules">

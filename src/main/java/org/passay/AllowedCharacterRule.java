@@ -11,14 +11,14 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class AllowedCharacterRule implements Rule
+public class AllowedCharacterRule implements CharacterData, Rule
 {
 
   /** Error code for allowed character failures. */
   public static final String ERROR_CODE = "ALLOWED_CHAR";
 
   /** Stores the characters that are allowed. */
-  private final char[] allowedChar;
+  private final char[] allowedCharacters;
 
 
   /**
@@ -28,8 +28,37 @@ public class AllowedCharacterRule implements Rule
    */
   public AllowedCharacterRule(final char[] c)
   {
-    allowedChar = c;
-    Arrays.sort(allowedChar);
+    if (c.length > 0) {
+      allowedCharacters = c;
+    } else {
+      throw new IllegalArgumentException("allowed characters length must be greater than zero");
+    }
+    Arrays.sort(allowedCharacters);
+  }
+
+
+  /**
+   * Returns the allowed characters for this rule.
+   *
+   * @return  allowedCharacters
+   */
+  public char[] getAllowedCharacters()
+  {
+    return allowedCharacters;
+  }
+
+
+  @Override
+  public String getCharacters()
+  {
+    return new String(allowedCharacters);
+  }
+
+
+  @Override
+  public String getErrorCode()
+  {
+    return ERROR_CODE;
   }
 
 
@@ -39,7 +68,7 @@ public class AllowedCharacterRule implements Rule
     final RuleResult result = new RuleResult(true);
 
     for (char c : passwordData.getPassword().toCharArray()) {
-      if (Arrays.binarySearch(allowedChar, c) < 0) {
+      if (Arrays.binarySearch(allowedCharacters, c) < 0) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
         break;
@@ -68,10 +97,9 @@ public class AllowedCharacterRule implements Rule
   public String toString()
   {
     return
-      String.format(
-        "%s@%h::allowedChar=%s",
+      String.format("%s@%h::allowedChar=%s",
         getClass().getName(),
         hashCode(),
-        allowedChar != null ? Arrays.toString(allowedChar) : null);
+        allowedCharacters != null ? Arrays.toString(allowedCharacters) : null);
   }
 }

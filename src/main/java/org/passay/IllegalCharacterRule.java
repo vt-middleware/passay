@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class IllegalCharacterRule implements Rule
+public final class IllegalCharacterRule implements Rule
 {
 
   /** Error code for illegal character failures. */

@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class UsernameRule implements Rule
+public final class UsernameRule implements Rule
 {
 
   /** Error code for matching username. */

@@ -123,6 +123,101 @@ public class PasswordValidatorTest extends AbstractRuleTest
     rules.add(sourceRule);
   }
 
+  /** @throws  Exception  On test failure. */
+  @Test(groups = {"passtest"})
+  public void getEntropyBits() throws Exception
+  {
+    /**
+     * NIST: Table A1 from http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf
+     * ___________________________
+     * Len: Plain  Dict  Dict+Comp
+     * 1  : 4.0    4.0    4.0
+     * 2  : 6.0    6.0    6.0
+     * 3  : 8.0    8.0    8.0
+     * 4  : 10.0   14.0   16.0
+     * 5  : 12.0   17.0   20.0
+     * 6  : 14.0   20.0   23.0
+     * 7  : 16.0   22.0   27.0
+     * 8  : 18.0   24.0   30.0
+     * 9  : 19.5   24.5   30.5
+     * 10 : 21.0   26.0   32.0
+     * 11 : 22.5   26.5   32.5
+     * 12 : 24.0   28.0   34.0
+     * 13 : 25.5   28.5   34.5
+     * 14 : 27.0   30.0   36.0
+     * 15 : 28.5   30.5   36.5
+     * 16 : 30.0   32.0   38.0
+     * 17 : 31.5   32.5   38.5
+     * 18 : 33.0   34.0   40.0
+     * 19 : 34.5   34.5   40.5
+     * 20 : 36.0   36.0   42.0
+     * 21 : 37.0   37.0   43.0
+     * 22 : 38.0   38.0   44.0
+     */
+
+    final PasswordData length5AllLowercasePassword = new PasswordData("hello");
+    final PasswordData length5CompositionPassword = new PasswordData("heLlo");
+
+    final PasswordData length10AllLowercasePassword = new PasswordData("hellohello");
+    final PasswordData length10CompositionPassword = new PasswordData("hellohell0");
+
+    final PasswordData length22AllLowercasePassword = new PasswordData("hellohellohellohellooo");
+    final PasswordData length22CompositionPassword = new PasswordData("hellohellohellohello!!");
+
+    final List<Rule> l = new ArrayList<>();
+    final PasswordValidator pv = new PasswordValidator(l);
+    l.add(new LengthRule(8, 16));
+
+    try {
+      pv.getEntropyBits(new PasswordData("heLlo", PasswordOrigin.RANDOM_GENERATED));
+    } catch (Throwable e) {
+      AssertJUnit.assertEquals(EntropyException.class, e.getClass());
+    }
+
+    final CharacterCharacteristicsRule ccRule = new CharacterCharacteristicsRule();
+    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
+    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
+    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
+    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
+    ccRule.setNumberOfCharacteristics(3);
+    l.add(ccRule);
+
+    //Length 5
+    AssertJUnit.assertEquals(12.0, pv.getEntropyBits(length5AllLowercasePassword));
+    //Length 5 + Composition
+    AssertJUnit.assertEquals(15.0, pv.getEntropyBits(length5CompositionPassword));
+    //Length 10
+    AssertJUnit.assertEquals(21.0, pv.getEntropyBits(length10AllLowercasePassword));
+    //Length 10 + Composition
+    AssertJUnit.assertEquals(27.0, pv.getEntropyBits(length10CompositionPassword));
+    //Length 22
+    AssertJUnit.assertEquals(38.0, pv.getEntropyBits(length22AllLowercasePassword));
+    //Length 22 + Composition
+    AssertJUnit.assertEquals(44.0, pv.getEntropyBits(length22CompositionPassword));
+
+    //Fully loaded validator tests:
+
+    //Test Length 5 + Composition + Dictionary
+    AssertJUnit.assertEquals(20.0, validator.getEntropyBits(length5CompositionPassword));
+    //Test Length 10 + Composition + Dictionary
+    AssertJUnit.assertEquals(32.0, validator.getEntropyBits(length10CompositionPassword));
+    //Test Length 22 + Composition + Dictionary
+    AssertJUnit.assertEquals(44.0, validator.getEntropyBits(length22CompositionPassword));
+
+    //182 total unique characters from given CharacterRules
+    length5CompositionPassword.setOrigin(PasswordOrigin.RANDOM_GENERATED);
+    length10CompositionPassword.setOrigin(PasswordOrigin.RANDOM_GENERATED);
+    length22CompositionPassword.setOrigin(PasswordOrigin.RANDOM_GENERATED);
+
+    //Random generated password test log2(b^l):
+    AssertJUnit.assertEquals(PasswordUtils.getEntropyBitsForRandomlySelectedPassword(182, 5),
+            validator.getEntropyBits(length5CompositionPassword));
+    AssertJUnit.assertEquals(PasswordUtils.getEntropyBitsForRandomlySelectedPassword(182, 10),
+            validator.getEntropyBits(length10CompositionPassword));
+    AssertJUnit.assertEquals(PasswordUtils.getEntropyBitsForRandomlySelectedPassword(182, 22),
+            validator.getEntropyBits(length22CompositionPassword));
+
+  }
 
   /** @throws  Exception  On test failure. */
   @Test(groups = {"passtest"})

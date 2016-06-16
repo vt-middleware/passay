@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class IllegalSequenceRule implements Rule
+public final class IllegalSequenceRule implements Rule
 {
 
   /** Default length of keyboard sequence, value is {@value}. */
@@ -164,7 +164,7 @@ public class IllegalSequenceRule implements Rule
    */
   private void recordFailure(final RuleResult result, final String match)
   {
-    if (reportAllFailures || result.getDetails().size() == 0) {
+    if (reportAllFailures || result.getDetails().isEmpty()) {
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
       result.setValid(false);
