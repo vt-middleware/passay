@@ -76,20 +76,18 @@ public abstract class AbstractDictionaryRule implements Rule
   {
     final RuleResult result = new RuleResult(true);
     String text = passwordData.getPassword();
-    if (text.length() > 1) {
-      String matchingWord = doWordSearch(text);
+    String matchingWord = doWordSearch(text);
+    if (matchingWord != null) {
+      result.setValid(false);
+      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(matchingWord)));
+    }
+    if (matchBackwards && text.length() > 1) {
+      text = new StringBuilder(passwordData.getPassword()).reverse().toString();
+      matchingWord = doWordSearch(text);
       if (matchingWord != null) {
         result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(matchingWord)));
-      }
-      if (matchBackwards) {
-        text = new StringBuilder(passwordData.getPassword()).reverse().toString();
-        matchingWord = doWordSearch(text);
-        if (matchingWord != null) {
-          result.setValid(false);
-          result.getDetails().add(
-            new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(matchingWord)));
-        }
+        result.getDetails().add(
+          new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(matchingWord)));
       }
     }
     return result;
