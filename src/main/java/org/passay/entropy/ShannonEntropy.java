@@ -74,9 +74,9 @@ public class ShannonEntropy implements Entropy
    * @return  estimated entropy bits given password properties
    */
   @Override
-  public Double estimate()
+  public double estimate()
   {
-    Double shannonEntropy = 0.0;
+    double shannonEntropy = 0.0;
     if (passwordSize > 0) {
       shannonEntropy += FIRST_PHASE_BONUS;
       if (passwordSize > SECOND_PHASE_LENGTH) {

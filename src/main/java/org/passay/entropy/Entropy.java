@@ -15,5 +15,5 @@ public interface Entropy
    *
    * @return  estimated entropy bits given password properties
    */
-  Double estimate();
+  double estimate();
 }

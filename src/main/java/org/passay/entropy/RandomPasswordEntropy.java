@@ -42,7 +42,7 @@ public class RandomPasswordEntropy implements Entropy
    * @return  estimated entropy bits given password properties
    */
   @Override
-  public Double estimate()
+  public double estimate()
   {
     return log2(Math.pow(alphabetSize, passwordSize));
   }
@@ -55,7 +55,7 @@ public class RandomPasswordEntropy implements Entropy
    *
    * @return  log2  of number
    */
-  public static Double log2(final Double number)
+  public static double log2(final double number)
   {
     return Math.log(number) / Math.log(2);
   }
