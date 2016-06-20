@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class CharacterRule implements CharacterData, Rule
+public class CharacterRule implements Rule
 {
 
   /** Character data for this rule. */
@@ -48,7 +48,7 @@ public class CharacterRule implements CharacterData, Rule
    *
    * @param  n  number of characters to require where n &gt; 0
    */
-  private void setNumberOfCharacters(final int n)
+  public void setNumberOfCharacters(final int n)
   {
     if (n > 0) {
       numCharacters = n;
@@ -81,31 +81,16 @@ public class CharacterRule implements CharacterData, Rule
 
 
   @Override
-  public String getCharacters()
-  {
-    return getValidCharacters();
-  }
-
-
-  @Override
-  public String getErrorCode()
-  {
-    return characterData.getErrorCode();
-  }
-
-
-  @Override
   public RuleResult validate(final PasswordData passwordData)
   {
     final String matchingChars = PasswordUtils.getMatchingCharacters(
       String.valueOf(characterData.getCharacters()),
-      passwordData.getPassword(), numCharacters);
+      passwordData.getPassword(),
+      numCharacters);
     if (matchingChars.length() < numCharacters) {
-      return new RuleResult(false, new RuleResultDetail(
-              characterData.getErrorCode(),
-              createRuleResultDetailParameters(matchingChars)
-        )
-      );
+      return new RuleResult(
+        false,
+        new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)));
     } else {
       return new RuleResult(true);
     }

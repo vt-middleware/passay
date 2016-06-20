@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class AllowedCharacterRule implements CharacterData, Rule
+public class AllowedCharacterRule implements Rule
 {
 
   /** Error code for allowed character failures. */
@@ -45,20 +45,6 @@ public class AllowedCharacterRule implements CharacterData, Rule
   public char[] getAllowedCharacters()
   {
     return allowedCharacters;
-  }
-
-
-  @Override
-  public String getCharacters()
-  {
-    return new String(allowedCharacters);
-  }
-
-
-  @Override
-  public String getErrorCode()
-  {
-    return ERROR_CODE;
   }
 
 

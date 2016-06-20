@@ -9,7 +9,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public final class IllegalSequenceRule implements Rule
+public class IllegalSequenceRule implements Rule
 {
 
   /** Default length of keyboard sequence, value is {@value}. */

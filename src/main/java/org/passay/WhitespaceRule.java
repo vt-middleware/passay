@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
  *
  * @author  Middleware Services
  */
-public final class WhitespaceRule implements Rule
+public class WhitespaceRule implements Rule
 {
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */

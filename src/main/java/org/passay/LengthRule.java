@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public final class LengthRule implements Rule
+public class LengthRule implements Rule
 {
 
   /** Error code for password too short. */

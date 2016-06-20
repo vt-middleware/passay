@@ -11,7 +11,7 @@ package org.passay;
  *
  * @author  Middleware Services
  */
-public final class RepeatCharacterRegexRule extends IllegalRegexRule
+public class RepeatCharacterRegexRule extends IllegalRegexRule
 {
 
   /** Default length of sequence, value is {@value}. */
