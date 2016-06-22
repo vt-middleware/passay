@@ -37,6 +37,9 @@ public final class ShannonEntropyFactory
    */
   public static ShannonEntropy createEntropy(final List<Rule> passwordRules, final PasswordData passwordData)
   {
+    if (!passwordData.getOrigin().equals(PasswordData.Origin.USER_GENERATED)) {
+      throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.USER_GENERATED);
+    }
     final boolean[] dictionaryCheck = new boolean[1];
     final boolean[] compositionCheck = new boolean[1];
     passwordRules.stream().forEach((rule) -> {
@@ -49,6 +52,9 @@ public final class ShannonEntropyFactory
               break;
             }
           }
+        } else if (rule instanceof CharacterRule) {
+          final CharacterRule characterRule = (CharacterRule) rule;
+          compositionCheck[0] = hasComposition(characterRule, characterRule.getValidCharacters(), passwordData);
         } else if (rule instanceof AllowedCharacterRule) {
           final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
           compositionCheck[0] = hasComposition(

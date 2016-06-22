@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import org.passay.AllowedCharacterRule;
 import org.passay.CharacterCharacteristicsRule;
+import org.passay.CharacterRule;
 import org.passay.PasswordData;
 import org.passay.Rule;
 
@@ -36,12 +37,19 @@ public final class RandomPasswordEntropyFactory
    */
   public static RandomPasswordEntropy createEntropy(final List<Rule> passwordRules, final PasswordData passwordData)
   {
+    if (!passwordData.getOrigin().equals(PasswordData.Origin.RANDOM_GENERATED)) {
+      throw new IllegalArgumentException(
+        "Password data must have an origin of " + PasswordData.Origin.RANDOM_GENERATED);
+    }
     final Set<Character> uniqueCharacters = new HashSet<>();
     passwordRules.stream().forEach((rule) -> {
       if (rule instanceof CharacterCharacteristicsRule) {
         final CharacterCharacteristicsRule characteristicRule = (CharacterCharacteristicsRule) rule;
         characteristicRule.getRules().forEach((characterRule) ->
           uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters())));
+      } else if (rule instanceof CharacterRule) {
+        final CharacterRule characterRule = (CharacterRule) rule;
+        uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters()));
       } else if (rule instanceof AllowedCharacterRule) {
         final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
         uniqueCharacters.addAll(getUniqueCharacters(String.valueOf(allowedCharacterRule.getAllowedCharacters())));
