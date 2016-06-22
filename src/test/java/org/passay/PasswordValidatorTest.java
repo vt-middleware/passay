@@ -165,6 +165,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     final PasswordData length22AllLowercasePassword = new PasswordData("hellohellohellohellooo");
     final PasswordData length22CompositionPassword = new PasswordData("hellohellohellohello!!");
 
+    //Test for no character based rules.
     final List<Rule> l = new ArrayList<>();
     final PasswordValidator pv = new PasswordValidator(l);
     l.add(new LengthRule(8, 16));
@@ -175,6 +176,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
     } catch (Throwable e) {
       AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
     }
+
+    //USER_GENERATED Password Origin Tests:
 
     final CharacterCharacteristicsRule ccRule = new CharacterCharacteristicsRule();
     ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
@@ -206,6 +209,23 @@ public class PasswordValidatorTest extends AbstractRuleTest
     //Test Length 22 + Composition + Dictionary
     AssertJUnit.assertEquals(44.0, validator.estimateEntropy(length22CompositionPassword));
 
+    //AllowedCharacterRule rule test
+    final List<Rule> al = new ArrayList<>();
+    final PasswordValidator pvAl = new PasswordValidator(al);
+    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(
+      new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!', });
+    al.add(allowedRule);
+
+    //Length 5 Composition
+    AssertJUnit.assertEquals(15.0, pvAl.estimateEntropy(length5CompositionPassword));
+    //Length 10 Composition
+    AssertJUnit.assertEquals(27.0, pvAl.estimateEntropy(length10CompositionPassword));
+    //Length 22 Composition
+    AssertJUnit.assertEquals(44.0, pvAl.estimateEntropy(length22CompositionPassword));
+
+    //RANDOM_GENERATED Password Origin Tests:
+
     //182 total unique characters from given CharacterRules
     length5CompositionPassword.setOrigin(PasswordData.Origin.RANDOM_GENERATED);
     length10CompositionPassword.setOrigin(PasswordData.Origin.RANDOM_GENERATED);
@@ -221,6 +241,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
     AssertJUnit.assertEquals(
       new RandomPasswordEntropy(182, 22).estimate(),
       validator.estimateEntropy(length22CompositionPassword));
+
+    //Random generated password test with AllowedCharacterRule
+    AssertJUnit.assertEquals(
+      new RandomPasswordEntropy(allowedRule.getAllowedCharacters().length,
+              length5CompositionPassword.getPassword().length()).estimate(),
+      pvAl.estimateEntropy(length5CompositionPassword));
   }
 
   /** @throws  Exception  On test failure. */
@@ -248,7 +274,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
     AssertJUnit.assertTrue(resultPass.isValid());
-    AssertJUnit.assertTrue(pv.getMessages(resultPass).size() == 0);
+    AssertJUnit.assertTrue(pv.getMessages(resultPass).isEmpty());
 
     final RuleResult resultFail = pv.validate(new PasswordData(INVALID_PASS));
     AssertJUnit.assertFalse(resultFail.isValid());

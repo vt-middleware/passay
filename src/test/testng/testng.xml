@@ -28,6 +28,7 @@
     <groups>
       <run>
         <include name="passtest" />
+        <include name="entrpytest" />
         <include name="passgentest" />
         <include name="seqperftest" />
       </run>
