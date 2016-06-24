@@ -37,9 +37,8 @@ public final class RandomPasswordEntropyFactory
    */
   public static RandomPasswordEntropy createEntropy(final List<Rule> passwordRules, final PasswordData passwordData)
   {
-    if (!passwordData.getOrigin().equals(PasswordData.Origin.RANDOM_GENERATED)) {
-      throw new IllegalArgumentException(
-        "Password data must have an origin of " + PasswordData.Origin.RANDOM_GENERATED);
+    if (!passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
+      throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.Generated);
     }
     final Set<Character> uniqueCharacters = new HashSet<>();
     passwordRules.stream().forEach((rule) -> {

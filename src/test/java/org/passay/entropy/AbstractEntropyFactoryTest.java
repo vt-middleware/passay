@@ -55,7 +55,7 @@ public abstract class AbstractEntropyFactoryTest
       new Object[][] {
         {
           rules,
-          new PasswordData("heLlo", PasswordData.Origin.RANDOM_GENERATED),
+          new PasswordData("heLlo", PasswordData.Origin.Generated),
         },
       };
   }
@@ -74,7 +74,7 @@ public abstract class AbstractEntropyFactoryTest
       new Object[][] {
         {
           rules,
-          new PasswordData("heLlo", PasswordData.Origin.USER_GENERATED),
+          new PasswordData("heLlo", PasswordData.Origin.User),
         },
       };
   }
