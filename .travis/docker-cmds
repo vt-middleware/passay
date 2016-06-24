@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# execute maven in docker
+mvn install -Dmaven.javadoc.skip=true -B -V
+ret_code=$?
+if [ $ret_code != 0 ]; then
+  echo "Maven install failed with error code ${ret_code}"
+  exit $ret_code
+fi
+
+# execute snapshot deploy in docker
+.travis/deploy-snapshot
+ret_code=$?
+if [ $ret_code != 0 ]; then
+  echo "Deploy snapshot failed with error code ${ret_code}"
+  exit $ret_code
+fi
+
+exit
