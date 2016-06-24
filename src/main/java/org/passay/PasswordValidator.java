@@ -58,10 +58,13 @@ public class PasswordValidator implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    passwordRules.stream().map((rule) -> rule.validate(passwordData)).filter((rr) -> !rr.isValid()).forEach((rr) -> {
-      result.setValid(false);
-      result.getDetails().addAll(rr.getDetails());
-    });
+    for (Rule rule : passwordRules) {
+      final RuleResult rr = rule.validate(passwordData);
+      if (!rr.isValid()) {
+        result.setValid(false);
+        result.getDetails().addAll(rr.getDetails());
+      }
+    }
     return result;
   }
 
@@ -83,9 +86,9 @@ public class PasswordValidator implements Rule
   public double estimateEntropy(final PasswordData passwordData)
   {
     Entropy entropy;
-    if (passwordData.getOrigin().equals(PasswordData.Origin.RANDOM_GENERATED)) {
+    if (passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
       entropy = RandomPasswordEntropyFactory.createEntropy(passwordRules, passwordData);
-    } else if (passwordData.getOrigin().equals(PasswordData.Origin.USER_GENERATED)) {
+    } else if (passwordData.getOrigin().equals(PasswordData.Origin.User)) {
       entropy = ShannonEntropyFactory.createEntropy(passwordRules, passwordData);
     } else {
       throw new IllegalArgumentException("Unknown password origin: " + passwordData);
