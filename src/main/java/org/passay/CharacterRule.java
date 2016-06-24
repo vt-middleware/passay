@@ -91,9 +91,8 @@ public class CharacterRule implements Rule
       return new RuleResult(
         false,
         new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)));
-    } else {
-      return new RuleResult(true);
     }
+    return new RuleResult(true);
   }
 
 
