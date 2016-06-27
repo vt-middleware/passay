@@ -211,7 +211,23 @@ public class PasswordData
 
 
   /**
-   * Convenience method for creating a password data with all of it's properties. Properties are ignored if they are
+   * Convenience method for creating user password data with all of its properties. Properties are ignored if they are
+   * null.
+   *
+   * @param  p  password
+   * @param  u  username
+   * @param  r  references
+   *
+   * @return  password data
+   */
+  public static PasswordData newInstance(final String p, final String u, final List<Reference> r)
+  {
+    return newInstance(p, u, Origin.User, r);
+  }
+
+
+  /**
+   * Convenience method for creating a password data with all of its properties. Properties are ignored if they are
    * null.
    *
    * @param  p  password
