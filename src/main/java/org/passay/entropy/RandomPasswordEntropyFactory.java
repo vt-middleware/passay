@@ -13,8 +13,6 @@ import org.passay.Rule;
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.
  *
- * @see {@link RandomPasswordEntropy}.
- *
  * @author  Middleware Services
  */
 public final class RandomPasswordEntropyFactory
