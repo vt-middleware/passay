@@ -79,64 +79,64 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
 
         {
           digestRule,
-          PasswordData.newInstance(VALID_PASS, USER, digestRefs),
+          PasswordData.newInstance(VALID_PASS, USER, null, digestRefs),
           null,
         },
         {
           digestRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, digestRefs),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           digestRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, digestRefs),
+          PasswordData.newInstance(HISTORY_PASS2, USER, null, digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           digestRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, digestRefs),
+          PasswordData.newInstance(HISTORY_PASS3, USER, null, digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
 
         {
           saltedDigestRule,
-          PasswordData.newInstance(VALID_PASS, USER, saltedDigestRefs),
+          PasswordData.newInstance(VALID_PASS, USER, null, saltedDigestRefs),
           null,
         },
         {
           saltedDigestRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, saltedDigestRefs),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           saltedDigestRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, saltedDigestRefs),
+          PasswordData.newInstance(HISTORY_PASS2, USER, null, saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           saltedDigestRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, saltedDigestRefs),
+          PasswordData.newInstance(HISTORY_PASS3, USER, null, saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
 
         {
           emptyDigestRule,
-          PasswordData.newInstance(VALID_PASS, USER, null),
+          PasswordData.newInstance(VALID_PASS, USER, null, null),
           null,
         },
         {
           emptyDigestRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, null),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, null),
           null,
         },
         {
           emptyDigestRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, null),
+          PasswordData.newInstance(HISTORY_PASS2, USER, null, null),
           null,
         },
         {
           emptyDigestRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, null),
+          PasswordData.newInstance(HISTORY_PASS3, USER, null, null),
           null,
         },
       };
@@ -156,7 +156,7 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           digestRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, digestRefs),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, digestRefs),
           new String[] {String.format("Password matches one of %s previous passwords.", digestRefs.size()), },
         },
       };

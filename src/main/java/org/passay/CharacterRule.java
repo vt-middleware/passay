@@ -85,15 +85,14 @@ public class CharacterRule implements Rule
   {
     final String matchingChars = PasswordUtils.getMatchingCharacters(
       String.valueOf(characterData.getCharacters()),
-      passwordData.getPassword());
-    if (matchingChars.length() >= numCharacters) {
-      return new RuleResult(true);
-    } else {
-      return
-        new RuleResult(
-          false,
-          new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)));
+      passwordData.getPassword(),
+      numCharacters);
+    if (matchingChars.length() < numCharacters) {
+      return new RuleResult(
+        false,
+        new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)));
     }
+    return new RuleResult(true);
   }
 
 

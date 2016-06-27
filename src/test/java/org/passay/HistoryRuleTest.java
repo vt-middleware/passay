@@ -63,43 +63,43 @@ public class HistoryRuleTest extends AbstractRuleTest
 
         {
           rule,
-          PasswordData.newInstance(VALID_PASS, USER, history),
+          PasswordData.newInstance(VALID_PASS, USER, null, history),
           null,
         },
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, history),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, history),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, history),
+          PasswordData.newInstance(HISTORY_PASS2, USER, null, history),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, history),
+          PasswordData.newInstance(HISTORY_PASS3, USER, null, history),
           codes(HistoryRule.ERROR_CODE),
         },
 
         {
           emptyRule,
-          PasswordData.newInstance(VALID_PASS, USER, null),
+          PasswordData.newInstance(VALID_PASS, USER, null, null),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, null),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, null),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, null),
+          PasswordData.newInstance(HISTORY_PASS2, USER, null, null),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, null),
+          PasswordData.newInstance(HISTORY_PASS3, USER, null, null),
           null,
         },
       };
@@ -119,7 +119,7 @@ public class HistoryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, history),
+          PasswordData.newInstance(HISTORY_PASS1, USER, null, history),
           new String[] {String.format("Password matches one of %s previous passwords.", history.size()), },
         },
       };

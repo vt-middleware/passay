@@ -164,7 +164,7 @@ public class IllegalSequenceRule implements Rule
    */
   private void recordFailure(final RuleResult result, final String match)
   {
-    if (reportAllFailures || result.getDetails().size() == 0) {
+    if (reportAllFailures || result.getDetails().isEmpty()) {
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
       result.setValid(false);

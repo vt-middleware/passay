@@ -27,7 +27,7 @@ public abstract class AbstractMessageResolver implements MessageResolver
   {
     final String key = detail.getErrorCode();
     final String message = getMessage(key);
-    String format;
+    final String format;
     if (message != null) {
       format = String.format(message, detail.getValues());
     } else {

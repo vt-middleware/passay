@@ -59,6 +59,16 @@
         <role>developer</role>
       </roles>
     </developer>
+    <developer>
+      <id>ememisya</id>
+      <name>Erdem A. Memisyazici</name>
+      <email>ememisya@vt.edu</email>
+      <organization>Virginia Tech</organization>
+      <organizationUrl>http://www.vt.edu</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+    </developer>
   </developers>
 
   <prerequisites>

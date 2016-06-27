@@ -66,9 +66,11 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   {
     AssertJUnit.assertTrue(caseSensitive.search("manipular"));
     AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
+    AssertJUnit.assertTrue(caseSensitive.search("z"));
     AssertJUnit.assertTrue(caseInsensitive.search("manipular"));
     AssertJUnit.assertTrue(caseInsensitive.search("manipular".toUpperCase()));
     AssertJUnit.assertFalse(caseInsensitive.search(FALSE_SEARCH));
+    AssertJUnit.assertTrue(caseInsensitive.search("z"));
   }
 
 

@@ -26,11 +26,30 @@ public final class PasswordUtils
    */
   public static String getMatchingCharacters(final String characters, final String input)
   {
+    return getMatchingCharacters(characters, input, Integer.MAX_VALUE);
+  }
+
+
+  /**
+   * Returns all the characters in the input string that are also in the characters array.
+   *
+   * @param  characters  that contains characters to match
+   * @param  input  to search for matches
+   * @param  maximumLength maximum length of matching characters
+   *
+   * @return  matching characters or empty string
+   */
+  public static String getMatchingCharacters(final String characters, final String input, final int maximumLength)
+  {
     final StringBuilder sb = new StringBuilder(input.length());
     for (int i = 0; i < input.length(); i++) {
       final char c = input.charAt(i);
       if (characters.indexOf(c) != -1) {
-        sb.append(c);
+        if (sb.length() < maximumLength) {
+          sb.append(c);
+        } else {
+          break;
+        }
       }
     }
     return sb.toString();
@@ -65,6 +84,4 @@ public final class PasswordUtils
     }
     return result;
   }
-
-
 }

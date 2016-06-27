@@ -3,6 +3,9 @@ package org.passay;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.passay.entropy.Entropy;
+import org.passay.entropy.RandomPasswordEntropyFactory;
+import org.passay.entropy.ShannonEntropyFactory;
 
 /**
  * The central component for evaluating multiple password rules against a candidate password.
@@ -63,6 +66,34 @@ public class PasswordValidator implements Rule
       }
     }
     return result;
+  }
+
+
+  /**
+   * Calculates the entropy of the given {@link PasswordData} based on the specified password rules specified. <em>It's
+   * important to note that this method does NOT take into account {@link IllegalRegexRule} or {@link AllowedRegexRule}
+   * </em> as the regular expressions driving the rules may be negative matches.
+   *
+   * @param  passwordData  to estimate entropy for
+   *
+   * @throws  IllegalArgumentException  for unknown {@link org.passay.PasswordData.Origin} or if the required {@link
+   * CharacterRule} instances are unavailable in the {@link #passwordRules} of this validator instance.
+   *
+   * @see <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
+   *
+   * @return  entropy estimate
+   */
+  public double estimateEntropy(final PasswordData passwordData)
+  {
+    Entropy entropy;
+    if (passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
+      entropy = RandomPasswordEntropyFactory.createEntropy(passwordRules, passwordData);
+    } else if (passwordData.getOrigin().equals(PasswordData.Origin.User)) {
+      entropy = ShannonEntropyFactory.createEntropy(passwordRules, passwordData);
+    } else {
+      throw new IllegalArgumentException("Unknown password origin: " + passwordData);
+    }
+    return entropy.estimate();
   }
 
 
