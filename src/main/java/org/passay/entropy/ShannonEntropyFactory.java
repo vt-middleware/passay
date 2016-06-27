@@ -2,6 +2,7 @@
 package org.passay.entropy;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.passay.AbstractDictionaryRule;
 import org.passay.AllowedCharacterRule;
 import org.passay.CharacterCharacteristicsRule;
@@ -12,8 +13,8 @@ import org.passay.Rule;
 
 /**
  * Factory for creating {@link ShannonEntropy} from password rules and password data.
- *
- * @see {@link ShannonEntropy}.
+ * <p>
+ * See {@link ShannonEntropy}.
  *
  * @author  Middleware Services
  */
@@ -40,34 +41,34 @@ public final class ShannonEntropyFactory
     if (!passwordData.getOrigin().equals(PasswordData.Origin.User)) {
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.User);
     }
-    boolean dictionaryCheck = false;
-    boolean compositionCheck = false;
-    for (Rule rule : passwordRules) {
-      if (!compositionCheck) {
+    final AtomicBoolean dictionaryCheck = new AtomicBoolean(false);
+    final AtomicBoolean compositionCheck = new AtomicBoolean(false);
+    passwordRules.parallelStream().forEach((rule) -> {
+      if (!compositionCheck.get()) {
         if (rule instanceof CharacterCharacteristicsRule) {
           final CharacterCharacteristicsRule characteristicRule = (CharacterCharacteristicsRule) rule;
           for (CharacterRule r : characteristicRule.getRules()) {
-            compositionCheck = hasComposition(r, r.getValidCharacters(), passwordData);
-            if (compositionCheck) {
+            compositionCheck.set(hasComposition(r, r.getValidCharacters(), passwordData));
+            if (compositionCheck.get()) {
               break;
             }
           }
         } else if (rule instanceof CharacterRule) {
           final CharacterRule characterRule = (CharacterRule) rule;
-          compositionCheck = hasComposition(characterRule, characterRule.getValidCharacters(), passwordData);
+          compositionCheck.set(hasComposition(characterRule, characterRule.getValidCharacters(), passwordData));
         } else if (rule instanceof AllowedCharacterRule) {
           final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
-          compositionCheck = hasComposition(
+          compositionCheck.set(hasComposition(
             rule,
             String.valueOf(allowedCharacterRule.getAllowedCharacters()),
-            passwordData);
+            passwordData));
         }
       }
       if (AbstractDictionaryRule.class.isAssignableFrom(rule.getClass())) {
-        dictionaryCheck = true;
+        dictionaryCheck.set(true);
       }
-    }
-    return new ShannonEntropy(dictionaryCheck, compositionCheck, passwordData.getPassword().length());
+    });
+    return new ShannonEntropy(dictionaryCheck.get(), compositionCheck.get(), passwordData.getPassword().length());
   }
 
 

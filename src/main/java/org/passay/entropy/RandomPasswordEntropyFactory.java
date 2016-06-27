@@ -1,9 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.entropy;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import org.passay.AllowedCharacterRule;
 import org.passay.CharacterCharacteristicsRule;
 import org.passay.CharacterRule;
@@ -12,8 +11,8 @@ import org.passay.Rule;
 
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.
- *
- * @see {@link RandomPasswordEntropy}.
+ * <p>
+ * See {@link RandomPasswordEntropy}.
  *
  * @author  Middleware Services
  */
@@ -40,18 +39,18 @@ public final class RandomPasswordEntropyFactory
     if (!passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.Generated);
     }
-    final Set<Character> uniqueCharacters = new HashSet<>();
-    passwordRules.stream().forEach((rule) -> {
+    final ConcurrentHashMap<Character, Boolean> uniqueCharacters = new ConcurrentHashMap<>();
+    passwordRules.parallelStream().forEach((rule) -> {
       if (rule instanceof CharacterCharacteristicsRule) {
         final CharacterCharacteristicsRule characteristicRule = (CharacterCharacteristicsRule) rule;
-        characteristicRule.getRules().forEach((characterRule) ->
-          uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters())));
+        characteristicRule.getRules().parallelStream().forEach((characterRule) ->
+          putUniqueCharacters(uniqueCharacters, characterRule.getValidCharacters()));
       } else if (rule instanceof CharacterRule) {
         final CharacterRule characterRule = (CharacterRule) rule;
-        uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters()));
+        putUniqueCharacters(uniqueCharacters, characterRule.getValidCharacters());
       } else if (rule instanceof AllowedCharacterRule) {
         final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
-        uniqueCharacters.addAll(getUniqueCharacters(String.valueOf(allowedCharacterRule.getAllowedCharacters())));
+        putUniqueCharacters(uniqueCharacters, String.valueOf(allowedCharacterRule.getAllowedCharacters()));
       }
     });
     if (uniqueCharacters.isEmpty()) {
@@ -65,18 +64,19 @@ public final class RandomPasswordEntropyFactory
   /**
    * Returns the set of unique characters in the supplied string
    *
+   * @param  uniqueCharacters used to populate keys for unique characters much like the underlying mechanism
+   * in {@link java.util.HashSet}s
    * @param  characters  used to populate unique characters set with from the rule
    *
-   * @return  unique characters
    */
-  private static Set<Character> getUniqueCharacters(final String characters)
+  private static void putUniqueCharacters(
+          final ConcurrentHashMap<Character, Boolean> uniqueCharacters,
+          final String characters)
   {
-    final Set<Character> uniqueCharacters = new HashSet<>();
     if (characters != null) {
       for (char c : characters.toCharArray()) {
-        uniqueCharacters.add(c);
+        uniqueCharacters.put(c, Boolean.TRUE);
       }
     }
-    return uniqueCharacters;
   }
 }
