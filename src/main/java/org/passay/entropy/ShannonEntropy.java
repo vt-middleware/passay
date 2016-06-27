@@ -3,8 +3,8 @@ package org.passay.entropy;
 
 /**
  * Entropy bits estimate defined in NIST SP-800-63-1 User Selected Passwords.
- *
- * @see <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a> A1.
+ * <p>
+ * See <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a> A1.
  * "User Selected Passwords"
  *
  * @author  Middleware Services
@@ -67,8 +67,8 @@ public class ShannonEntropy implements Entropy
   /**
    * Returns the entropy bits of a user selected password. This estimate is based on a 94 Character Alphabet and is a
    * "ballpark" estimate based on Claude Shannon's observations.
-   *
-   * @see <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
+   * <p>
+   * See<a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
    * A1. "User Selected Passwords"
    *
    * @return  estimated entropy bits given password properties
