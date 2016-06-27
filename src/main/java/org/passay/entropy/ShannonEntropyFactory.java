@@ -40,34 +40,34 @@ public final class ShannonEntropyFactory
     if (!passwordData.getOrigin().equals(PasswordData.Origin.User)) {
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.User);
     }
-    final boolean[] dictionaryCheck = new boolean[1];
-    final boolean[] compositionCheck = new boolean[1];
-    passwordRules.stream().forEach((rule) -> {
-      if (!compositionCheck[0]) {
+    boolean dictionaryCheck = false;
+    boolean compositionCheck = false;
+    for (Rule rule : passwordRules) {
+      if (!compositionCheck) {
         if (rule instanceof CharacterCharacteristicsRule) {
           final CharacterCharacteristicsRule characteristicRule = (CharacterCharacteristicsRule) rule;
           for (CharacterRule r : characteristicRule.getRules()) {
-            compositionCheck[0] = hasComposition(r, r.getValidCharacters(), passwordData);
-            if (compositionCheck[0]) {
+            compositionCheck = hasComposition(r, r.getValidCharacters(), passwordData);
+            if (compositionCheck) {
               break;
             }
           }
         } else if (rule instanceof CharacterRule) {
           final CharacterRule characterRule = (CharacterRule) rule;
-          compositionCheck[0] = hasComposition(characterRule, characterRule.getValidCharacters(), passwordData);
+          compositionCheck = hasComposition(characterRule, characterRule.getValidCharacters(), passwordData);
         } else if (rule instanceof AllowedCharacterRule) {
           final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
-          compositionCheck[0] = hasComposition(
+          compositionCheck = hasComposition(
             rule,
             String.valueOf(allowedCharacterRule.getAllowedCharacters()),
             passwordData);
         }
       }
       if (AbstractDictionaryRule.class.isAssignableFrom(rule.getClass())) {
-        dictionaryCheck[0] = true;
+        dictionaryCheck = true;
       }
-    });
-    return new ShannonEntropy(dictionaryCheck[0], compositionCheck[0], passwordData.getPassword().length());
+    }
+    return new ShannonEntropy(dictionaryCheck, compositionCheck, passwordData.getPassword().length());
   }
 
 
