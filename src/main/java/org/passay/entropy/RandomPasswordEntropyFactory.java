@@ -12,8 +12,6 @@ import org.passay.Rule;
 
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.
- * <p>
- * See {@link RandomPasswordEntropy}.
  *
  * @author  Middleware Services
  */

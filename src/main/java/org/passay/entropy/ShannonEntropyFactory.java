@@ -12,8 +12,6 @@ import org.passay.Rule;
 
 /**
  * Factory for creating {@link ShannonEntropy} from password rules and password data.
- * <p>
- * See {@link ShannonEntropy}.
  *
  * @author  Middleware Services
  */
