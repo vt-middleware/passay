@@ -33,6 +33,9 @@ public abstract class AbstractDictionaryRule implements Rule
    */
   public void setDictionary(final Dictionary dict)
   {
+    if (dict == null) {
+      throw new NullPointerException("Dictionary cannot be null");
+    }
     dictionary = dict;
   }
 

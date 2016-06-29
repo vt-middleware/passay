@@ -18,4 +18,11 @@ public interface Dictionary
    * @return  whether word was found
    */
   boolean search(String word);
+
+  /**
+   * Returns the number of words in this dictionary
+   *
+   * @return  total number of words to search
+   */
+  long size();
 }

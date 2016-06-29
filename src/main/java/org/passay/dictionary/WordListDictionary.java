@@ -42,6 +42,11 @@ public class WordListDictionary implements Dictionary
     return wordList;
   }
 
+  @Override
+  public long size()
+  {
+    return wordList == null ? 0 : wordList.size();
+  }
 
   @Override
   public boolean search(final String word)
