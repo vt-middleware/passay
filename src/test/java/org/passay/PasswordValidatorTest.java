@@ -157,13 +157,13 @@ public class PasswordValidatorTest extends AbstractRuleTest
      */
 
     final PasswordData length5AllLowercasePassword = new PasswordData("hello");
-    final PasswordData length5CompositionPassword = new PasswordData("heL!o");
+    final PasswordData length5CompositionPassword = new PasswordData("h3L!o");
 
     final PasswordData length10AllLowercasePassword = new PasswordData("hellohello");
-    final PasswordData length10CompositionPassword = new PasswordData("helLohell0");
+    final PasswordData length10CompositionPassword = new PasswordData("h3!Lohell0");
 
     final PasswordData length22AllLowercasePassword = new PasswordData("hellohellohellohellooo");
-    final PasswordData length22CompositionPassword = new PasswordData("helloHellohellohello!!");
+    final PasswordData length22CompositionPassword = new PasswordData("he1loHellohellohello!!");
 
     //Test for no character based rules.
     final List<Rule> l = new ArrayList<>();
