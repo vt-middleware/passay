@@ -22,6 +22,20 @@ public final class ShannonEntropyFactory
   /** Number of character characteristics rules to enforce for a password to have composition. */
   private static final int COMPOSITION_CHARACTERISTICS_REQUIREMENT = 4;
 
+  /** Rule which defines whether a password has composition. */
+  private static final CharacterCharacteristicsRule COMPOSITION_RULE;
+
+
+  /** Initialize the composition rule. */
+  static {
+    COMPOSITION_RULE = new CharacterCharacteristicsRule();
+    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
+    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
+    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
+    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
+    COMPOSITION_RULE.setNumberOfCharacteristics(COMPOSITION_CHARACTERISTICS_REQUIREMENT);
+  }
+
 
   /**
    * Private constructor for factory class.
@@ -51,22 +65,16 @@ public final class ShannonEntropyFactory
 
 
   /**
-   * Checks whether a given passwordData has composition. (As suggested by NIST SP-800-63-1)
+   * Checks whether the supplied passwordData has composition. (As suggested by NIST SP-800-63-1)
    *
-   * @param passwordData Password to check for composition
+   * @param  passwordData  to check for composition
    *
-   * @return true if valid, false otherwise
+   * @return  true if valid, false otherwise
    */
   protected static boolean hasComposition(final PasswordData passwordData)
   {
-    final CharacterCharacteristicsRule compositionRule = new CharacterCharacteristicsRule();
-    compositionRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
-    compositionRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    compositionRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    compositionRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-    compositionRule.setNumberOfCharacteristics(COMPOSITION_CHARACTERISTICS_REQUIREMENT);
     final List<Rule> rules = new ArrayList<>();
-    rules.add(compositionRule);
+    rules.add(COMPOSITION_RULE);
     final PasswordValidator compositionValidator = new PasswordValidator(rules);
     return compositionValidator.validate(passwordData).isValid();
   }
