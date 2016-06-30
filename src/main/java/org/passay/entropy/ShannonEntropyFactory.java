@@ -19,11 +19,9 @@ import org.passay.Rule;
 public final class ShannonEntropyFactory
 {
 
-  /**
-   * Number of character characteristics rule to enforce to consider a password having
-   * composition check.
-   */
+  /** Number of character characteristics rules to enforce for a password to have composition. */
   private static final int COMPOSITION_CHARACTERISTICS_REQUIREMENT = 4;
+
 
   /**
    * Private constructor for factory class.
@@ -44,17 +42,19 @@ public final class ShannonEntropyFactory
     if (!passwordData.getOrigin().equals(PasswordData.Origin.User)) {
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.User);
     }
-    final boolean dictionaryCheck = passwordRules.stream()
-            .filter(rule -> AbstractDictionaryRule.class.isAssignableFrom(rule.getClass()) &&
-                    ((AbstractDictionaryRule) rule).getDictionary().size() > 0).count() > 0;
+    final boolean dictionaryCheck = passwordRules.stream().filter(
+      rule -> AbstractDictionaryRule.class.isAssignableFrom(
+        rule.getClass()) && ((AbstractDictionaryRule) rule).getDictionary().size() > 0).count() > 0;
     final boolean compositionCheck = hasComposition(passwordData);
     return new ShannonEntropy(dictionaryCheck, compositionCheck, passwordData.getPassword().length());
   }
+
 
   /**
    * Checks whether a given passwordData has composition. (As suggested by NIST SP-800-63-1)
    *
    * @param passwordData Password to check for composition
+   *
    * @return true if valid, false otherwise
    */
   protected static boolean hasComposition(final PasswordData passwordData)

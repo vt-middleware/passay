@@ -19,6 +19,7 @@ public interface Dictionary
    */
   boolean search(String word);
 
+
   /**
    * Returns the number of words in this dictionary
    *
