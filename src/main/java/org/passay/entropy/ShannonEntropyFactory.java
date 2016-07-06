@@ -71,7 +71,7 @@ public final class ShannonEntropyFactory
    *
    * @return  true if valid, false otherwise
    */
-  protected static boolean hasComposition(final PasswordData passwordData)
+  private static boolean hasComposition(final PasswordData passwordData)
   {
     final List<Rule> rules = new ArrayList<>();
     rules.add(COMPOSITION_RULE);
