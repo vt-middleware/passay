@@ -89,6 +89,13 @@ public class TernaryTreeDictionary implements Dictionary
 
 
   @Override
+  public long size()
+  {
+    return tree == null ? 0 : tree.getWords().size();
+  }
+
+
+  @Override
   public boolean search(final String word)
   {
     return tree.search(word);

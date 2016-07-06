@@ -44,6 +44,13 @@ public class WordListDictionary implements Dictionary
 
 
   @Override
+  public long size()
+  {
+    return wordList == null ? 0 : wordList.size();
+  }
+
+
+  @Override
   public boolean search(final String word)
   {
     return WordLists.binarySearch(wordList, word) >= 0;
