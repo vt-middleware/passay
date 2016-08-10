@@ -25,7 +25,7 @@ include the following in your pom.xml:
       <dependency>
           <groupId>org.passay</groupId>
           <artifactId>passay</artifactId>
-          <version>1.1.0</version>
+          <version>{{ site.version }}</version>
       </dependency>
     <dependencies>
 
