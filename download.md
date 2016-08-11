@@ -33,6 +33,7 @@ Issue | Description
 Issue | Description
 :---- | :----------
 [passay-24]({{ site.issueURL }}24) | Add OSGi manifest entries
+[passay-23]({{ site.issueURL }}23) | SequenceRule refactoring
 
 ### Version 1.0 - 01Dec2014 (Requires Java 6)
 Initial Release
