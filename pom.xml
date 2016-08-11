@@ -81,6 +81,7 @@
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <testng.dir>${basedir}/src/test/testng</testng.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
+    <org.passay.oldVersion>1.1.0</org.passay.oldVersion>
   </properties>
 
   <dependencies>
@@ -218,6 +219,42 @@
             <suiteXmlFile>${testng.dir}/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+        <version>0.8.1</version>
+        <configuration>
+          <oldVersion>
+            <dependency>
+              <groupId>${project.groupId}</groupId>
+              <artifactId>${project.artifactId}</artifactId>
+              <version>${org.passay.oldVersion}</version>
+              <type>jar</type>
+            </dependency>
+          </oldVersion>
+          <newVersion>
+            <file>
+              <path>${project.build.directory}/${project.artifactId}-${project.version}.${project.packaging}</path>
+            </file>
+          </newVersion>
+          <parameter>
+            <ignoreNonResolvableArtifacts>false</ignoreNonResolvableArtifacts>
+            <onlyBinaryIncompatible>true</onlyBinaryIncompatible>
+            <breakBuildOnBinaryIncompatibleModifications>false</breakBuildOnBinaryIncompatibleModifications>
+            <packagingSupporteds>
+              <packagingSupported>jar</packagingSupported>
+            </packagingSupporteds>
+          </parameter>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>verify</phase>
+            <goals>
+              <goal>cmp</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
