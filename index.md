@@ -27,7 +27,7 @@ include the following in your pom.xml:
           <artifactId>passay</artifactId>
           <version>{{ site.version }}</version>
       </dependency>
-    <dependencies>
+    </dependencies>
 
 # History
 Passay is the descendant of the venerable [vt-password](https://code.google.com/p/vt-middleware/wiki/vtpassword) Java
