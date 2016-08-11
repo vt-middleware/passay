@@ -29,6 +29,7 @@ Issue | Description
 [passay-18]({{ site.issueURL }}18) | Develop Entropy-Based Password Strength Evaluation
 
 ### Version 1.1.0 - 22Jul2015 (Requires Java 7)
+
 Issue | Description
 :---- | :----------
 [passay-24]({{ site.issueURL }}24) | Add OSGi manifest entries
