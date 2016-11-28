@@ -81,7 +81,8 @@
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <testng.dir>${basedir}/src/test/testng</testng.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
-    <org.passay.oldVersion>1.1.0</org.passay.oldVersion>
+    <japicmp.enabled>true</japicmp.enabled>
+    <japicmp.oldVersion>1.2.0</japicmp.oldVersion>
   </properties>
 
   <dependencies>
@@ -94,13 +95,13 @@
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.9.10</version>
+      <version>6.9.13.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>4.3.2.RELEASE</version>
+      <version>4.3.4.RELEASE</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -170,12 +171,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6.0</version>
         <configuration>
           <fork>true</fork>
           <debug>true</debug>
@@ -223,13 +224,13 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.8.1</version>
+        <version>0.9.2</version>
         <configuration>
           <oldVersion>
             <dependency>
               <groupId>${project.groupId}</groupId>
               <artifactId>${project.artifactId}</artifactId>
-              <version>${org.passay.oldVersion}</version>
+              <version>${japicmp.oldVersion}</version>
               <type>jar</type>
             </dependency>
           </oldVersion>
@@ -241,7 +242,7 @@
           <parameter>
             <ignoreNonResolvableArtifacts>false</ignoreNonResolvableArtifacts>
             <onlyBinaryIncompatible>true</onlyBinaryIncompatible>
-            <breakBuildOnBinaryIncompatibleModifications>false</breakBuildOnBinaryIncompatibleModifications>
+            <breakBuildOnBinaryIncompatibleModifications>${japicmp.enabled}</breakBuildOnBinaryIncompatibleModifications>
             <packagingSupporteds>
               <packagingSupported>jar</packagingSupported>
             </packagingSupporteds>
@@ -326,7 +327,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>2.6</version>
+        <version>3.0.0</version>
         <configuration>
           <appendAssemblyId>true</appendAssemblyId>
           <attach>false</attach>
