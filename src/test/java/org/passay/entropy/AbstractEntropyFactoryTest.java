@@ -32,10 +32,10 @@ public abstract class AbstractEntropyFactoryTest
       new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', });
 
-    final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
-    charRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    charRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-    charRule.setNumberOfCharacteristics(3);
+    final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
+      3,
+      new CharacterRule(EnglishCharacterData.UpperCase, 1),
+      new CharacterRule(EnglishCharacterData.LowerCase, 1));
 
     rules.add(charRule);
     rules.add(allowedRule);

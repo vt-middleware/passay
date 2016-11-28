@@ -4,6 +4,7 @@ package org.passay;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -35,6 +36,20 @@ public class PasswordGenerator
   public PasswordGenerator(final Random r)
   {
     random = r;
+  }
+
+
+  /**
+   * See {@link #generatePassword(int, List)}.
+   *
+   * @param  length  of password to generate
+   * @param  rules  to generate compliant password from
+   *
+   * @return  generated password
+   */
+  public String generatePassword(final int length, final CharacterRule... rules)
+  {
+    return generatePassword(length, Arrays.asList(rules));
   }
 
 

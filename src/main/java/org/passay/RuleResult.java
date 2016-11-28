@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -77,6 +78,17 @@ public class RuleResult
   public List<RuleResultDetail> getDetails()
   {
     return details;
+  }
+
+
+  /**
+   * Sets any details associated with the rule verification.
+   *
+   * @param  rrd  rule result details
+   */
+  public void setDetails(final RuleResultDetail... rrd)
+  {
+    setDetails(Arrays.asList(rrd));
   }
 
 

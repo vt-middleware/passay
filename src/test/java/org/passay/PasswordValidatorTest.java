@@ -73,12 +73,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
   public void createChecker()
     throws Exception
   {
-    final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule();
-    charRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
-    charRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    charRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    charRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-    charRule.setNumberOfCharacteristics(3);
+    final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
+      3,
+      new CharacterRule(EnglishCharacterData.Digit, 1),
+      new CharacterRule(EnglishCharacterData.Special, 1),
+      new CharacterRule(EnglishCharacterData.UpperCase, 1),
+      new CharacterRule(EnglishCharacterData.LowerCase, 1));
 
     final WhitespaceRule whitespaceRule = new WhitespaceRule();
 
@@ -247,12 +247,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     l.add(new LengthRule(8, 16));
 
-    final CharacterCharacteristicsRule ccRule = new CharacterCharacteristicsRule();
-    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
-    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    ccRule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-    ccRule.setNumberOfCharacteristics(3);
+    final CharacterCharacteristicsRule ccRule = new CharacterCharacteristicsRule(
+      3,
+      new CharacterRule(EnglishCharacterData.Digit, 1),
+      new CharacterRule(EnglishCharacterData.Special, 1),
+      new CharacterRule(EnglishCharacterData.UpperCase, 1),
+      new CharacterRule(EnglishCharacterData.LowerCase, 1));
     l.add(ccRule);
 
     l.add(new IllegalSequenceRule(EnglishSequenceData.USQwerty));

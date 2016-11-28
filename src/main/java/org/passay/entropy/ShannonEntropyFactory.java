@@ -28,12 +28,12 @@ public final class ShannonEntropyFactory
 
   /** Initialize the composition rule. */
   static {
-    COMPOSITION_RULE = new CharacterCharacteristicsRule();
-    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
-    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    COMPOSITION_RULE.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-    COMPOSITION_RULE.setNumberOfCharacteristics(COMPOSITION_CHARACTERISTICS_REQUIREMENT);
+    COMPOSITION_RULE = new CharacterCharacteristicsRule(
+      COMPOSITION_CHARACTERISTICS_REQUIREMENT,
+      new CharacterRule(EnglishCharacterData.Digit, 1),
+      new CharacterRule(EnglishCharacterData.Special, 1),
+      new CharacterRule(EnglishCharacterData.UpperCase, 1),
+      new CharacterRule(EnglishCharacterData.LowerCase, 1));
   }
 
 

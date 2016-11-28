@@ -84,22 +84,22 @@ public class HistoryRuleTest extends AbstractRuleTest
 
         {
           emptyRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, null, null),
+          PasswordData.newInstance(HISTORY_PASS1, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, null, null),
+          PasswordData.newInstance(HISTORY_PASS2, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, null, null),
+          PasswordData.newInstance(HISTORY_PASS3, USER),
           null,
         },
       };

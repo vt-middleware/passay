@@ -68,105 +68,105 @@ public class UsernameRuleTest extends AbstractRuleTest
 
         {
           rule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           rule,
-          PasswordData.newInstance(USERID_PASS, USER, null, null),
+          PasswordData.newInstance(USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE),
         },
         {
           rule,
-          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER),
           null,
         },
         {
           rule,
-          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER),
           null,
         },
         {
           rule,
-          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER),
           null,
         },
 
         {
           backwardsRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           backwardsRule,
-          PasswordData.newInstance(USERID_PASS, USER, null, null),
+          PasswordData.newInstance(USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE),
         },
         {
           backwardsRule,
-          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE_REVERSED),
         },
         {
           backwardsRule,
-          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER),
           null,
         },
         {
           backwardsRule,
-          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER),
           null,
         },
 
         {
           ignoreCaseRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           ignoreCaseRule,
-          PasswordData.newInstance(USERID_PASS, USER, null, null),
+          PasswordData.newInstance(USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE),
         },
         {
           ignoreCaseRule,
-          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER),
           null,
         },
         {
           ignoreCaseRule,
-          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE),
         },
         {
           ignoreCaseRule,
-          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER),
           null,
         },
 
         {
           allRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           allRule,
-          PasswordData.newInstance(USERID_PASS, USER, null, null),
+          PasswordData.newInstance(USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE),
         },
         {
           allRule,
-          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE_REVERSED),
         },
         {
           allRule,
-          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(UPPERCASE_USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE),
         },
         {
           allRule,
-          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_UPPERCASE_USERID_PASS, USER),
           codes(UsernameRule.ERROR_CODE_REVERSED),
         },
       };
@@ -186,12 +186,12 @@ public class UsernameRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          PasswordData.newInstance(USERID_PASS, USER, null, null),
+          PasswordData.newInstance(USERID_PASS, USER),
           new String[] {String.format("Password contains the user id '%s'.", USER), },
         },
         {
           backwardsRule,
-          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER, null, null),
+          PasswordData.newInstance(BACKWARDS_USERID_PASS, USER),
           new String[] {String.format("Password contains the user id '%s' in reverse.", USER), },
         },
       };

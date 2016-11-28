@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.passay.entropy.Entropy;
@@ -24,6 +25,17 @@ public class PasswordValidator implements Rule
 
 
   /**
+   * See {@link #PasswordValidator(List)}.
+   *
+   * @param  rules  to validate
+   */
+  public PasswordValidator(final Rule... rules)
+  {
+    this(new PropertiesMessageResolver(), Arrays.asList(rules));
+  }
+
+
+  /**
    * Creates a new password validator with a {@link PropertiesMessageResolver}.
    *
    * @param  rules  to validate
@@ -31,6 +43,18 @@ public class PasswordValidator implements Rule
   public PasswordValidator(final List<Rule> rules)
   {
     this(new PropertiesMessageResolver(), rules);
+  }
+
+
+  /**
+   * See {@link #PasswordValidator(MessageResolver, List)}.
+   *
+   * @param  resolver  message resolver.
+   * @param  rules  to validate
+   */
+  public PasswordValidator(final MessageResolver resolver, final Rule... rules)
+  {
+    this(resolver, Arrays.asList(rules));
   }
 
 

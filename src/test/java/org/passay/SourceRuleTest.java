@@ -66,12 +66,12 @@ public class SourceRuleTest extends AbstractRuleTest
 
         {
           emptyRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(SOURCE_PASS, USER, null, null),
+          PasswordData.newInstance(SOURCE_PASS, USER),
           null,
         },
       };

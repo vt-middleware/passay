@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -202,11 +203,51 @@ public class PasswordData
   /**
    * Sets the password references.
    *
+   * @param  r  password references
+   */
+  public void setPasswordReferences(final Reference... r)
+  {
+    setPasswordReferences(Arrays.asList(r));
+  }
+
+
+  /**
+   * Sets the password references.
+   *
    * @param  l  password references
    */
   public void setPasswordReferences(final List<Reference> l)
   {
     passwordReferences = l;
+  }
+
+
+  /**
+   * See {@link #newInstance(String, String, Origin, List)}.
+   *
+   * @param  p  password
+   * @param  u  username
+   *
+   * @return  password data
+   */
+  public static PasswordData newInstance(final String p, final String u)
+  {
+    return newInstance(p, u, null, (Reference[]) null);
+  }
+
+
+  /**
+   * See {@link #newInstance(String, String, List)}.
+   *
+   * @param  p  password
+   * @param  u  username
+   * @param  r  references
+   *
+   * @return  password data
+   */
+  public static PasswordData newInstance(final String p, final String u, final Reference... r)
+  {
+    return newInstance(p, u, r != null ? Arrays.asList(r) : null);
   }
 
 
@@ -223,6 +264,22 @@ public class PasswordData
   public static PasswordData newInstance(final String p, final String u, final List<Reference> r)
   {
     return newInstance(p, u, Origin.User, r);
+  }
+
+
+  /**
+   * See {@link #newInstance(String, String, Origin, List)}.
+   *
+   * @param  p  password
+   * @param  u  username
+   * @param  o  origin
+   * @param  r  references
+   *
+   * @return  password data
+   */
+  public static PasswordData newInstance(final String p, final String u, final Origin o, final Reference... r)
+  {
+    return newInstance(p, u, o, r != null ? Arrays.asList(r) : null);
   }
 
 

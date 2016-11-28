@@ -121,22 +121,22 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
 
         {
           emptyDigestRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, null),
+          PasswordData.newInstance(VALID_PASS, USER),
           null,
         },
         {
           emptyDigestRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, null, null),
+          PasswordData.newInstance(HISTORY_PASS1, USER),
           null,
         },
         {
           emptyDigestRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, null, null),
+          PasswordData.newInstance(HISTORY_PASS2, USER),
           null,
         },
         {
           emptyDigestRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, null, null),
+          PasswordData.newInstance(HISTORY_PASS3, USER),
           null,
         },
       };

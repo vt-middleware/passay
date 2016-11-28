@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +20,69 @@ public class CharacterCharacteristicsRule implements Rule
   public static final String ERROR_CODE = "INSUFFICIENT_CHARACTERISTICS";
 
   /** Rules to apply when checking a password. */
-  private List<CharacterRule> rules = new ArrayList<>();
+  private List<CharacterRule> rules;
 
   /** Number of rules to enforce. Default value is 1. */
   private int numCharacteristics = 1;
 
   /** Whether to report the details of each character rule failure. */
   private boolean reportRuleFailures = true;
+
+
+  /**
+   * Default constructor.
+   */
+  public CharacterCharacteristicsRule()
+  {
+    rules = new ArrayList<>();
+  }
+
+
+  /**
+   * Creates a new character characteristics rule.
+   *
+   * @param  r  character rules to set
+   */
+  public CharacterCharacteristicsRule(final CharacterRule... r)
+  {
+    this(1, r);
+  }
+
+
+  /**
+   * Creates a new character characteristics rule.
+   *
+   * @param  l  character rules to set
+   */
+  public CharacterCharacteristicsRule(final List<CharacterRule> l)
+  {
+    this(1, l);
+  }
+
+
+  /**
+   * Creates a new character characteristics rule.
+   *
+   * @param  n  number of characteristics to enforce, where n &gt; 0
+   * @param  r  character rules to set
+   */
+  public CharacterCharacteristicsRule(final int n, final CharacterRule... r)
+  {
+    this(n, Arrays.asList(r));
+  }
+
+
+  /**
+   * Creates a new character characteristics rule.
+   *
+   * @param  n  number of characteristics to enforce, where n &gt; 0
+   * @param  l  character rules to set
+   */
+  public CharacterCharacteristicsRule(final int n, final List<CharacterRule> l)
+  {
+    setNumberOfCharacteristics(n);
+    setRules(l);
+  }
 
 
   /**
@@ -47,6 +104,17 @@ public class CharacterCharacteristicsRule implements Rule
   public void setRules(final List<CharacterRule> l)
   {
     rules = l;
+  }
+
+
+  /**
+   * Sets the character rules used by this rule.
+   *
+   * @param  r  character rules to set
+   */
+  public void setRules(final CharacterRule... r)
+  {
+    rules = Arrays.asList(r);
   }
 
 
@@ -149,10 +217,11 @@ public class CharacterCharacteristicsRule implements Rule
   {
     return
       String.format(
-        "%s@%h::numberOfCharacteristics=%s,rules=%s",
+        "%s@%h::numberOfCharacteristics=%s,rules=%s,reportRuleFailures=%s",
         getClass().getName(),
         hashCode(),
         numCharacteristics,
-        rules);
+        rules,
+        reportRuleFailures);
   }
 }
