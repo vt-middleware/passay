@@ -163,11 +163,11 @@ public class LengthComplexityRule implements Rule
   /**
    * Class that represents a range of numbers and parses interval notation.
    */
-  private static class Range
+  protected static class Range
   {
 
     /** Type of range value. */
-    private enum RangeValueType {
+    public enum RangeValueType {
 
       /** inclusive value. */
       INCLUSIVE,
@@ -213,7 +213,7 @@ public class LengthComplexityRule implements Rule
      *
      * @param  pattern  to parse
      */
-    Range(final String pattern)
+    public Range(final String pattern)
     {
       final Matcher m = INTERVAL_PATTERN.matcher(pattern);
       if (!m.matches()) {
