@@ -173,11 +173,33 @@ public class LengthComplexityRule implements Rule
       INCLUSIVE,
 
       /** exclusive value. */
-      EXCLUSIVE
+      EXCLUSIVE;
+
+
+      /**
+       * Returns the enum associated with the supplied text. '[' and ']' return {@link #INCLUSIVE}. '(' and ')' return
+       * {@link #EXCLUSIVE}.
+       *
+       * @param  text  to parse
+       *
+       * @return  range value type
+       *
+       * @throws  IllegalArgumentException  if text is not one of '[', ']', '(', ')'
+       */
+      public static RangeValueType parse(final String text)
+      {
+        if ("[".equals(text) || "]".equals(text)) {
+          return INCLUSIVE;
+        }
+        if ("(".equals(text) || ")".equals(text)) {
+          return EXCLUSIVE;
+        }
+        throw new IllegalArgumentException("Invalid interval notation: " + text);
+      }
     }
 
     /** Pattern for matching intervals. */
-    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^[\\(|\\[](\\d+),(\\d+)[\\)|\\]]$");
+    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+)([\\)|\\]])$");
 
     /** Lower bound of the range. */
     private final RangeValue lowerBound;
@@ -198,25 +220,13 @@ public class LengthComplexityRule implements Rule
         throw new IllegalArgumentException("Invalid interval notation: " + pattern);
       }
 
-      final int lower = Integer.parseInt(m.group(1));
-      final int upper = Integer.parseInt(m.group(2));
+      final String lowerType = m.group(1);
+      final int lower = Integer.parseInt(m.group(2));
+      final int upper = Integer.parseInt(m.group(3));
+      final String upperType = m.group(4);
 
-      if (pattern.charAt(0) == '[') {
-        lowerBound = new RangeValue(lower, RangeValueType.INCLUSIVE);
-      } else if (pattern.charAt(0) == '(') {
-        lowerBound = new RangeValue(lower, RangeValueType.EXCLUSIVE);
-      } else {
-        throw new IllegalArgumentException("Invalid interval notation: lower bound " + pattern.charAt(0));
-      }
-
-      if (pattern.charAt(pattern.length() - 1) == ']') {
-        upperBound = new RangeValue(upper, RangeValueType.INCLUSIVE);
-      } else if (pattern.charAt(pattern.length() - 1) == ')') {
-        upperBound = new RangeValue(upper, RangeValueType.EXCLUSIVE);
-      } else {
-        throw new IllegalArgumentException(
-          "Invalid interval notation: upper bound " + pattern.charAt(pattern.length() - 1));
-      }
+      lowerBound = new RangeValue(lower, RangeValueType.parse(lowerType));
+      upperBound = new RangeValue(upper, RangeValueType.parse(upperType));
     }
 
 
