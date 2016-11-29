@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +38,7 @@ public class LengthComplexityRule implements Rule
    *
    * @throws  IllegalArgumentException  if range is invalid or intersects with an existing range
    */
-  public void setRules(final String range, final List<Rule> l)
+  public void addRules(final String range, final List<Rule> l)
   {
     final Range r = new Range(range);
     for (Range existingRange : rules.keySet()) {
@@ -55,9 +56,9 @@ public class LengthComplexityRule implements Rule
    * @param  range  of integers that the supplied rules apply to
    * @param  r  list of rules
    */
-  public void setRules(final String range, final Rule... r)
+  public void addRules(final String range, final Rule... r)
   {
-    setRules(range, Arrays.asList(r));
+    addRules(range, Arrays.asList(r));
   }
 
 
@@ -121,12 +122,9 @@ public class LengthComplexityRule implements Rule
    */
   private List<Rule> getRulesByLength(final int length)
   {
-    for (Map.Entry<Range, List<Rule>> e : rules.entrySet()) {
-      if (e.getKey().includes(length)) {
-        return e.getValue();
-      }
-    }
-    return null;
+    final Optional<List<Rule>> match = rules.entrySet().stream().filter(
+      e -> e.getKey().includes(length)).map(Map.Entry::getValue).findFirst();
+    return match.isPresent() ? match.get() : null;
   }
 
 
@@ -167,7 +165,7 @@ public class LengthComplexityRule implements Rule
   {
 
     /** Type of range value. */
-    public enum RangeValueType {
+    public enum BoundType {
 
       /** inclusive value. */
       INCLUSIVE,
@@ -186,7 +184,7 @@ public class LengthComplexityRule implements Rule
        *
        * @throws  IllegalArgumentException  if text is not one of '[', ']', '(', ')'
        */
-      public static RangeValueType parse(final String text)
+      public static BoundType parse(final String text)
       {
         if ("[".equals(text) || "]".equals(text)) {
           return INCLUSIVE;
@@ -202,10 +200,10 @@ public class LengthComplexityRule implements Rule
     private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+)([\\)|\\]])$");
 
     /** Lower bound of the range. */
-    private final RangeValue lowerBound;
+    private final Bound lowerBound;
 
     /** Upper bound of the range. */
-    private final RangeValue upperBound;
+    private final Bound upperBound;
 
 
     /**
@@ -225,8 +223,8 @@ public class LengthComplexityRule implements Rule
       final int upper = Integer.parseInt(m.group(3));
       final String upperType = m.group(4);
 
-      lowerBound = new RangeValue(lower, RangeValueType.parse(lowerType));
-      upperBound = new RangeValue(upper, RangeValueType.parse(upperType));
+      lowerBound = new Bound(lower, BoundType.parse(lowerType));
+      upperBound = new Bound(upper, BoundType.parse(upperType));
     }
 
 
@@ -338,26 +336,26 @@ public class LengthComplexityRule implements Rule
     /**
      * Class that represents a single value in a range.
      */
-    private class RangeValue
+    private class Bound
     {
 
       /** Value in a range. */
       private final int value;
 
       /** Whether this value is inclusive. */
-      private final RangeValueType type;
+      private final BoundType type;
 
 
       /**
        * Creates a new range value.
        *
        * @param  i  value
-       * @param  rvt  inclusive or exclusive
+       * @param  bt  inclusive or exclusive
        */
-      RangeValue(final int i, final RangeValueType rvt)
+      Bound(final int i, final BoundType bt)
       {
         value = i;
-        type = rvt;
+        type = bt;
       }
 
 
@@ -368,7 +366,7 @@ public class LengthComplexityRule implements Rule
        */
       public boolean isInclusive()
       {
-        return RangeValueType.INCLUSIVE == type;
+        return BoundType.INCLUSIVE == type;
       }
 
 
@@ -379,7 +377,7 @@ public class LengthComplexityRule implements Rule
        */
       public boolean isExclusive()
       {
-        return RangeValueType.EXCLUSIVE == type;
+        return BoundType.EXCLUSIVE == type;
       }
 
 
@@ -390,7 +388,7 @@ public class LengthComplexityRule implements Rule
           return true;
         }
         if (o != null && getClass() == o.getClass())  {
-          final RangeValue other = (RangeValue) o;
+          final Bound other = (Bound) o;
           return value == other.value && type == other.type;
         }
         return false;

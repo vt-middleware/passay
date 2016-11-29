@@ -44,7 +44,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    rule1.setRules(
+    rule1.addRules(
       "[0,12)",
       new LengthRule(8, 64),
       new CharacterCharacteristicsRule(
@@ -59,7 +59,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
       new IllegalSequenceRule(EnglishSequenceData.USQwerty),
       new RepeatCharacterRegexRule());
 
-    rule1.setRules(
+    rule1.addRules(
       "[12,16)",
       new LengthRule(8, 64),
       new CharacterCharacteristicsRule(
@@ -73,7 +73,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
       new IllegalSequenceRule(EnglishSequenceData.USQwerty),
       new RepeatCharacterRegexRule());
 
-    rule1.setRules(
+    rule1.addRules(
       "[16,20)",
       new LengthRule(8, 64),
       new CharacterCharacteristicsRule(
@@ -86,7 +86,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
       new IllegalSequenceRule(EnglishSequenceData.USQwerty),
       new RepeatCharacterRegexRule());
 
-    rule1.setRules(
+    rule1.addRules(
       "[20,1024]",
       new LengthRule(8, 64),
       new UsernameRule(true, true),
@@ -221,7 +221,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   {
     final LengthComplexityRule lcr = new LengthComplexityRule();
     try {
-      lcr.setRules(range, new RepeatCharacterRegexRule());
+      lcr.addRules(range, new RepeatCharacterRegexRule());
       if (!valid) {
         AssertJUnit.fail("Should have thrown IllegalArgumentException");
       }
@@ -248,7 +248,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
       AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
     }
 
-    lcr.setRules("[10,20]", new RepeatCharacterRegexRule());
+    lcr.addRules("[10,20]", new RepeatCharacterRegexRule());
     try {
       // no rules below length of 10
       lcr.validate(new PasswordData(VALID_PASS_9));
@@ -266,14 +266,28 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 
     try {
       // intersecting rules
-      lcr.setRules("(5,15)", new WhitespaceRule());
+      lcr.addRules("(5,11)", new WhitespaceRule());
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
     }
     try {
       // intersecting rules
-      lcr.setRules("(15,25)", new WhitespaceRule());
+      lcr.addRules("(5,15]", new WhitespaceRule());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+    try {
+      // intersecting rules
+      lcr.addRules("[15,25)", new WhitespaceRule());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+    try {
+      // intersecting rules
+      lcr.addRules("(19,25)", new WhitespaceRule());
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
