@@ -1,0 +1,348 @@
+/* See LICENSE for licensing and NOTICE for copyright. */
+package org.passay;
+
+import org.testng.AssertJUnit;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
+
+/**
+ * Unit test for {@link LengthComplexityRule}.
+ *
+ * @author  Middleware Services
+ */
+public class LengthComplexityRuleTest extends AbstractRuleTest
+{
+
+  /** Test password. */
+  private static final String INVALID_PASS_5 = "r%vE2";
+
+  /** Test password. */
+  private static final String VALID_PASS_9 = "r%scvEW2e";
+
+  /** Test password. */
+  private static final String VALID_PASS_12 = "rkscvEW2e93C";
+
+  /** Test password. */
+  private static final String VALID_PASS_18 = "rkscvEWbePwCOUovqt";
+
+  /** Test password. */
+  private static final String VALID_PASS_20 = "horse staple battery";
+
+  /** Test password. */
+  private static final String VALID_PASS_24 = "it was the best of times";
+
+  /** Test password. */
+  private static final String INVALID_PASS_78 =
+    "It was the best of times, it was the worst of times, it was the age of wisdom,";
+
+  /** For testing. */
+  private final LengthComplexityRule rule1 = new LengthComplexityRule();
+
+
+  /** Initialize rules for this test. */
+  @BeforeClass(groups = {"passtest"})
+  public void createRules()
+  {
+    rule1.setRules(
+      "[0,12)",
+      new LengthRule(8, 64),
+      new CharacterCharacteristicsRule(
+        4,
+        new CharacterRule(EnglishCharacterData.Digit, 1),
+        new CharacterRule(EnglishCharacterData.Special, 1),
+        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+      new UsernameRule(true, true),
+      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      new IllegalSequenceRule(EnglishSequenceData.Numerical),
+      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+      new RepeatCharacterRegexRule());
+
+    rule1.setRules(
+      "[12,16)",
+      new LengthRule(8, 64),
+      new CharacterCharacteristicsRule(
+        3,
+        new CharacterRule(EnglishCharacterData.Digit, 1),
+        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+      new UsernameRule(true, true),
+      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      new IllegalSequenceRule(EnglishSequenceData.Numerical),
+      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+      new RepeatCharacterRegexRule());
+
+    rule1.setRules(
+      "[16,20)",
+      new LengthRule(8, 64),
+      new CharacterCharacteristicsRule(
+        2,
+        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+      new UsernameRule(true, true),
+      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      new IllegalSequenceRule(EnglishSequenceData.Numerical),
+      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+      new RepeatCharacterRegexRule());
+
+    rule1.setRules(
+      "[20,1024]",
+      new LengthRule(8, 64),
+      new UsernameRule(true, true),
+      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      new IllegalSequenceRule(EnglishSequenceData.Numerical),
+      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+      new RepeatCharacterRegexRule());
+  }
+
+
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "passwords")
+  public Object[][] passwords()
+    throws Exception
+  {
+    return
+      new Object[][] {
+
+        {rule1, new PasswordData("alfred", VALID_PASS_9), null, },
+        {rule1, new PasswordData("alfred", VALID_PASS_12), null, },
+        {rule1, new PasswordData("alfred", VALID_PASS_18), null, },
+        {rule1, new PasswordData("alfred", VALID_PASS_20), null, },
+        {rule1, new PasswordData("alfred", VALID_PASS_24), null, },
+        {
+          rule1,
+          new PasswordData("alfred", INVALID_PASS_5),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            LengthRule.ERROR_CODE_MIN),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", INVALID_PASS_78),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            LengthRule.ERROR_CODE_MAX),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", "rPscvEW2e"),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Special.getErrorCode()),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", "r%scvEWte"),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode()),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", "r%scvew2e"),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.UpperCase.getErrorCode()),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", "R%SCVEW2E"),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.LowerCase.getErrorCode()),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", "rALfredTe"),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            UsernameRule.ERROR_CODE,
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Special.getErrorCode(),
+            EnglishCharacterData.Digit.getErrorCode()),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", "It was the best of eeeee, it was the worst of 87654"),
+          codes(
+            LengthComplexityRule.ERROR_CODE,
+            RepeatCharacterRegexRule.ERROR_CODE,
+            EnglishSequenceData.USQwerty.getErrorCode(),
+            EnglishSequenceData.Numerical.getErrorCode()),
+        },
+      };
+  }
+
+
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "ranges")
+  public Object[][] ranges()
+    throws Exception
+  {
+    return
+      new Object[][] {
+
+        {"(7,33)", true},
+        {"[8,32]", true},
+        {"[8,33)", true},
+        {"(7,32]", true},
+        {"", false},
+        {"()", false},
+        {"(7,32", false},
+        {"[,32]", false},
+        {"[32]", false},
+        {"[8, 32]", false},
+      };
+  }
+
+
+  /**
+   * @param  range  to check
+   * @param  valid  whether the supplied range is valid
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"passtest"}, dataProvider = "ranges")
+  public void checkRange(final String range, final boolean valid)
+    throws Exception
+  {
+    final LengthComplexityRule lcr = new LengthComplexityRule();
+    try {
+      lcr.setRules(range, new RepeatCharacterRegexRule());
+      if (!valid) {
+        AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      }
+    } catch (Exception e) {
+      if (valid) {
+        AssertJUnit.fail("Should not have thrown exception: " + e);
+      }
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+  }
+
+
+  /** @throws  Exception  On test failure. */
+  @Test(groups = {"passtest"})
+  public void checkConsistency()
+    throws Exception
+  {
+    // no rules configured
+    final LengthComplexityRule lcr = new LengthComplexityRule();
+    try {
+      lcr.validate(new PasswordData(VALID_PASS_9));
+      AssertJUnit.fail("Should have thrown IllegalStateException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
+    }
+
+    lcr.setRules("[10,20]", new RepeatCharacterRegexRule());
+    try {
+      // no rules below length of 10
+      lcr.validate(new PasswordData(VALID_PASS_9));
+      AssertJUnit.fail("Should have thrown IllegalStateException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
+    }
+    try {
+      // no rules above length of 20
+      lcr.validate(new PasswordData(VALID_PASS_24));
+      AssertJUnit.fail("Should have thrown IllegalStateException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
+    }
+
+    try {
+      // intersecting rules
+      lcr.setRules("(5,15)", new WhitespaceRule());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+    try {
+      // intersecting rules
+      lcr.setRules("(15,25)", new WhitespaceRule());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+  }
+
+
+  /**
+   * @return  Test data.
+   *
+   * @throws  Exception  On test data generation failure.
+   */
+  @DataProvider(name = "messages")
+  public Object[][] messages()
+    throws Exception
+  {
+    return
+      new Object[][] {
+        {
+          rule1,
+          new PasswordData("bwayne", INVALID_PASS_5),
+          new String[] {
+            String.format("Password must be at least %s characters in length.", 8),
+            String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("bwayne", INVALID_PASS_78),
+          new String[] {
+            String.format("Password must be no more than %s characters in length.", 64),
+            String.format("Password meets %s complexity rules, but %s are required.", 5, 6),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("bwayne", "rpscvEW2e"),
+          new String[] {
+            String.format("Password must contain at least %s special characters.", 1),
+            String.format("Password matches %s of %s character rules, but %s are required.", 3, 4, 4),
+            String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("bwayne", "rkscvEWteNTC"),
+          new String[] {
+            String.format("Password must contain at least %s digit characters.", 1),
+            String.format("Password matches %s of %s character rules, but %s are required.", 2, 3, 3),
+            String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("bwayne", "rkscvewbepwcouovqt"),
+          new String[] {
+            String.format("Password must contain at least %s uppercase characters.", 1),
+            String.format("Password matches %s of %s character rules, but %s are required.", 1, 2, 2),
+            String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("bwayne", "horse defghj battery"),
+          new String[] {
+            String.format("Password contains the illegal alphabetical sequence '%s'.", "defgh"),
+            String.format("Password meets %s complexity rules, but %s are required.", 5, 6),
+          },
+        },
+      };
+  }
+}
