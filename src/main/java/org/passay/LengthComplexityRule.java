@@ -331,7 +331,7 @@ public class LengthComplexityRule implements Rule
           lowerBound.isInclusive() ? '[' : '(',
           lowerBound.value,
           upperBound.value,
-          upperBound.isExclusive() ? ']' : ')');
+          upperBound.isInclusive() ? ']' : ')');
     }
 
 
