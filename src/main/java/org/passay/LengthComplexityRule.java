@@ -24,7 +24,7 @@ public class LengthComplexityRule implements Rule
   public static final String ERROR_CODE = "INSUFFICIENT_COMPLEXITY";
 
   /** Rules to apply when checking a password. */
-  private final Map<Range, List<Rule>> rules = new HashMap<>();
+  private final Map<Interval, List<Rule>> rules = new HashMap<>();
 
   /** Whether to report the details of each character rule failure. */
   private boolean reportRuleFailures = true;
@@ -33,21 +33,21 @@ public class LengthComplexityRule implements Rule
   /**
    * Sets the rules used by this rule.
    *
-   * @param  range  of integers that the supplied rules apply to
+   * @param  interval  of integers that the supplied rules apply to
    * @param  l  list of rules
    *
-   * @throws  IllegalArgumentException  if the supplied rules are empty or null or if range is invalid or intersects
-   *                                    with an existing range
+   * @throws  IllegalArgumentException  if the supplied rules are empty or null or if interval is invalid or intersects
+   *                                    with an existing interval
    */
-  public void addRules(final String range, final List<Rule> l)
+  public void addRules(final String interval, final List<Rule> l)
   {
     if (l == null || l.isEmpty()) {
       throw new IllegalArgumentException("Rules cannot be empty or null");
     }
-    final Range r = new Range(range);
-    for (Range existingRange : rules.keySet()) {
-      if (existingRange.intersects(r)) {
-        throw new IllegalArgumentException("Range " + r + " intersects existing range " + existingRange);
+    final Interval r = new Interval(interval);
+    for (Interval existingInterval : rules.keySet()) {
+      if (existingInterval.intersects(r)) {
+        throw new IllegalArgumentException("Interval " + r + " intersects existing interval " + existingInterval);
       }
     }
     rules.put(r, l);
@@ -57,12 +57,12 @@ public class LengthComplexityRule implements Rule
   /**
    * Sets the rules used by this rule.
    *
-   * @param  range  of integers that the supplied rules apply to
+   * @param  interval  of integers that the supplied rules apply to
    * @param  r  list of rules
    */
-  public void addRules(final String range, final Rule... r)
+  public void addRules(final String interval, final Rule... r)
   {
-    addRules(range, r != null ? Arrays.asList(r) : null);
+    addRules(interval, r != null ? Arrays.asList(r) : null);
   }
 
 
@@ -122,7 +122,7 @@ public class LengthComplexityRule implements Rule
    *
    * @param  length  of the password
    *
-   * @return  rules or null if length is not included in any range
+   * @return  rules or null if length is not included in any interval
    */
   private List<Rule> getRulesByLength(final int length)
   {
@@ -163,38 +163,38 @@ public class LengthComplexityRule implements Rule
 
 
   /**
-   * Class that represents a range of numbers and parses interval notation.
+   * Class that represents an interval of numbers and parses interval notation.
    */
-  protected static class Range
+  protected static class Interval
   {
 
-    /** Type of range value. */
+    /** Type of bound type. */
     public enum BoundType {
 
-      /** inclusive value. */
-      INCLUSIVE,
+      /** closed value. */
+      CLOSED,
 
-      /** exclusive value. */
-      EXCLUSIVE;
+      /** open value. */
+      OPEN;
 
 
       /**
-       * Returns the enum associated with the supplied text. '[' and ']' return {@link #INCLUSIVE}. '(' and ')' return
-       * {@link #EXCLUSIVE}.
+       * Returns the enum associated with the supplied text. '[' and ']' return {@link #CLOSED}. '(' and ')' return
+       * {@link #OPEN}.
        *
        * @param  text  to parse
        *
-       * @return  range value type
+       * @return  bound type
        *
        * @throws  IllegalArgumentException  if text is not one of '[', ']', '(', ')'
        */
       public static BoundType parse(final String text)
       {
         if ("[".equals(text) || "]".equals(text)) {
-          return INCLUSIVE;
+          return CLOSED;
         }
         if ("(".equals(text) || ")".equals(text)) {
-          return EXCLUSIVE;
+          return OPEN;
         }
         throw new IllegalArgumentException("Invalid interval notation: " + text);
       }
@@ -203,19 +203,19 @@ public class LengthComplexityRule implements Rule
     /** Pattern for matching intervals. */
     private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+)([\\)|\\]])$");
 
-    /** Lower bound of the range. */
+    /** Lower bound of the interval. */
     private final Bound lowerBound;
 
-    /** Upper bound of the range. */
+    /** Upper bound of the interval. */
     private final Bound upperBound;
 
 
     /**
-     * Creates a new range.
+     * Creates a new interval.
      *
      * @param  pattern  to parse
      */
-    public Range(final String pattern)
+    public Interval(final String pattern)
     {
       final Matcher m = INTERVAL_PATTERN.matcher(pattern);
       if (!m.matches()) {
@@ -229,15 +229,19 @@ public class LengthComplexityRule implements Rule
 
       lowerBound = new Bound(lower, BoundType.parse(lowerType));
       upperBound = new Bound(upper, BoundType.parse(upperType));
+
+      if (getUpperBoundClosed() - getLowerBoundClosed() < 0) {
+        throw new IllegalArgumentException("Invalid interval notation: " + pattern + " produced an empty set");
+      }
     }
 
 
     /**
-     * Returns whether this range includes the supplied integer.
+     * Returns whether this interval includes the supplied integer.
      *
      * @param  i  to test for inclusion
      *
-     * @return  whether this range includes the supplied integer
+     * @return  whether this interval includes the supplied integer
      */
     public boolean includes(final int i)
     {
@@ -245,9 +249,9 @@ public class LengthComplexityRule implements Rule
       if (i >= lowerBound.value && i <= upperBound.value) {
         if (i > lowerBound.value && i < upperBound.value) {
           includes = true;
-        } else if (i == lowerBound.value && lowerBound.isInclusive()) {
+        } else if (i == lowerBound.value && lowerBound.isClosed()) {
           includes = true;
-        } else if (i == upperBound.value && upperBound.isInclusive()) {
+        } else if (i == upperBound.value && upperBound.isClosed()) {
           includes = true;
         }
       }
@@ -256,50 +260,50 @@ public class LengthComplexityRule implements Rule
 
 
     /**
-     * Returns whether this range includes the supplied range.
+     * Returns whether this interval includes the supplied interval.
      *
-     * @param  r  range to test for inclusion
+     * @param  i  interval to test for inclusion
      *
-     * @return  whether this range includes the supplied range
+     * @return  whether this interval includes the supplied interval
      */
-    public boolean includes(final Range r)
+    public boolean includes(final Interval i)
     {
-      return includes(r.getLowerBoundInclusive()) && includes(r.getUpperBoundInclusive());
+      return includes(i.getLowerBoundClosed()) && includes(i.getUpperBoundClosed());
     }
 
 
     /**
-     * Returns whether this range intersects the supplied range.
+     * Returns whether this interval intersects the supplied interval.
      *
-     * @param  r  range to test for intersection
+     * @param  i  interval to test for intersection
      *
-     * @return  whether this range intersects the supplied range
+     * @return  whether this interval intersects the supplied interval
      */
-    public boolean intersects(final Range r)
+    public boolean intersects(final Interval i)
     {
-      return includes(r.getLowerBoundInclusive()) || includes(r.getUpperBoundInclusive());
+      return includes(i.getLowerBoundClosed()) || includes(i.getUpperBoundClosed());
     }
 
 
     /**
-     * Returns the inclusive lower bound for this range.
+     * Returns the closed lower bound for this interval.
      *
-     * @return  inclusive lower bound
+     * @return  closed lower bound
      */
-    private int getLowerBoundInclusive()
+    private int getLowerBoundClosed()
     {
-      return lowerBound.isInclusive() ? lowerBound.value : lowerBound.value + 1;
+      return lowerBound.isClosed() ? lowerBound.value : lowerBound.value + 1;
     }
 
 
     /**
-     * Returns the inclusive upper bound for this range.
+     * Returns the closed upper bound for this interval.
      *
-     * @return  inclusive upper bound
+     * @return  closed upper bound
      */
-    private int getUpperBoundInclusive()
+    private int getUpperBoundClosed()
     {
-      return upperBound.isInclusive() ? upperBound.value : upperBound.value - 1;
+      return upperBound.isClosed() ? upperBound.value : upperBound.value - 1;
     }
 
 
@@ -310,7 +314,7 @@ public class LengthComplexityRule implements Rule
         return true;
       }
       if (o != null && getClass() == o.getClass())  {
-        final Range other = (Range) o;
+        final Interval other = (Interval) o;
         return lowerBound.equals(other.lowerBound) && upperBound.equals(other.upperBound);
       }
       return false;
@@ -330,31 +334,31 @@ public class LengthComplexityRule implements Rule
       return
         String.format(
           "%s%s,%s%s",
-          lowerBound.isInclusive() ? '[' : '(',
+          lowerBound.isClosed() ? '[' : '(',
           lowerBound.value,
           upperBound.value,
-          upperBound.isInclusive() ? ']' : ')');
+          upperBound.isClosed() ? ']' : ')');
     }
 
 
     /**
-     * Class that represents a single value in a range.
+     * Class that represents a single value in an interval.
      */
     private class Bound
     {
 
-      /** Value in a range. */
+      /** Value in an interval. */
       private final int value;
 
-      /** Whether this value is inclusive. */
+      /** Bound type in an interval. */
       private final BoundType type;
 
 
       /**
-       * Creates a new range value.
+       * Creates a new bound.
        *
        * @param  i  value
-       * @param  bt  inclusive or exclusive
+       * @param  bt  bound type
        */
       Bound(final int i, final BoundType bt)
       {
@@ -364,24 +368,24 @@ public class LengthComplexityRule implements Rule
 
 
       /**
-       * Whether this range value in inclusive.
+       * Whether this bound is closed.
        *
-       * @return  whether this range value in inclusive
+       * @return  whether this bound is closed
        */
-      public boolean isInclusive()
+      public boolean isClosed()
       {
-        return BoundType.INCLUSIVE == type;
+        return BoundType.CLOSED == type;
       }
 
 
       /**
-       * Whether this range value in exclusive.
+       * Whether this bound is open.
        *
-       * @return  whether this range value in exclusive
+       * @return  whether this bound is open
        */
-      public boolean isExclusive()
+      public boolean isOpen()
       {
-        return BoundType.EXCLUSIVE == type;
+        return BoundType.OPEN == type;
       }
 
 

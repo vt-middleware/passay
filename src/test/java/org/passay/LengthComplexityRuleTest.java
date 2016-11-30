@@ -189,8 +189,8 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
    *
    * @throws  Exception  On test data generation failure.
    */
-  @DataProvider(name = "ranges")
-  public Object[][] ranges()
+  @DataProvider(name = "intervals")
+  public Object[][] intervals()
     throws Exception
   {
     return
@@ -203,26 +203,35 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         {"", false},
         {"()", false},
         {"(7,32", false},
+        {"7,32)", false},
         {"[,32]", false},
         {"[32]", false},
         {"[8, 32]", false},
+        {"(6,6)", false},
+        {"[6,6)", false},
+        {"(6,6]", false},
+        {"[6,6]", true},
+        {"(6,5)", false},
+        {"[6,5)", false},
+        {"(6,5]", false},
+        {"[6,5]", false},
       };
   }
 
 
   /**
-   * @param  range  to check
-   * @param  valid  whether the supplied range is valid
+   * @param  interval  to check
+   * @param  valid  whether the supplied interval is valid
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"passtest"}, dataProvider = "ranges")
-  public void checkRange(final String range, final boolean valid)
+  @Test(groups = {"passtest"}, dataProvider = "intervals")
+  public void checkInterval(final String interval, final boolean valid)
     throws Exception
   {
     final LengthComplexityRule lcr = new LengthComplexityRule();
     try {
-      lcr.addRules(range, new RepeatCharacterRegexRule());
+      lcr.addRules(interval, new RepeatCharacterRegexRule());
       if (!valid) {
         AssertJUnit.fail("Should have thrown IllegalArgumentException");
       }
