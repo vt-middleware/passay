@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.ArrayList;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
@@ -288,6 +289,20 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // intersecting rules
       lcr.addRules("(19,25)", new WhitespaceRule());
+      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+    try {
+      // null rules
+      lcr.addRules("(0,1)", (Rule[]) null);
+      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+    }
+    try {
+      // empty rules
+      lcr.addRules("(0,1)", new ArrayList<>());
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());

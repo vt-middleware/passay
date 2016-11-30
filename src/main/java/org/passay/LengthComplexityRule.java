@@ -36,10 +36,14 @@ public class LengthComplexityRule implements Rule
    * @param  range  of integers that the supplied rules apply to
    * @param  l  list of rules
    *
-   * @throws  IllegalArgumentException  if range is invalid or intersects with an existing range
+   * @throws  IllegalArgumentException  if the supplied rules are empty or null or if range is invalid or intersects
+   *                                    with an existing range
    */
   public void addRules(final String range, final List<Rule> l)
   {
+    if (l == null || l.isEmpty()) {
+      throw new IllegalArgumentException("Rules cannot be empty or null");
+    }
     final Range r = new Range(range);
     for (Range existingRange : rules.keySet()) {
       if (existingRange.intersects(r)) {
@@ -58,7 +62,7 @@ public class LengthComplexityRule implements Rule
    */
   public void addRules(final String range, final Rule... r)
   {
-    addRules(range, Arrays.asList(r));
+    addRules(range, r != null ? Arrays.asList(r) : null);
   }
 
 
@@ -88,7 +92,7 @@ public class LengthComplexityRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final List<Rule> rulesByLength = getRulesByLength(passwordData.getPassword().length());
-    if (rulesByLength == null || rulesByLength.isEmpty()) {
+    if (rulesByLength == null) {
       throw new IllegalStateException(
         "No rules have been configured for password length " + passwordData.getPassword().length());
     }
