@@ -13,25 +13,25 @@ import java.util.regex.Pattern;
 
 /**
  * Rule for determining if a password contains the desired complexity for a certain length. In order to meet the
- * criteria of this rule, passwords must meet any number of supplied rules.
+ * criteria of this rule, passwords must meet all the supplied rules for a given password length.
  *
  * @author  Middleware Services
  */
 public class LengthComplexityRule implements Rule
 {
 
-  /** Error code for insufficient number of characteristics. */
+  /** Error code for insufficient complexity. */
   public static final String ERROR_CODE = "INSUFFICIENT_COMPLEXITY";
 
   /** Rules to apply when checking a password. */
   private final Map<Interval, List<Rule>> rules = new HashMap<>();
 
-  /** Whether to report the details of each character rule failure. */
+  /** Whether to report the details of each complexity rule failure. */
   private boolean reportRuleFailures = true;
 
 
   /**
-   * Sets the rules used by this rule.
+   * Adds the rules to invoke for the supplied interval.
    *
    * @param  interval  of integers that the supplied rules apply to
    * @param  l  list of rules
@@ -44,18 +44,18 @@ public class LengthComplexityRule implements Rule
     if (l == null || l.isEmpty()) {
       throw new IllegalArgumentException("Rules cannot be empty or null");
     }
-    final Interval r = new Interval(interval);
+    final Interval i = new Interval(interval);
     for (Interval existingInterval : rules.keySet()) {
-      if (existingInterval.intersects(r)) {
-        throw new IllegalArgumentException("Interval " + r + " intersects existing interval " + existingInterval);
+      if (existingInterval.intersects(i)) {
+        throw new IllegalArgumentException("Interval " + i + " intersects existing interval " + existingInterval);
       }
     }
-    rules.put(r, l);
+    rules.put(i, l);
   }
 
 
   /**
-   * Sets the rules used by this rule.
+   * Adds the rules to invoke for the supplied interval.
    *
    * @param  interval  of integers that the supplied rules apply to
    * @param  r  list of rules
@@ -67,9 +67,9 @@ public class LengthComplexityRule implements Rule
 
 
   /**
-   * Returns whether to add the rule result detail for each character rule that fails to validate to the rule result.
+   * Returns whether to add the rule result detail for each rule that fails to validate to the rule result.
    *
-   * @return  whether to add character rule result details
+   * @return  whether to add rule result details
    */
   public boolean getReportRuleFailures()
   {
@@ -78,9 +78,9 @@ public class LengthComplexityRule implements Rule
 
 
   /**
-   * Sets whether to add the rule result detail for each character rule that fails to validate to the rule result.
+   * Sets whether to add the rule result detail for each rule that fails to validate to the rule result.
    *
-   * @param  b  whether to add character rule result details
+   * @param  b  whether to add rule result details
    */
   public void setReportRuleFailures(final boolean b)
   {
