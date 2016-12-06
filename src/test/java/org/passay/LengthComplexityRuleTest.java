@@ -37,6 +37,11 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   private static final String INVALID_PASS_78 =
     "It was the best of times, it was the worst of times, it was the age of wisdom,";
 
+  /** Test password. */
+  private static final String INVALID_PASS_198 =
+    "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, " +
+    "it was the epoch of belief, it was the epoch of incredulity, it was the season of Light,";
+
   /** For testing. */
   private final LengthComplexityRule rule1 = new LengthComplexityRule();
 
@@ -88,7 +93,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
       new RepeatCharacterRegexRule());
 
     rule1.addRules(
-      "[20,1024]",
+      "[20,128]",
       new LengthRule(8, 64),
       new UsernameRule(true, true),
       new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
@@ -128,6 +133,12 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           codes(
             LengthComplexityRule.ERROR_CODE,
             LengthRule.ERROR_CODE_MAX),
+        },
+        {
+          rule1,
+          new PasswordData("alfred", INVALID_PASS_198),
+          codes(
+            LengthComplexityRule.ERROR_CODE_RULES),
         },
         {
           rule1,
@@ -251,29 +262,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   {
     // no rules configured
     final LengthComplexityRule lcr = new LengthComplexityRule();
-    try {
-      lcr.validate(new PasswordData(VALID_PASS_9));
-      AssertJUnit.fail("Should have thrown IllegalStateException");
-    } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
-    }
-
     lcr.addRules("[10,20]", new RepeatCharacterRegexRule());
-    try {
-      // no rules below length of 10
-      lcr.validate(new PasswordData(VALID_PASS_9));
-      AssertJUnit.fail("Should have thrown IllegalStateException");
-    } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
-    }
-    try {
-      // no rules above length of 20
-      lcr.validate(new PasswordData(VALID_PASS_24));
-      AssertJUnit.fail("Should have thrown IllegalStateException");
-    } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
-    }
-
     try {
       // intersecting rules
       lcr.addRules("(5,11)", new WhitespaceRule());
@@ -344,6 +333,13 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           new String[] {
             String.format("Password must be no more than %s characters in length.", 64),
             String.format("Password meets %s complexity rules, but %s are required.", 5, 6),
+          },
+        },
+        {
+          rule1,
+          new PasswordData("bwayne", INVALID_PASS_198),
+          new String[] {
+            String.format("No rules have been configured for a password of length %s.", 198),
           },
         },
         {

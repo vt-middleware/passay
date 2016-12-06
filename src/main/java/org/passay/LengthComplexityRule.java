@@ -23,6 +23,9 @@ public class LengthComplexityRule implements Rule
   /** Error code for insufficient complexity. */
   public static final String ERROR_CODE = "INSUFFICIENT_COMPLEXITY";
 
+  /** Error code for missing complexity rules. */
+  public static final String ERROR_CODE_RULES = "INSUFFICIENT_COMPLEXITY_RULES";
+
   /** Rules to apply when checking a password. */
   private final Map<Interval, List<Rule>> rules = new HashMap<>();
 
@@ -91,10 +94,12 @@ public class LengthComplexityRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final List<Rule> rulesByLength = getRulesByLength(passwordData.getPassword().length());
+    final int passwordLength = passwordData.getPassword().length();
+    final List<Rule> rulesByLength = getRulesByLength(passwordLength);
     if (rulesByLength == null) {
-      throw new IllegalStateException(
-        "No rules have been configured for password length " + passwordData.getPassword().length());
+      return new RuleResult(
+        false,
+        new RuleResultDetail(ERROR_CODE_RULES, createRuleResultDetailParameters(passwordLength, 0, 0)));
     }
     int successCount = 0;
     final RuleResult result = new RuleResult(true);
@@ -111,7 +116,9 @@ public class LengthComplexityRule implements Rule
     if (successCount < rulesByLength.size()) {
       result.setValid(false);
       result.getDetails().add(
-        new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount, rulesByLength.size())));
+        new RuleResultDetail(
+          ERROR_CODE,
+          createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
     }
     return result;
   }
@@ -135,14 +142,19 @@ public class LengthComplexityRule implements Rule
   /**
    * Creates the parameter data for the rule result detail.
    *
+   * @param  length  of the password
    * @param  success  number of successful rules
    * @param  ruleCount  number of total rules
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final int success, final int ruleCount)
+  protected Map<String, Object> createRuleResultDetailParameters(
+    final int length,
+    final int success,
+    final int ruleCount)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
+    m.put("passwordLength", length);
     m.put("successCount", success);
     m.put("ruleCount", ruleCount);
     return m;
