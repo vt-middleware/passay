@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.entropy;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.passay.AbstractDictionaryRule;
 import org.passay.CharacterCharacteristicsRule;
@@ -22,18 +21,18 @@ public final class ShannonEntropyFactory
   /** Number of character characteristics rules to enforce for a password to have composition. */
   private static final int COMPOSITION_CHARACTERISTICS_REQUIREMENT = 4;
 
-  /** Rule which defines whether a password has composition. */
-  private static final CharacterCharacteristicsRule COMPOSITION_RULE;
-
+  /** Validator which decides whether a password has composition. */
+  private static final PasswordValidator COMPOSITION_VALIDATOR;
 
   /** Initialize the composition rule. */
   static {
-    COMPOSITION_RULE = new CharacterCharacteristicsRule(
-      COMPOSITION_CHARACTERISTICS_REQUIREMENT,
-      new CharacterRule(EnglishCharacterData.Digit, 1),
-      new CharacterRule(EnglishCharacterData.Special, 1),
-      new CharacterRule(EnglishCharacterData.UpperCase, 1),
-      new CharacterRule(EnglishCharacterData.LowerCase, 1));
+    COMPOSITION_VALIDATOR = new PasswordValidator(
+      new CharacterCharacteristicsRule(
+        COMPOSITION_CHARACTERISTICS_REQUIREMENT,
+        new CharacterRule(EnglishCharacterData.Digit, 1),
+        new CharacterRule(EnglishCharacterData.Special, 1),
+        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+        new CharacterRule(EnglishCharacterData.LowerCase, 1)));
   }
 
 
@@ -53,12 +52,26 @@ public final class ShannonEntropyFactory
    */
   public static ShannonEntropy createEntropy(final List<Rule> passwordRules, final PasswordData passwordData)
   {
-    if (!passwordData.getOrigin().equals(PasswordData.Origin.User)) {
-      throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.User);
-    }
     final boolean dictionaryCheck = passwordRules.stream().filter(
       rule -> AbstractDictionaryRule.class.isAssignableFrom(
         rule.getClass()) && ((AbstractDictionaryRule) rule).getDictionary().size() > 0).count() > 0;
+    return createEntropy(dictionaryCheck, passwordData);
+  }
+
+
+  /**
+   * Creates a new shannon entropy.
+   *
+   * @param  dictionaryCheck   whether or not a common passwords dictionary is checked against the password
+   * @param  passwordData  to aid in entropy calculation
+   *
+   * @return  shannon entropy
+   */
+  public static ShannonEntropy createEntropy(final boolean dictionaryCheck, final PasswordData passwordData)
+  {
+    if (!passwordData.getOrigin().equals(PasswordData.Origin.User)) {
+      throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.User);
+    }
     final boolean compositionCheck = hasComposition(passwordData);
     return new ShannonEntropy(dictionaryCheck, compositionCheck, passwordData.getPassword().length());
   }
@@ -73,9 +86,6 @@ public final class ShannonEntropyFactory
    */
   private static boolean hasComposition(final PasswordData passwordData)
   {
-    final List<Rule> rules = new ArrayList<>();
-    rules.add(COMPOSITION_RULE);
-    final PasswordValidator compositionValidator = new PasswordValidator(rules);
-    return compositionValidator.validate(passwordData).isValid();
+    return COMPOSITION_VALIDATOR.validate(passwordData).isValid();
   }
 }
