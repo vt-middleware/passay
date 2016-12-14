@@ -323,7 +323,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("bwayne", INVALID_PASS_5),
           new String[] {
-            String.format("Password must be at least %s characters in length.", 8),
+            String.format("Password must be %s or more characters in length.", 8),
             String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
           },
         },
@@ -346,7 +346,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("bwayne", "rpscvEW2e"),
           new String[] {
-            String.format("Password must contain at least %s special characters.", 1),
+            String.format("Password must contain %s or more special characters.", 1),
             String.format("Password matches %s of %s character rules, but %s are required.", 3, 4, 4),
             String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
           },
@@ -355,7 +355,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("bwayne", "rkscvEWteNTC"),
           new String[] {
-            String.format("Password must contain at least %s digit characters.", 1),
+            String.format("Password must contain %s or more digit characters.", 1),
             String.format("Password matches %s of %s character rules, but %s are required.", 2, 3, 3),
             String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
           },
@@ -364,7 +364,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("bwayne", "rkscvewbepwcouovqt"),
           new String[] {
-            String.format("Password must contain at least %s uppercase characters.", 1),
+            String.format("Password must contain %s or more uppercase characters.", 1),
             String.format("Password matches %s of %s character rules, but %s are required.", 1, 2, 2),
             String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
           },
