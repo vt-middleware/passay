@@ -148,7 +148,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("r%scvEW2e3)"),
           new String[] {
-            String.format("Password must contain at least %s digit characters.", 3),
+            String.format("Password must contain %s or more digit characters.", 3),
             String.format("Password matches %s of %s character rules, but %s are required.", 4, 5, 5),
           },
         },
@@ -156,7 +156,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           rule1,
           new PasswordData("R»S7VEW2e3)"),
           new String[] {
-            String.format("Password must contain at least %s lowercase characters.", 2),
+            String.format("Password must contain %s or more lowercase characters.", 2),
             String.format("Password matches %s of %s character rules, but %s are required.", 4, 5, 5),
           },
         },
@@ -164,8 +164,8 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           rule2,
           new PasswordData("rscvew2e3"),
           new String[] {
-            String.format("Password must contain at least %s special characters.", 1),
-            String.format("Password must contain at least %s uppercase characters.", 1),
+            String.format("Password must contain %s or more special characters.", 1),
+            String.format("Password must contain %s or more uppercase characters.", 1),
             String.format("Password matches %s of %s character rules, but %s are required.", 2, 4, 3),
           },
         },

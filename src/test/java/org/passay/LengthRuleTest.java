@@ -141,7 +141,7 @@ public class LengthRuleTest extends AbstractRuleTest
         {
           rule,
           new PasswordData(SHORT_PASS),
-          new String[] {String.format("Password must be at least %s characters in length.", rule.getMinimumLength()), },
+          new String[] {String.format("Password must be %s or more characters in length.", rule.getMinimumLength()), },
         },
       };
   }

@@ -622,8 +622,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
           validator,
           PasswordData.newInstance("ay3dop5zss", USER, null, references),
           new String[] {
-            String.format("Password must contain at least %s special characters.", 1),
-            String.format("Password must contain at least %s uppercase characters.", 1),
+            String.format("Password must contain %s or more special characters.", 1),
+            String.format("Password must contain %s or more uppercase characters.", 1),
             String.format("Password matches %s of %s character rules, but %s are required.", 2, 4, 3),
           },
         },
