@@ -29,6 +29,9 @@ public class LengthComplexityRule implements Rule
   /** Rules to apply when checking a password. */
   private final Map<Interval, List<Rule>> rules = new HashMap<>();
 
+  /** Whether to report the details of this rule failure. */
+  private boolean reportFailure = true;
+
   /** Whether to report the details of each complexity rule failure. */
   private boolean reportRuleFailures = true;
 
@@ -66,6 +69,28 @@ public class LengthComplexityRule implements Rule
   public void addRules(final String interval, final Rule... r)
   {
     addRules(interval, r != null ? Arrays.asList(r) : null);
+  }
+
+
+  /**
+   * Returns whether to add the rule result detail of this rule to the rule result.
+   *
+   * @return  whether to add rule result detail of this rule
+   */
+  public boolean getReportFailure()
+  {
+    return reportFailure;
+  }
+
+
+  /**
+   * Sets whether to add the rule result detail of this rule to the rule result.
+   *
+   * @param  b  whether to add rule result detail of this rule
+   */
+  public void setReportFailure(final boolean b)
+  {
+    reportFailure = b;
   }
 
 
@@ -115,10 +140,12 @@ public class LengthComplexityRule implements Rule
     }
     if (successCount < rulesByLength.size()) {
       result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(
-          ERROR_CODE,
-          createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
+      if (reportFailure) {
+        result.getDetails().add(
+          new RuleResultDetail(
+            ERROR_CODE,
+            createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
+      }
     }
     return result;
   }

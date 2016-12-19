@@ -56,6 +56,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
     rule1.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
     rule1.setNumberOfCharacteristics(5);
 
+    rule2.setReportFailure(false);
     rule2.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
     rule2.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
     rule2.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
@@ -166,7 +167,6 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
           new String[] {
             String.format("Password must contain %s or more special characters.", 1),
             String.format("Password must contain %s or more uppercase characters.", 1),
-            String.format("Password matches %s of %s character rules, but %s are required.", 2, 4, 3),
           },
         },
       };

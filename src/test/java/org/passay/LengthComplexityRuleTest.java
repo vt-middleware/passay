@@ -45,6 +45,9 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   /** For testing. */
   private final LengthComplexityRule rule1 = new LengthComplexityRule();
 
+  /** For testing. */
+  private final LengthComplexityRule rule2 = new LengthComplexityRule();
+
 
   /** Initialize rules for this test. */
   @BeforeClass(groups = {"passtest"})
@@ -94,6 +97,31 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 
     rule1.addRules(
       "[20,128]",
+      new LengthRule(8, 64),
+      new UsernameRule(true, true),
+      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      new IllegalSequenceRule(EnglishSequenceData.Numerical),
+      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+      new RepeatCharacterRegexRule());
+
+    rule2.setReportFailure(false);
+    rule2.addRules(
+      "[0,20)",
+      new LengthRule(8, 64),
+      new CharacterCharacteristicsRule(
+        4,
+        new CharacterRule(EnglishCharacterData.Digit, 1),
+        new CharacterRule(EnglishCharacterData.Special, 1),
+        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+      new UsernameRule(true, true),
+      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      new IllegalSequenceRule(EnglishSequenceData.Numerical),
+      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+      new RepeatCharacterRegexRule());
+
+    rule2.addRules(
+      "[20,*]",
       new LengthRule(8, 64),
       new UsernameRule(true, true),
       new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
@@ -187,6 +215,14 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           new PasswordData("alfred", "It was the best of eeeee, it was the worst of 87654"),
           codes(
             LengthComplexityRule.ERROR_CODE,
+            RepeatCharacterRegexRule.ERROR_CODE,
+            EnglishSequenceData.USQwerty.getErrorCode(),
+            EnglishSequenceData.Numerical.getErrorCode()),
+        },
+        {
+          rule2,
+          new PasswordData("alfred", "It was the best of eeeee, it was the worst of 87654"),
+          codes(
             RepeatCharacterRegexRule.ERROR_CODE,
             EnglishSequenceData.USQwerty.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode()),
@@ -383,6 +419,13 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           new String[] {
             String.format("Password contains the illegal alphabetical sequence '%s'.", "defgh"),
             String.format("Password meets %s complexity rules, but %s are required.", 5, 6),
+          },
+        },
+        {
+          rule2,
+          new PasswordData("bwayne", "horse defghj battery"),
+          new String[] {
+            String.format("Password contains the illegal alphabetical sequence '%s'.", "defgh"),
           },
         },
       };
