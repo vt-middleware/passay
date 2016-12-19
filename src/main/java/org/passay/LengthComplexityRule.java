@@ -213,7 +213,7 @@ public class LengthComplexityRule implements Rule
     }
 
     /** Pattern for matching intervals. */
-    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+)([\\)|\\]])$");
+    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+|\\*)([\\)|\\]])$");
 
     /** Lower bound of the interval. */
     private final Bound lowerBound;
@@ -235,12 +235,14 @@ public class LengthComplexityRule implements Rule
       }
 
       final String lowerType = m.group(1);
-      final int lower = Integer.parseInt(m.group(2));
-      final int upper = Integer.parseInt(m.group(3));
+      final String lower = m.group(2);
+      final String upper = m.group(3);
       final String upperType = m.group(4);
 
-      lowerBound = new Bound(lower, BoundType.parse(lowerType));
-      upperBound = new Bound(upper, BoundType.parse(upperType));
+      lowerBound = new Bound(Integer.parseInt(lower), BoundType.parse(lowerType));
+      upperBound = new Bound(
+        "*".equals(upper) ? Integer.MAX_VALUE : Integer.parseInt(upper),
+        BoundType.parse(upperType));
 
       if (getUpperBoundClosed() - getLowerBoundClosed() < 0) {
         throw new IllegalArgumentException("Invalid interval notation: " + pattern + " produced an empty set");

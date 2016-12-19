@@ -226,6 +226,14 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         {"[6,5)", false},
         {"(6,5]", false},
         {"[6,5]", false},
+        {"[-10,10]", false},
+        {",*]", false},
+        {"[,*]", false},
+        {"[*]", false},
+        {"[64,*", false},
+        {"[64,128*]", false},
+        {"[64,*]", true},
+        {"[64,*)", true},
       };
   }
 
