@@ -25,6 +25,9 @@ public class CharacterCharacteristicsRule implements Rule
   /** Number of rules to enforce. Default value is 1. */
   private int numCharacteristics = 1;
 
+  /** Whether to report the details of this rule failure. */
+  private boolean reportFailure = true;
+
   /** Whether to report the details of each character rule failure. */
   private boolean reportRuleFailures = true;
 
@@ -135,6 +138,28 @@ public class CharacterCharacteristicsRule implements Rule
 
 
   /**
+   * Returns whether to add the rule result detail of this rule to the rule result.
+   *
+   * @return  whether to add rule result detail of this rule
+   */
+  public boolean getReportFailure()
+  {
+    return reportFailure;
+  }
+
+
+  /**
+   * Sets whether to add the rule result detail of this rule to the rule result.
+   *
+   * @param  b  whether to add rule result detail of this rule
+   */
+  public void setReportFailure(final boolean b)
+  {
+    reportFailure = b;
+  }
+
+
+  /**
    * Returns the number of characteristics which currently must be satisfied in order for a password to meet the
    * requirements of this rule.
    *
@@ -189,7 +214,9 @@ public class CharacterCharacteristicsRule implements Rule
     }
     if (successCount < numCharacteristics) {
       result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount)));
+      if (reportFailure) {
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount)));
+      }
     }
     return result;
   }
