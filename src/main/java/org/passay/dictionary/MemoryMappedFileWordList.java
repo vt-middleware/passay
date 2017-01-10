@@ -87,8 +87,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
     long pos = 0;
     String a;
     String b = null;
-    while (buffer.hasRemaining()) {
-      a = readLine(buffer);
+    while ((a = readLine(buffer)) != null) {
       if (b != null && comparator.compare(a, b) < 0) {
         throw new IllegalArgumentException("File is not sorted correctly for this comparator");
       }
@@ -144,33 +143,22 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    *
    * @param  buffer  to read from
    *
-   * @return  file line
+   * @return  file line or null if end of file has been reached
    */
   private static String readLine(final MappedByteBuffer buffer)
   {
     final StringBuilder line = new StringBuilder();
-    boolean lineFeed = false;
-    boolean carriageReturn = false;
     while (buffer.hasRemaining()) {
       final char c = (char) buffer.get();
-      if (lineFeed) {
-        buffer.position(buffer.position() - 1);
+      if (c == '\n' || c == '\r') {
+        // Ignore leading line termination characters
+        if (line.length() == 0) {
+          continue;
+        }
         break;
       }
-      if (carriageReturn) {
-        if (c != '\n') {
-          buffer.position(buffer.position() - 1);
-          break;
-        }
-      }
-      if (c == '\n') {
-        lineFeed = true;
-      } else if (c == '\r') {
-        carriageReturn = true;
-      } else {
-        line.append(c);
-      }
+      line.append(c);
     }
-    return line.toString();
+    return line.length() > 0 ? line.toString() : null;
   }
 }

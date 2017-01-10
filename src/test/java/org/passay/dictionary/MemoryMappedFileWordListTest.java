@@ -28,6 +28,9 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest
     throws Exception
   {
     wordList = new MemoryMappedFileWordList(new RandomAccessFile(file, "r"));
+    AssertJUnit.assertEquals(282, wordList.size());
+    AssertJUnit.assertEquals("DVD", wordList.get(42));
+    AssertJUnit.assertEquals("UID", wordList.get(199));
   }
 
 
@@ -54,7 +57,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest
    */
   @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
   @Test(groups = {"wltest"})
-  public void construt(final String file1, final String file2)
+  public void construct(final String file1, final String file2)
     throws Exception
   {
     try {
