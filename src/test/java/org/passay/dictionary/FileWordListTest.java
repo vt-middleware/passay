@@ -54,7 +54,7 @@ public class FileWordListTest extends AbstractWordListTest
    */
   @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
   @Test(groups = {"wltest"})
-  public void construt(final String file1, final String file2)
+  public void construct(final String file1, final String file2)
     throws Exception
   {
     try {
