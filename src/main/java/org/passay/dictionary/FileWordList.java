@@ -79,7 +79,7 @@ public class FileWordList extends AbstractFileWordList
 
     final long fileBytes = file.length();
     final long cacheSize = (fileBytes / 100) * cachePercent;
-    final long cacheOffset = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
+    final long cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
 
     String a;
     String b = null;
@@ -89,7 +89,7 @@ public class FileWordList extends AbstractFileWordList
       }
       b = a;
 
-      if (cacheSize > 0 && size % cacheOffset == 0) {
+      if (cacheSize > 0 && size % cacheModulus == 0) {
         cache.put(size, pos);
       }
       pos = file.getFilePointer();

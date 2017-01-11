@@ -82,7 +82,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
 
     final int fileBytes = buffer.capacity();
     final int cacheSize = (fileBytes / 100) * cachePercent;
-    final int cacheOffset = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
+    final int cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
 
     long pos = 0;
     String a;
@@ -93,7 +93,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
       }
       b = a;
 
-      if (cacheSize > 0 && size % cacheOffset == 0) {
+      if (cacheSize > 0 && size % cacheModulus == 0) {
         cache.put(size, pos);
       }
       pos = buffer.position();
