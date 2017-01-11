@@ -145,20 +145,34 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    *
    * @return  file line or null if end of file has been reached
    */
-  private static String readLine(final MappedByteBuffer buffer)
+  protected static String readLine(final MappedByteBuffer buffer)
   {
+    if (!buffer.hasRemaining()) {
+      return null;
+    }
     final StringBuilder line = new StringBuilder();
+    boolean lineFeed = false;
+    boolean carriageReturn = false;
     while (buffer.hasRemaining()) {
       final char c = (char) buffer.get();
-      if (c == '\n' || c == '\r') {
-        // Ignore leading line termination characters
-        if (line.length() == 0) {
-          continue;
-        }
+      if (lineFeed) {
+        buffer.position(buffer.position() - 1);
         break;
       }
-      line.append(c);
+      if (carriageReturn) {
+        if (c != '\n') {
+          buffer.position(buffer.position() - 1);
+          break;
+        }
+      }
+      if (c == '\n') {
+        lineFeed = true;
+      } else if (c == '\r') {
+        carriageReturn = true;
+      } else {
+        line.append(c);
+      }
     }
-    return line.length() > 0 ? line.toString() : null;
+    return line.toString();
   }
 }
