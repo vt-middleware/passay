@@ -81,7 +81,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
     buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 
     final int fileBytes = buffer.capacity();
-    final int cacheSize = (fileBytes / HUNDRED_PERCENT) * cachePercent;
+    final int cacheSize = (fileBytes / 100) * cachePercent;
     final int cacheOffset = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
 
     long pos = 0;

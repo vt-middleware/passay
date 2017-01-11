@@ -16,9 +16,6 @@ public abstract class AbstractFileWordList extends AbstractWordList
   /** default cache size. */
   public static final int DEFAULT_CACHE_SIZE = 5;
 
-  /** 100 percent. */
-  protected static final int HUNDRED_PERCENT = 100;
-
   /** file containing words. */
   protected final RandomAccessFile file;
 
@@ -45,7 +42,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
   public AbstractFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
     throws IOException
   {
-    if (cachePercent < 0 || cachePercent > HUNDRED_PERCENT) {
+    if (cachePercent < 0 || cachePercent > 100) {
       throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
     }
     file = raf;

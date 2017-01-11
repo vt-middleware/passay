@@ -78,7 +78,7 @@ public class FileWordList extends AbstractFileWordList
     file.seek(pos);
 
     final long fileBytes = file.length();
-    final long cacheSize = (fileBytes / HUNDRED_PERCENT) * cachePercent;
+    final long cacheSize = (fileBytes / 100) * cachePercent;
     final long cacheOffset = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
 
     String a;
