@@ -18,6 +18,12 @@ import java.io.RandomAccessFile;
 public class FileWordList extends AbstractFileWordList
 {
 
+  /** Buffered reader around backing file. */
+  private BufferedReader reader;
+
+  /** Current position in backing file. */
+  private long position;
+
 
   /**
    * Creates a new case-sensitive word list from the supplied file. The input file is read on initialization and is
@@ -74,65 +80,38 @@ public class FileWordList extends AbstractFileWordList
     throws IOException
   {
     super(raf, caseSensitive, cachePercent);
-    long pos = 0;
-    file.seek(pos);
-
-    final long fileBytes = file.length();
-    final long cacheSize = (fileBytes / 100) * cachePercent;
-    final long cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
-
-    String a;
-    String b = null;
-    while ((a = file.readLine()) != null) {
-      if (b != null && comparator.compare(a, b) < 0) {
-        throw new IllegalArgumentException("File is not sorted correctly for this comparator");
-      }
-      b = a;
-
-      if (cacheSize > 0 && size % cacheModulus == 0) {
-        cache.put(size, pos);
-      }
-      pos = file.getFilePointer();
-      size++;
-    }
+    initialize(cachePercent);
   }
 
 
-  /**
-   * Reads the file line by line and returns the word at the supplied index. Returns null if the index cannot be read.
-   * This method leverages the cache to seek to the closest position of the supplied index.
-   *
-   * @param  index  to read word at
-   *
-   * @return  word at the supplied index
-   *
-   * @throws  IllegalStateException  if an error occurs reading the supplied file
-   */
   @Override
-  protected String readFile(final int index)
+  protected void seek(final long offset) throws IOException
   {
-    try {
-      synchronized (file) {
-        int i = 0;
-        if (!cache.isEmpty() && cache.firstKey() <= index) {
-          i = cache.floorKey(index);
-        }
+    position = offset;
+    file.seek(offset);
+    reader = new BufferedReader(new FileReader(file.getFD()));
+  }
 
-        final long pos = i > 0 ? cache.get(i) : 0L;
-        file.seek(pos);
 
-        String s;
-        final BufferedReader reader = new BufferedReader(new FileReader(file.getFD()));
-        while ((s = reader.readLine()) != null) {
-          if (i == index) {
-            return s;
-          }
-          i++;
+  @Override
+  protected FileWord nextWord() throws IOException
+  {
+    final StringBuilder line = new StringBuilder();
+    int value;
+    long pos = position;
+    while ((value = reader.read()) != -1) {
+      position++;
+      final char c = (char) value;
+      if (c == '\n' || c == '\r') {
+        // Ignore leading line termination characters
+        if (line.length() == 0) {
+          pos = position;
+          continue;
         }
+        break;
       }
-    } catch (IOException e) {
-      throw new IllegalStateException("Error reading file", e);
+      line.append(c);
     }
-    return null;
+    return line.length() > 0 ? new FileWord(line.toString(), pos) : null;
   }
 }

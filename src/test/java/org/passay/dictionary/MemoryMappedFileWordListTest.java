@@ -1,9 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
+import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -16,40 +15,35 @@ import org.testng.annotations.Test;
  *
  * @author  Middleware Services
  */
-public class MemoryMappedFileWordListTest extends AbstractWordListTest
+public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMappedFileWordList>
 {
+  /** Word list backed by file with Unix line endings. */
+  private MemoryMappedFileWordList unixWordList;
 
-  /** File with unix new lines. */
-  private FileChannel unixFileChannel;
+  /** Word list backed by file with Mac line endings. */
+  private MemoryMappedFileWordList macWordList;
 
-  /** File with mac new lines. */
-  private FileChannel macFileChannel;
-
-  /** File with dos new lines. */
-  private FileChannel dosFileChannel;
+  /** Word list backed by file with DOS line endings. */
+  private MemoryMappedFileWordList dosWordList;
 
 
   /**
-   * @param  file  dictionary to load.
-   * @param  unixFile  file with unix line endings
-   * @param  macFile  file with mac line endings
-   * @param  dosFile  file with dos line endings
+   * @param  file  path to word list file
+   * @param  unixFile  path to word list file with unix line endings
+   * @param  macFile  path to word list file with mac line endings
+   * @param  dosFile  path to word list file with dos line endings
    *
    * @throws  Exception  On test failure.
    */
   @Parameters({ "fbsdFileSorted", "newLinesUnix", "newLinesMac", "newLinesDos" })
   @BeforeClass(groups = {"wltest"})
-  public void createWordList(final String file, final String unixFile, final String macFile, final String dosFile)
-    throws Exception
+  public void createWordLists(final String file, final String unixFile, final String macFile, final String dosFile)
+      throws Exception
   {
     wordList = new MemoryMappedFileWordList(new RandomAccessFile(file, "r"));
-    AssertJUnit.assertEquals(282, wordList.size());
-    AssertJUnit.assertEquals("DVD", wordList.get(42));
-    AssertJUnit.assertEquals("UID", wordList.get(199));
-
-    unixFileChannel = new RandomAccessFile(unixFile, "r").getChannel();
-    macFileChannel = new RandomAccessFile(macFile, "r").getChannel();
-    dosFileChannel = new RandomAccessFile(dosFile, "r").getChannel();
+    unixWordList = new MemoryMappedFileWordList(new RandomAccessFile(unixFile, "r"), false, 0);
+    macWordList = new MemoryMappedFileWordList(new RandomAccessFile(macFile, "r"), false, 50);
+    dosWordList = new MemoryMappedFileWordList(new RandomAccessFile(dosFile, "r"), true, 100);
   }
 
 
@@ -59,16 +53,34 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest
    * @throws  Exception  On test failure.
    */
   @AfterClass(groups = {"wltest"})
-  public void closeWordList()
-    throws Exception
+  public void closeWordLists()
+      throws Exception
   {
-    AssertJUnit.assertTrue(((MemoryMappedFileWordList) wordList).getFile().getFD().valid());
-    ((MemoryMappedFileWordList) wordList).close();
-    AssertJUnit.assertFalse(((MemoryMappedFileWordList) wordList).getFile().getFD().valid());
+    final MemoryMappedFileWordList[] lists = {wordList, unixWordList, macWordList, dosWordList};
+    for (MemoryMappedFileWordList list : lists) {
+      AssertJUnit.assertTrue(list.getFile().getFD().valid());
+      list.close();
+      AssertJUnit.assertFalse(list.getFile().getFD().valid());
+    }
+  }
 
-    unixFileChannel.close();
-    macFileChannel.close();
-    dosFileChannel.close();
+
+  /**
+   * Create test parameters.
+   *
+   * @return  Array of MemoryMappedFileWordListTest.
+   *
+   * @throws IOException  on file I/O errors.
+   */
+  @DataProvider(name = "wordLists")
+  public Object[][] getWordLists()
+      throws IOException
+  {
+    return new Object[][] {
+      new Object[] {unixWordList},
+      new Object[] {macWordList},
+      new Object[] {dosWordList},
+    };
   }
 
 
@@ -106,41 +118,5 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest
 
     fwl = new MemoryMappedFileWordList(new RandomAccessFile(file2, "r"), false, 0);
     fwl.close();
-  }
-
-
-  /**
-   * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
-   */
-  @DataProvider(name = "newlineFiles")
-  public Object[][] newlineFiles()
-    throws Exception
-  {
-    return
-      new Object[][] {
-        {unixFileChannel.map(FileChannel.MapMode.READ_ONLY, 0, unixFileChannel.size()), },
-        {macFileChannel.map(FileChannel.MapMode.READ_ONLY, 0, macFileChannel.size()), },
-        {dosFileChannel.map(FileChannel.MapMode.READ_ONLY, 0, dosFileChannel.size()), },
-      };
-  }
-
-
-  /**
-   * @param  buffer  to read lines from
-   *
-   * @throws  Exception  On test failure.
-   */
-  @Test(groups = {"wltest"}, dataProvider = "newlineFiles")
-  public void readLine(final MappedByteBuffer buffer)
-    throws Exception
-  {
-    AssertJUnit.assertEquals("This is the first line", MemoryMappedFileWordList.readLine(buffer));
-    AssertJUnit.assertEquals("", MemoryMappedFileWordList.readLine(buffer));
-    AssertJUnit.assertEquals("This is the second to last line", MemoryMappedFileWordList.readLine(buffer));
-    AssertJUnit.assertEquals("", MemoryMappedFileWordList.readLine(buffer));
-    // buffer should be empty
-    AssertJUnit.assertNull(MemoryMappedFileWordList.readLine(buffer));
   }
 }

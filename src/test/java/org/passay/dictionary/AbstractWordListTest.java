@@ -8,9 +8,11 @@ import org.testng.annotations.Test;
 /**
  * Common unit tests for {@link WordList} implementations.
  *
+ * @param  <T>  Type of word list under test.
+ *
  * @author  Middleware Services
  */
-public abstract class AbstractWordListTest
+public abstract class AbstractWordListTest<T extends WordList>
 {
 
   /** False contains. */
@@ -23,39 +25,48 @@ public abstract class AbstractWordListTest
   public static final int TRUE_CONTAINS_INDEX = 103;
 
   /** Test list. */
-  protected WordList wordList;
+  protected T wordList;
 
 
   /**
-   * Test for {@link WordList#get(int)}.
+   * Exercises reading words from {@link FileWordList}.
+   *
+   * @param  list  word list to test.
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
-  public void get()
-    throws Exception
+  @Test(groups = {"wltest"}, dataProvider = "wordLists")
+  public void get(final T list)
+      throws Exception
   {
+    AssertJUnit.assertEquals(26, list.size());
+
     try {
-      wordList.get(-1);
+      list.get(-1);
       AssertJUnit.fail("Should have thrown IndexOutOfBoundsException");
     } catch (IndexOutOfBoundsException e) {
       AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
     } catch (Exception e) {
       AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
     }
-
+    AssertJUnit.assertEquals("Alpha", list.get(0));
+    AssertJUnit.assertEquals("Bravo", list.get(1));
+    AssertJUnit.assertEquals("Charlie", list.get(2));
+    AssertJUnit.assertEquals("Delta", list.get(3));
+    AssertJUnit.assertEquals("Echo", list.get(4));
+    AssertJUnit.assertEquals("Foxtrot", list.get(5));
+    AssertJUnit.assertEquals("Mike", list.get(12));
+    AssertJUnit.assertEquals("November", list.get(13));
+    AssertJUnit.assertEquals("Yankee", list.get(24));
+    AssertJUnit.assertEquals("Zulu", list.get(25));
     try {
-      wordList.get(282);
+      list.get(26);
       AssertJUnit.fail("Should have thrown IndexOutOfBoundsException");
     } catch (IndexOutOfBoundsException e) {
       AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
     } catch (Exception e) {
       AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
     }
-
-    AssertJUnit.assertEquals("ABI", wordList.get(0));
-    AssertJUnit.assertEquals("MIPS", wordList.get(107));
-    AssertJUnit.assertEquals("website", wordList.get(281));
   }
 
 

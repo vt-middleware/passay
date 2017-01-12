@@ -49,7 +49,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
     throws Exception
   {
     System.out.println(
-      wld.getClass().getSimpleName() + " (" + ArrayWordList.class.getSimpleName() + ") search time: " +
+      wld.getClass().getSimpleName() + " (" + ArrayWordList.class.getSimpleName() + ") total search time: " +
       (wldSearchTime / 1000 / 1000) + "ms");
     System.out.println(
       wld.getClass().getSimpleName() + " (" + ArrayWordList.class.getSimpleName() + ") avg time per search: " +

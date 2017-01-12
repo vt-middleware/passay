@@ -79,100 +79,34 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
     super(raf, caseSensitive, cachePercent);
     final FileChannel channel = file.getChannel();
     buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-
-    final int fileBytes = buffer.capacity();
-    final int cacheSize = (fileBytes / 100) * cachePercent;
-    final int cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
-
-    long pos = 0;
-    String a;
-    String b = null;
-    while ((a = readLine(buffer)) != null) {
-      if (b != null && comparator.compare(a, b) < 0) {
-        throw new IllegalArgumentException("File is not sorted correctly for this comparator");
-      }
-      b = a;
-
-      if (cacheSize > 0 && size % cacheModulus == 0) {
-        cache.put(size, pos);
-      }
-      pos = buffer.position();
-      size++;
-    }
+    initialize(cachePercent);
   }
 
 
-  /**
-   * Reads the file line by line and returns the word at the supplied index. Returns null if the index cannot be read.
-   * This method leverages the cache to seek to the closest position of the supplied index.
-   *
-   * @param  index  to read word at
-   *
-   * @return  word at the supplied index
-   *
-   * @throws  IllegalStateException  if an error occurs reading the supplied file
-   */
   @Override
-  protected String readFile(final int index)
+  protected void seek(final long offset) throws IOException
   {
-    synchronized (buffer) {
-      int i = 0;
-      if (!cache.isEmpty() && cache.firstKey() <= index) {
-        i = cache.floorKey(index);
-      }
-
-      final int pos = i > 0 ? cache.get(i).intValue() : 0;
-      buffer.position(pos);
-
-      String s;
-      while (buffer.hasRemaining()) {
-        s = readLine(buffer);
-        if (i == index) {
-          return s;
-        }
-        i++;
-      }
-    }
-    return null;
+    buffer.position((int) offset);
   }
 
 
-  /**
-   * Reads a line from the supplied buffer. Buffer position will be set to the beginning of the next line. Line
-   * terminator must be one of '\n', '\r', or "\r\n".
-   *
-   * @param  buffer  to read from
-   *
-   * @return  file line or null if end of file has been reached
-   */
-  protected static String readLine(final MappedByteBuffer buffer)
+  @Override
+  protected FileWord nextWord()
   {
-    if (!buffer.hasRemaining()) {
-      return null;
-    }
     final StringBuilder line = new StringBuilder();
-    boolean lineFeed = false;
-    boolean carriageReturn = false;
+    int pos = buffer.position();
     while (buffer.hasRemaining()) {
       final char c = (char) buffer.get();
-      if (lineFeed) {
-        buffer.position(buffer.position() - 1);
+      if (c == '\n' || c == '\r') {
+        // Ignore leading line termination characters
+        if (line.length() == 0) {
+          pos = buffer.position();
+          continue;
+        }
         break;
       }
-      if (carriageReturn) {
-        if (c != '\n') {
-          buffer.position(buffer.position() - 1);
-          break;
-        }
-      }
-      if (c == '\n') {
-        lineFeed = true;
-      } else if (c == '\r') {
-        carriageReturn = true;
-      } else {
-        line.append(c);
-      }
+      line.append(c);
     }
-    return line.toString();
+    return line.length() > 0 ? new FileWord(line.toString(), pos) : null;
   }
 }
