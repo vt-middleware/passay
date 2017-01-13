@@ -38,7 +38,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
   @Parameters({ "fbsdFileSorted", "newLinesUnix", "newLinesMac", "newLinesDos" })
   @BeforeClass(groups = {"wltest"})
   public void createWordLists(final String file, final String unixFile, final String macFile, final String dosFile)
-      throws Exception
+    throws Exception
   {
     wordList = new MemoryMappedFileWordList(new RandomAccessFile(file, "r"));
     unixWordList = new MemoryMappedFileWordList(new RandomAccessFile(unixFile, "r"), false, 0);
@@ -54,7 +54,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
    */
   @AfterClass(groups = {"wltest"})
   public void closeWordLists()
-      throws Exception
+    throws Exception
   {
     final MemoryMappedFileWordList[] lists = {wordList, unixWordList, macWordList, dosWordList};
     for (MemoryMappedFileWordList list : lists) {
@@ -74,7 +74,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
    */
   @DataProvider(name = "wordLists")
   public Object[][] getWordLists()
-      throws IOException
+    throws IOException
   {
     return new Object[][] {
       new Object[] {unixWordList},

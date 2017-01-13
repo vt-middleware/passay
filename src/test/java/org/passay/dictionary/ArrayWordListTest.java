@@ -51,7 +51,7 @@ public class ArrayWordListTest extends AbstractWordListTest
    */
   @DataProvider(name = "wordLists")
   public Object[][] getWordLists()
-      throws IOException
+    throws IOException
   {
     return new Object[][] {
       new Object[] {wordList},

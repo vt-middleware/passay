@@ -53,7 +53,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
    */
   @AfterClass(groups = {"wltest"})
   public void closeWordList()
-      throws Exception
+    throws Exception
   {
     final FileWordList[] lists = {wordList, unixWordList, macWordList, dosWordList};
     for (FileWordList list : lists) {
@@ -73,7 +73,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
    */
   @DataProvider(name = "wordLists")
   public Object[][] getWordLists()
-      throws IOException
+    throws IOException
   {
     return new Object[][] {
       new Object[] {unixWordList},

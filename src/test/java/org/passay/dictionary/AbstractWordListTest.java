@@ -37,7 +37,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    */
   @Test(groups = {"wltest"}, dataProvider = "wordLists")
   public void get(final T list)
-      throws Exception
+    throws Exception
   {
     AssertJUnit.assertEquals(26, list.size());
 
