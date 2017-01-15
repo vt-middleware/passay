@@ -1,28 +1,25 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 
 /**
- * Provides an implementation of a {@link WordList} that is backed by a file. Each word is read from the file for every
- * get, though the implementation supports a simple memory cache to improve read performance. This implementation should
- * be avoided for files greater than 100MB in size. Due to the inefficiencies in {@link RandomAccessFile#readLine()},
- * expect a 100MB file to require approximately 60 seconds to be read during initialization. Once this class is
- * initialized, reads are relatively fast since a {@link BufferedReader} is used.
+ * Provides an implementation of a {@link WordList} that is backed by a file and leverages a {@link MappedByteBuffer}.
+ * Each word is read from the file for every get, though the implementation supports a simple memory cache to improve
+ * read performance. This implementation does not support files greater than 2GB in size. Use this implementation when
+ * the initialization cost of {@link FileWordList} is too high.
  *
  * @author  Middleware Services
  */
-public class FileWordList extends AbstractFileWordList
+public class MemoryMappedFileWordList extends AbstractFileWordList
 {
 
-  /** Buffered reader around backing file. */
-  private BufferedReader reader;
+  /** mapped byte buffer. */
+  protected final MappedByteBuffer buffer;
 
-  /** Current position in backing file. */
-  private long position;
 
 
   /**
@@ -36,7 +33,7 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf)
+  public MemoryMappedFileWordList(final RandomAccessFile raf)
     throws IOException
   {
     this(raf, true);
@@ -55,7 +52,7 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive)
+  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive)
     throws IOException
   {
     this(raf, caseSensitive, DEFAULT_CACHE_SIZE);
@@ -76,10 +73,12 @@ public class FileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
+  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
     throws IOException
   {
     super(raf, caseSensitive, cachePercent);
+    final FileChannel channel = file.getChannel();
+    buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
     initialize(cachePercent);
   }
 
@@ -87,25 +86,21 @@ public class FileWordList extends AbstractFileWordList
   @Override
   protected void seek(final long offset) throws IOException
   {
-    position = offset;
-    file.seek(offset);
-    reader = new BufferedReader(new FileReader(file.getFD()));
+    buffer.position((int) offset);
   }
 
 
   @Override
-  protected FileWord nextWord() throws IOException
+  protected FileWord nextWord()
   {
     final StringBuilder line = new StringBuilder();
-    int value;
-    long pos = position;
-    while ((value = reader.read()) != -1) {
-      position++;
-      final char c = (char) value;
+    int pos = buffer.position();
+    while (buffer.hasRemaining()) {
+      final char c = (char) buffer.get();
       if (c == '\n' || c == '\r') {
         // Ignore leading line termination characters
         if (line.length() == 0) {
-          pos = position;
+          pos = buffer.position();
           continue;
         }
         break;

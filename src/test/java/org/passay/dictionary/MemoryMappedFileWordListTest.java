@@ -11,20 +11,21 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
- * Unit test for {@link FileWordList}.
+ * Unit test for {@link MemoryMappedFileWordList}.
  *
  * @author  Middleware Services
  */
-public class FileWordListTest extends AbstractWordListTest<FileWordList>
+public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMappedFileWordList>
 {
   /** Word list backed by file with Unix line endings. */
-  private FileWordList unixWordList;
+  private MemoryMappedFileWordList unixWordList;
 
   /** Word list backed by file with Mac line endings. */
-  private FileWordList macWordList;
+  private MemoryMappedFileWordList macWordList;
 
   /** Word list backed by file with DOS line endings. */
-  private FileWordList dosWordList;
+  private MemoryMappedFileWordList dosWordList;
+
 
   /**
    * @param  file  path to word list file
@@ -39,24 +40,24 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
   public void createWordLists(final String file, final String unixFile, final String macFile, final String dosFile)
     throws Exception
   {
-    wordList = new FileWordList(new RandomAccessFile(file, "r"));
-    unixWordList = new FileWordList(new RandomAccessFile(unixFile, "r"), false, 0);
-    macWordList = new FileWordList(new RandomAccessFile(macFile, "r"), false, 50);
-    dosWordList = new FileWordList(new RandomAccessFile(dosFile, "r"), true, 100);
+    wordList = new MemoryMappedFileWordList(new RandomAccessFile(file, "r"));
+    unixWordList = new MemoryMappedFileWordList(new RandomAccessFile(unixFile, "r"), false, 0);
+    macWordList = new MemoryMappedFileWordList(new RandomAccessFile(macFile, "r"), false, 50);
+    dosWordList = new MemoryMappedFileWordList(new RandomAccessFile(dosFile, "r"), true, 100);
   }
 
 
   /**
-   * Test for {@link FileWordList#close()}.
+   * Test for {@link MemoryMappedFileWordList#close()}.
    *
    * @throws  Exception  On test failure.
    */
   @AfterClass(groups = {"wltest"})
-  public void closeWordList()
+  public void closeWordLists()
     throws Exception
   {
-    final FileWordList[] lists = {wordList, unixWordList, macWordList, dosWordList};
-    for (FileWordList list : lists) {
+    final MemoryMappedFileWordList[] lists = {wordList, unixWordList, macWordList, dosWordList};
+    for (MemoryMappedFileWordList list : lists) {
       AssertJUnit.assertTrue(list.getFile().getFD().valid());
       list.close();
       AssertJUnit.assertFalse(list.getFile().getFD().valid());
@@ -95,7 +96,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
     throws Exception
   {
     try {
-      new FileWordList(new RandomAccessFile(file1, "r"), true, -1);
+      new MemoryMappedFileWordList(new RandomAccessFile(file1, "r"), true, -1);
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
@@ -104,7 +105,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
     }
 
     try {
-      new FileWordList(new RandomAccessFile(file1, "r"), true, 101);
+      new MemoryMappedFileWordList(new RandomAccessFile(file1, "r"), true, 101);
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
@@ -112,10 +113,10 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
       AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
 
-    FileWordList fwl = new FileWordList(new RandomAccessFile(file1, "r"), true, 0);
+    MemoryMappedFileWordList fwl = new MemoryMappedFileWordList(new RandomAccessFile(file1, "r"), true, 0);
     fwl.close();
 
-    fwl = new FileWordList(new RandomAccessFile(file2, "r"), false, 0);
+    fwl = new MemoryMappedFileWordList(new RandomAccessFile(file2, "r"), false, 0);
     fwl.close();
   }
 }

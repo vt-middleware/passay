@@ -2,6 +2,7 @@
 package org.passay.dictionary;
 
 import java.io.RandomAccessFile;
+
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -12,7 +13,7 @@ import org.testng.annotations.Test;
  *
  * @author  Middleware Services
  */
-public class FileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
+public class MemoryMappedFileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
 {
 
   /** dictionary to test. */
@@ -36,10 +37,11 @@ public class FileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
     super.initialize(dict1, dict2);
 
     long t = System.currentTimeMillis();
-    wld = new WordListDictionary(new FileWordList(new RandomAccessFile(webFile, "r")));
+    wld = new WordListDictionary(new MemoryMappedFileWordList(new RandomAccessFile(webFile, "r")));
     t = System.currentTimeMillis() - t;
     System.out.println(
-      wld.getClass().getSimpleName() + " (" + FileWordList.class.getSimpleName() + ") time to construct: " + t + "ms");
+      wld.getClass().getSimpleName() + " (" + MemoryMappedFileWordList.class.getSimpleName() +
+          ") time to construct: " + t + "ms");
   }
 
 
@@ -49,11 +51,11 @@ public class FileWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
     throws Exception
   {
     System.out.println(
-      wld.getClass().getSimpleName() + " (" + FileWordList.class.getSimpleName() + ") total search time: " +
-      (wldSearchTime / 1000 / 1000) + "ms");
+      wld.getClass().getSimpleName() + " (" + MemoryMappedFileWordList.class.getSimpleName() +
+          ") total search time: " + (wldSearchTime / 1000 / 1000) + "ms");
     System.out.println(
-      wld.getClass().getSimpleName() + " (" + FileWordList.class.getSimpleName() + ") avg time per search: " +
-      (wldSearchTime / 10000) + "ns");
+      wld.getClass().getSimpleName() + " (" + MemoryMappedFileWordList.class.getSimpleName() +
+          ") avg time per search: " + (wldSearchTime / 10000) + "ns");
     wld = null;
   }
 
