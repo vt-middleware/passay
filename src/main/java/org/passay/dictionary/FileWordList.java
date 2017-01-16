@@ -1,28 +1,27 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 
 /**
  * Provides an implementation of a {@link WordList} that is backed by a file. Each word is read from the file for every
  * get, though the implementation supports a simple memory cache to improve read performance. This implementation should
- * be avoided for files greater than 100MB in size. Due to the inefficiencies in {@link RandomAccessFile#readLine()},
- * expect a 100MB file to require approximately 60 seconds to be read during initialization. Once this class is
- * initialized, reads are relatively fast since a {@link BufferedReader} is used.
+ * be avoided for files greater than 100MB in size.
  *
  * @author  Middleware Services
  */
 public class FileWordList extends AbstractFileWordList
 {
+  /** Size of read buffer. */
+  private static final int READ_BUFSIZE = 8192;
 
-  /** Buffered reader around backing file. */
-  private BufferedReader reader;
+  /** Read buffer. */
+  private final byte[] bytes = new byte[READ_BUFSIZE];
 
-  /** Current position in backing file. */
-  private long position;
+  /** Wrapper around read buffer. */
+  private final ByteBuffer buffer = ByteBuffer.wrap(bytes);
 
 
   /**
@@ -36,8 +35,7 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf)
-    throws IOException
+  public FileWordList(final RandomAccessFile raf) throws IOException
   {
     this(raf, true);
   }
@@ -55,8 +53,7 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive)
-    throws IOException
+  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive) throws IOException
   {
     this(raf, caseSensitive, DEFAULT_CACHE_SIZE);
   }
@@ -87,31 +84,25 @@ public class FileWordList extends AbstractFileWordList
   @Override
   protected void seek(final long offset) throws IOException
   {
-    position = offset;
     file.seek(offset);
-    reader = new BufferedReader(new FileReader(file.getFD()));
+    buffer.clear();
+    fill();
   }
 
 
   @Override
-  protected FileWord nextWord() throws IOException
+  protected ByteBuffer buffer()
   {
-    final StringBuilder line = new StringBuilder();
-    int value;
-    long pos = position;
-    while ((value = reader.read()) != -1) {
-      position++;
-      final char c = (char) value;
-      if (c == '\n' || c == '\r') {
-        // Ignore leading line termination characters
-        if (line.length() == 0) {
-          pos = position;
-          continue;
-        }
-        break;
-      }
-      line.append(c);
-    }
-    return line.length() > 0 ? new FileWord(line.toString(), pos) : null;
+    return buffer;
+  }
+
+
+  @Override
+  protected void fill()
+    throws IOException
+  {
+    buffer.clear();
+    final int count = file.read(bytes);
+    buffer.limit(count > 0 ? count : 0);
   }
 }

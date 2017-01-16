@@ -3,6 +3,7 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
@@ -17,9 +18,8 @@ import java.nio.channels.FileChannel;
 public class MemoryMappedFileWordList extends AbstractFileWordList
 {
 
-  /** mapped byte buffer. */
-  protected final MappedByteBuffer buffer;
-
+  /** Memory-mapped buffer around file. */
+  private final MappedByteBuffer buffer;
 
 
   /**
@@ -33,8 +33,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf)
-    throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile raf) throws IOException
   {
     this(raf, true);
   }
@@ -52,8 +51,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive)
-    throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive) throws IOException
   {
     this(raf, caseSensitive, DEFAULT_CACHE_SIZE);
   }
@@ -86,27 +84,17 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
   @Override
   protected void seek(final long offset) throws IOException
   {
-    buffer.position((int) offset);
+    buffer.clear().position((int) offset);
   }
 
 
   @Override
-  protected FileWord nextWord()
+  protected ByteBuffer buffer()
   {
-    final StringBuilder line = new StringBuilder();
-    int pos = buffer.position();
-    while (buffer.hasRemaining()) {
-      final char c = (char) buffer.get();
-      if (c == '\n' || c == '\r') {
-        // Ignore leading line termination characters
-        if (line.length() == 0) {
-          pos = buffer.position();
-          continue;
-        }
-        break;
-      }
-      line.append(c);
-    }
-    return line.length() > 0 ? new FileWord(line.toString(), pos) : null;
+    return buffer;
   }
+
+
+  @Override
+  protected void fill() throws IOException {}
 }

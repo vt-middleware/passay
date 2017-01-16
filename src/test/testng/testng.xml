@@ -19,6 +19,8 @@
   <parameter name="newLinesUnix" value="src/test/resources/newlines.unix"/>
   <parameter name="newLinesMac" value="src/test/resources/newlines.mac"/>
   <parameter name="newLinesDos" value="src/test/resources/newlines.dos"/>
+  <parameter name="utf8" value="src/test/resources/openwall-utf8.txt"/>
+  <parameter name="utf8Bom" value="src/test/resources/openwall-utf8-bom.txt"/>
 
   <parameter name="partialSearchWord" value=".e.e.e.e"/>
   <parameter name="partialSearchResults" value="Genevese|reserene|teleseme|terebene"/>
@@ -54,7 +56,6 @@
       <package name="org.passay.dictionary.*" />
     </packages>
   </test>
-  <!--
   <test name="dictperftests" parallel="methods" thread-count="6">
     <groups>
       <run>
@@ -66,5 +67,4 @@
       <package name="org.passay.dictionary.*" />
     </packages>
   </test>
-  -->
 </suite>

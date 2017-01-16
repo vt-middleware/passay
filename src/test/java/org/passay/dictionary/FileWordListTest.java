@@ -4,9 +4,6 @@ package org.passay.dictionary;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import org.testng.AssertJUnit;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
@@ -17,69 +14,17 @@ import org.testng.annotations.Test;
  */
 public class FileWordListTest extends AbstractWordListTest<FileWordList>
 {
-  /** Word list backed by file with Unix line endings. */
-  private FileWordList unixWordList;
+  /** Current cache percent. */
+  private int cachePercent;
 
-  /** Word list backed by file with Mac line endings. */
-  private FileWordList macWordList;
 
-  /** Word list backed by file with DOS line endings. */
-  private FileWordList dosWordList;
-
-  /**
-   * @param  file  path to word list file
-   * @param  unixFile  path to word list file with unix line endings
-   * @param  macFile  path to word list file with mac line endings
-   * @param  dosFile  path to word list file with dos line endings
-   *
-   * @throws  Exception  On test failure.
-   */
-  @Parameters({ "fbsdFileSorted", "newLinesUnix", "newLinesMac", "newLinesDos" })
-  @BeforeClass(groups = {"wltest"})
-  public void createWordLists(final String file, final String unixFile, final String macFile, final String dosFile)
-    throws Exception
+  @Override
+  protected FileWordList createWordList(final String filePath, final boolean caseSensitive) throws IOException
   {
-    wordList = new FileWordList(new RandomAccessFile(file, "r"));
-    unixWordList = new FileWordList(new RandomAccessFile(unixFile, "r"), false, 0);
-    macWordList = new FileWordList(new RandomAccessFile(macFile, "r"), false, 50);
-    dosWordList = new FileWordList(new RandomAccessFile(dosFile, "r"), true, 100);
-  }
-
-
-  /**
-   * Test for {@link FileWordList#close()}.
-   *
-   * @throws  Exception  On test failure.
-   */
-  @AfterClass(groups = {"wltest"})
-  public void closeWordList()
-    throws Exception
-  {
-    final FileWordList[] lists = {wordList, unixWordList, macWordList, dosWordList};
-    for (FileWordList list : lists) {
-      AssertJUnit.assertTrue(list.getFile().getFD().valid());
-      list.close();
-      AssertJUnit.assertFalse(list.getFile().getFD().valid());
-    }
-  }
-
-
-  /**
-   * Create test parameters.
-   *
-   * @return  Array of MemoryMappedFileWordListTest.
-   *
-   * @throws IOException  on file I/O errors.
-   */
-  @DataProvider(name = "wordLists")
-  public Object[][] getWordLists()
-    throws IOException
-  {
-    return new Object[][] {
-      new Object[] {unixWordList},
-      new Object[] {macWordList},
-      new Object[] {dosWordList},
-    };
+    final FileWordList list = new FileWordList(
+        new RandomAccessFile(filePath, "r"), caseSensitive, cachePercent > 100 ? 100 : cachePercent);
+    cachePercent *= 3 / 2;
+    return list;
   }
 
 
@@ -91,8 +36,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
    */
   @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
   @Test(groups = {"wltest"})
-  public void construct(final String file1, final String file2)
-    throws Exception
+  public void construct(final String file1, final String file2) throws Exception
   {
     try {
       new FileWordList(new RandomAccessFile(file1, "r"), true, -1);
@@ -104,7 +48,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
     }
 
     try {
-      new FileWordList(new RandomAccessFile(file1, "r"), true, 101);
+      new FileWordList(new RandomAccessFile(file1, "r"), true, 100 + 1);
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);

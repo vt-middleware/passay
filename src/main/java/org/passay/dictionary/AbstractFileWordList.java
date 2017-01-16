@@ -3,6 +3,9 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.TreeMap;
 
 /**
@@ -13,23 +16,35 @@ import java.util.TreeMap;
 public abstract class AbstractFileWordList extends AbstractWordList
 {
 
-  /** default cache size. */
+  /** Default cache size. */
   public static final int DEFAULT_CACHE_SIZE = 5;
 
-  /** file containing words. */
+  /** Byte marker indicating non-UTF-8 encoding. */
+  private static final byte NON_UTF8_MARKER = (byte) 0xF0;
+
+  /** UTF-8 BOM. */
+  private static final byte[] UTF8_BOM = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
+
+  /** File containing words. */
   protected final RandomAccessFile file;
 
-  /** number of words in the file. */
+  /** Number of words in the file. */
   protected int size;
 
-  /** cache of indexes to file positions. */
+  /** Cache of indexes to file positions. */
   // CheckStyle:IllegalType OFF
   // uses the firstKey and floorKey implementations
   protected TreeMap<Integer, Long> cache = new TreeMap<>();
   // CheckStyle:IllegalType ON
 
-  /** Synchronization lock. */
-  private final Object lock = new Object();
+  /** Buffer to hold word read from file. */
+  private final ByteBuffer wordBuf = ByteBuffer.allocate(256);
+
+  /** Buffer to hold file header that may contain UTF-8 BOM. */
+  private final byte[] header = new byte[UTF8_BOM.length];
+
+  /** Current position into backing file. */
+  private long position;
 
 
   /**
@@ -92,10 +107,9 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  if an error occurs closing the file
    */
-  public void close()
-    throws IOException
+  public void close() throws IOException
   {
-    synchronized (file) {
+    synchronized (cache) {
       file.close();
     }
     cache = null;
@@ -115,10 +129,17 @@ public abstract class AbstractFileWordList extends AbstractWordList
     final long cacheSize = (fileBytes / 100) * cachePercent;
     final long cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
 
+    if (cache == null) {
+      throw new IllegalStateException("Cannot initialize after close has been called.");
+    }
+
     FileWord a;
     FileWord b = null;
-    synchronized (lock) {
+    synchronized (cache) {
+      position = 0;
       seek(0);
+      handleBom();
+      cache.clear();
       while ((a = nextWord()) != null) {
         if (b != null && comparator.compare(a.word, b.word) < 0) {
           throw new IllegalArgumentException("File is not sorted correctly for this comparator");
@@ -148,10 +169,13 @@ public abstract class AbstractFileWordList extends AbstractWordList
     if (!cache.isEmpty() && cache.firstKey() <= index) {
       i = cache.floorKey(index);
     }
-    final long pos = i > 0 ? cache.get(i) : 0L;
     FileWord w;
-    synchronized (lock) {
-      seek(pos);
+    synchronized (cache) {
+      position = i > 0 ? cache.get(i) : 0L;
+      seek(position);
+      if (position == 0) {
+        handleBom();
+      }
       do {
         w = nextWord();
       } while (i++ < index && w != null);
@@ -171,13 +195,88 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
 
   /**
+   * @return  Buffer around backing file.
+   */
+  protected abstract ByteBuffer buffer();
+
+
+  /**
+   * Fills the buffer from the backing file. This method may be a no-op if the buffer contains all file contents.
+   *
+   * @throws  IOException  on I/O errors filling buffer.
+   */
+  protected abstract void fill() throws IOException;
+
+
+  /**
    * Reads the next word from the current position in the backing file.
    *
    * @return  Data structure containing word and byte offset into file where word begins.
-
+   *
    * @throws  IOException  on I/O errors reading file data.
    */
-  protected abstract FileWord nextWord() throws IOException;
+  private FileWord nextWord() throws IOException
+  {
+    byte b;
+    long start = position;
+    wordBuf.clear();
+    while (hasRemaining()) {
+      b = buffer().get();
+      position++;
+      if ((char) b == '\n' || (char) b == '\r') {
+        // Ignore leading line termination characters
+        if (wordBuf.position() == 0) {
+          start++;
+          continue;
+        }
+        break;
+      }
+      if ((b & NON_UTF8_MARKER) == NON_UTF8_MARKER) {
+        throw new IOException("Invalid file encoding. UTF-8 is required.");
+      }
+      wordBuf.put(b);
+    }
+    if (wordBuf.position() == 0) {
+      return null;
+    }
+    final String word = new String(wordBuf.array(), 0, wordBuf.position(), StandardCharsets.UTF_8);
+    return new FileWord(word, start);
+  }
+
+
+  /**
+   * Determines whether the backing buffer has any more data to read. If the buffer is empty, it attempts
+   * to read from the underlying file and then checks the buffer again.
+   *
+   * @return  True if there is any more data to read from the buffer, false otherwise.
+   *
+   * @throws  IOException  on I/O errors reading file data.
+   */
+  private boolean hasRemaining() throws IOException
+  {
+    if (buffer().hasRemaining()) {
+      return true;
+    }
+    fill();
+    return buffer().hasRemaining();
+  }
+
+
+  /**
+   * Handle UTF-8 BOM that may appear at file start.
+   *
+   * @throws  IOException  On I/O errors.
+   */
+  private void handleBom() throws IOException
+  {
+    buffer().get(header);
+    if (Arrays.equals(UTF8_BOM, header)) {
+      position = buffer().position();
+    } else {
+      // No BOM found, return to start of file
+      seek(0);
+    }
+  }
 
 
   /**
