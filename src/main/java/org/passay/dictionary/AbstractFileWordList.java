@@ -4,8 +4,9 @@ package org.passay.dictionary;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 import java.util.TreeMap;
 
 /**
@@ -19,12 +20,6 @@ public abstract class AbstractFileWordList extends AbstractWordList
   /** Default cache size. */
   public static final int DEFAULT_CACHE_SIZE = 5;
 
-  /** Byte marker indicating non-UTF-8 encoding. */
-  private static final byte NON_UTF8_MARKER = (byte) 0xF0;
-
-  /** UTF-8 BOM. */
-  private static final byte[] UTF8_BOM = {(byte) 0xEF, (byte) 0xBB, (byte) 0xBF};
-
   /** File containing words. */
   protected final RandomAccessFile file;
 
@@ -37,11 +32,14 @@ public abstract class AbstractFileWordList extends AbstractWordList
   protected TreeMap<Integer, Long> cache = new TreeMap<>();
   // CheckStyle:IllegalType ON
 
+  /** Character decoder. */
+  private final CharsetDecoder charDecoder;
+
   /** Buffer to hold word read from file. */
   private final ByteBuffer wordBuf = ByteBuffer.allocate(256);
 
-  /** Buffer to hold file header that may contain UTF-8 BOM. */
-  private final byte[] header = new byte[UTF8_BOM.length];
+  /** Buffer to hold decoded word read from file. */
+  private final CharBuffer charBuf = CharBuffer.allocate(wordBuf.capacity() * 4);
 
   /** Current position into backing file. */
   private long position;
@@ -53,11 +51,16 @@ public abstract class AbstractFileWordList extends AbstractWordList
    * @param  raf  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
+   * @param  decoder  Charset decoder for converting file bytes to characters
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public AbstractFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
+  public AbstractFileWordList(
+    final RandomAccessFile raf,
+    final boolean caseSensitive,
+    final int cachePercent,
+    final CharsetDecoder decoder)
     throws IOException
   {
     if (cachePercent < 0 || cachePercent > 100) {
@@ -69,6 +72,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
     } else {
       comparator = WordLists.CASE_INSENSITIVE_COMPARATOR;
     }
+    charDecoder = decoder;
   }
 
 
@@ -138,7 +142,6 @@ public abstract class AbstractFileWordList extends AbstractWordList
     synchronized (cache) {
       position = 0;
       seek(0);
-      handleBom();
       cache.clear();
       while ((a = nextWord()) != null) {
         if (b != null && comparator.compare(a.word, b.word) < 0) {
@@ -173,9 +176,6 @@ public abstract class AbstractFileWordList extends AbstractWordList
     synchronized (cache) {
       position = i > 0 ? cache.get(i) : 0L;
       seek(position);
-      if (position == 0) {
-        handleBom();
-      }
       do {
         w = nextWord();
       } while (i++ < index && w != null);
@@ -231,16 +231,19 @@ public abstract class AbstractFileWordList extends AbstractWordList
         }
         break;
       }
-      if ((b & NON_UTF8_MARKER) == NON_UTF8_MARKER) {
-        throw new IOException("Invalid file encoding. UTF-8 is required.");
-      }
       wordBuf.put(b);
     }
     if (wordBuf.position() == 0) {
       return null;
     }
-    final String word = new String(wordBuf.array(), 0, wordBuf.position(), StandardCharsets.UTF_8);
-    return new FileWord(word, start);
+
+    charBuf.clear();
+    wordBuf.flip();
+    final CoderResult result = charDecoder.decode(wordBuf, charBuf, true);
+    if (result.isError()) {
+      result.throwException();
+    }
+    return new FileWord(charBuf.flip().toString(), start);
   }
 
 
@@ -263,23 +266,6 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
 
   /**
-   * Handle UTF-8 BOM that may appear at file start.
-   *
-   * @throws  IOException  On I/O errors.
-   */
-  private void handleBom() throws IOException
-  {
-    buffer().get(header);
-    if (Arrays.equals(UTF8_BOM, header)) {
-      position = buffer().position();
-    } else {
-      // No BOM found, return to start of file
-      seek(0);
-    }
-  }
-
-
-  /**
    * Data structure containing word and byte offset into file where word begins in backing file.
    */
   static class FileWord
@@ -291,7 +277,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
     /** Byte offset into file where word begins. */
     long offset;
-    // CheckStyle:VisibilityModifier OFF
+    // CheckStyle:VisibilityModifier ON
 
 
     /**

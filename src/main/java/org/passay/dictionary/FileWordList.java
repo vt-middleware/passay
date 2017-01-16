@@ -4,6 +4,8 @@ package org.passay.dictionary;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Provides an implementation of a {@link WordList} that is backed by a file. Each word is read from the file for every
@@ -35,7 +37,8 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf) throws IOException
+  public FileWordList(final RandomAccessFile raf)
+    throws IOException
   {
     this(raf, true);
   }
@@ -53,7 +56,8 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive) throws IOException
+  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive)
+    throws IOException
   {
     this(raf, caseSensitive, DEFAULT_CACHE_SIZE);
   }
@@ -76,7 +80,33 @@ public class FileWordList extends AbstractFileWordList
   public FileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
     throws IOException
   {
-    super(raf, caseSensitive, cachePercent);
+    this(raf, caseSensitive, cachePercent, StandardCharsets.UTF_8.newDecoder());
+  }
+
+
+  /**
+   * Creates a new word list from the supplied file. The input file is read on initialization and is maintained by this
+   * class. cachePercent is a percentage of the file size in bytes.
+   *
+   * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
+   * called subsequently.</p>
+   *
+   * @param  raf  File containing words, one per line.
+   * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
+   * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
+   * @param  decoder  Charset decoder for converting file bytes to characters
+   *
+   * @throws  IllegalArgumentException  if cache percent is out of range.
+   * @throws  IOException  if an error occurs reading the supplied file
+   */
+  public FileWordList(
+    final RandomAccessFile raf,
+    final boolean caseSensitive,
+    final int cachePercent,
+    final CharsetDecoder decoder)
+    throws IOException
+  {
+    super(raf, caseSensitive, cachePercent, decoder);
     initialize(cachePercent);
   }
 
