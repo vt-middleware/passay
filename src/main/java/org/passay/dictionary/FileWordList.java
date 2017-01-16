@@ -112,7 +112,8 @@ public class FileWordList extends AbstractFileWordList
 
 
   @Override
-  protected void seek(final long offset) throws IOException
+  protected void seek(final long offset)
+    throws IOException
   {
     file.seek(offset);
     buffer.clear();

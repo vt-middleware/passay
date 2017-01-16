@@ -111,7 +111,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  if an error occurs closing the file
    */
-  public void close() throws IOException
+  public void close()
+    throws IOException
   {
     synchronized (cache) {
       file.close();
@@ -127,7 +128,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors reading file data.
    */
-  protected void initialize(final int cachePercent) throws IOException
+  protected void initialize(final int cachePercent)
+    throws IOException
   {
     final long fileBytes = file.length();
     final long cacheSize = (fileBytes / 100) * cachePercent;
@@ -166,7 +168,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors
    */
-  protected String readWord(final int index) throws IOException
+  protected String readWord(final int index)
+    throws IOException
   {
     int i = 0;
     if (!cache.isEmpty() && cache.firstKey() <= index) {
@@ -191,7 +194,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors seeking.
    */
-  protected abstract void seek(long offset) throws IOException;
+  protected abstract void seek(long offset)
+    throws IOException;
 
 
   /**
@@ -205,7 +209,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors filling buffer.
    */
-  protected abstract void fill() throws IOException;
+  protected abstract void fill()
+    throws IOException;
 
 
   /**
@@ -215,7 +220,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors reading file data.
    */
-  private FileWord nextWord() throws IOException
+  private FileWord nextWord()
+    throws IOException
   {
     byte b;
     long start = position;
@@ -255,7 +261,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors reading file data.
    */
-  private boolean hasRemaining() throws IOException
+  private boolean hasRemaining()
+    throws IOException
   {
     if (buffer().hasRemaining()) {
       return true;
