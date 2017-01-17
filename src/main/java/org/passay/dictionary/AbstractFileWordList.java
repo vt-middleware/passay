@@ -3,6 +3,10 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CoderResult;
 import java.util.TreeMap;
 
 /**
@@ -13,23 +17,32 @@ import java.util.TreeMap;
 public abstract class AbstractFileWordList extends AbstractWordList
 {
 
-  /** default cache size. */
+  /** Default cache size. */
   public static final int DEFAULT_CACHE_SIZE = 5;
 
-  /** file containing words. */
+  /** File containing words. */
   protected final RandomAccessFile file;
 
-  /** number of words in the file. */
+  /** Number of words in the file. */
   protected int size;
 
-  /** cache of indexes to file positions. */
+  /** Cache of indexes to file positions. */
   // CheckStyle:IllegalType OFF
   // uses the firstKey and floorKey implementations
   protected TreeMap<Integer, Long> cache = new TreeMap<>();
   // CheckStyle:IllegalType ON
 
-  /** Synchronization lock. */
-  private final Object lock = new Object();
+  /** Character decoder. */
+  private final CharsetDecoder charDecoder;
+
+  /** Buffer to hold word read from file. */
+  private final ByteBuffer wordBuf = ByteBuffer.allocate(256);
+
+  /** Buffer to hold decoded word read from file. */
+  private final CharBuffer charBuf = CharBuffer.allocate(wordBuf.capacity() * 4);
+
+  /** Current position into backing file. */
+  private long position;
 
 
   /**
@@ -38,11 +51,16 @@ public abstract class AbstractFileWordList extends AbstractWordList
    * @param  raf  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
+   * @param  decoder  Charset decoder for converting file bytes to characters
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public AbstractFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
+  public AbstractFileWordList(
+    final RandomAccessFile raf,
+    final boolean caseSensitive,
+    final int cachePercent,
+    final CharsetDecoder decoder)
     throws IOException
   {
     if (cachePercent < 0 || cachePercent > 100) {
@@ -54,6 +72,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
     } else {
       comparator = WordLists.CASE_INSENSITIVE_COMPARATOR;
     }
+    charDecoder = decoder;
   }
 
 
@@ -95,7 +114,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
   public void close()
     throws IOException
   {
-    synchronized (file) {
+    synchronized (cache) {
       file.close();
     }
     cache = null;
@@ -109,16 +128,23 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors reading file data.
    */
-  protected void initialize(final int cachePercent) throws IOException
+  protected void initialize(final int cachePercent)
+    throws IOException
   {
     final long fileBytes = file.length();
     final long cacheSize = (fileBytes / 100) * cachePercent;
     final long cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
 
+    if (cache == null) {
+      throw new IllegalStateException("Cannot initialize after close has been called.");
+    }
+
     FileWord a;
     FileWord b = null;
-    synchronized (lock) {
+    synchronized (cache) {
+      position = 0;
       seek(0);
+      cache.clear();
       while ((a = nextWord()) != null) {
         if (b != null && comparator.compare(a.word, b.word) < 0) {
           throw new IllegalArgumentException("File is not sorted correctly for this comparator");
@@ -142,16 +168,17 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors
    */
-  protected String readWord(final int index) throws IOException
+  protected String readWord(final int index)
+    throws IOException
   {
     int i = 0;
     if (!cache.isEmpty() && cache.firstKey() <= index) {
       i = cache.floorKey(index);
     }
-    final long pos = i > 0 ? cache.get(i) : 0L;
     FileWord w;
-    synchronized (lock) {
-      seek(pos);
+    synchronized (cache) {
+      position = i > 0 ? cache.get(i) : 0L;
+      seek(position);
       do {
         w = nextWord();
       } while (i++ < index && w != null);
@@ -167,17 +194,82 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors seeking.
    */
-  protected abstract void seek(long offset) throws IOException;
+  protected abstract void seek(long offset)
+    throws IOException;
+
+
+  /**
+   * @return  Buffer around backing file.
+   */
+  protected abstract ByteBuffer buffer();
+
+
+  /**
+   * Fills the buffer from the backing file. This method may be a no-op if the buffer contains all file contents.
+   *
+   * @throws  IOException  on I/O errors filling buffer.
+   */
+  protected abstract void fill()
+    throws IOException;
 
 
   /**
    * Reads the next word from the current position in the backing file.
    *
    * @return  Data structure containing word and byte offset into file where word begins.
-
+   *
    * @throws  IOException  on I/O errors reading file data.
    */
-  protected abstract FileWord nextWord() throws IOException;
+  private FileWord nextWord()
+    throws IOException
+  {
+    byte b;
+    long start = position;
+    wordBuf.clear();
+    while (hasRemaining()) {
+      b = buffer().get();
+      position++;
+      if ((char) b == '\n' || (char) b == '\r') {
+        // Ignore leading line termination characters
+        if (wordBuf.position() == 0) {
+          start++;
+          continue;
+        }
+        break;
+      }
+      wordBuf.put(b);
+    }
+    if (wordBuf.position() == 0) {
+      return null;
+    }
+
+    charBuf.clear();
+    wordBuf.flip();
+    final CoderResult result = charDecoder.decode(wordBuf, charBuf, true);
+    if (result.isError()) {
+      result.throwException();
+    }
+    return new FileWord(charBuf.flip().toString(), start);
+  }
+
+
+  /**
+   * Determines whether the backing buffer has any more data to read. If the buffer is empty, it attempts
+   * to read from the underlying file and then checks the buffer again.
+   *
+   * @return  True if there is any more data to read from the buffer, false otherwise.
+   *
+   * @throws  IOException  on I/O errors reading file data.
+   */
+  private boolean hasRemaining()
+    throws IOException
+  {
+    if (buffer().hasRemaining()) {
+      return true;
+    }
+    fill();
+    return buffer().hasRemaining();
+  }
 
 
   /**
@@ -192,7 +284,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
     /** Byte offset into file where word begins. */
     long offset;
-    // CheckStyle:VisibilityModifier OFF
+    // CheckStyle:VisibilityModifier ON
 
 
     /**

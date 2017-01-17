@@ -1,8 +1,14 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import org.testng.AssertJUnit;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 /**
@@ -14,32 +20,157 @@ import org.testng.annotations.Test;
  */
 public abstract class AbstractWordListTest<T extends WordList>
 {
-
-  /** False contains. */
-  public static final String FALSE_CONTAINS = "not-found-in-the-list";
-
-  /** True contains. */
-  public static final String TRUE_CONTAINS = "LinuxDoc";
-
-  /** True contains index. */
-  public static final int TRUE_CONTAINS_INDEX = 103;
-
-  /** Test list. */
-  protected T wordList;
+  /** Tracks word lists that have been created to facilitate test cleanup. */
+  private List<T> wordLists = new ArrayList<>();
 
 
   /**
-   * Exercises reading words from {@link FileWordList}.
+   * Word lists with expected size and words.
    *
-   * @param  list  word list to test.
+   * @return  Array of word list, size, and array of expected words.
+   *
+   * @throws IOException  on file I/O errors.
+   */
+  @DataProvider(name = "wordListsWithExpectedWords")
+  public Object[][] provideWordListsWithExpectedWords() throws IOException
+  {
+    final Object[][] parameters = new Object[][] {
+      new Object[] {
+        createWordList("src/test/resources/dict-enUS.txt", true),
+        48029,
+        new ExpectedWord[] {
+          new ExpectedWord("A", 0),
+          new ExpectedWord("AA", 1),
+          new ExpectedWord("Bernanke", 1076),
+          new ExpectedWord("clammily", 16264),
+          new ExpectedWord("clamminess", 16265),
+          new ExpectedWord("exponential", 22000),
+          new ExpectedWord("maple", 30256),
+          new ExpectedWord("zymurgy", 48028),
+        },
+      },
+      new Object[] {
+        createWordList("src/test/resources/dict-frFR.txt", true),
+        73424,
+        new ExpectedWord[] {
+          new ExpectedWord("A", 0),
+          new ExpectedWord("Carol", 990),
+          new ExpectedWord("caoutchouc", 15866),
+          new ExpectedWord("peinture", 50303),
+          new ExpectedWord("retrouvaille", 58153),
+          new ExpectedWord("yaourt", 70997),
+          new ExpectedWord("œuvée", 73423),
+        },
+      },
+      new Object[] {
+        createWordList("src/test/resources/dict-frFR-cr.txt", true),
+        73424,
+        new ExpectedWord[] {
+          new ExpectedWord("A", 0),
+          new ExpectedWord("Carol", 990),
+          new ExpectedWord("caoutchouc", 15866),
+          new ExpectedWord("peinture", 50303),
+          new ExpectedWord("retrouvaille", 58153),
+          new ExpectedWord("yaourt", 70997),
+          new ExpectedWord("œuvée", 73423),
+        },
+      },
+      new Object[] {
+        createWordList("src/test/resources/dict-viVN.txt", true),
+        6634,
+        new ExpectedWord[] {
+          new ExpectedWord("a", 0),
+          new ExpectedWord("ai", 1),
+          new ExpectedWord("giội", 1361),
+          new ExpectedWord("giộp", 1362),
+          new ExpectedWord("mướt", 2763),
+          new ExpectedWord("mười", 2764),
+          new ExpectedWord("mường", 2765),
+          new ExpectedWord("ực", 6632),
+          new ExpectedWord("ỷ", 6633),
+        },
+      },
+      new Object[] {
+        createWordList("src/test/resources/dict-viVN-crlf.txt", true),
+        6634,
+        new ExpectedWord[] {
+          new ExpectedWord("a", 0),
+          new ExpectedWord("ai", 1),
+          new ExpectedWord("giội", 1361),
+          new ExpectedWord("giộp", 1362),
+          new ExpectedWord("mướt", 2763),
+          new ExpectedWord("mười", 2764),
+          new ExpectedWord("mường", 2765),
+          new ExpectedWord("ực", 6632),
+          new ExpectedWord("ỷ", 6633),
+        },
+      },
+    };
+    for (Object[] parameter : parameters) {
+      wordLists.add((T) parameter[0]);
+    }
+    return parameters;
+  }
+
+
+  /**
+   * Word lists.
+   *
+   * @return  Array of word list.
+   *
+   * @throws IOException  on file I/O errors.
+   */
+  @DataProvider(name = "wordLists")
+  public Object[][] provideWordLists() throws IOException
+  {
+    final Object[][] parameters = new Object[][] {
+      new Object[] {createWordList("src/test/resources/dict-enUS.txt", true)},
+      new Object[] {createWordList("src/test/resources/dict-frFR.txt", true)},
+      new Object[] {createWordList("src/test/resources/dict-frFR-cr.txt", true)},
+      new Object[] {createWordList("src/test/resources/dict-viVN.txt", true)},
+      new Object[] {createWordList("src/test/resources/dict-viVN-crlf.txt", true)},
+    };
+    for (Object[] parameter : parameters) {
+      wordLists.add((T) parameter[0]);
+    }
+    return parameters;
+  }
+
+
+  /**
+   * Short word lists.
+   *
+   * @return  Array of word list.
+   *
+   * @throws IOException  on file I/O errors.
+   */
+  @DataProvider(name = "shortWordLists")
+  public Object[][] provideShortWordLists() throws IOException
+  {
+    final Object[][] parameters = new Object[][] {
+      new Object[] {createWordList("src/test/resources/freebsd.sort", true)},
+      new Object[] {createWordList("src/test/resources/freebsd.lc.sort", false)},
+    };
+    for (Object[] parameter : parameters) {
+      wordLists.add((T) parameter[0]);
+    }
+    return parameters;
+  }
+
+
+  /**
+   * Exercises reading words from a {@link WordList}.
+   *
+   * @param  list  Word list to test.
+   * @param  expectedSize  Expected size of the word list.
+   * @param  expectedWords  Test list of words to get and compare to expected result.
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"}, dataProvider = "wordLists")
-  public void get(final T list)
-    throws Exception
+  @Test(groups = {"wltest"}, dataProvider = "wordListsWithExpectedWords")
+  public void get(final T list, final int expectedSize, final ExpectedWord ... expectedWords) throws Exception
   {
-    AssertJUnit.assertEquals(26, list.size());
+    AssertJUnit.assertEquals(expectedSize, list.size());
 
     try {
       list.get(-1);
@@ -49,18 +180,13 @@ public abstract class AbstractWordListTest<T extends WordList>
     } catch (Exception e) {
       AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
     }
-    AssertJUnit.assertEquals("Alpha", list.get(0));
-    AssertJUnit.assertEquals("Bravo", list.get(1));
-    AssertJUnit.assertEquals("Charlie", list.get(2));
-    AssertJUnit.assertEquals("Delta", list.get(3));
-    AssertJUnit.assertEquals("Echo", list.get(4));
-    AssertJUnit.assertEquals("Foxtrot", list.get(5));
-    AssertJUnit.assertEquals("Mike", list.get(12));
-    AssertJUnit.assertEquals("November", list.get(13));
-    AssertJUnit.assertEquals("Yankee", list.get(24));
-    AssertJUnit.assertEquals("Zulu", list.get(25));
+
+    for (ExpectedWord expectedWord : expectedWords) {
+      AssertJUnit.assertEquals(expectedWord.word, list.get(expectedWord.index));
+    }
+
     try {
-      list.get(26);
+      list.get(expectedSize);
       AssertJUnit.fail("Should have thrown IndexOutOfBoundsException");
     } catch (IndexOutOfBoundsException e) {
       AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
@@ -73,17 +199,18 @@ public abstract class AbstractWordListTest<T extends WordList>
   /**
    * Test for {@link WordList#iterator()}.
    *
+   * @param  list  Word list to test.
+   *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
-  public void iterator()
-    throws Exception
+  @Test(groups = {"wltest"}, dataProvider = "shortWordLists")
+  public void iterator(final T list) throws Exception
   {
-    final Iterator<String> i = wordList.iterator();
+    final Iterator<String> i = list.iterator();
     int index = 0;
     while (i.hasNext()) {
       final String s = i.next();
-      AssertJUnit.assertEquals(wordList.get(index), s);
+      AssertJUnit.assertEquals(list.get(index), s);
       index++;
     }
   }
@@ -92,24 +219,83 @@ public abstract class AbstractWordListTest<T extends WordList>
   /**
    * Test for {@link WordList#medianIterator()}.
    *
+   * @param  list  Word list to test.
+   *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
-  public void medianIterator()
-    throws Exception
+  @Test(groups = {"wltest"}, dataProvider = "shortWordLists")
+  public void medianIterator(final T list) throws Exception
   {
-    final Iterator<String> i = wordList.medianIterator();
-    int index = wordList.size() / 2;
+    final Iterator<String> i = list.medianIterator();
+    int index = list.size() / 2;
     int count = 0;
     while (i.hasNext()) {
       final String s = i.next();
-      AssertJUnit.assertEquals(wordList.get(index), s);
+      AssertJUnit.assertEquals(list.get(index), s);
       count++;
       if (count % 2 == 0) {
         index = index + count;
       } else {
         index = index - count;
       }
+    }
+  }
+
+
+  /**
+   * Creates a word list from that contains the words in the given file.
+   *
+   * @param  filePath  Path to file containing words.
+   * @param  caseSensitive  True to create case-sensitive word list, false otherwise.
+   *
+   * @return  Word list.
+   *
+   * @throws  IOException  On I/O errors opening and initializing word list.
+   */
+  protected abstract T createWordList(String filePath, boolean caseSensitive) throws IOException;
+
+
+  /**
+   * Attempts to close word lists that have a close method.
+   *
+   * @throws  Exception  On test failure.
+   */
+  @AfterClass(groups = {"wltest"})
+  public void cleanUp() throws Exception
+  {
+    for (T list : wordLists) {
+      try {
+        final Method closeMethod = list.getClass().getMethod("close");
+        closeMethod.invoke(list);
+      } catch (NoSuchMethodException e) {
+        continue;
+      }
+    }
+  }
+
+
+  /** Expected result from {@link WordList#get(int)}. */
+  static class ExpectedWord
+  {
+    // CheckStyle:VisibilityModifier OFF
+    /** Expected word. */
+    String word;
+
+    /** Expected index. */
+    int index;
+    // CheckStyle:VisibilityModifier ON
+
+
+    /**
+     * Creates a new instance with a word and index where the word should appear in the word list.
+     *
+     * @param  s  Expected word.
+     * @param  i  Expected index.
+     */
+    ExpectedWord(final String s, final int i)
+    {
+      word = s;
+      index = i;
     }
   }
 }
