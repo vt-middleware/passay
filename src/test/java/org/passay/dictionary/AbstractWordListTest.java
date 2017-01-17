@@ -114,30 +114,6 @@ public abstract class AbstractWordListTest<T extends WordList>
 
 
   /**
-   * Word lists.
-   *
-   * @return  Array of word list.
-   *
-   * @throws IOException  on file I/O errors.
-   */
-  @DataProvider(name = "wordLists")
-  public Object[][] provideWordLists() throws IOException
-  {
-    final Object[][] parameters = new Object[][] {
-      new Object[] {createWordList("src/test/resources/dict-enUS.txt", true)},
-      new Object[] {createWordList("src/test/resources/dict-frFR.txt", true)},
-      new Object[] {createWordList("src/test/resources/dict-frFR-cr.txt", true)},
-      new Object[] {createWordList("src/test/resources/dict-viVN.txt", true)},
-      new Object[] {createWordList("src/test/resources/dict-viVN-crlf.txt", true)},
-    };
-    for (Object[] parameter : parameters) {
-      wordLists.add((T) parameter[0]);
-    }
-    return parameters;
-  }
-
-
-  /**
    * Short word lists.
    *
    * @return  Array of word list.
