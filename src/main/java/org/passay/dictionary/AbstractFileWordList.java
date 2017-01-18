@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.LongBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 
@@ -309,7 +310,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
     }
 
     /** Map of word indices to the byte offset in the file where the word starts. */
-    private long[] map;
+    private LongBuffer map;
 
     /** Modulus of indices to cache. */
     private int modulus;
@@ -332,11 +333,10 @@ public abstract class AbstractFileWordList extends AbstractWordList
       }
       modulus = (int) (fileSize / cacheSize);
 
-      final long startSize = cacheSize / 6;
-      if (startSize > Integer.MAX_VALUE) {
+      if (cacheSize > Integer.MAX_VALUE) {
         throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
       }
-      map = new long[(int) startSize];
+      map = ByteBuffer.allocateDirect((int) cacheSize).asLongBuffer();
     }
 
 
@@ -351,16 +351,18 @@ public abstract class AbstractFileWordList extends AbstractWordList
       if (modulus == 0) {
         return;
       }
-      if (index >= map.length) {
-        final long newSize = map.length * 3L / 2;
+      if (index >= map.capacity()) {
+        // 12 = 1.5 * 8 since this is a long view of a byte buffer
+        final long newSize = map.capacity() * 12L;
         if (newSize > Integer.MAX_VALUE) {
           throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
         }
-        final long[] temp = new long[(int) newSize];
-        System.arraycopy(map, 0, temp, 0, map.length);
+        final LongBuffer temp = ByteBuffer.allocateDirect((int) newSize).asLongBuffer();
+        map.rewind();
+        temp.put(map);
         map = temp;
       }
-      map[index / modulus] = position;
+      map.put(position);
     }
 
 
@@ -377,10 +379,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
         return new Entry(0, 0);
       }
       final int i = index / modulus;
-      if (i < map.length) {
-        return new Entry(i, map[i]);
-      }
-      throw new IndexOutOfBoundsException(index + " out of range");
+      map.position(i);
+      return new Entry(i, map.get());
     }
   }
 }
