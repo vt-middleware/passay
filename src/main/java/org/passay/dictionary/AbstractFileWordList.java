@@ -7,7 +7,6 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
-import java.util.TreeMap;
 
 /**
  * Common implementation for file based word lists.
@@ -27,10 +26,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
   protected int size;
 
   /** Cache of indexes to file positions. */
-  // CheckStyle:IllegalType OFF
-  // uses the firstKey and floorKey implementations
-  protected TreeMap<Integer, Long> cache = new TreeMap<>();
-  // CheckStyle:IllegalType ON
+  private Cache cache;
 
   /** Character decoder. */
   private final CharsetDecoder charDecoder;
@@ -50,7 +46,6 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @param  raf  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
-   * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
    * @param  decoder  Charset decoder for converting file bytes to characters
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
@@ -59,14 +54,11 @@ public abstract class AbstractFileWordList extends AbstractWordList
   public AbstractFileWordList(
     final RandomAccessFile raf,
     final boolean caseSensitive,
-    final int cachePercent,
     final CharsetDecoder decoder)
     throws IOException
   {
-    if (cachePercent < 0 || cachePercent > 100) {
-      throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
-    }
     file = raf;
+
     if (caseSensitive) {
       comparator = WordLists.CASE_SENSITIVE_COMPARATOR;
     } else {
@@ -131,29 +123,18 @@ public abstract class AbstractFileWordList extends AbstractWordList
   protected void initialize(final int cachePercent)
     throws IOException
   {
-    final long fileBytes = file.length();
-    final long cacheSize = (fileBytes / 100) * cachePercent;
-    final long cacheModulus = cacheSize == 0 ? fileBytes : cacheSize > fileBytes ? 1 : fileBytes / cacheSize;
-
-    if (cache == null) {
-      throw new IllegalStateException("Cannot initialize after close has been called.");
-    }
-
+    cache = new Cache(file.length(), cachePercent);
     FileWord a;
     FileWord b = null;
     synchronized (cache) {
       position = 0;
-      seek(0);
-      cache.clear();
+      seek(position);
       while ((a = nextWord()) != null) {
         if (b != null && comparator.compare(a.word, b.word) < 0) {
           throw new IllegalArgumentException("File is not sorted correctly for this comparator");
         }
         b = a;
-        if (cacheSize > 0 && size % cacheModulus == 0) {
-          cache.put(size, a.offset);
-        }
-        size++;
+        cache.put(size++, position);
       }
     }
   }
@@ -171,14 +152,12 @@ public abstract class AbstractFileWordList extends AbstractWordList
   protected String readWord(final int index)
     throws IOException
   {
-    int i = 0;
-    if (!cache.isEmpty() && cache.firstKey() <= index) {
-      i = cache.floorKey(index);
-    }
     FileWord w;
+    int i;
     synchronized (cache) {
-      position = i > 0 ? cache.get(i) : 0L;
-      seek(position);
+      final Cache.Entry entry = cache.get(index);
+      i = entry.index;
+      seek(entry.position);
       do {
         w = nextWord();
       } while (i++ < index && w != null);
@@ -297,6 +276,111 @@ public abstract class AbstractFileWordList extends AbstractWordList
     {
       word = s;
       offset = position;
+    }
+  }
+
+
+  /** Cache of word indices to byte offsets where word starts in backing file. */
+  static class Cache
+  {
+    /** Cache entry that indicates cached word index and byte offset of start of word in backing file. */
+    static class Entry
+    {
+      // CheckStyle:VisibilityModifier OFF
+      /** Cached word index. */
+      int index;
+
+      /** Byte offset where word starts in backing file. */
+      long position;
+      // CheckStyle:VisibilityModifier ON
+
+
+      /**
+       * Creates a new cache entry.
+       *
+       * @param  i  Cached word index.
+       * @param  pos  Byte offset where word starts in backing file.
+       */
+      Entry(final int i, final long pos)
+      {
+        index = i;
+        position = pos;
+      }
+    }
+
+    /** Map of word indices to the byte offset in the file where the word starts. */
+    private long[] map;
+
+    /** Modulus of indices to cache. */
+    private int modulus;
+
+
+    /**
+     * Creates a new cache instance.
+     *
+     * @param  fileSize  Size of file in bytes.
+     * @param  cachePercent  Percent of words to cache.
+     */
+    Cache(final long fileSize, final int cachePercent)
+    {
+      if (cachePercent < 0 || cachePercent > 100) {
+        throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
+      }
+      final long cacheSize = (fileSize / 100) * cachePercent;
+      if (cacheSize == 0) {
+        return;
+      }
+      modulus = (int) (fileSize / cacheSize);
+
+      final long startSize = cacheSize / 6;
+      if (startSize > Integer.MAX_VALUE) {
+        throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
+      }
+      map = new long[(int) startSize];
+    }
+
+
+    /**
+     * Puts an entry that maps the word at given index to the byte offset in into the backing file.
+     *
+     * @param  index  Word at index.
+     * @param  position  Byte offset into backing for file where word starts.
+     */
+    void put(final int index, final long position)
+    {
+      if (modulus == 0) {
+        return;
+      }
+      if (index >= map.length) {
+        final long newSize = map.length * 3L / 2;
+        if (newSize > Integer.MAX_VALUE) {
+          throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
+        }
+        final long[] temp = new long[(int) newSize];
+        System.arraycopy(map, 0, temp, 0, map.length);
+        map = temp;
+      }
+      map[index / modulus] = position;
+    }
+
+
+    /**
+     * Gets the byte offset into the backing file for the word at the given index.
+     *
+     * @param  index  Word at index.
+     *
+     * @return  Nearest cache entry for given index.
+     */
+    Entry get(final int index)
+    {
+      if (modulus == 0) {
+        return new Entry(0, 0);
+      }
+      final int i = index / modulus;
+      if (i < map.length) {
+        return new Entry(i, map[i]);
+      }
+      throw new IndexOutOfBoundsException(index + " out of range");
     }
   }
 }

@@ -106,7 +106,7 @@ public class FileWordList extends AbstractFileWordList
     final CharsetDecoder decoder)
     throws IOException
   {
-    super(raf, caseSensitive, cachePercent, decoder);
+    super(raf, caseSensitive, decoder);
     initialize(cachePercent);
   }
 

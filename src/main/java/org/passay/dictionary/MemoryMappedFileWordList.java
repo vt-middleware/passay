@@ -104,7 +104,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
     final CharsetDecoder decoder)
     throws IOException
   {
-    super(raf, caseSensitive, cachePercent, decoder);
+    super(raf, caseSensitive, decoder);
     final FileChannel channel = file.getChannel();
     buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
     initialize(cachePercent);
