@@ -348,10 +348,10 @@ public abstract class AbstractFileWordList extends AbstractWordList
      */
     void put(final int index, final long position)
     {
-      if (modulus == 0) {
+      if (modulus == 0 || index % modulus > 0) {
         return;
       }
-      if (index >= map.capacity()) {
+      if (map.position() == map.capacity()) {
         // 12 = 1.5 * 8 since this is a long view of a byte buffer
         final long newSize = map.capacity() * 12L;
         if (newSize > Integer.MAX_VALUE) {
@@ -380,7 +380,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
       }
       final int i = index / modulus;
       map.position(i);
-      return new Entry(i, map.get());
+      return new Entry(i * modulus, map.get());
     }
   }
 }
