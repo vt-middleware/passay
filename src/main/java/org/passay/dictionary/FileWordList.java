@@ -59,7 +59,7 @@ public class FileWordList extends AbstractFileWordList
   public FileWordList(final RandomAccessFile raf, final boolean caseSensitive)
     throws IOException
   {
-    this(raf, caseSensitive, DEFAULT_CACHE_SIZE);
+    this(raf, caseSensitive, DEFAULT_CACHE_PERCENT);
   }
 
 

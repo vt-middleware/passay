@@ -57,7 +57,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
   public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive)
     throws IOException
   {
-    this(raf, caseSensitive, DEFAULT_CACHE_SIZE);
+    this(raf, caseSensitive, DEFAULT_CACHE_PERCENT);
   }
 
 

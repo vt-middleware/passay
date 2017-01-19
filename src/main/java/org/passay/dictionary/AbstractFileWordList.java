@@ -17,8 +17,8 @@ import java.nio.charset.CoderResult;
 public abstract class AbstractFileWordList extends AbstractWordList
 {
 
-  /** Default cache size. */
-  public static final int DEFAULT_CACHE_SIZE = 5;
+  /** Default cache percent. */
+  public static final int DEFAULT_CACHE_PERCENT = 5;
 
   /** File containing words. */
   protected final RandomAccessFile file;
@@ -135,7 +135,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
           throw new IllegalArgumentException("File is not sorted correctly for this comparator");
         }
         b = a;
-        cache.put(size++, position);
+        cache.put(size++, a.offset);
       }
     }
   }
@@ -255,7 +255,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
   /**
    * Data structure containing word and byte offset into file where word begins in backing file.
    */
-  static class FileWord
+  protected static class FileWord
   {
 
     // CheckStyle:VisibilityModifier OFF
@@ -282,7 +282,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
 
   /** Cache of word indices to byte offsets where word starts in backing file. */
-  static class Cache
+  private static class Cache
   {
     /** Cache entry that indicates cached word index and byte offset of start of word in backing file. */
     static class Entry
@@ -321,6 +321,9 @@ public abstract class AbstractFileWordList extends AbstractWordList
      *
      * @param  fileSize  Size of file in bytes.
      * @param  cachePercent  Percent of words to cache.
+     *
+     * @throws  IllegalArgumentException  if cachePercent is not between 0-100 or the computed cache size exceeds {@link
+     *                                    Integer#MAX_VALUE}
      */
     Cache(final long fileSize, final int cachePercent)
     {
@@ -328,20 +331,17 @@ public abstract class AbstractFileWordList extends AbstractWordList
         throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
       }
       final long cacheSize = (fileSize / 100) * cachePercent;
-      if (cacheSize == 0) {
-        return;
+      if (cacheSize > 0) {
+        modulus = (int) (fileSize / cacheSize);
+        resize(cacheSize);
       }
-      modulus = (int) (fileSize / cacheSize);
-
-      if (cacheSize > Integer.MAX_VALUE) {
-        throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
-      }
-      map = ByteBuffer.allocateDirect((int) cacheSize).asLongBuffer();
     }
 
 
     /**
-     * Puts an entry that maps the word at given index to the byte offset in into the backing file.
+     * Puts an entry that maps the word at given index to the byte offset in into the backing file. The operation only
+     * succeeds if it is determined that the supplied index should be stored based on the cachePercent, otherwise this
+     * is a no-op.
      *
      * @param  index  Word at index.
      * @param  position  Byte offset into backing for file where word starts.
@@ -354,20 +354,15 @@ public abstract class AbstractFileWordList extends AbstractWordList
       if (map.position() == map.capacity()) {
         // 12 = 1.5 * 8 since this is a long view of a byte buffer
         final long newSize = map.capacity() * 12L;
-        if (newSize > Integer.MAX_VALUE) {
-          throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
-        }
-        final LongBuffer temp = ByteBuffer.allocateDirect((int) newSize).asLongBuffer();
-        map.rewind();
-        temp.put(map);
-        map = temp;
+        resize(newSize);
       }
       map.put(position);
     }
 
 
     /**
-     * Gets the byte offset into the backing file for the word at the given index.
+     * Gets the byte offset into the backing file for the word at the index that is less than or equal to the supplied
+     * index.
      *
      * @param  index  Word at index.
      *
@@ -375,12 +370,36 @@ public abstract class AbstractFileWordList extends AbstractWordList
      */
     Entry get(final int index)
     {
-      if (modulus == 0) {
+      if (modulus == 0 || index < modulus) {
         return new Entry(0, 0);
       }
       final int i = index / modulus;
       map.position(i);
       return new Entry(i * modulus, map.get());
+    }
+
+
+    /**
+     * Creates a new byte buffer of the supplied size for use as the cache. If the cache already exists, it's contents
+     * are copied into the new buffer.
+     *
+     * @param  size  Of byte buffer to create
+     *
+     * @throws  IllegalArgumentException  if size exceeds {@link Integer#MAX_VALUE}
+     */
+    private void resize(final long size)
+    {
+      if (size > Integer.MAX_VALUE) {
+        throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
+      }
+      final LongBuffer temp = ByteBuffer.allocateDirect((int) size).asLongBuffer();
+      if (map == null) {
+        map = temp;
+      } else {
+        map.rewind();
+        temp.put(map);
+        map = temp;
+      }
     }
   }
 }

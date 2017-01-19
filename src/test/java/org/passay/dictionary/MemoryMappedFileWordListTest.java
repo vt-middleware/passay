@@ -23,7 +23,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
     throws IOException
   {
     final MemoryMappedFileWordList list = new MemoryMappedFileWordList(
-        new RandomAccessFile(filePath, "r"), caseSensitive, cachePercent > 100 ? 100 : cachePercent);
+      new RandomAccessFile(filePath, "r"), caseSensitive, cachePercent > 100 ? 100 : cachePercent);
     cachePercent *= 3 / 2;
     return list;
   }
