@@ -419,12 +419,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
       if (size > Integer.MAX_VALUE) {
         throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
       }
-      final LongBuffer temp;
-      if (allocateDirect) {
-        temp = ByteBuffer.allocateDirect((int) size).asLongBuffer();
-      } else {
-        temp = ByteBuffer.allocate((int) size).asLongBuffer();
-      }
+      final LongBuffer temp = allocateDirect ?
+        ByteBuffer.allocateDirect((int) size).asLongBuffer() : ByteBuffer.allocate((int) size).asLongBuffer();
       if (map == null) {
         map = temp;
       } else {
