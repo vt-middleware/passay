@@ -55,23 +55,23 @@ public class SourceRuleTest extends AbstractRuleTest
 
         {
           rule,
-          PasswordData.newInstance(VALID_PASS, USER, null, sources),
+          TestUtils.newPasswordData(VALID_PASS, USER, null, sources),
           null,
         },
         {
           rule,
-          PasswordData.newInstance(SOURCE_PASS, USER, null, sources),
+          TestUtils.newPasswordData(SOURCE_PASS, USER, null, sources),
           codes(SourceRule.ERROR_CODE),
         },
 
         {
           emptyRule,
-          PasswordData.newInstance(VALID_PASS, USER),
+          TestUtils.newPasswordData(VALID_PASS, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(SOURCE_PASS, USER),
+          TestUtils.newPasswordData(SOURCE_PASS, USER),
           null,
         },
       };
@@ -91,7 +91,7 @@ public class SourceRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          PasswordData.newInstance(SOURCE_PASS, USER, null, sources),
+          TestUtils.newPasswordData(SOURCE_PASS, USER, null, sources),
           new String[] {String.format("Password cannot be the same as your %s password.", "System A"), },
         },
       };

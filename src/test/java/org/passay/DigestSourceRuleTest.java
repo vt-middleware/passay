@@ -60,23 +60,23 @@ public class DigestSourceRuleTest extends AbstractRuleTest
 
         {
           digestRule,
-          PasswordData.newInstance(VALID_PASS, USER, null, sourceRefs),
+          TestUtils.newPasswordData(VALID_PASS, USER, null, sourceRefs),
           null,
         },
         {
           digestRule,
-          PasswordData.newInstance(SOURCE_PASS, USER, null, sourceRefs),
+          TestUtils.newPasswordData(SOURCE_PASS, USER, null, sourceRefs),
           codes(SourceRule.ERROR_CODE),
         },
 
         {
           emptyRule,
-          PasswordData.newInstance(VALID_PASS, USER),
+          TestUtils.newPasswordData(VALID_PASS, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(SOURCE_PASS, USER),
+          TestUtils.newPasswordData(SOURCE_PASS, USER),
           null,
         },
       };
@@ -96,7 +96,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           digestRule,
-          PasswordData.newInstance(SOURCE_PASS, USER, null, sourceRefs),
+          TestUtils.newPasswordData(SOURCE_PASS, USER, null, sourceRefs),
           new String[] {String.format("Password cannot be the same as your %s password.", "System B"), },
         },
       };

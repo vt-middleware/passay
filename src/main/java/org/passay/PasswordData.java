@@ -223,92 +223,19 @@ public class PasswordData
 
 
   /**
-   * See {@link #newInstance(String, String, Origin, List)}.
+   * Returns a password data initialized with the supplied data.
    *
-   * @param  p  password
-   * @param  u  username
-   *
-   * @return  password data
-   */
-  public static PasswordData newInstance(final String p, final String u)
-  {
-    return newInstance(p, u, null, (Reference[]) null);
-  }
-
-
-  /**
-   * See {@link #newInstance(String, String, List)}.
-   *
-   * @param  p  password
-   * @param  u  username
-   * @param  r  references
+   * @param  data  password data to read properties from
    *
    * @return  password data
    */
-  public static PasswordData newInstance(final String p, final String u, final Reference... r)
-  {
-    return newInstance(p, u, r != null ? Arrays.asList(r) : null);
-  }
-
-
-  /**
-   * Convenience method for creating user password data with all of its properties. Properties are ignored if they are
-   * null.
-   *
-   * @param  p  password
-   * @param  u  username
-   * @param  r  references
-   *
-   * @return  password data
-   */
-  public static PasswordData newInstance(final String p, final String u, final List<Reference> r)
-  {
-    return newInstance(p, u, Origin.User, r);
-  }
-
-
-  /**
-   * See {@link #newInstance(String, String, Origin, List)}.
-   *
-   * @param  p  password
-   * @param  u  username
-   * @param  o  origin
-   * @param  r  references
-   *
-   * @return  password data
-   */
-  public static PasswordData newInstance(final String p, final String u, final Origin o, final Reference... r)
-  {
-    return newInstance(p, u, o, r != null ? Arrays.asList(r) : null);
-  }
-
-
-  /**
-   * Convenience method for creating a password data with all of its properties. Properties are ignored if they are
-   * null.
-   *
-   * @param  p  password
-   * @param  u  username
-   * @param  o  origin
-   * @param  r  references
-   *
-   * @return  password data
-   */
-  public static PasswordData newInstance(final String p, final String u, final Origin o, final List<Reference> r)
+  public static PasswordData newPasswordData(final PasswordData data)
   {
     final PasswordData pd = new PasswordData();
-    if (p != null) {
-      pd.setPassword(p);
-    }
-    if (u != null) {
-      pd.setUsername(u);
-    }
-    if (o != null) {
-      pd.setOrigin(o);
-    }
-    if (r != null) {
-      pd.setPasswordReferences(r);
-    }
+    pd.setUsername(data.getUsername());
+    pd.setPassword(data.getPassword());
+    pd.setPasswordReferences(pd.getPasswordReferences());
+    pd.setOrigin(pd.getOrigin());
     return pd;
   }
 

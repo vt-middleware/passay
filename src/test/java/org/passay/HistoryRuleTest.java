@@ -63,43 +63,43 @@ public class HistoryRuleTest extends AbstractRuleTest
 
         {
           rule,
-          PasswordData.newInstance(VALID_PASS, USER, null, history),
+          TestUtils.newPasswordData(VALID_PASS, USER, null, history),
           null,
         },
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, null, history),
+          TestUtils.newPasswordData(HISTORY_PASS1, USER, null, history),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS2, USER, null, history),
+          TestUtils.newPasswordData(HISTORY_PASS2, USER, null, history),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS3, USER, null, history),
+          TestUtils.newPasswordData(HISTORY_PASS3, USER, null, history),
           codes(HistoryRule.ERROR_CODE),
         },
 
         {
           emptyRule,
-          PasswordData.newInstance(VALID_PASS, USER),
+          TestUtils.newPasswordData(VALID_PASS, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS1, USER),
+          TestUtils.newPasswordData(HISTORY_PASS1, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS2, USER),
+          TestUtils.newPasswordData(HISTORY_PASS2, USER),
           null,
         },
         {
           emptyRule,
-          PasswordData.newInstance(HISTORY_PASS3, USER),
+          TestUtils.newPasswordData(HISTORY_PASS3, USER),
           null,
         },
       };
@@ -119,7 +119,7 @@ public class HistoryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          PasswordData.newInstance(HISTORY_PASS1, USER, null, history),
+          TestUtils.newPasswordData(HISTORY_PASS1, USER, null, history),
           new String[] {String.format("Password matches one of %s previous passwords.", history.size()), },
         },
       };
