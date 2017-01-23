@@ -118,13 +118,14 @@ public abstract class AbstractFileWordList extends AbstractWordList
    * Reads words from the backing file to initialize the word list.
    *
    * @param  cachePercent  Percent of file in bytes to use for cache.
+   * @param  allocateDirect  whether buffers should be allocated with {@link ByteBuffer#allocateDirect(int)}
    *
    * @throws  IOException  on I/O errors reading file data.
    */
-  protected void initialize(final int cachePercent)
+  protected void initialize(final int cachePercent, final boolean allocateDirect)
     throws IOException
   {
-    cache = new Cache(file.length(), cachePercent);
+    cache = new Cache(file.length(), cachePercent, allocateDirect);
     FileWord a;
     FileWord b = null;
     synchronized (cache) {
@@ -137,6 +138,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
         b = a;
         cache.put(size++, a.offset);
       }
+      cache.initialized = true;
     }
   }
 
@@ -252,6 +254,20 @@ public abstract class AbstractFileWordList extends AbstractWordList
   }
 
 
+  @Override
+  public String toString()
+  {
+    return
+      String.format(
+        "%s@%h::size=%s,cache=%s,charDecoder=%s",
+        getClass().getName(),
+        hashCode(),
+        size,
+        cache,
+        charDecoder);
+  }
+
+
   /**
    * Data structure containing word and byte offset into file where word begins in backing file.
    */
@@ -315,21 +331,29 @@ public abstract class AbstractFileWordList extends AbstractWordList
     /** Modulus of indices to cache. */
     private int modulus;
 
+    /** Whether to allocate a direct buffer. */
+    private boolean allocateDirect;
+
+    /** Whether this cache is ready for use. */
+    private boolean initialized;
+
 
     /**
      * Creates a new cache instance.
      *
      * @param  fileSize  Size of file in bytes.
      * @param  cachePercent  Percent of words to cache.
+     * @param  direct  Whether to allocate a direct byte buffer.
      *
      * @throws  IllegalArgumentException  if cachePercent is not between 0-100 or the computed cache size exceeds {@link
      *                                    Integer#MAX_VALUE}
      */
-    Cache(final long fileSize, final int cachePercent)
+    Cache(final long fileSize, final int cachePercent, final boolean direct)
     {
       if (cachePercent < 0 || cachePercent > 100) {
         throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
       }
+      allocateDirect = direct;
       final long cacheSize = (fileSize / 100) * cachePercent;
       if (cacheSize > 0) {
         modulus = (int) (fileSize / cacheSize);
@@ -348,6 +372,9 @@ public abstract class AbstractFileWordList extends AbstractWordList
      */
     void put(final int index, final long position)
     {
+      if (initialized) {
+        throw new IllegalStateException("Cache initialized, put is not allowed");
+      }
       if (modulus == 0 || index % modulus > 0) {
         return;
       }
@@ -392,7 +419,12 @@ public abstract class AbstractFileWordList extends AbstractWordList
       if (size > Integer.MAX_VALUE) {
         throw new IllegalArgumentException("Cache limit exceeded. Try reducing cacheSize.");
       }
-      final LongBuffer temp = ByteBuffer.allocateDirect((int) size).asLongBuffer();
+      final LongBuffer temp;
+      if (allocateDirect) {
+        temp = ByteBuffer.allocateDirect((int) size).asLongBuffer();
+      } else {
+        temp = ByteBuffer.allocate((int) size).asLongBuffer();
+      }
       if (map == null) {
         map = temp;
       } else {
@@ -400,6 +432,21 @@ public abstract class AbstractFileWordList extends AbstractWordList
         temp.put(map);
         map = temp;
       }
+    }
+
+
+    @Override
+    public String toString()
+    {
+      return
+        String.format(
+          "%s@%h::size=%s,modulus=%s,allocateDirect=%s,initialized=%s",
+          getClass().getSimpleName(),
+          hashCode(),
+          map.capacity(),
+          modulus,
+          allocateDirect,
+          initialized);
     }
   }
 }
