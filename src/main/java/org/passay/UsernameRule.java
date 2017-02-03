@@ -5,7 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Rule for determining if a password contains the username associated with that password.
+ * Rule for determining if a password contains the username associated with that password.  This rule returns true if a
+ * supplied {@link PasswordData} returns a null or empty username.
  *
  * @author  Middleware Services
  */
@@ -90,21 +91,23 @@ public class UsernameRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    String text = passwordData.getPassword();
     String user = passwordData.getUsername();
-    String reverseUser = new StringBuilder(user).reverse().toString();
-    if (ignoreCase) {
-      text = text.toLowerCase();
-      user = user.toLowerCase();
-      reverseUser = reverseUser.toLowerCase();
-    }
-    if (text.contains(user)) {
-      result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
-    }
-    if (matchBackwards && text.contains(reverseUser)) {
-      result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
+    if (user != null && !"".equals(user)) {
+      String text = passwordData.getPassword();
+      String reverseUser = new StringBuilder(user).reverse().toString();
+      if (ignoreCase) {
+        text = text.toLowerCase();
+        user = user.toLowerCase();
+        reverseUser = reverseUser.toLowerCase();
+      }
+      if (text.contains(user)) {
+        result.setValid(false);
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
+      }
+      if (matchBackwards && text.contains(reverseUser)) {
+        result.setValid(false);
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
+      }
     }
     return result;
   }

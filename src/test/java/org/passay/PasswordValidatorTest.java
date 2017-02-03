@@ -270,14 +270,8 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     l.add(new UsernameRule(true, true));
 
-    try {
-      pv.validate(new PasswordData(VALID_PASS));
-      AssertJUnit.fail("Should have thrown NullPointerException");
-    } catch (NullPointerException e) {
-      AssertJUnit.assertEquals(e.getClass(), NullPointerException.class);
-    } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown NullPointerException, threw " + e.getMessage());
-    }
+    AssertJUnit.assertTrue(pv.validate(new PasswordData(VALID_PASS)).isValid());
+    AssertJUnit.assertTrue(pv.validate(new PasswordData("", VALID_PASS)).isValid());
 
     final PasswordData valid = new PasswordData(VALID_PASS);
     valid.setUsername(USER);

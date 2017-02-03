@@ -68,6 +68,16 @@ public class UsernameRuleTest extends AbstractRuleTest
 
         {
           rule,
+          TestUtils.newPasswordData(VALID_PASS, null),
+          null,
+        },
+        {
+          rule,
+          TestUtils.newPasswordData(VALID_PASS, ""),
+          null,
+        },
+        {
+          rule,
           TestUtils.newPasswordData(VALID_PASS, USER),
           null,
         },
