@@ -1,8 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +23,9 @@ public class IllegalRegexRule implements Rule
   /** Regex pattern. */
   protected final Pattern pattern;
 
+  /** Whether to report all sequence matches or just the first. */
+  protected boolean reportAllFailures;
+
 
   /**
    * Creates a new illegal regex rule.
@@ -29,7 +34,20 @@ public class IllegalRegexRule implements Rule
    */
   public IllegalRegexRule(final String regex)
   {
+    this(regex, true);
+  }
+
+
+  /**
+   * Creates a new illegal regex rule.
+   *
+   * @param  regex  regular expression
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public IllegalRegexRule(final String regex, final boolean reportAll)
+  {
     pattern = Pattern.compile(regex);
+    reportAllFailures = reportAll;
   }
 
 
@@ -38,9 +56,17 @@ public class IllegalRegexRule implements Rule
   {
     final RuleResult result = new RuleResult(true);
     final Matcher m = pattern.matcher(passwordData.getPassword());
-    if (m.find()) {
-      result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(m.group())));
+    final Set<String> matches = new HashSet<>();
+    while (m.find()) {
+      final String match = m.group();
+      if (!matches.contains(match)) {
+        result.setValid(false);
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(match)));
+        if (!reportAllFailures) {
+          break;
+        }
+        matches.add(match);
+      }
     }
     return result;
   }

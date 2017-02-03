@@ -11,15 +11,6 @@ import org.testng.annotations.DataProvider;
 public class IllegalCharacterRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "AycDPdsyz";
-
-  /** Test password. */
-  private static final String INVALID_PASS = "AycD@Pdsyz";
-
-  /** For testing. */
-  private final IllegalCharacterRule rule = new IllegalCharacterRule(new char[] {'@'});
-
 
   /**
    * @return  Test data.
@@ -33,11 +24,31 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {rule, new PasswordData(VALID_PASS), null, },
+        // test valid password
+        {new IllegalCharacterRule(new char[] {'@', '$'}), new PasswordData("AycDPdsyz"), null, },
+        // test invalid password
         {
-          rule,
-          new PasswordData(INVALID_PASS),
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pdsyz"),
           codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        // test multiple matches
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pd$yz"),
+          codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
+        },
+        // test single match
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, false),
+          new PasswordData("AycD@Pd$yz"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        // test duplicate matches
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pd$yz@"),
+          codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
         },
       };
   }
@@ -55,9 +66,28 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          rule,
-          new PasswordData(INVALID_PASS),
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pdsyz"),
           new String[] {String.format("Password contains the illegal character '%s'.", "@"), },
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pd$yz"),
+          new String[] {
+            String.format("Password contains the illegal character '%s'.", "@"),
+            String.format("Password contains the illegal character '%s'.", "$"), },
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, false),
+          new PasswordData("AycD@Pd$yz"),
+          new String[] {String.format("Password contains the illegal character '%s'.", "@")},
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pd$yz@"),
+          new String[] {
+            String.format("Password contains the illegal character '%s'.", "@"),
+            String.format("Password contains the illegal character '%s'.", "$"), },
         },
       };
   }

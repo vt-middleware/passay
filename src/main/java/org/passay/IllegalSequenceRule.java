@@ -28,7 +28,7 @@ public class IllegalSequenceRule implements Rule
   protected boolean wrapSequence;
 
   /** Whether to report all sequence matches or just the first. */
-  protected boolean reportAllFailures = true;
+  protected boolean reportAllFailures;
 
 
   /**
