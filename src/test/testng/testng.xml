@@ -19,8 +19,6 @@
   <parameter name="newLinesUnix" value="src/test/resources/newlines.unix"/>
   <parameter name="newLinesMac" value="src/test/resources/newlines.mac"/>
   <parameter name="newLinesDos" value="src/test/resources/newlines.dos"/>
-  <parameter name="utf8" value="src/test/resources/openwall-utf8.txt"/>
-  <parameter name="utf8Bom" value="src/test/resources/openwall-utf8-bom.txt"/>
 
   <parameter name="partialSearchWord" value=".e.e.e.e"/>
   <parameter name="partialSearchResults" value="Genevese|reserene|teleseme|terebene"/>
@@ -50,6 +48,7 @@
         <include name="sorttest" />
         <include name="wldicttest" />
         <include name="ttdicttest" />
+        <include name="jdbcdicttest" />
       </run>
     </groups>
     <packages>
