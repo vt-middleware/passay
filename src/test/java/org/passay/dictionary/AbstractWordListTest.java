@@ -242,7 +242,9 @@ public abstract class AbstractWordListTest<T extends WordList>
     for (T list : wordLists) {
       try {
         final Method closeMethod = list.getClass().getMethod("close");
-        closeMethod.invoke(list);
+        if (closeMethod != null) {
+          closeMethod.invoke(list);
+        }
       } catch (NoSuchMethodException e) {
         continue;
       }
