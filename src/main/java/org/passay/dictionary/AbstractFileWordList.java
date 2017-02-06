@@ -439,7 +439,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
           "%s@%h::size=%s,modulus=%s,allocateDirect=%s,initialized=%s",
           getClass().getSimpleName(),
           hashCode(),
-          map.capacity(),
+          map != null ? map.capacity() : 0,
           modulus,
           allocateDirect,
           initialized);
