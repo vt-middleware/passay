@@ -25,9 +25,15 @@ public class UsernameRule implements Rule
   /** Whether to ignore case when checking for usernames. */
   private boolean ignoreCase;
 
+  /** Where to match whitespace. */
+  private final StringMatch stringMatch;
+
 
   /** Default constructor. */
-  public UsernameRule() {}
+  public UsernameRule()
+  {
+    this(false, false, StringMatch.Contains);
+  }
 
 
   /**
@@ -38,8 +44,22 @@ public class UsernameRule implements Rule
    */
   public UsernameRule(final boolean mb, final boolean ic)
   {
+    this(mb, ic, StringMatch.Contains);
+  }
+
+
+  /**
+   * Create a new username rule.
+   *
+   * @param  mb  whether to match backwards
+   * @param  ic  whether to ignore case
+   * @param  match  how to match username
+   */
+  public UsernameRule(final boolean mb, final boolean ic, final StringMatch match)
+  {
     setMatchBackwards(mb);
     setIgnoreCase(ic);
+    stringMatch = match;
   }
 
 
@@ -100,11 +120,11 @@ public class UsernameRule implements Rule
         user = user.toLowerCase();
         reverseUser = reverseUser.toLowerCase();
       }
-      if (text.contains(user)) {
+      if (stringMatch.match(text, user)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
       }
-      if (matchBackwards && text.contains(reverseUser)) {
+      if (matchBackwards && stringMatch.match(text, reverseUser)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
       }
@@ -124,6 +144,7 @@ public class UsernameRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("username", username);
+    m.put("stringMatch", stringMatch);
     return m;
   }
 
@@ -133,10 +154,11 @@ public class UsernameRule implements Rule
   {
     return
       String.format(
-        "%s@%h::ignoreCase=%s,matchBackwards=%s",
+        "%s@%h::ignoreCase=%s,matchBackwards=%s,stringMatch=%s",
         getClass().getName(),
         hashCode(),
         ignoreCase,
-        matchBackwards);
+        matchBackwards,
+        stringMatch);
   }
 }
