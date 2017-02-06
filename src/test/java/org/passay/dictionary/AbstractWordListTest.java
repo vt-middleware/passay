@@ -240,13 +240,13 @@ public abstract class AbstractWordListTest<T extends WordList>
   public void cleanUp() throws Exception
   {
     for (T list : wordLists) {
-      try {
-        final Method closeMethod = list.getClass().getMethod("close");
-        if (closeMethod != null) {
+      if (list != null) {
+        try {
+          final Method closeMethod = list.getClass().getMethod("close");
           closeMethod.invoke(list);
+        } catch (NoSuchMethodException e) {
+          continue;
         }
-      } catch (NoSuchMethodException e) {
-        continue;
       }
     }
   }
