@@ -38,7 +38,19 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
    */
   public RepeatCharacterRegexRule(final int sl)
   {
-    super(String.format(REPEAT_CHAR_REGEX, sl - 1));
+    this(sl, true);
+  }
+
+
+  /**
+   * Creates a new repeat character regex rule.
+   *
+   * @param  sl  sequence length
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public RepeatCharacterRegexRule(final int sl, final boolean reportAll)
+  {
+    super(String.format(REPEAT_CHAR_REGEX, sl - 1), reportAll);
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
       throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
     }

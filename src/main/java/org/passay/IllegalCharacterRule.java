@@ -2,8 +2,10 @@
 package org.passay;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Rule for determining if a password contains an illegal character. Validation will fail if the password contains any
@@ -17,8 +19,11 @@ public class IllegalCharacterRule implements Rule
   /** Error code for illegal character failures. */
   public static final String ERROR_CODE = "ILLEGAL_CHAR";
 
+  /** Whether to report all sequence matches or just the first. */
+  protected boolean reportAllFailures;
+
   /** Stores the characters that are not allowed. */
-  private final char[] illegalChar;
+  private final char[] illegalCharacters;
 
 
   /**
@@ -28,7 +33,25 @@ public class IllegalCharacterRule implements Rule
    */
   public IllegalCharacterRule(final char[] c)
   {
-    illegalChar = c;
+    this(c, true);
+  }
+
+
+  /**
+   * Create a new illegal character rule.
+   *
+   * @param  c  illegal characters
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public IllegalCharacterRule(final char[] c, final boolean reportAll)
+  {
+    if (c.length > 0) {
+      illegalCharacters = c;
+    } else {
+      throw new IllegalArgumentException("illegal characters length must be greater than zero");
+    }
+    Arrays.sort(illegalCharacters);
+    reportAllFailures = reportAll;
   }
 
 
@@ -36,11 +59,15 @@ public class IllegalCharacterRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    for (char c : illegalChar) {
-      if (passwordData.getPassword().indexOf(c) != -1) {
+    final Set<Character> matches = new HashSet<>();
+    for (char c : passwordData.getPassword().toCharArray()) {
+      if (Arrays.binarySearch(illegalCharacters, c) >= 0 && !matches.contains(c)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
-        break;
+        if (!reportAllFailures) {
+          break;
+        }
+        matches.add(c);
       }
     }
     return result;
@@ -67,9 +94,9 @@ public class IllegalCharacterRule implements Rule
   {
     return
       String.format(
-        "%s@%h::illegalChar=%s",
+        "%s@%h::illegalCharacters=%s",
         getClass().getName(),
         hashCode(),
-        illegalChar != null ? Arrays.toString(illegalChar) : null);
+        illegalCharacters != null ? Arrays.toString(illegalCharacters) : null);
   }
 }

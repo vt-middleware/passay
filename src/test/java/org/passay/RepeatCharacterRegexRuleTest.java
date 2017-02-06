@@ -60,6 +60,24 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
           new PasswordData("p4vvvvvvv#n65"),
           codes(RepeatCharacterRegexRule.ERROR_CODE),
         },
+        // test multiple matches
+        {
+          new RepeatCharacterRegexRule(),
+          new PasswordData("p4&&&&&#n65FFFFF"),
+          codes(RepeatCharacterRegexRule.ERROR_CODE, RepeatCharacterRegexRule.ERROR_CODE),
+        },
+        // test single match
+        {
+          new RepeatCharacterRegexRule(5, false),
+          new PasswordData("p4&&&&&#n65FFFFF"),
+          codes(RepeatCharacterRegexRule.ERROR_CODE),
+        },
+        // test duplicate matches
+        {
+          new RepeatCharacterRegexRule(),
+          new PasswordData("p4&&&&&#n65FFFFFQr1&&&&&"),
+          codes(RepeatCharacterRegexRule.ERROR_CODE, RepeatCharacterRegexRule.ERROR_CODE),
+        },
       };
   }
 
@@ -79,6 +97,25 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
           new RepeatCharacterRegexRule(),
           new PasswordData("p4&&&&&#n65"),
           new String[] {String.format("Password matches the illegal pattern '%s'.", "&&&&&"), },
+        },
+        {
+          new RepeatCharacterRegexRule(),
+          new PasswordData("p4&&&&&#n65FFFFF"),
+          new String[] {
+            String.format("Password matches the illegal pattern '%s'.", "&&&&&"),
+            String.format("Password matches the illegal pattern '%s'.", "FFFFF"), },
+        },
+        {
+          new RepeatCharacterRegexRule(5, false),
+          new PasswordData("p4&&&&&#n65FFFFF"),
+          new String[] {String.format("Password matches the illegal pattern '%s'.", "&&&&&"), },
+        },
+        {
+          new RepeatCharacterRegexRule(),
+          new PasswordData("p4&&&&&#n65FFFFFQr1&&&&&"),
+          new String[] {
+            String.format("Password matches the illegal pattern '%s'.", "&&&&&"),
+            String.format("Password matches the illegal pattern '%s'.", "FFFFF"), },
         },
       };
   }

@@ -11,16 +11,10 @@ import org.testng.annotations.DataProvider;
 public class AllowedCharacterRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "boepselwezz";
-
-  /** Test password. */
-  private static final String INVALID_PASS = "gbwersco4kk";
-
-  /** For testing. */
-  private final AllowedCharacterRule rule = new AllowedCharacterRule(
-    new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', });
+  /** Allowed characters for testing. */
+  private static final char[] ALLOWED_CHARS = new char[]{
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', };
 
 
   /**
@@ -35,11 +29,31 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {rule, new PasswordData(VALID_PASS), null, },
+        // test valid password
+        {new AllowedCharacterRule(ALLOWED_CHARS), new PasswordData("boepselwezz"), null, },
+        // test invalid password
         {
-          rule,
-          new PasswordData(INVALID_PASS),
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersco4kk"),
           codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        // test multiple matches
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersco4kk5kk"),
+          codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
+        },
+        // test single match
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS, false),
+          new PasswordData("gbwersco4kk5kk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        // test duplicate matches
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersco4kk5kk4"),
+          codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
         },
       };
   }
@@ -57,9 +71,28 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          rule,
-          new PasswordData(INVALID_PASS),
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersco4kk"),
           new String[] {String.format("Password contains the illegal character '%s'.", "4"), },
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersco4kk5kk"),
+          new String[] {
+            String.format("Password contains the illegal character '%s'.", "4"),
+            String.format("Password contains the illegal character '%s'.", "5"), },
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS, false),
+          new PasswordData("gbwersco4kk5kk"),
+          new String[] {String.format("Password contains the illegal character '%s'.", "4"), },
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersco4kk5kk4"),
+          new String[] {
+            String.format("Password contains the illegal character '%s'.", "4"),
+            String.format("Password contains the illegal character '%s'.", "5"), },
         },
       };
   }
