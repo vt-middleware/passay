@@ -25,9 +25,26 @@ public class UsernameRule implements Rule
   /** Whether to ignore case when checking for usernames. */
   private boolean ignoreCase;
 
+  /** Where to match whitespace. */
+  private final MatchBehavior matchBehavior;
+
 
   /** Default constructor. */
-  public UsernameRule() {}
+  public UsernameRule()
+  {
+    this(false, false, MatchBehavior.Contains);
+  }
+
+
+  /**
+   * Create a new username rule.
+   *
+   * @param  behavior  how to match username
+   */
+  public UsernameRule(final MatchBehavior behavior)
+  {
+    this(false, false, behavior);
+  }
 
 
   /**
@@ -38,8 +55,22 @@ public class UsernameRule implements Rule
    */
   public UsernameRule(final boolean mb, final boolean ic)
   {
+    this(mb, ic, MatchBehavior.Contains);
+  }
+
+
+  /**
+   * Create a new username rule.
+   *
+   * @param  mb  whether to match backwards
+   * @param  ic  whether to ignore case
+   * @param  behavior  how to match username
+   */
+  public UsernameRule(final boolean mb, final boolean ic, final MatchBehavior behavior)
+  {
     setMatchBackwards(mb);
     setIgnoreCase(ic);
+    matchBehavior = behavior;
   }
 
 
@@ -100,11 +131,11 @@ public class UsernameRule implements Rule
         user = user.toLowerCase();
         reverseUser = reverseUser.toLowerCase();
       }
-      if (text.contains(user)) {
+      if (matchBehavior.match(text, user)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
       }
-      if (matchBackwards && text.contains(reverseUser)) {
+      if (matchBackwards && matchBehavior.match(text, reverseUser)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
       }
@@ -124,6 +155,7 @@ public class UsernameRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("username", username);
+    m.put("matchBehavior", matchBehavior);
     return m;
   }
 
@@ -133,10 +165,11 @@ public class UsernameRule implements Rule
   {
     return
       String.format(
-        "%s@%h::ignoreCase=%s,matchBackwards=%s",
+        "%s@%h::ignoreCase=%s,matchBackwards=%s,matchBehavior=%s",
         getClass().getName(),
         hashCode(),
         ignoreCase,
-        matchBackwards);
+        matchBackwards,
+        matchBehavior);
   }
 }

@@ -25,6 +25,9 @@ public class AllowedCharacterRule implements Rule
   /** Stores the characters that are allowed. */
   private final char[] allowedCharacters;
 
+  /** Where to match whitespace. */
+  private final MatchBehavior matchBehavior;
+
 
   /**
    * Create a new allowed character rule.
@@ -33,7 +36,19 @@ public class AllowedCharacterRule implements Rule
    */
   public AllowedCharacterRule(final char[] c)
   {
-    this(c, true);
+    this(c, MatchBehavior.Contains, true);
+  }
+
+
+  /**
+   * Create a new allowed character rule.
+   *
+   * @param  c  allowed characters
+   * @param  behavior  how to match allowed characters
+   */
+  public AllowedCharacterRule(final char[] c, final MatchBehavior behavior)
+  {
+    this(c, behavior, true);
   }
 
 
@@ -45,12 +60,26 @@ public class AllowedCharacterRule implements Rule
    */
   public AllowedCharacterRule(final char[] c, final boolean reportAll)
   {
+    this(c, MatchBehavior.Contains, reportAll);
+  }
+
+
+  /**
+   * Create a new allowed character rule.
+   *
+   * @param  c  allowed characters
+   * @param  behavior  how to match allowed characters
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public AllowedCharacterRule(final char[] c, final MatchBehavior behavior, final boolean reportAll)
+  {
     if (c.length > 0) {
       allowedCharacters = c;
     } else {
       throw new IllegalArgumentException("allowed characters length must be greater than zero");
     }
     Arrays.sort(allowedCharacters);
+    matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
 
@@ -71,14 +100,17 @@ public class AllowedCharacterRule implements Rule
   {
     final RuleResult result = new RuleResult(true);
     final Set<Character> matches = new HashSet<>();
-    for (char c : passwordData.getPassword().toCharArray()) {
+    final String text = passwordData.getPassword();
+    for (char c : text.toCharArray()) {
       if (Arrays.binarySearch(allowedCharacters, c) < 0 && !matches.contains(c)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
-        if (!reportAllFailures) {
-          break;
+        if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, c)) {
+          result.setValid(false);
+          result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
+          if (!reportAllFailures) {
+            break;
+          }
+          matches.add(c);
         }
-        matches.add(c);
       }
     }
     return result;
@@ -96,6 +128,7 @@ public class AllowedCharacterRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("illegalCharacter", c);
+    m.put("matchBehavior", matchBehavior);
     return m;
   }
 
@@ -104,9 +137,11 @@ public class AllowedCharacterRule implements Rule
   public String toString()
   {
     return
-      String.format("%s@%h::allowedChar=%s",
+      String.format("%s@%h::reportAllFailures=%s,matchBehavior=%s,allowedCharacters=%s",
         getClass().getName(),
         hashCode(),
+        reportAllFailures,
+        matchBehavior,
         allowedCharacters != null ? Arrays.toString(allowedCharacters) : null);
   }
 }

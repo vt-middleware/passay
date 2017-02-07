@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -11,47 +10,6 @@ import org.testng.annotations.DataProvider;
  */
 public class UsernameRuleTest extends AbstractRuleTest
 {
-
-  /** Test password. */
-  private static final String VALID_PASS = "p4t3stu$er#n65";
-
-  /** Test password. */
-  private static final String USERID_PASS = "p4testuser#n65";
-
-  /** Test password. */
-  private static final String BACKWARDS_USERID_PASS = "p4resutset#n65";
-
-  /** Test password. */
-  private static final String UPPERCASE_USERID_PASS = "p4TEStuSER#n65";
-
-  /** Test password. */
-  private static final String BACKWARDS_UPPERCASE_USERID_PASS = "p4RESUTsET#n65";
-
-  /** Test username. */
-  private static final String USER = "testuser";
-
-  /** For testing. */
-  private final UsernameRule rule = new UsernameRule();
-
-  /** For testing. */
-  private final UsernameRule backwardsRule = new UsernameRule();
-
-  /** For testing. */
-  private final UsernameRule ignoreCaseRule = new UsernameRule();
-
-  /** For testing. */
-  private final UsernameRule allRule = new UsernameRule();
-
-
-  /** Initialize rules for this test. */
-  @BeforeClass(groups = {"passtest"})
-  public void createRules()
-  {
-    backwardsRule.setMatchBackwards(true);
-    ignoreCaseRule.setIgnoreCase(true);
-    allRule.setMatchBackwards(true);
-    allRule.setIgnoreCase(true);
-  }
 
 
   /**
@@ -65,119 +23,142 @@ public class UsernameRuleTest extends AbstractRuleTest
   {
     return
       new Object[][] {
-
+        // valid password
         {
-          rule,
-          TestUtils.newPasswordData(VALID_PASS, null),
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4t3stu$er#n65", null),
           null,
         },
         {
-          rule,
-          TestUtils.newPasswordData(VALID_PASS, ""),
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4t3stu$er#n65", ""),
           null,
         },
         {
-          rule,
-          TestUtils.newPasswordData(VALID_PASS, USER),
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4t3stu$er#n65", "testuser"),
+          null,
+        },
+        // match username
+        {
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
+          codes(UsernameRule.ERROR_CODE),
+        },
+        // negative testing for backwards and case sensitive
+        {
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4resutset#n65", "testuser"),
           null,
         },
         {
-          rule,
-          TestUtils.newPasswordData(USERID_PASS, USER),
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4TEStuSER#n65", "testuser"),
+          null,
+        },
+        {
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4RESUTsET#n65", "testuser"),
+          null,
+        },
+        // backwards matching
+        {
+          new UsernameRule(true, false),
+          TestUtils.newPasswordData("p4t3stu$er#n65", "testuser"),
+          null,
+        },
+        {
+          new UsernameRule(true, false),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE),
         },
         {
-          rule,
-          TestUtils.newPasswordData(BACKWARDS_USERID_PASS, USER),
-          null,
-        },
-        {
-          rule,
-          TestUtils.newPasswordData(UPPERCASE_USERID_PASS, USER),
-          null,
-        },
-        {
-          rule,
-          TestUtils.newPasswordData(BACKWARDS_UPPERCASE_USERID_PASS, USER),
-          null,
-        },
-
-        {
-          backwardsRule,
-          TestUtils.newPasswordData(VALID_PASS, USER),
-          null,
-        },
-        {
-          backwardsRule,
-          TestUtils.newPasswordData(USERID_PASS, USER),
-          codes(UsernameRule.ERROR_CODE),
-        },
-        {
-          backwardsRule,
-          TestUtils.newPasswordData(BACKWARDS_USERID_PASS, USER),
+          new UsernameRule(true, false),
+          TestUtils.newPasswordData("p4resutset#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE_REVERSED),
         },
         {
-          backwardsRule,
-          TestUtils.newPasswordData(UPPERCASE_USERID_PASS, USER),
+          new UsernameRule(true, false),
+          TestUtils.newPasswordData("p4TEStuSER#n65", "testuser"),
           null,
         },
         {
-          backwardsRule,
-          TestUtils.newPasswordData(BACKWARDS_UPPERCASE_USERID_PASS, USER),
+          new UsernameRule(true, false),
+          TestUtils.newPasswordData("p4RESUTsET#n65", "testuser"),
           null,
         },
-
+        // case insensitive matching
         {
-          ignoreCaseRule,
-          TestUtils.newPasswordData(VALID_PASS, USER),
+          new UsernameRule(false, true),
+          TestUtils.newPasswordData("p4t3stu$er#n65", "testuser"),
           null,
         },
         {
-          ignoreCaseRule,
-          TestUtils.newPasswordData(USERID_PASS, USER),
+          new UsernameRule(false, true),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE),
         },
         {
-          ignoreCaseRule,
-          TestUtils.newPasswordData(BACKWARDS_USERID_PASS, USER),
+          new UsernameRule(false, true),
+          TestUtils.newPasswordData("p4resutset#n65", "testuser"),
           null,
         },
         {
-          ignoreCaseRule,
-          TestUtils.newPasswordData(UPPERCASE_USERID_PASS, USER),
+          new UsernameRule(false, true),
+          TestUtils.newPasswordData("p4TEStuSER#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE),
         },
         {
-          ignoreCaseRule,
-          TestUtils.newPasswordData(BACKWARDS_UPPERCASE_USERID_PASS, USER),
+          new UsernameRule(false, true),
+          TestUtils.newPasswordData("p4RESUTsET#n65", "testuser"),
           null,
         },
-
+        // both backwards and case insensitive matching
         {
-          allRule,
-          TestUtils.newPasswordData(VALID_PASS, USER),
+          new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4t3stu$er#n65", "testuser"),
           null,
         },
         {
-          allRule,
-          TestUtils.newPasswordData(USERID_PASS, USER),
+          new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE),
         },
         {
-          allRule,
-          TestUtils.newPasswordData(BACKWARDS_USERID_PASS, USER),
+          new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4resutset#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE_REVERSED),
         },
         {
-          allRule,
-          TestUtils.newPasswordData(UPPERCASE_USERID_PASS, USER),
+          new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4TEStuSER#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE),
         },
         {
-          allRule,
-          TestUtils.newPasswordData(BACKWARDS_UPPERCASE_USERID_PASS, USER),
+          new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4RESUTsET#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE_REVERSED),
+        },
+        // test match behavior
+        {
+          new UsernameRule(MatchBehavior.StartsWith),
+          TestUtils.newPasswordData("testuser#n65", "testuser"),
+          codes(UsernameRule.ERROR_CODE),
+        },
+        {
+          new UsernameRule(MatchBehavior.StartsWith),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
+          null,
+        },
+        {
+          new UsernameRule(MatchBehavior.EndsWith),
+          TestUtils.newPasswordData("p4#n65testuser", "testuser"),
+          codes(UsernameRule.ERROR_CODE),
+        },
+        {
+          new UsernameRule(MatchBehavior.EndsWith),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
+          null,
         },
       };
   }
@@ -195,14 +176,24 @@ public class UsernameRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          rule,
-          TestUtils.newPasswordData(USERID_PASS, USER),
-          new String[] {String.format("Password contains the user id '%s'.", USER), },
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4testuser#n65", "testuser"),
+          new String[] {String.format("Password contains the user id '%s'.", "testuser"), },
         },
         {
-          backwardsRule,
-          TestUtils.newPasswordData(BACKWARDS_USERID_PASS, USER),
-          new String[] {String.format("Password contains the user id '%s' in reverse.", USER), },
+          new UsernameRule(true, false),
+          TestUtils.newPasswordData("p4resutset#n65", "testuser"),
+          new String[] {String.format("Password contains the user id '%s' in reverse.", "testuser"), },
+        },
+        {
+          new UsernameRule(MatchBehavior.StartsWith),
+          TestUtils.newPasswordData("testuser#n65", "testuser"),
+          new String[] {String.format("Password starts with the user id '%s'.", "testuser"), },
+        },
+        {
+          new UsernameRule(MatchBehavior.EndsWith),
+          TestUtils.newPasswordData("p4#n65testuser", "testuser"),
+          new String[] {String.format("Password ends with the user id '%s'.", "testuser"), },
         },
       };
   }

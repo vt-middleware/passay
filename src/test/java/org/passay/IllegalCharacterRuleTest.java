@@ -50,6 +50,27 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
           new PasswordData("AycD@Pd$yz@"),
           codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
         },
+        // test match behavior
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.StartsWith),
+          new PasswordData("@ycDAPdSyz&"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.StartsWith),
+          new PasswordData("AycD@Pdsyz"),
+          null,
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.EndsWith),
+          new PasswordData("AycDAPdSyz@"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.EndsWith),
+          new PasswordData("AycD@Pdsyz"),
+          null,
+        },
       };
   }
 
@@ -88,6 +109,16 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
           new String[] {
             String.format("Password contains the illegal character '%s'.", "@"),
             String.format("Password contains the illegal character '%s'.", "$"), },
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.StartsWith),
+          new PasswordData("@ycDAPdsyz"),
+          new String[] {String.format("Password starts with the illegal character '%s'.", "@"), },
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.EndsWith),
+          new PasswordData("AycDAPdsyz$"),
+          new String[] {String.format("Password ends with the illegal character '%s'.", "$"), },
         },
       };
   }

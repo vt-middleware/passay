@@ -11,21 +11,6 @@ import org.testng.annotations.DataProvider;
 public class WhitespaceRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "AycDPdsyz";
-
-  /** Test password. */
-  private static final String SPACE_PASS = "AycD" + " " + "Pdsyz";
-
-  /** Test password. */
-  private static final String TAB_PASS = "Ayc" + "\t" + "DPdsyz";
-
-  /** Test password. */
-  private static final String LINE_SEP_PASS = "AycDPs" + System.getProperty("line.separator") + "yz";
-
-  /** For testing. */
-  private final WhitespaceRule rule = new WhitespaceRule();
-
 
   /**
    * @return  Test data.
@@ -39,21 +24,41 @@ public class WhitespaceRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {rule, new PasswordData(VALID_PASS), null, },
+        {new WhitespaceRule(), new PasswordData("AycDPdsyz"), null, },
         {
-          rule,
-          new PasswordData(SPACE_PASS),
+          new WhitespaceRule(),
+          new PasswordData("AycD Pdsyz"),
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
-          rule,
-          new PasswordData(TAB_PASS),
+          new WhitespaceRule(),
+          new PasswordData("Ayc\tDPdsyz"),
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
-          rule,
-          new PasswordData(LINE_SEP_PASS),
+          new WhitespaceRule(),
+          new PasswordData("AycDPs" + System.getProperty("line.separator") + "yz"),
           codes(WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(MatchBehavior.StartsWith),
+          new PasswordData(" AycDPdsyz"),
+          codes(WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(MatchBehavior.StartsWith),
+          new PasswordData("AycD Pdsyz"),
+          null,
+        },
+        {
+          new WhitespaceRule(MatchBehavior.EndsWith),
+          new PasswordData("AycDPdsyz "),
+          codes(WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(MatchBehavior.EndsWith),
+          new PasswordData("AycD Pdsyz"),
+          null,
         },
       };
   }
@@ -71,9 +76,19 @@ public class WhitespaceRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          rule,
-          new PasswordData(SPACE_PASS),
-          new String[] {"Password cannot contain whitespace characters.", },
+          new WhitespaceRule(MatchBehavior.StartsWith),
+          new PasswordData("\tAycDPdsyz"),
+          new String[] {"Password starts with a whitespace character.", },
+        },
+        {
+          new WhitespaceRule(),
+          new PasswordData("AycD Pdsyz"),
+          new String[] {"Password contains a whitespace character.", },
+        },
+        {
+          new WhitespaceRule(MatchBehavior.EndsWith),
+          new PasswordData("AycDPdsyz\n"),
+          new String[] {"Password ends with a whitespace character.", },
         },
       };
   }
