@@ -68,8 +68,8 @@ public class UsernameRule implements Rule
    */
   public UsernameRule(final boolean mb, final boolean ic, final MatchBehavior behavior)
   {
-    setMatchBackwards(mb);
-    setIgnoreCase(ic);
+    matchBackwards = mb;
+    ignoreCase = ic;
     matchBehavior = behavior;
   }
 

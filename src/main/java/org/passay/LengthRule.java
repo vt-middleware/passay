@@ -23,11 +23,14 @@ public class LengthRule implements Rule
   private int minimumLength;
 
   /** Stores the maximum length of a password. */
-  private int maximumLength = Integer.MAX_VALUE;
+  private int maximumLength;
 
 
   /** Creates a new length rule with lengths unset. The defaults are 0 and Integer.MAX_VALUE respectively. */
-  public LengthRule() {}
+  public LengthRule()
+  {
+    this(0, Integer.MAX_VALUE);
+  }
 
 
   /**
@@ -38,8 +41,7 @@ public class LengthRule implements Rule
    */
   public LengthRule(final int length)
   {
-    minimumLength = length;
-    maximumLength = length;
+    this(length, length);
   }
 
 
