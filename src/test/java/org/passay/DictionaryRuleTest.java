@@ -15,21 +15,6 @@ import org.testng.annotations.Parameters;
 public class DictionaryRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "Pullm@n1z3";
-
-  /** Test password. */
-  private static final String DICT_PASS = "Pullmanize";
-
-  /** Test password. */
-  private static final String BACKWARDS_DICT_PASS = "ezinamlluP";
-
-  /** Test password. */
-  private static final String UPPERCASE_DICT_PASS = "PuLLmanIZE";
-
-  /** Test password. */
-  private static final String BACKWARDS_UPPERCASE_DICT_PASS = "EZInamLLuP";
-
   /** For testing. */
   private final DictionaryRule rule = new DictionaryRule();
 
@@ -81,72 +66,83 @@ public class DictionaryRuleTest extends AbstractRuleTest
   {
     return
       new Object[][] {
-
-        {rule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {rule, new PasswordData("Pullm@n1z3"), null, },
+        // dictionary word
         {
           rule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("Pullmanize"),
           codes(DictionaryRule.ERROR_CODE),
         },
-        {rule, new PasswordData(BACKWARDS_DICT_PASS), null, },
-        {rule, new PasswordData(UPPERCASE_DICT_PASS), null, },
-        {rule, new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS), null, },
+        // backwards dictionary word
+        {rule, new PasswordData("ezinamlluP"), null, },
+        // mixed case dictionary word
+        {rule, new PasswordData("PuLLmanIZE"), null, },
+        // backwards mixed case dictionary word
+        {rule, new PasswordData("EZInamLLuP"), null, },
 
-        {backwardsRule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {backwardsRule, new PasswordData("Pullm@n1z3"), null, },
+        // dictionary word
         {
           backwardsRule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("Pullmanize"),
           codes(DictionaryRule.ERROR_CODE),
         },
+        // backward dictionary word
         {
           backwardsRule,
-          new PasswordData(BACKWARDS_DICT_PASS),
+          new PasswordData("ezinamlluP"),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
         },
-        {backwardsRule, new PasswordData(UPPERCASE_DICT_PASS), null, },
-        {
-          backwardsRule,
-          new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
-          null,
-        },
+        // mixed case dictionary word
+        {backwardsRule, new PasswordData("PuLLmanIZE"), null, },
+        // backwards mixed case dictionary word
+        {backwardsRule, new PasswordData("EZInamLLuP"), null, },
 
-        {ignoreCaseRule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {ignoreCaseRule, new PasswordData("Pullm@n1z3"), null, },
+        // dictionary word
         {
           ignoreCaseRule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("Pullmanize"),
           codes(DictionaryRule.ERROR_CODE),
         },
-        {ignoreCaseRule, new PasswordData(BACKWARDS_DICT_PASS), null, },
+        // backwards dictionary word
+        {ignoreCaseRule, new PasswordData("ezinamlluP"), null, },
+        // mixed case dictionary word
         {
           ignoreCaseRule,
-          new PasswordData(UPPERCASE_DICT_PASS),
+          new PasswordData("PuLLmanIZE"),
           codes(DictionaryRule.ERROR_CODE),
         },
-        {
-          ignoreCaseRule,
-          new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
-          null,
-        },
+        // backwards mixed case dictionary word
+        {ignoreCaseRule, new PasswordData("EZInamLLuP"), null, },
 
-        {allRule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {allRule, new PasswordData("Pullm@n1z3"), null, },
+        // dictionary word
         {
           allRule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("Pullmanize"),
           codes(DictionaryRule.ERROR_CODE),
         },
+        // backwards dictionary rule
         {
           allRule,
-          new PasswordData(BACKWARDS_DICT_PASS),
+          new PasswordData("ezinamlluP"),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
         },
+        // mixed case dictionary word
         {
           allRule,
-          new PasswordData(UPPERCASE_DICT_PASS),
+          new PasswordData("PuLLmanIZE"),
           codes(DictionaryRule.ERROR_CODE),
         },
+        // backwards mixed case dictionary word
         {
           allRule,
-          new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
+          new PasswordData("EZInamLLuP"),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
         },
       };
@@ -166,12 +162,12 @@ public class DictionaryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("Pullmanize"),
           new String[] {String.format("Password contains the dictionary word '%s'.", "Pullmanize"), },
         },
         {
           backwardsRule,
-          new PasswordData(BACKWARDS_DICT_PASS),
+          new PasswordData("ezinamlluP"),
           new String[] {String.format("Password contains the reversed dictionary word '%s'.", "Pullmanize"), },
         },
       };

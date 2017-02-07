@@ -14,30 +14,6 @@ import org.testng.annotations.Test;
 public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "r%scvEW2e93)";
-
-  /** Test password. */
-  private static final String VALID_PASS_ALT = "r¢sCvE±2e93";
-
-  /** Test password. */
-  private static final String VALID_PASS_ISSUE32 = "r~scvEW2e93b";
-
-  /** Test password. */
-  private static final String ALPHA_PASS = "r%5#8EW2393)";
-
-  /** Test password. */
-  private static final String DIGIT_PASS = "r%scvEW2e9e)";
-
-  /** Test password. */
-  private static final String UPPERCASE_PASS = "r%scv3W2e9)";
-
-  /** Test password. */
-  private static final String LOWERCASE_PASS = "R%s4VEW239)";
-
-  /** Test password. */
-  private static final String NONALPHA_PASS = "r5scvEW2e9b";
-
   /** For testing. */
   private final CharacterCharacteristicsRule rule1 = new CharacterCharacteristicsRule();
 
@@ -76,45 +52,53 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   {
     return
       new Object[][] {
-
-        {rule1, new PasswordData(VALID_PASS), null, },
-        {rule1, new PasswordData(VALID_PASS_ALT), null, },
-        {rule1, new PasswordData(VALID_PASS_ISSUE32), null, },
+        // valid ascii password
+        {rule1, new PasswordData("r%scvEW2e93)"), null, },
+        // valid non-ascii password
+        {rule1, new PasswordData("r¢sCvE±2e93"), null, },
+        // issue #32
+        {rule1, new PasswordData("r~scvEW2e93b"), null, },
+        // missing lowercase
         {
           rule1,
-          new PasswordData(ALPHA_PASS),
+          new PasswordData("r%5#8EW2393)"),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Alphabetical.getErrorCode(),
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
+        // missing 3 digits
         {
           rule1,
-          new PasswordData(DIGIT_PASS),
+          new PasswordData("r%scvEW2e9e)"),
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Digit.getErrorCode()),
         },
+        // missing 2 uppercase
         {
           rule1,
-          new PasswordData(UPPERCASE_PASS),
+          new PasswordData("r%scv3W2e9)"),
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.UpperCase.getErrorCode()),
         },
+        // missing 2 lowercase
         {
           rule1,
-          new PasswordData(LOWERCASE_PASS),
+          new PasswordData("R%s4VEW239)"),
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.LowerCase.getErrorCode()),
         },
+        // missing 1 special
         {
           rule1,
-          new PasswordData(NONALPHA_PASS),
+          new PasswordData("r5scvEW2e9b"),
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Special.getErrorCode()),
         },
-        {rule2, new PasswordData(VALID_PASS), null, },
-        {rule2, new PasswordData(VALID_PASS_ALT), null, },
-        {rule2, new PasswordData(ALPHA_PASS), null, },
-        {rule2, new PasswordData(DIGIT_PASS), null, },
-        {rule2, new PasswordData(UPPERCASE_PASS), null, },
-        {rule2, new PasswordData(LOWERCASE_PASS), null, },
-        {rule2, new PasswordData(NONALPHA_PASS), null, },
+        // previous passwords all valid under different rule set
+        {rule2, new PasswordData("r%scvEW2e93)"), null, },
+        {rule2, new PasswordData("r¢sCvE±2e93"), null, },
+        {rule2, new PasswordData("r%5#8EW2393)"), null, },
+        {rule2, new PasswordData("r%scvEW2e9e)"), null, },
+        {rule2, new PasswordData("r%scv3W2e9)"), null, },
+        {rule2, new PasswordData("R%s4VEW239)"), null, },
+        {rule2, new PasswordData("r5scvEW2e9b"), null, },
       };
   }
 
@@ -126,7 +110,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   {
     final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule();
     try {
-      ccr.validate(new PasswordData(VALID_PASS));
+      ccr.validate(new PasswordData("r%scvEW2e93)"));
       AssertJUnit.fail("Should have thrown IllegalStateException");
     } catch (Exception e) {
       AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());

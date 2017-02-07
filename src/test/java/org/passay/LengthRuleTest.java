@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -11,42 +10,6 @@ import org.testng.annotations.DataProvider;
  */
 public class LengthRuleTest extends AbstractRuleTest
 {
-
-  /** Test password. */
-  private static final String MIN_VALID_PASS = "p4T3#6Tu";
-
-  /** Test password. */
-  private static final String MID_VALID_PASS = "p4T3t#6Tu";
-
-  /** Test password. */
-  private static final String MAX_VALID_PASS = "p4T3to#6Tu";
-
-  /** Test password. */
-  private static final String SHORT_PASS = "p4T36";
-
-  /** Test password. */
-  private static final String LONG_PASS = "p4T3j76rE@#";
-
-  /** For testing. */
-  private final LengthRule rule = new LengthRule(8, 10);
-
-  /** For testing. */
-  private final LengthRule minRule = new LengthRule(8);
-
-  /** For testing. */
-  private final LengthRule noMinRule = new LengthRule();
-
-  /** For testing. */
-  private final LengthRule noMaxRule = new LengthRule();
-
-
-  /** Initialize rules for this test. */
-  @BeforeClass(groups = {"passtest"})
-  public void createRules()
-  {
-    noMinRule.setMaximumLength(10);
-    noMaxRule.setMinimumLength(8);
-  }
 
 
   /**
@@ -61,61 +24,61 @@ public class LengthRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {rule, new PasswordData(MIN_VALID_PASS), null, },
-        {rule, new PasswordData(MID_VALID_PASS), null, },
-        {rule, new PasswordData(MAX_VALID_PASS), null, },
+        {new LengthRule(8, 10), new PasswordData("p4T3#6Tu"), null, },
+        {new LengthRule(8, 10), new PasswordData("p4T3t#6Tu"), null, },
+        {new LengthRule(8, 10), new PasswordData("p4T3to#6Tu"), null, },
         {
-          rule,
-          new PasswordData(SHORT_PASS),
+          new LengthRule(8, 10),
+          new PasswordData("p4T36"),
           codes(LengthRule.ERROR_CODE_MIN),
         },
         {
-          rule,
-          new PasswordData(LONG_PASS),
+          new LengthRule(8, 10),
+          new PasswordData("p4T3j76rE@#"),
           codes(LengthRule.ERROR_CODE_MAX),
         },
 
-        {minRule, new PasswordData(MIN_VALID_PASS), null, },
+        {new LengthRule(8), new PasswordData("p4T3#6Tu"), null, },
         {
-          minRule,
-          new PasswordData(MID_VALID_PASS),
+          new LengthRule(8),
+          new PasswordData("p4T3t#6Tu"),
           codes(LengthRule.ERROR_CODE_MAX),
         },
         {
-          minRule,
-          new PasswordData(MAX_VALID_PASS),
+          new LengthRule(8),
+          new PasswordData("p4T3to#6Tu"),
           codes(LengthRule.ERROR_CODE_MAX),
         },
         {
-          minRule,
-          new PasswordData(SHORT_PASS),
+          new LengthRule(8),
+          new PasswordData("p4T36"),
           codes(LengthRule.ERROR_CODE_MIN),
         },
         {
-          minRule,
-          new PasswordData(LONG_PASS),
+          new LengthRule(8),
+          new PasswordData("p4T3j76rE@#"),
           codes(LengthRule.ERROR_CODE_MAX),
         },
 
-        {noMinRule, new PasswordData(MIN_VALID_PASS), null, },
-        {noMinRule, new PasswordData(MID_VALID_PASS), null, },
-        {noMinRule, new PasswordData(MAX_VALID_PASS), null, },
-        {noMinRule, new PasswordData(SHORT_PASS), null, },
+        {new LengthRule(0, 10), new PasswordData("p4T3#6Tu"), null, },
+        {new LengthRule(0, 10), new PasswordData("p4T3t#6Tu"), null, },
+        {new LengthRule(0, 10), new PasswordData("p4T3to#6Tu"), null, },
+        {new LengthRule(0, 10), new PasswordData("p4T36"), null, },
         {
-          noMinRule,
-          new PasswordData(LONG_PASS),
+          new LengthRule(0, 10),
+          new PasswordData("p4T3j76rE@#"),
           codes(LengthRule.ERROR_CODE_MAX),
         },
 
-        {noMaxRule, new PasswordData(MIN_VALID_PASS), null, },
-        {noMaxRule, new PasswordData(MID_VALID_PASS), null, },
-        {noMaxRule, new PasswordData(MAX_VALID_PASS), null, },
+        {new LengthRule(8, Integer.MAX_VALUE), new PasswordData("p4T3#6Tu"), null, },
+        {new LengthRule(8, Integer.MAX_VALUE), new PasswordData("p4T3t#6Tu"), null, },
+        {new LengthRule(8, Integer.MAX_VALUE), new PasswordData("p4T3to#6Tu"), null, },
         {
-          noMaxRule,
-          new PasswordData(SHORT_PASS),
+          new LengthRule(8, Integer.MAX_VALUE),
+          new PasswordData("p4T36"),
           codes(LengthRule.ERROR_CODE_MIN),
         },
-        {noMaxRule, new PasswordData(LONG_PASS), null, },
+        {new LengthRule(8, Integer.MAX_VALUE), new PasswordData("p4T3j76rE@#"), null, },
       };
   }
 
@@ -132,16 +95,16 @@ public class LengthRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          rule,
-          new PasswordData(LONG_PASS),
+          new LengthRule(8, 10),
+          new PasswordData("p4T3j76rE@#"),
           new String[] {
-            String.format("Password must be no more than %s characters in length.", rule.getMaximumLength()),
+            String.format("Password must be no more than %s characters in length.", 10),
           },
         },
         {
-          rule,
-          new PasswordData(SHORT_PASS),
-          new String[] {String.format("Password must be %s or more characters in length.", rule.getMinimumLength()), },
+          new LengthRule(8, 10),
+          new PasswordData("p4T36"),
+          new String[] {String.format("Password must be %s or more characters in length.", 8), },
         },
       };
   }

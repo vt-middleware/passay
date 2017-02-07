@@ -15,33 +15,6 @@ import org.testng.annotations.Test;
 public class LengthComplexityRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String INVALID_PASS_5 = "r%vE2";
-
-  /** Test password. */
-  private static final String VALID_PASS_9 = "r%scvEW2e";
-
-  /** Test password. */
-  private static final String VALID_PASS_12 = "rkscvEW2e93C";
-
-  /** Test password. */
-  private static final String VALID_PASS_18 = "rkscvEWbePwCOUovqt";
-
-  /** Test password. */
-  private static final String VALID_PASS_20 = "horse staple battery";
-
-  /** Test password. */
-  private static final String VALID_PASS_24 = "it was the best of times";
-
-  /** Test password. */
-  private static final String INVALID_PASS_78 =
-    "It was the best of times, it was the worst of times, it was the age of wisdom,";
-
-  /** Test password. */
-  private static final String INVALID_PASS_198 =
-    "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, " +
-    "it was the epoch of belief, it was the epoch of incredulity, it was the season of Light,";
-
   /** For testing. */
   private final LengthComplexityRule rule1 = new LengthComplexityRule();
 
@@ -142,29 +115,32 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   {
     return
       new Object[][] {
-
-        {rule1, new PasswordData("alfred", VALID_PASS_9), null, },
-        {rule1, new PasswordData("alfred", VALID_PASS_12), null, },
-        {rule1, new PasswordData("alfred", VALID_PASS_18), null, },
-        {rule1, new PasswordData("alfred", VALID_PASS_20), null, },
-        {rule1, new PasswordData("alfred", VALID_PASS_24), null, },
+        // valid passwords in each length range
+        {rule1, new PasswordData("alfred", "r%scvEW2e"), null, },
+        {rule1, new PasswordData("alfred", "rkscvEW2e93C"), null, },
+        {rule1, new PasswordData("alfred", "rkscvEWbePwCOUovqt"), null, },
+        {rule1, new PasswordData("alfred", "horse staple battery"), null, },
+        {rule1, new PasswordData("alfred", "it was the best of times"), null, },
         {
           rule1,
-          new PasswordData("alfred", INVALID_PASS_5),
+          new PasswordData("alfred", "r%vE2"),
           codes(
             LengthComplexityRule.ERROR_CODE,
             LengthRule.ERROR_CODE_MIN),
         },
         {
           rule1,
-          new PasswordData("alfred", INVALID_PASS_78),
+          new PasswordData("alfred", "It was the best of times, it was the worst of times, it was the age of wisdom,"),
           codes(
             LengthComplexityRule.ERROR_CODE,
             LengthRule.ERROR_CODE_MAX),
         },
         {
           rule1,
-          new PasswordData("alfred", INVALID_PASS_198),
+          new PasswordData(
+            "alfred",
+            "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of " +
+              "foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light,"),
           codes(
             LengthComplexityRule.ERROR_CODE_RULES),
         },
@@ -365,7 +341,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule1,
-          new PasswordData("bwayne", INVALID_PASS_5),
+          new PasswordData("bwayne", "r%vE2"),
           new String[] {
             String.format("Password must be %s or more characters in length.", 8),
             String.format("Password meets %s complexity rules, but %s are required.", 6, 7),
@@ -373,7 +349,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         },
         {
           rule1,
-          new PasswordData("bwayne", INVALID_PASS_78),
+          new PasswordData("bwayne", "It was the best of times, it was the worst of times, it was the age of wisdom,"),
           new String[] {
             String.format("Password must be no more than %s characters in length.", 64),
             String.format("Password meets %s complexity rules, but %s are required.", 5, 6),
@@ -381,7 +357,10 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         },
         {
           rule1,
-          new PasswordData("bwayne", INVALID_PASS_198),
+          new PasswordData(
+            "bwayne",
+            "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of " +
+              "foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light,"),
           new String[] {
             String.format("No rules have been configured for a password of length %s.", 198),
           },

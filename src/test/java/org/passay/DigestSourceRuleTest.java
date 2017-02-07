@@ -17,15 +17,6 @@ import org.testng.annotations.DataProvider;
 public class DigestSourceRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "t3stUs3r01";
-
-  /** Test password. */
-  private static final String SOURCE_PASS = "t3stUs3r04";
-
-  /** Test username. */
-  private static final String USER = "testuser";
-
   /** For testing. */
   private final List<PasswordData.Reference> sourceRefs = new ArrayList<>();
 
@@ -58,27 +49,14 @@ public class DigestSourceRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
+        {digestRule, TestUtils.newPasswordData("t3stUs3r01", "testuser", null, sourceRefs), null, },
         {
           digestRule,
-          TestUtils.newPasswordData(VALID_PASS, USER, null, sourceRefs),
-          null,
-        },
-        {
-          digestRule,
-          TestUtils.newPasswordData(SOURCE_PASS, USER, null, sourceRefs),
+          TestUtils.newPasswordData("t3stUs3r04", "testuser", null, sourceRefs),
           codes(SourceRule.ERROR_CODE),
         },
-
-        {
-          emptyRule,
-          TestUtils.newPasswordData(VALID_PASS, USER),
-          null,
-        },
-        {
-          emptyRule,
-          TestUtils.newPasswordData(SOURCE_PASS, USER),
-          null,
-        },
+        {emptyRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
+        {emptyRule, TestUtils.newPasswordData("t3stUs3r04", "testuser"), null, },
       };
   }
 
@@ -96,7 +74,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           digestRule,
-          TestUtils.newPasswordData(SOURCE_PASS, USER, null, sourceRefs),
+          TestUtils.newPasswordData("t3stUs3r04", "testuser", null, sourceRefs),
           new String[] {String.format("Password cannot be the same as your %s password.", "System B"), },
         },
       };

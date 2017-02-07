@@ -95,9 +95,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
 
-    final UsernameRule userIDRule = new UsernameRule();
-    userIDRule.setIgnoreCase(true);
-    userIDRule.setMatchBackwards(true);
+    final UsernameRule userIDRule = new UsernameRule(true, true);
 
     final EncodingHashBean sha1Bean = new EncodingHashBean();
     sha1Bean.setDigestSpec(new DigestSpec("SHA1"));

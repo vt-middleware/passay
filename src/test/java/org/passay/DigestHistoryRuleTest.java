@@ -17,21 +17,6 @@ import org.testng.annotations.DataProvider;
 public class DigestHistoryRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "t3stUs3r00";
-
-  /** Test password. */
-  private static final String HISTORY_PASS1 = "t3stUs3r01";
-
-  /** Test password. */
-  private static final String HISTORY_PASS2 = "t3stUs3r02";
-
-  /** Test password. */
-  private static final String HISTORY_PASS3 = "t3stUs3r03";
-
-  /** Test username. */
-  private static final String USER = "testuser";
-
   /** For testing. */
   private final List<PasswordData.Reference> digestRefs = new ArrayList<>();
 
@@ -77,68 +62,44 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
+        {digestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, digestRefs), null, },
         {
           digestRule,
-          TestUtils.newPasswordData(VALID_PASS, USER, null, digestRefs),
-          null,
-        },
-        {
-          digestRule,
-          TestUtils.newPasswordData(HISTORY_PASS1, USER, null, digestRefs),
+          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           digestRule,
-          TestUtils.newPasswordData(HISTORY_PASS2, USER, null, digestRefs),
+          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           digestRule,
-          TestUtils.newPasswordData(HISTORY_PASS3, USER, null, digestRefs),
+          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
 
+        {saltedDigestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, saltedDigestRefs), null, },
         {
           saltedDigestRule,
-          TestUtils.newPasswordData(VALID_PASS, USER, null, saltedDigestRefs),
-          null,
-        },
-        {
-          saltedDigestRule,
-          TestUtils.newPasswordData(HISTORY_PASS1, USER, null, saltedDigestRefs),
+          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           saltedDigestRule,
-          TestUtils.newPasswordData(HISTORY_PASS2, USER, null, saltedDigestRefs),
+          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           saltedDigestRule,
-          TestUtils.newPasswordData(HISTORY_PASS3, USER, null, saltedDigestRefs),
+          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        {
-          emptyDigestRule,
-          TestUtils.newPasswordData(VALID_PASS, USER),
-          null,
-        },
-        {
-          emptyDigestRule,
-          TestUtils.newPasswordData(HISTORY_PASS1, USER),
-          null,
-        },
-        {
-          emptyDigestRule,
-          TestUtils.newPasswordData(HISTORY_PASS2, USER),
-          null,
-        },
-        {
-          emptyDigestRule,
-          TestUtils.newPasswordData(HISTORY_PASS3, USER),
-          null,
-        },
+        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser"), null, },
+        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
+        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r02", "testuser"), null, },
+        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r03", "testuser"), null, },
       };
   }
 
@@ -156,7 +117,7 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           digestRule,
-          TestUtils.newPasswordData(HISTORY_PASS1, USER, null, digestRefs),
+          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, digestRefs),
           new String[] {String.format("Password matches one of %s previous passwords.", digestRefs.size()), },
         },
       };

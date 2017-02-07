@@ -18,21 +18,6 @@ import org.testng.annotations.Parameters;
 public class DictionarySubstringRuleTest extends AbstractRuleTest
 {
 
-  /** Test password. */
-  private static final String VALID_PASS = "p4t3t#7wd5gew";
-
-  /** Test password. */
-  private static final String DICT_PASS = "p4tlancely5gew";
-
-  /** Test password. */
-  private static final String BACKWARDS_DICT_PASS = "p4tylecnal5gew";
-
-  /** Test password. */
-  private static final String UPPERCASE_DICT_PASS = "p4tlAnCeLy5gew";
-
-  /** Test password. */
-  private static final String BACKWARDS_UPPERCASE_DICT_PASS = "p4tyLeCnAl5gew";
-
   /** For testing. */
   private final DictionarySubstringRule rule = new DictionarySubstringRule();
 
@@ -93,72 +78,83 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
   {
     return
       new Object[][] {
-
-        {rule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {rule, new PasswordData("p4t3t#7wd5gew"), null, },
+        // dictionary word
         {
           rule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("p4tlancely5gew"),
           codes(DictionarySubstringRule.ERROR_CODE),
         },
-        {rule, new PasswordData(BACKWARDS_DICT_PASS), null, },
-        {rule, new PasswordData(UPPERCASE_DICT_PASS), null, },
-        {rule, new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS), null, },
+        // backwards dictionary word
+        {rule, new PasswordData("p4tylecnal5gew"), null, },
+        // mixed case dictionary word
+        {rule, new PasswordData("p4tlAnCeLy5gew"), null, },
+        // backwards mixed case dictionary word
+        {rule, new PasswordData("p4tyLeCnAl5gew"), null, },
 
-        {backwardsRule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {backwardsRule, new PasswordData("p4t3t#7wd5gew"), null, },
+        // dictionary word
         {
           backwardsRule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("p4tlancely5gew"),
           codes(DictionarySubstringRule.ERROR_CODE),
         },
+        // backwards dictionary word
         {
           backwardsRule,
-          new PasswordData(BACKWARDS_DICT_PASS),
+          new PasswordData("p4tylecnal5gew"),
           codes(DictionarySubstringRule.ERROR_CODE_REVERSED),
         },
-        {backwardsRule, new PasswordData(UPPERCASE_DICT_PASS), null, },
-        {
-          backwardsRule,
-          new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
-          null,
-        },
+        // mixed case dictionary word
+        {backwardsRule, new PasswordData("p4tlAnCeLy5gew"), null, },
+        // backwards mixed case dictionary word
+        {backwardsRule, new PasswordData("p4tyLeCnAl5gew"), null, },
 
-        {ignoreCaseRule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {ignoreCaseRule, new PasswordData("p4t3t#7wd5gew"), null, },
+        // dictionary word
         {
           ignoreCaseRule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("p4tlancely5gew"),
           codes(DictionarySubstringRule.ERROR_CODE),
         },
-        {ignoreCaseRule, new PasswordData(BACKWARDS_DICT_PASS), null, },
+        // backwards dictionary word
+        {ignoreCaseRule, new PasswordData("p4tylecnal5gew"), null, },
+        // mixed case dictionary word
         {
           ignoreCaseRule,
-          new PasswordData(UPPERCASE_DICT_PASS),
+          new PasswordData("p4tlAnCeLy5gew"),
           codes(DictionarySubstringRule.ERROR_CODE),
         },
-        {
-          ignoreCaseRule,
-          new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
-          null,
-        },
+        // backwards mixed case dictionary word
+        {ignoreCaseRule, new PasswordData("p4tyLeCnAl5gew"), null, },
 
-        {allRule, new PasswordData(VALID_PASS), null, },
+        // valid password
+        {allRule, new PasswordData("p4t3t#7wd5gew"), null, },
+        // dictionary word
         {
           allRule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("p4tlancely5gew"),
           codes(DictionarySubstringRule.ERROR_CODE),
         },
+        // backwards dictionary word
         {
           allRule,
-          new PasswordData(BACKWARDS_DICT_PASS),
+          new PasswordData("p4tylecnal5gew"),
           codes(DictionarySubstringRule.ERROR_CODE_REVERSED),
         },
+        // mixed case dictionary word
         {
           allRule,
-          new PasswordData(UPPERCASE_DICT_PASS),
+          new PasswordData("p4tlAnCeLy5gew"),
           codes(DictionarySubstringRule.ERROR_CODE),
         },
+        // backwards mixed case dictionary word
         {
           allRule,
-          new PasswordData(BACKWARDS_UPPERCASE_DICT_PASS),
+          new PasswordData("p4tyLeCnAl5gew"),
           codes(DictionarySubstringRule.ERROR_CODE_REVERSED),
         },
       };
@@ -178,12 +174,12 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          new PasswordData(DICT_PASS),
+          new PasswordData("p4tlancely5gew"),
           new String[] {String.format("Password contains the dictionary word '%s'.", "lance"), },
         },
         {
           backwardsRule,
-          new PasswordData(BACKWARDS_DICT_PASS),
+          new PasswordData("p4tylecnal5gew"),
           new String[] {String.format("Password contains the reversed dictionary word '%s'.", "lance"), },
         },
       };
