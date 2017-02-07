@@ -30,7 +30,7 @@ public class WhitespaceRule implements Rule
   protected boolean reportAllFailures;
 
   /** Where to match whitespace. */
-  private final StringMatch stringMatch;
+  private final MatchBehavior matchBehavior;
 
 
   /**
@@ -38,30 +38,30 @@ public class WhitespaceRule implements Rule
    */
   public WhitespaceRule()
   {
-    this(StringMatch.Contains);
+    this(MatchBehavior.Contains);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  match  how to match whitespace
+   * @param  behavior  how to match whitespace
    */
-  public WhitespaceRule(final StringMatch match)
+  public WhitespaceRule(final MatchBehavior behavior)
   {
-    this(match, true);
+    this(behavior, true);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  match  how to match whitespace
+   * @param  behavior  how to match whitespace
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final StringMatch match, final boolean reportAll)
+  public WhitespaceRule(final MatchBehavior behavior, final boolean reportAll)
   {
-    stringMatch = match;
+    matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
 
@@ -72,7 +72,7 @@ public class WhitespaceRule implements Rule
     final RuleResult result = new RuleResult(true);
     final String text = passwordData.getPassword();
     for (char c : CHARS) {
-      if (stringMatch.match(text, c)) {
+      if (matchBehavior.match(text, c)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
         if (!reportAllFailures) {
@@ -95,7 +95,7 @@ public class WhitespaceRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("whitespaceCharacter", c);
-    m.put("stringMatch", stringMatch);
+    m.put("matchBehavior", matchBehavior);
     return m;
   }
 
@@ -105,10 +105,10 @@ public class WhitespaceRule implements Rule
   {
     return
       String.format(
-        "%s@%h::reportAllFailures=%s,stringMatch=%s",
+        "%s@%h::reportAllFailures=%s,matchBehavior=%s",
         getClass().getName(),
         hashCode(),
         reportAllFailures,
-        stringMatch);
+        matchBehavior);
   }
 }

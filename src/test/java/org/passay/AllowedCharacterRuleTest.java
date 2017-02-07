@@ -55,17 +55,26 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
           new PasswordData("gbwersco4kk5kk4"),
           codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
         },
-        // test match type
+        // test match behavior
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, StringMatch.StartsWith),
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
           new PasswordData("4gbwersco4kk5kk"),
           codes(AllowedCharacterRule.ERROR_CODE),
         },
-        // test match type
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, StringMatch.EndsWith),
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
+          new PasswordData("gbwersco4kk"),
+          null,
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),
           new PasswordData("gbwersco4kk5kk4"),
           codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),
+          new PasswordData("gbwersco4kk"),
+          null,
         },
       };
   }
@@ -107,12 +116,12 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
             String.format("Password contains the illegal character '%s'.", "5"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, StringMatch.StartsWith),
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
           new PasswordData("4bwersco4kk"),
           new String[] {String.format("Password starts with the illegal character '%s'.", "4"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, StringMatch.EndsWith),
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),
           new PasswordData("gbwersco4kk4"),
           new String[] {String.format("Password ends with the illegal character '%s'.", "4"), },
         },

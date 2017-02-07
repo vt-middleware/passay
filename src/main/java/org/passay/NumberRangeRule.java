@@ -25,23 +25,23 @@ public class NumberRangeRule implements Rule
   private final int upperRange;
 
   /** Where to match each number. */
-  private final StringMatch stringMatchType;
+  private final MatchBehavior matchBehavior;
 
 
   /**
-   * Creates a new number range rule using {@link StringMatch#Contains}.
+   * Creates a new number range rule.
    *
    * @param  lower  end of the number range, inclusive
    * @param  upper  end of the number range, exclusive
    */
   public NumberRangeRule(final int lower, final int upper)
   {
-    this(lower, upper, StringMatch.Contains, true);
+    this(lower, upper, MatchBehavior.Contains, true);
   }
 
 
   /**
-   * Creates a new number range rule using {@link StringMatch#Contains}.
+   * Creates a new number range rule.
    *
    * @param  lower  end of the number range, inclusive
    * @param  upper  end of the number range, exclusive
@@ -49,7 +49,7 @@ public class NumberRangeRule implements Rule
    */
   public NumberRangeRule(final int lower, final int upper, final boolean reportAll)
   {
-    this(lower, upper, StringMatch.Contains, reportAll);
+    this(lower, upper, MatchBehavior.Contains, reportAll);
   }
 
 
@@ -58,11 +58,11 @@ public class NumberRangeRule implements Rule
    *
    * @param  lower  end of the number range, inclusive
    * @param  upper  end of the number range, exclusive
-   * @param  match  match type
+   * @param  behavior  how to match number range
    */
-  public NumberRangeRule(final int lower, final int upper, final StringMatch match)
+  public NumberRangeRule(final int lower, final int upper, final MatchBehavior behavior)
   {
-    this(lower, upper, match, true);
+    this(lower, upper, behavior, true);
   }
 
 
@@ -71,17 +71,17 @@ public class NumberRangeRule implements Rule
    *
    * @param  lower  end of the number range, inclusive
    * @param  upper  end of the number range, exclusive
-   * @param  match  match type
+   * @param  behavior  how to match number range
    * @param  reportAll  whether to report all matches or just the first
    */
-  public NumberRangeRule(final int lower, final int upper, final StringMatch match, final boolean reportAll)
+  public NumberRangeRule(final int lower, final int upper, final MatchBehavior behavior, final boolean reportAll)
   {
     if (lower >= upper) {
       throw new IllegalArgumentException("lower must be less than upper");
     }
     lowerRange = lower;
     upperRange = upper;
-    stringMatchType = match;
+    matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
 
@@ -92,7 +92,7 @@ public class NumberRangeRule implements Rule
     final RuleResult result = new RuleResult(true);
     final String text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {
-      if (stringMatchType.match(text, Integer.toString(i))) {
+      if (matchBehavior.match(text, Integer.toString(i))) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(i)));
         if (!reportAllFailures) {
@@ -115,7 +115,7 @@ public class NumberRangeRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("number", number);
-    m.put("stringMatchType", stringMatchType);
+    m.put("matchBehavior", matchBehavior);
     return m;
   }
 
@@ -125,11 +125,11 @@ public class NumberRangeRule implements Rule
   {
     return
       String.format(
-        "%s@%h::lowerRange=%s,upperRange=%s,stringMatchType=%s",
+        "%s@%h::lowerRange=%s,upperRange=%s,matchBehavior=%s",
         getClass().getName(),
         hashCode(),
         lowerRange,
         upperRange,
-        stringMatchType);
+        matchBehavior);
   }
 }

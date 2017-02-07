@@ -31,14 +31,24 @@ public class NumberRangeRuleTest extends AbstractRuleTest
           codes(NumberRangeRule.ERROR_CODE),
         },
         {
-          new NumberRangeRule(101, 199, StringMatch.StartsWith),
+          new NumberRangeRule(101, 199, MatchBehavior.StartsWith),
           new PasswordData("150Rcv8#n65"),
           codes(NumberRangeRule.ERROR_CODE),
         },
         {
-          new NumberRangeRule(101, 199, StringMatch.EndsWith),
+          new NumberRangeRule(101, 199, MatchBehavior.StartsWith),
+          new PasswordData("p4zRcv101#n6F"),
+          null,
+        },
+        {
+          new NumberRangeRule(101, 199, MatchBehavior.EndsWith),
           new PasswordData("p4zRcv8#n198"),
           codes(NumberRangeRule.ERROR_CODE),
+        },
+        {
+          new NumberRangeRule(101, 199, MatchBehavior.EndsWith),
+          new PasswordData("p4zRcv101#n6F"),
+          null,
         },
         {new NumberRangeRule(101, 199), new PasswordData("p4zRcv99#n65"), null, },
         {new NumberRangeRule(101, 199), new PasswordData("p4zRcv100#n65"), null, },
@@ -59,17 +69,17 @@ public class NumberRangeRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          new NumberRangeRule(101, 199, StringMatch.StartsWith),
+          new NumberRangeRule(101, 199, MatchBehavior.StartsWith),
           new PasswordData("133Rcv8#n65"),
           new String[] {"Password starts with the number '133'.", },
         },
         {
-          new NumberRangeRule(101, 199, StringMatch.Contains),
+          new NumberRangeRule(101, 199, MatchBehavior.Contains),
           new PasswordData("p4zRcv168#n65"),
           new String[] {"Password contains the number '168'.", },
         },
         {
-          new NumberRangeRule(101, 199, StringMatch.EndsWith),
+          new NumberRangeRule(101, 199, MatchBehavior.EndsWith),
           new PasswordData("p4zRcv8#n188"),
           new String[] {"Password ends with the number '188'.", },
         },

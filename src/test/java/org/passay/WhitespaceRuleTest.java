@@ -27,12 +27,12 @@ public class WhitespaceRuleTest extends AbstractRuleTest
         {new WhitespaceRule(), new PasswordData("AycDPdsyz"), null, },
         {
           new WhitespaceRule(),
-          new PasswordData("AycD" + " " + "Pdsyz"),
+          new PasswordData("AycD Pdsyz"),
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
           new WhitespaceRule(),
-          new PasswordData("Ayc" + "\t" + "DPdsyz"),
+          new PasswordData("Ayc\tDPdsyz"),
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
@@ -41,14 +41,24 @@ public class WhitespaceRuleTest extends AbstractRuleTest
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
-          new WhitespaceRule(StringMatch.StartsWith),
+          new WhitespaceRule(MatchBehavior.StartsWith),
           new PasswordData(" AycDPdsyz"),
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
-          new WhitespaceRule(StringMatch.EndsWith),
+          new WhitespaceRule(MatchBehavior.StartsWith),
+          new PasswordData("AycD Pdsyz"),
+          null,
+        },
+        {
+          new WhitespaceRule(MatchBehavior.EndsWith),
           new PasswordData("AycDPdsyz "),
           codes(WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(MatchBehavior.EndsWith),
+          new PasswordData("AycD Pdsyz"),
+          null,
         },
       };
   }
@@ -66,7 +76,7 @@ public class WhitespaceRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          new WhitespaceRule(StringMatch.StartsWith),
+          new WhitespaceRule(MatchBehavior.StartsWith),
           new PasswordData("\tAycDPdsyz"),
           new String[] {"Password starts with a whitespace character.", },
         },
@@ -76,7 +86,7 @@ public class WhitespaceRuleTest extends AbstractRuleTest
           new String[] {"Password contains a whitespace character.", },
         },
         {
-          new WhitespaceRule(StringMatch.EndsWith),
+          new WhitespaceRule(MatchBehavior.EndsWith),
           new PasswordData("AycDPdsyz\n"),
           new String[] {"Password ends with a whitespace character.", },
         },

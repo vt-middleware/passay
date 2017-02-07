@@ -26,7 +26,7 @@ public class IllegalCharacterRule implements Rule
   private final char[] illegalCharacters;
 
   /** Where to match whitespace. */
-  private final StringMatch stringMatch;
+  private final MatchBehavior matchBehavior;
 
 
   /**
@@ -36,7 +36,7 @@ public class IllegalCharacterRule implements Rule
    */
   public IllegalCharacterRule(final char[] c)
   {
-    this(c, StringMatch.Contains, true);
+    this(c, MatchBehavior.Contains, true);
   }
 
 
@@ -44,11 +44,11 @@ public class IllegalCharacterRule implements Rule
    * Create a new illegal character rule.
    *
    * @param  c  illegal characters
-   * @param  match  how to match illegal characters
+   * @param  behavior  how to match illegal characters
    */
-  public IllegalCharacterRule(final char[] c, final StringMatch match)
+  public IllegalCharacterRule(final char[] c, final MatchBehavior behavior)
   {
-    this(c, match, true);
+    this(c, behavior, true);
   }
 
 
@@ -60,7 +60,7 @@ public class IllegalCharacterRule implements Rule
    */
   public IllegalCharacterRule(final char[] c, final boolean reportAll)
   {
-    this(c, StringMatch.Contains, reportAll);
+    this(c, MatchBehavior.Contains, reportAll);
   }
 
 
@@ -68,17 +68,17 @@ public class IllegalCharacterRule implements Rule
    * Create a new illegal character rule.
    *
    * @param  c  illegal characters
-   * @param  match  how to match illegal characters
+   * @param  behavior  how to match illegal characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public IllegalCharacterRule(final char[] c, final StringMatch match, final boolean reportAll)
+  public IllegalCharacterRule(final char[] c, final MatchBehavior behavior, final boolean reportAll)
   {
     if (c.length > 0) {
       illegalCharacters = c;
     } else {
       throw new IllegalArgumentException("illegal characters length must be greater than zero");
     }
-    stringMatch = match;
+    matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
 
@@ -90,7 +90,7 @@ public class IllegalCharacterRule implements Rule
     final Set<Character> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (char c : illegalCharacters) {
-      if (stringMatch.match(text, c) && !matches.contains(c)) {
+      if (matchBehavior.match(text, c) && !matches.contains(c)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
         if (!reportAllFailures) {
@@ -114,7 +114,7 @@ public class IllegalCharacterRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("illegalCharacter", c);
-    m.put("stringMatch", stringMatch);
+    m.put("matchBehavior", matchBehavior);
     return m;
   }
 
@@ -124,11 +124,11 @@ public class IllegalCharacterRule implements Rule
   {
     return
       String.format(
-        "%s@%h::reportAllFailures=%s,stringMatch=%s,illegalCharacters=%s",
+        "%s@%h::reportAllFailures=%s,matchBehavior=%s,illegalCharacters=%s",
         getClass().getName(),
         hashCode(),
         reportAllFailures,
-        stringMatch,
+        matchBehavior,
         illegalCharacters != null ? Arrays.toString(illegalCharacters) : null);
   }
 }

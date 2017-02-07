@@ -6,7 +6,7 @@ package org.passay;
  *
  * @author  Middleware Services
  */
-public enum StringMatch
+public enum MatchBehavior
 {
 
   /** Use {@link String#startsWith(String)}. */
