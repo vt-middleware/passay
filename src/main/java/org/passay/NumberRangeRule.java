@@ -31,8 +31,8 @@ public class NumberRangeRule implements Rule
   /**
    * Creates a new number range rule using {@link StringMatch#Contains}.
    *
-   * @param  lower  end of the number range
-   * @param  upper  end of the number range
+   * @param  lower  end of the number range, inclusive
+   * @param  upper  end of the number range, exclusive
    */
   public NumberRangeRule(final int lower, final int upper)
   {
@@ -43,8 +43,8 @@ public class NumberRangeRule implements Rule
   /**
    * Creates a new number range rule using {@link StringMatch#Contains}.
    *
-   * @param  lower  end of the number range
-   * @param  upper  end of the number range
+   * @param  lower  end of the number range, inclusive
+   * @param  upper  end of the number range, exclusive
    * @param  reportAll  whether to report all matches or just the first
    */
   public NumberRangeRule(final int lower, final int upper, final boolean reportAll)
@@ -56,8 +56,8 @@ public class NumberRangeRule implements Rule
   /**
    * Creates a new number range rule.
    *
-   * @param  lower  end of the number range
-   * @param  upper  end of the number range
+   * @param  lower  end of the number range, inclusive
+   * @param  upper  end of the number range, exclusive
    * @param  match  match type
    */
   public NumberRangeRule(final int lower, final int upper, final StringMatch match)
@@ -69,8 +69,8 @@ public class NumberRangeRule implements Rule
   /**
    * Creates a new number range rule.
    *
-   * @param  lower  end of the number range
-   * @param  upper  end of the number range
+   * @param  lower  end of the number range, inclusive
+   * @param  upper  end of the number range, exclusive
    * @param  match  match type
    * @param  reportAll  whether to report all matches or just the first
    */
