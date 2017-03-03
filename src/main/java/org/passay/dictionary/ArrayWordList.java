@@ -98,6 +98,6 @@ public class ArrayWordList extends AbstractWordList
   @Override
   public String toString()
   {
-    return String.format("%s@%h::words=%s", getClass().getName(), hashCode(), Arrays.toString(words));
+    return String.format("%s@%h::size=%s", getClass().getName(), hashCode(), words.length);
   }
 }
