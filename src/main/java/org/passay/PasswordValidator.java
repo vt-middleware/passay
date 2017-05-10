@@ -18,7 +18,7 @@ public class PasswordValidator implements Rule
 {
 
   /** Password rules. */
-  private final List<Rule> passwordRules;
+  private final List<? extends Rule> passwordRules;
 
   /** Message resolver. */
   private final MessageResolver messageResolver;
@@ -40,7 +40,7 @@ public class PasswordValidator implements Rule
    *
    * @param  rules  to validate
    */
-  public PasswordValidator(final List<Rule> rules)
+  public PasswordValidator(final List<? extends Rule> rules)
   {
     this(new PropertiesMessageResolver(), rules);
   }
@@ -64,7 +64,7 @@ public class PasswordValidator implements Rule
    * @param  resolver  message resolver.
    * @param  rules  to validate
    */
-  public PasswordValidator(final MessageResolver resolver, final List<Rule> rules)
+  public PasswordValidator(final MessageResolver resolver, final List<? extends Rule> rules)
   {
     messageResolver = resolver;
     passwordRules = rules;

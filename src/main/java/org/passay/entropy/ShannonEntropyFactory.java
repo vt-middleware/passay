@@ -50,7 +50,7 @@ public final class ShannonEntropyFactory
    *
    * @return  shannon entropy
    */
-  public static ShannonEntropy createEntropy(final List<Rule> passwordRules, final PasswordData passwordData)
+  public static ShannonEntropy createEntropy(final List<? extends Rule> passwordRules, final PasswordData passwordData)
   {
     final boolean dictionaryCheck = passwordRules.stream().filter(
       rule -> AbstractDictionaryRule.class.isAssignableFrom(
