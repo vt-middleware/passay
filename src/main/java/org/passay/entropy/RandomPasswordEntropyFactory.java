@@ -33,7 +33,9 @@ public final class RandomPasswordEntropyFactory
    *
    * @return  random password entropy
    */
-  public static RandomPasswordEntropy createEntropy(final List<Rule> passwordRules, final PasswordData passwordData)
+  public static RandomPasswordEntropy createEntropy(
+    final List<? extends Rule> passwordRules,
+    final PasswordData passwordData)
   {
     if (!passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.Generated);

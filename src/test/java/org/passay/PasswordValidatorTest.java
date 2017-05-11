@@ -621,4 +621,18 @@ public class PasswordValidatorTest extends AbstractRuleTest
         },
       };
   }
+
+
+  /** @throws  Exception  On test failure. */
+  @Test(groups = {"passtest"})
+  public void producerExtends() throws Exception
+  {
+    // test that password validator will accept any list of rules that extends Rule
+    final List<CharacterRule> l = new ArrayList<>();
+    l.add(new CharacterRule(EnglishCharacterData.LowerCase));
+    l.add(new CharacterRule(EnglishCharacterData.UpperCase));
+    new PasswordValidator(l);
+    new PasswordValidator(
+      new CharacterRule(EnglishCharacterData.LowerCase), new CharacterRule(EnglishCharacterData.UpperCase));
+  }
 }
