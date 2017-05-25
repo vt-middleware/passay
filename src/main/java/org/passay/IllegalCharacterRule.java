@@ -83,6 +83,28 @@ public class IllegalCharacterRule implements Rule
   }
 
 
+  /**
+   * Returns the illegal characters for this rule.
+   *
+   * @return  illegal characters
+   */
+  public char[] getIllegalCharacters()
+  {
+    return illegalCharacters;
+  }
+
+
+  /**
+   * Returns the match behavior for this rule.
+   *
+   * @return  match behavior
+   */
+  public MatchBehavior getMatchBehavior()
+  {
+    return matchBehavior;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {

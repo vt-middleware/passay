@@ -70,6 +70,17 @@ public class CharacterRule implements Rule
 
 
   /**
+   * Returns the character data for this rule.
+   *
+   * @return  character data
+   */
+  public CharacterData getCharacterData()
+  {
+    return characterData;
+  }
+
+
+  /**
    * Returns the characters that are considered valid for this rule.
    *
    * @return  valid characters
@@ -117,6 +128,11 @@ public class CharacterRule implements Rule
   @Override
   public String toString()
   {
-    return String.format("%s@%h::numberOfCharacters=%s", getClass().getName(), hashCode(), numCharacters);
+    return String.format(
+      "%s@%h::characterData=%s,numberOfCharacters=%s",
+      getClass().getName(),
+      hashCode(),
+      characterData,
+      numCharacters);
   }
 }

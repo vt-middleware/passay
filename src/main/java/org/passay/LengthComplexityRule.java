@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -116,6 +117,17 @@ public class LengthComplexityRule implements Rule
   }
 
 
+  /**
+   * Returns the password rules for this complexity rule.
+   *
+   * @return  unmodifiable map of password rules
+   */
+  public Map<Interval, List<? extends Rule>> getRules()
+  {
+    return Collections.unmodifiableMap(rules);
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
@@ -204,7 +216,7 @@ public class LengthComplexityRule implements Rule
   /**
    * Class that represents an interval of numbers and parses interval notation.
    */
-  protected static class Interval
+  public static class Interval
   {
 
     /** Type of bound type. */

@@ -86,6 +86,39 @@ public class NumberRangeRule implements Rule
   }
 
 
+  /**
+   * Returns the lower range for this rule.
+   *
+   * @return  lower range
+   */
+  public int getLowerRange()
+  {
+    return lowerRange;
+  }
+
+
+  /**
+   * Returns the upper range for this rule.
+   *
+   * @return  upper range
+   */
+  public int getUpperRange()
+  {
+    return upperRange;
+  }
+
+
+  /**
+   * Returns the match behavior for this rule.
+   *
+   * @return  match behavior
+   */
+  public MatchBehavior getMatchBehavior()
+  {
+    return matchBehavior;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {

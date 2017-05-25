@@ -87,11 +87,22 @@ public class AllowedCharacterRule implements Rule
   /**
    * Returns the allowed characters for this rule.
    *
-   * @return  allowedCharacters
+   * @return  allowed characters
    */
   public char[] getAllowedCharacters()
   {
     return allowedCharacters;
+  }
+
+
+  /**
+   * Returns the match behavior for this rule.
+   *
+   * @return  match behavior
+   */
+  public MatchBehavior getMatchBehavior()
+  {
+    return matchBehavior;
   }
 
 

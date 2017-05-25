@@ -22,7 +22,7 @@ public class IllegalSequenceRule implements Rule
   protected final SequenceData sequenceData;
 
   /** Number of characters in sequence to match. */
-  protected int sequenceLength = DEFAULT_SEQUENCE_LENGTH;
+  protected int sequenceLength;
 
   /** Whether or not to wrap a sequence when searching for matches. */
   protected boolean wrapSequence;
@@ -72,6 +72,28 @@ public class IllegalSequenceRule implements Rule
     sequenceLength = sl;
     wrapSequence = wrap;
     reportAllFailures = reportAll;
+  }
+
+
+  /**
+   * Returns the sequence length for this rule.
+   *
+   * @return  sequence length
+   */
+  public int getSequenceLength()
+  {
+    return sequenceLength;
+  }
+
+
+  /**
+   * Returns the sequence data for this rule.
+   *
+   * @return  sequence data
+   */
+  public SequenceData getSequenceData()
+  {
+    return sequenceData;
   }
 
 

@@ -51,6 +51,17 @@ public class IllegalRegexRule implements Rule
   }
 
 
+  /**
+   * Returns the pattern for this rule.
+   *
+   * @return  pattern
+   */
+  public Pattern getPattern()
+  {
+    return pattern;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
