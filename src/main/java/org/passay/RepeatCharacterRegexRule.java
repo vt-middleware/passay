@@ -23,6 +23,9 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
   /** Regular expression used by this rule, value is {@value}. */
   private static final String REPEAT_CHAR_REGEX = "([^\\x00-\\x1F])\\1{%d}";
 
+  /** Number of characters in sequence to match. */
+  protected int sequenceLength;
+
 
   /** Creates a new repeat character regex rule with the default sequence length. */
   public RepeatCharacterRegexRule()
@@ -54,5 +57,17 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
       throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
     }
+    sequenceLength = sl;
+  }
+
+
+  /**
+   * Returns the sequence length for this rule.
+   *
+   * @return  sequence length
+   */
+  public int getSequenceLength()
+  {
+    return sequenceLength;
   }
 }

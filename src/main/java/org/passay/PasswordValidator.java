@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.passay.entropy.Entropy;
@@ -68,6 +69,28 @@ public class PasswordValidator implements Rule
   {
     messageResolver = resolver;
     passwordRules = rules;
+  }
+
+
+  /**
+   * Returns the password rules for this validator.
+   *
+   * @return  unmodifiable list of password rules
+   */
+  public List<? extends Rule> getRules()
+  {
+    return Collections.unmodifiableList(passwordRules);
+  }
+
+
+  /**
+   * Returns the message resolver for this validator.
+   *
+   * @return  message resolver
+   */
+  public MessageResolver getMessageResolver()
+  {
+    return messageResolver;
   }
 
 
