@@ -31,6 +31,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    *
    * @throws IOException  on file I/O errors.
    */
+  @SuppressWarnings("unchecked")
   @DataProvider(name = "wordListsWithExpectedWords")
   public Object[][] provideWordListsWithExpectedWords() throws IOException
   {
@@ -120,6 +121,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    *
    * @throws IOException  on file I/O errors.
    */
+  @SuppressWarnings("unchecked")
   @DataProvider(name = "shortWordLists")
   public Object[][] provideShortWordLists() throws IOException
   {
