@@ -29,6 +29,8 @@ letters, lower-case letters, symbols
 requires passwords to contain at least N characters from a given character set (e.g. digits, upper-case letters,
 lowercase-letters, symbols)
 5. [`LengthRule`](../javadocs/org/passay/LengthRule.html) - requires passwords to meet a minimum required length
+6. [`LengthComplexityRule`](../javadocs/org/passay/LengthComplexityRule.html) -
+requires passwords to meet a specific set of rules based on the length of the password. For example, passwords between 8-12 characters long must contain both a number and symbol. Passwords 13 characters and longer must only contain alphabetical characters
 
 ## Negative matching rules
 1. Dictionary rules
@@ -47,35 +49,20 @@ rejects passwords that contain _any_ of a set of characters
 rejects passwords that conform to a regular expression
 5. [`IllegalSequenceRule`](../javadocs/org/passay/IllegalSequenceRule.html) -
 rejects passwords that contain a sequence of N characters (e.g. _12345_)
-6. Source rules
+6. [`NumberRangeRule`](../javadocs/org/passay/NumberRangeRule.html) -
+rejects passwords that contain any number within a defined range (e.g. _1000-9999_)
+rejects passwords that contain a sequence of N characters (e.g. _12345_)
+7. Source rules
    1. [`SourceRule`](../javadocs/org/passay/SourceRule.html) -
    rejects passwords that match those from another source (cleartext comparison)
    2. [`DigestSourceRule`](../javadocs/org/passay/DigestSourceRule.html) -
    rejects passwords that match the digest of those from another source (hash/digest comparison)
-7. [`RepeatCharacterRegexRule`](../javadocs/org/passay/RepeatCharacterRegexRule.html) -
+8. [`RepeatCharacterRegexRule`](../javadocs/org/passay/RepeatCharacterRegexRule.html) -
 rejects passwords that contain a repeated ASCII character
-8. [`UsernameRule`](../javadocs/org/passay/UsernameRule.html) -
+9. [`UsernameRule`](../javadocs/org/passay/UsernameRule.html) -
 rejects passwords that contain the username of the user providing the password
-9. [`WhitespaceRule`](../javadocs/org/passay/WhitespaceRule.html) -
+10. [`WhitespaceRule`](../javadocs/org/passay/WhitespaceRule.html) -
 rejects passwords that contain whitespace characters
-
-## API changes from 1.0 to 1.1.0
-Required character and invalid sequence rules have been consolidated in 1.1.0 to facilitate extension to arbitrary
-character sets.
-
-`CharacterRule` replaces the following 1.0 components:
-
-1. `AlphabeticalCharacterRule` -> `CharacterRule(EnglishCharacterData.Alphabetical)`
-2. `DigitCharacterRule` -> `CharacterRule(EnglishCharacterData.Digit)`
-3. `LowercaseCharacterRule` -> `CharacterRule(EnglishCharacterData.LowerCase)`
-4. `SpecialCharacterRule` -> `CharacterRule(EnglishCharacterData.Special)`
-5. `UppercaseCharacterRule` -> `CharacterRule(EnglishCharacterData.UpperCase)`
-
-`IllegalSequenceRule` replaces the following 1.0 components:
-
-1. `AlphabeticalSequenceRule` -> `IllegalSequenceRule(EnglishSequenceData.Alphabetical)`
-2. `NumericSequenceRule` -> `IllegalSequenceRule(EnglishSequenceData.Numerical)`
-3. `QwertySequenceRule` -> `IllegalSequenceRule(EnglishSequenceData.USQwerty)`
 
 # Password validation
 Password validation involves creating a `PasswordValidator` from a rule set, which is simply a list of `Rule` objects.

@@ -21,6 +21,18 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.3.0 - 18Jul2017 (Requires Java 8)
+
+Note that cryptacular is now an optional dependency. If you use the DigestHistoryRule or DigestSourceRule, you must add an explicit dependency on org.cryptacular.
+
+Issue | Description
+:---- | :----------
+[passay-55]({{ site.issueURL }}55) | Change PasswordValidator constructor to comply with PECS
+[passay-47]({{ site.issueURL }}47) | Improve FileWordList to support large files
+[passay-43]({{ site.issueURL }}43) | Variable ruleset based on password length
+[passay-42]({{ site.issueURL }}42) | NPE check in UsernameRule#validate
+[passay-41]({{ site.issueURL }}41) | Make cryptacular an optional dependency
+
 ### Version 1.2.0 - 11Aug2016 (Requires Java 8)
 
 Issue | Description
