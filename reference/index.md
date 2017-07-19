@@ -151,10 +151,7 @@ The following rules support enforcement of unique passwords in the context of pa
 1. [`HistoryRule`](../javadocs/org/passay/HistoryRule.html) - for passwords stored as cleartext (insecure, uncommon)
 2. [`DigestHistoryRule`](../javadocs/org/passay/HistoryRule.html) - for passwords stored as a hash/digest
 
-Both rules require querying a data source for historical password data, but in practice `DigestHistoryRule` is the
-more useful component since passwords are typically stored as a hash/digest. Digest support requires the use of
-message digest components provided by the [cryptacular](http://www.cryptacular.org/) crypto library. The
-example below demonstrates history-based validation for passwords stored in the following format:
+Both rules require querying a data source for historical password data, but in practice `DigestHistoryRule` is the more useful component since passwords are typically stored as a hash/digest. Digest support requires the use of message digest components provided by the [cryptacular](http://www.cryptacular.org/) crypto library, which is an optional dependency of this library. The example below demonstrates history-based validation for passwords stored in the following format:
 
 1. SHA-256 digest algorithm
 2. The hash is computed by digesting two values in turn:
