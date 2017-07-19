@@ -75,35 +75,7 @@ Consider the following simple password policy:
 The following code excerpt constructs a validator that enforces the policy.
 
 {% highlight java %}
-PasswordValidator validator = new PasswordValidator(Arrays.asList(
-  // length between 8 and 16 characters
-  new LengthRule(8, 16),
-
-  // at least one upper-case character
-  new CharacterRule(EnglishCharacterData.UpperCase, 1),
-
-  // at least one lower-case character
-  new CharacterRule(EnglishCharacterData.LowerCase, 1),
-
-  // at least one digit character
-  new CharacterRule(EnglishCharacterData.Digit, 1),
-
-  // at least one symbol (special character)
-  new CharacterRule(EnglishCharacterData.Special, 1),
-
-  // no whitespace
-  new WhitespaceRule()));
-
-final char[] password = System.console().readPassword("Password: ");
-RuleResult result = validator.validate(new PasswordData(new String(password)));
-if (result.isValid()) {
-  System.out.println("Password is valid");
-} else {
-  System.out.println("Invalid password:");
-  for (String msg : validator.getMessages(result)) {
-    System.out.println(msg);
-  }
-}
+{% include source/reference/1.java %}
 {% endhighlight %}
 
 ## Advanced validation: customizing messages
@@ -135,10 +107,7 @@ uses a message bundle to define validation messages whose default values are sho
 The following example demonstrates how to replace the default message bundle with a custom/localized properties file.
 
 {% highlight java %}
-Properties props = new Properties();
-props.load(new FileInputStream("/path/to/messages.properties"));
-MessageResolver resolver = new PropertiesMessageResolver(props);
-PasswordValidator validator = new PasswordValidator(resolver, ruleList);
+{% include source/reference/2.java %}
 {% endhighlight %}
 
 ## Advanced validation: M of N rules
@@ -153,22 +122,7 @@ this use case. Consider the following policy:
 This policy is implemented in the following code excerpt.
 
 {% highlight java %}
-LengthRule r1 = new LengthRule(8, 16);
-
-CharacterCharacteristicsRule r2 = new CharacterCharacteristicsRule();
-
-// Define M (3 in this case)
-r2.setNumberOfCharacteristics(3);
-
-// Define elements of N (upper, lower, digit, symbol)
-r2.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-r2.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-r2.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
-r2.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-
-WhitespaceRule r3 = new WhitespaceRule();
-
-PasswordValidator validator = new PasswordValidator(Arrays.asList(r1, r2, r3));
+{% include source/reference/3.java %}
 {% endhighlight %}
 
 ## Advanced validation: dictionary rules
@@ -188,14 +142,7 @@ Configuring this rule with a published list of popular passwords, such as those 
 preventing common, and therefore insecure, passwords.
 
 {% highlight java %}
-DictionaryRule rule = new DictionaryRule(
-	new WordListDictionary(WordLists.createFromReader(
-	  // Reader around the word list file
-  	new FileReader[] {new FileReader("path/to/top100.txt")},
-  	// True for case sensitivity, false otherwise
-  	false,
-  	// Dictionaries must be sorted
-  	new ArraysSort())));
+{% include source/reference/4.java %}
 {% endhighlight %}
 
 ## Advanced validation: password history
@@ -219,47 +166,7 @@ example below demonstrates history-based validation for passwords stored in the 
 This is a realistic scenario for passwords stored in an LDAP directory using the SSHA pseudo-standard.
 
 {% highlight java %}
-// The historical data would be obtained from an authentication store in a
-// real-world scenario. Each item consists of a label and the encoded password
-// data. A common use case for labels is multiple password encodings where each
-// label identifies a particular encoding.
-// Salt=86ffd2e3521b5b169ec9a75678c92eed
-List<PasswordData.Reference> history = Arrays.asList(
-  // Password=P@ssword1
-  new PasswordData.HistoricalReference(
-    "SHA256",
-    "j93vuQDT5ZpZ5L9FxSfeh87zznS3CM8govlLNHU8GRWG/9LjUhtbFp7Jp1Z4yS7t"),
-
-  // Password=P@ssword2
-  new PasswordData.HistoricalReference(
-    "SHA256",
-    "mhR+BHzcQXt2fOUWCy4f903AHA6LzNYKlSOQ7r9np02G/9LjUhtbFp7Jp1Z4yS7t"),
-
-  // Password=P@ssword3
-  new PasswordData.HistoricalReference(
-    "SHA256",
-    "BDr/pEo1eMmJoeP6gRKh6QMmiGAyGcddvfAHH+VJ05iG/9LjUhtbFp7Jp1Z4yS7t")
-);
-
-// Cryptacular components:
-// org.cryptacular.bean.EncodingHashBean;
-// org.cryptacular.spec.CodecSpec;
-// org.cryptacular.spec.DigestSpec;
-EncodingHashBean hasher = new EncodingHashBean(
-  new CodecSpec("Base64"), // Handles base64 encoding
-  new DigestSpec("SHA256"), // Digest algorithm
-  1, // Number of hash rounds
-  false); // Salted hash == false
-
-List<Rule> rules = Arrays.asList(
-  // ...
-  // Insert other rules as needed
-  // ...
-  new DigestHistoryRule(hasher));
-
-PasswordValidator validator = new PasswordValidator(rules);
-PasswordData data = PasswordData.newInstance("P@ssword1", "username", history);
-RuleResult result = validator.validate(data);
+{% include source/reference/5.java %}
 {% endhighlight %}
 
 # Password generation
@@ -272,23 +179,7 @@ password generation for the following policy:
 3. No whitespace characters
 
 {% highlight java %}
-List<CharacterRule> rules = Arrays.asList(
-  // at least one upper-case character
-  new CharacterRule(EnglishCharacterData.UpperCase, 1),
-
-  // at least one lower-case character
-  new CharacterRule(EnglishCharacterData.LowerCase, 1),
-
-  // at least one digit character
-  new CharacterRule(EnglishCharacterData.Digit, 1),
-
-  // at least one symbol (special character)
-  new CharacterRule(EnglishCharacterData.Special, 1));
-
-PasswordGenerator generator = new PasswordGenerator();
-
-// Generated password is 12 characters long, which complies with policy
-String password = generator.generatePassword(12, rules);
+{% include source/reference/6.java %}
 {% endhighlight %}
 
 Note that generated passwords in the above example don't contain spaces since none of the character sets above
@@ -296,15 +187,5 @@ includes a space character. It is trivial to add support for generating password
 additional `CharacterRule` with a custom character set as follows.
 
 {% highlight java %}
-new CharacterRule(new CharacterData() {
-  @Override
-  public String getErrorCode() {
-    return "ERR_SPACE";
-  }
-
-  @Override
-  public String getCharacters() {
-    return " ";
-  }
-}, 1);
+{% include source/reference/7.java %}
 {% endhighlight %}
