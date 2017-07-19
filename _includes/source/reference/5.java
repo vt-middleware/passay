@@ -37,5 +37,6 @@ List<Rule> rules = Arrays.asList(
   new DigestHistoryRule(hasher));
 
 PasswordValidator validator = new PasswordValidator(rules);
-PasswordData data = PasswordData.newInstance("P@ssword1", "username", history);
+PasswordData data = new PasswordData("username", "P@ssword1");
+data.setPasswordReferences(history);
 RuleResult result = validator.validate(data);

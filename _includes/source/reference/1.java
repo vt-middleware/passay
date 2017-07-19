@@ -1,4 +1,4 @@
-PasswordValidator validator = new PasswordValidator(Arrays.asList(
+PasswordValidator validator = new PasswordValidator(
   // length between 8 and 16 characters
   new LengthRule(8, 16),
 
@@ -15,7 +15,7 @@ PasswordValidator validator = new PasswordValidator(Arrays.asList(
   new CharacterRule(EnglishCharacterData.Special, 1),
 
   // no whitespace
-  new WhitespaceRule()));
+  new WhitespaceRule());
 
 final char[] password = System.console().readPassword("Password: ");
 RuleResult result = validator.validate(new PasswordData(new String(password)));

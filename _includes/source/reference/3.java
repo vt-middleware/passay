@@ -13,4 +13,4 @@ r2.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
 
 WhitespaceRule r3 = new WhitespaceRule();
 
-PasswordValidator validator = new PasswordValidator(Arrays.asList(r1, r2, r3));
+PasswordValidator validator = new PasswordValidator(r1, r2, r3);
