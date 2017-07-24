@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import com.sun.codemodel.JClassAlreadyExistsException;
@@ -99,7 +98,7 @@ public class ClassGenerator
         throws IOException
       {
         if (attrs.isRegularFile()) {
-          final String content = new Scanner(file.toFile()).useDelimiter("\\Z").next();
+          final String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
           final String name = file.getName(file.getNameCount() - 2).toString();
           final List<String> l;
           if (sections.containsKey(name)) {
