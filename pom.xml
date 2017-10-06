@@ -81,8 +81,8 @@
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <testng.dir>${basedir}/src/test/testng</testng.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
-    <japicmp.enabled>false</japicmp.enabled>
-    <japicmp.oldVersion>1.2.0</japicmp.oldVersion>
+    <japicmp.enabled>true</japicmp.enabled>
+    <japicmp.oldVersion>1.3.0</japicmp.oldVersion>
   </properties>
 
   <dependencies>
