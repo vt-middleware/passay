@@ -234,8 +234,8 @@ public class PasswordData
     final PasswordData pd = new PasswordData();
     pd.setUsername(data.getUsername());
     pd.setPassword(data.getPassword());
-    pd.setPasswordReferences(pd.getPasswordReferences());
-    pd.setOrigin(pd.getOrigin());
+    pd.setPasswordReferences(data.getPasswordReferences());
+    pd.setOrigin(data.getOrigin());
     return pd;
   }
 
