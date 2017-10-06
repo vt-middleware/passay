@@ -41,10 +41,10 @@ public final class RandomPasswordEntropyFactory
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.Generated);
     }
     final Set<Character> uniqueCharacters = new HashSet<>();
-    passwordRules.stream().forEach((rule) -> {
+    passwordRules.stream().forEach(rule -> {
       if (rule instanceof CharacterCharacteristicsRule) {
         final CharacterCharacteristicsRule characteristicRule = (CharacterCharacteristicsRule) rule;
-        characteristicRule.getRules().forEach((characterRule) ->
+        characteristicRule.getRules().forEach(characterRule ->
           uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters())));
       } else if (rule instanceof CharacterRule) {
         final CharacterRule characterRule = (CharacterRule) rule;

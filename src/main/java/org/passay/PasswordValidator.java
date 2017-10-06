@@ -132,7 +132,7 @@ public class PasswordValidator implements Rule
    */
   public double estimateEntropy(final PasswordData passwordData)
   {
-    Entropy entropy;
+    final Entropy entropy;
     if (passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
       entropy = RandomPasswordEntropyFactory.createEntropy(passwordRules, passwordData);
     } else if (passwordData.getOrigin().equals(PasswordData.Origin.User)) {

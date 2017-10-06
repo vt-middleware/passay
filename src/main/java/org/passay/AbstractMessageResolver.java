@@ -19,7 +19,7 @@ public abstract class AbstractMessageResolver implements MessageResolver
    *
    * @return  message
    */
-  protected abstract String getMessage(final String key);
+  protected abstract String getMessage(String key);
 
 
   @Override

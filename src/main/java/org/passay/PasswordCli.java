@@ -77,7 +77,7 @@ public final class PasswordCli
       if (password == null) {
         throw new ArrayIndexOutOfBoundsException();
       } else {
-        RuleResult result;
+        final RuleResult result;
         final PasswordData pd = new PasswordData(password);
         final PasswordValidator validator = new PasswordValidator(rules);
         if (username != null) {

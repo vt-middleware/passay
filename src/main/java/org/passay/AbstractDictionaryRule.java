@@ -119,7 +119,7 @@ public abstract class AbstractDictionaryRule implements Rule
    *
    * @return  matching word
    */
-  protected abstract String doWordSearch(final String text);
+  protected abstract String doWordSearch(String text);
 
 
   @Override

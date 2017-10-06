@@ -141,7 +141,7 @@ public class TernaryTree
       throw new UnsupportedOperationException("Partial search is not supported for case insensitive ternary trees");
     }
 
-    String[] results;
+    final String[] results;
     final List<String> matches = partialSearchNode(root, new ArrayList<>(), "", word, 0);
     if (matches == null) {
       results = new String[] {};
@@ -173,7 +173,7 @@ public class TernaryTree
       throw new UnsupportedOperationException("Near search is not supported for case insensitive ternary trees");
     }
 
-    String[] results;
+    final String[] results;
     final List<String> matches = nearSearchNode(root, distance, new ArrayList<>(), "", word, 0);
     if (matches == null) {
       results = new String[] {};

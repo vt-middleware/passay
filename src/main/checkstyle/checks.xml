@@ -19,18 +19,17 @@
   <!-- forbid tab characters in source files -->
   <module name="FileTabCharacter"/>
 
-  <module name="SuppressionCommentFilter">
-    <property name="offCommentFormat" value="CheckStyle\:([\w\|]+) OFF"/>
-    <property name="onCommentFormat" value="CheckStyle\:([\w\|]+) ON"/>
-    <property name="checkFormat" value="$1"/>
-  </module>
   <module name="NewlineAtEndOfFile">
     <property name="fileExtensions" value="java"/>
   </module>
   <module name="TreeWalker">
     <property name="tabWidth" value="2"/>
 
-    <module name="FileContentsHolder"/>
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="CheckStyle\:([\w\|]+) OFF"/>
+      <property name="onCommentFormat" value="CheckStyle\:([\w\|]+) ON"/>
+      <property name="checkFormat" value="$1"/>
+    </module>
 
     <!--  annotations -->
     <module name="AnnotationUseStyle"/>
