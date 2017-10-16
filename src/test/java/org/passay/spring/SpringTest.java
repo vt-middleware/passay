@@ -1,7 +1,12 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.passay;
+package org.passay.spring;
 
 import java.util.ArrayList;
+
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.Rule;
+import org.passay.RuleResult;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
