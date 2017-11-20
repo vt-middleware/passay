@@ -2,7 +2,6 @@
 package org.passay.spring;
 
 import java.util.ArrayList;
-
 import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.Rule;

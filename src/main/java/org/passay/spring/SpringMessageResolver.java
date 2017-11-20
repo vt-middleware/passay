@@ -2,7 +2,6 @@
 package org.passay.spring;
 
 import java.util.Locale;
-
 import org.passay.MessageResolver;
 import org.passay.PropertiesMessageResolver;
 import org.passay.RuleResultDetail;
