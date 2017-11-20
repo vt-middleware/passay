@@ -24,6 +24,8 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   /** Test dictionary. */
   private JDBCDictionary caseInsensitive;
 
+  /** Size of the dictionary. */
+  private long dictionarySize;
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"jdbcdicttest"})
@@ -43,6 +45,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
       for (Object[] word : createAllWebWords()) {
         ps.setObject(1, word[0]);
         ps.executeUpdate();
+        dictionarySize++;
       }
     }
 
@@ -97,5 +100,15 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
     AssertJUnit.assertTrue(caseInsensitive.search(word));
     AssertJUnit.assertTrue(caseInsensitive.search(word.toLowerCase()));
     AssertJUnit.assertTrue(caseInsensitive.search(word.toUpperCase()));
+  }
+
+
+  /** @throws  Exception  On test failure. */
+  @Test(groups = {"jdbcdicttest"})
+  public void size()
+    throws Exception
+  {
+    AssertJUnit.assertEquals(dictionarySize, caseSensitive.size());
+    AssertJUnit.assertEquals(dictionarySize, caseInsensitive.size());
   }
 }

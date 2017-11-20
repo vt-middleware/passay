@@ -55,7 +55,7 @@ public class JDBCDictionary implements Dictionary
   public long size()
   {
     try {
-      return executeStatement(sizeStatement, Long.class, (Object) null);
+      return executeStatement(sizeStatement, Long.class, (Object[]) null);
     } catch (SQLException e) {
       throw new RuntimeException("Error executing SQL", e);
     }
