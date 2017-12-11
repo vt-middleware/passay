@@ -30,7 +30,7 @@ public class HistoryRule implements Rule
     }
 
     final String cleartext = passwordData.getPassword();
-    references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
+    references.stream().filter(reference -> matches(cleartext, reference)).findAny().ifPresent(reference -> {
       result.setValid(false);
       result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
     });
