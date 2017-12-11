@@ -18,6 +18,26 @@ public class SourceRule implements Rule
   /** Error code for regex validation failures. */
   public static final String ERROR_CODE = "SOURCE_VIOLATION";
 
+  /** Whether to report all source matches or just the first. */
+  protected boolean reportAllFailures;
+
+
+  /**
+   * Creates a new source rule.
+   */
+  public SourceRule() {}
+
+
+  /**
+   * Creates a new source rule.
+   *
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public SourceRule(final boolean reportAll)
+  {
+    reportAllFailures = reportAll;
+  }
+
 
   @Override
   public RuleResult validate(final PasswordData passwordData)
@@ -30,11 +50,19 @@ public class SourceRule implements Rule
     }
 
     final String cleartext = passwordData.getPassword();
-    references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
-      result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
-    });
+    if (reportAllFailures) {
+      references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
+        result.setValid(false);
+        result.getDetails().add(
+          new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
+      });
+    } else {
+      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(reference -> {
+        result.setValid(false);
+        result.getDetails().add(
+          new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
+      });
+    }
     return result;
   }
 

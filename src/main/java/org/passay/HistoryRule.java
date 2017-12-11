@@ -17,6 +17,26 @@ public class HistoryRule implements Rule
   /** Error code for history violation. */
   public static final String ERROR_CODE = "HISTORY_VIOLATION";
 
+  /** Whether to report all history matches or just the first. */
+  protected boolean reportAllFailures;
+
+
+  /**
+   * Creates a new history rule.
+   */
+  public HistoryRule() {}
+
+
+  /**
+   * Creates a new history rule.
+   *
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public HistoryRule(final boolean reportAll)
+  {
+    reportAllFailures = reportAll;
+  }
+
 
   @Override
   public RuleResult validate(final PasswordData passwordData)
@@ -30,10 +50,17 @@ public class HistoryRule implements Rule
     }
 
     final String cleartext = passwordData.getPassword();
-    references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
-      result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
-    });
+    if (reportAllFailures) {
+      references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
+        result.setValid(false);
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
+      });
+    } else {
+      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(reference -> {
+        result.setValid(false);
+        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
+      });
+    }
     return result;
   }
 

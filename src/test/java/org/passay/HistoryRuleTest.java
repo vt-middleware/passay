@@ -21,6 +21,9 @@ public class HistoryRuleTest extends AbstractRuleTest
   private final HistoryRule rule = new HistoryRule();
 
   /** For testing. */
+  private final HistoryRule ruleReportAll = new HistoryRule(true);
+
+  /** For testing. */
   private final HistoryRule emptyRule = new HistoryRule();
 
 
@@ -31,6 +34,7 @@ public class HistoryRuleTest extends AbstractRuleTest
     history.add(new PasswordData.HistoricalReference("history", "t3stUs3r01"));
     history.add(new PasswordData.HistoricalReference("history", "t3stUs3r02"));
     history.add(new PasswordData.HistoricalReference("history", "t3stUs3r03"));
+    history.add(new PasswordData.HistoricalReference("history", "t3stUs3r02"));
   }
 
 
@@ -63,6 +67,23 @@ public class HistoryRuleTest extends AbstractRuleTest
           codes(HistoryRule.ERROR_CODE),
         },
 
+        {ruleReportAll, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, history), null, },
+        {
+          ruleReportAll,
+          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, history),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          ruleReportAll,
+          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, history),
+          codes(HistoryRule.ERROR_CODE, HistoryRule.ERROR_CODE),
+        },
+        {
+          ruleReportAll,
+          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, history),
+          codes(HistoryRule.ERROR_CODE),
+        },
+
         {emptyRule, TestUtils.newPasswordData("t3stUs3r00", "testuser"), null, },
         {emptyRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
         {emptyRule, TestUtils.newPasswordData("t3stUs3r02", "testuser"), null, },
@@ -86,6 +107,14 @@ public class HistoryRuleTest extends AbstractRuleTest
           rule,
           TestUtils.newPasswordData("t3stUs3r01", "testuser", null, history),
           new String[] {String.format("Password matches one of %s previous passwords.", history.size()), },
+        },
+        {
+          ruleReportAll,
+          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, history),
+          new String[] {
+            String.format("Password matches one of %s previous passwords.", history.size()),
+            String.format("Password matches one of %s previous passwords.", history.size()),
+          },
         },
       };
   }
