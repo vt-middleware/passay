@@ -4,7 +4,9 @@ package org.passay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -219,6 +221,22 @@ public class PasswordData
   public void setPasswordReferences(final List<Reference> l)
   {
     passwordReferences = l;
+  }
+
+
+  /**
+   * Returns a count of characters associated with each {@link CharacterData} for the password.
+   *
+   * @param  data  character data to analyze
+   *
+   * @return  character counts
+   */
+  public Map<CharacterData, Long> getCounts(final CharacterData... data)
+  {
+    final Map<CharacterData, Long> counts = new HashMap<>(data.length);
+    Arrays.stream(data).forEach(
+      d -> counts.put(d, password.chars().filter(c -> d.getCharacters().indexOf(c) >= 0).count()));
+    return counts;
   }
 
 
