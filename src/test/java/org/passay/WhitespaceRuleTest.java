@@ -31,6 +31,11 @@ public class WhitespaceRuleTest extends AbstractRuleTest
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
+          new WhitespaceRule(MatchBehavior.Contains),
+          new PasswordData("AycD Pds\tyz"),
+          codes(WhitespaceRule.ERROR_CODE, WhitespaceRule.ERROR_CODE),
+        },
+        {
           new WhitespaceRule(),
           new PasswordData("Ayc\tDPdsyz"),
           codes(WhitespaceRule.ERROR_CODE),
