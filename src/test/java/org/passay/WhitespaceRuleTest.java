@@ -42,7 +42,22 @@ public class WhitespaceRuleTest extends AbstractRuleTest
         },
         {
           new WhitespaceRule(),
-          new PasswordData("AycDPs" + System.getProperty("line.separator") + "yz"),
+          new PasswordData("AycDPs\nyz"),
+          codes(WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(),
+          new PasswordData("AycDPs\ryz"),
+          codes(WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(),
+          new PasswordData("AycDPs\n\ryz"),
+          codes(WhitespaceRule.ERROR_CODE, WhitespaceRule.ERROR_CODE),
+        },
+        {
+          new WhitespaceRule(MatchBehavior.Contains, false),
+          new PasswordData("AycDPs\n\ryz"),
           codes(WhitespaceRule.ERROR_CODE),
         },
         {
@@ -89,6 +104,16 @@ public class WhitespaceRuleTest extends AbstractRuleTest
           new WhitespaceRule(),
           new PasswordData("AycD Pdsyz"),
           new String[] {"Password contains a whitespace character.", },
+        },
+        {
+          new WhitespaceRule(),
+          new PasswordData("AycD Pds\tyz"),
+          new String[] {"Password contains a whitespace character.", "Password contains a whitespace character.", },
+        },
+        {
+          new WhitespaceRule(MatchBehavior.Contains, false),
+          new PasswordData("AycD Pds\tyz"),
+          new String[] {"Password contains a whitespace character.",  },
         },
         {
           new WhitespaceRule(MatchBehavior.EndsWith),
