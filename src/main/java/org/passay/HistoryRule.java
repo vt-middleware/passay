@@ -24,7 +24,10 @@ public class HistoryRule implements Rule
   /**
    * Creates a new history rule.
    */
-  public HistoryRule() {}
+  public HistoryRule()
+  {
+    this(true);
+  }
 
 
   /**

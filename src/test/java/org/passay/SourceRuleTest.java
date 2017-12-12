@@ -21,7 +21,7 @@ public class SourceRuleTest extends AbstractRuleTest
   private final SourceRule rule = new SourceRule();
 
   /** For testing. */
-  private final SourceRule ruleReportAll = new SourceRule(true);
+  private final SourceRule ruleReportFirst = new SourceRule(false);
 
   /** For testing. */
   private final SourceRule emptyRule = new SourceRule();
@@ -58,19 +58,19 @@ public class SourceRuleTest extends AbstractRuleTest
         {
           rule,
           TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
-          codes(SourceRule.ERROR_CODE),
+          codes(SourceRule.ERROR_CODE, SourceRule.ERROR_CODE),
         },
 
-        {ruleReportAll, TestUtils.newPasswordData("t3stUs3r01", "testuser", null, sources), null, },
+        {ruleReportFirst, TestUtils.newPasswordData("t3stUs3r01", "testuser", null, sources), null, },
         {
-          ruleReportAll,
+          ruleReportFirst,
           TestUtils.newPasswordData("t3stUs3r04", "testuser", null, sources),
           codes(SourceRule.ERROR_CODE),
         },
         {
-          ruleReportAll,
+          ruleReportFirst,
           TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
-          codes(SourceRule.ERROR_CODE, SourceRule.ERROR_CODE),
+          codes(SourceRule.ERROR_CODE),
         },
 
         {emptyRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
@@ -97,12 +97,17 @@ public class SourceRuleTest extends AbstractRuleTest
           new String[] {String.format("Password cannot be the same as your %s password.", "System A"), },
         },
         {
-          ruleReportAll,
+          rule,
           TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
           new String[] {
             String.format("Password cannot be the same as your %s password.", "System A"),
             String.format("Password cannot be the same as your %s password.", "System A"),
           },
+        },
+        {
+          ruleReportFirst,
+          TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
+          new String[] {String.format("Password cannot be the same as your %s password.", "System A"), },
         },
       };
   }

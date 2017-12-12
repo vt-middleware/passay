@@ -25,7 +25,10 @@ public class SourceRule implements Rule
   /**
    * Creates a new source rule.
    */
-  public SourceRule() {}
+  public SourceRule()
+  {
+    this(true);
+  }
 
 
   /**
