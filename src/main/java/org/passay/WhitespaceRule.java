@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -123,6 +124,28 @@ public class WhitespaceRule implements Rule
   }
 
 
+  /**
+   * Returns the whitespace characters for this rule.
+   *
+   * @return  whitespace characters
+   */
+  public char[] getWhitespaceCharacters()
+  {
+    return whitespaceCharacters;
+  }
+
+
+  /**
+   * Returns the match behavior for this rule.
+   *
+   * @return  match behavior
+   */
+  public MatchBehavior getMatchBehavior()
+  {
+    return matchBehavior;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
@@ -180,10 +203,11 @@ public class WhitespaceRule implements Rule
   {
     return
       String.format(
-        "%s@%h::reportAllFailures=%s,matchBehavior=%s",
+        "%s@%h::reportAllFailures=%s,matchBehavior=%s,whitespaceCharacters=%s",
         getClass().getName(),
         hashCode(),
         reportAllFailures,
-        matchBehavior);
+        matchBehavior,
+        whitespaceCharacters != null ? Arrays.toString(whitespaceCharacters) : null);
   }
 }
