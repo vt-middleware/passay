@@ -53,7 +53,7 @@ public enum EnglishSequenceData implements SequenceData {
   private final CharacterSequence[] sequences;
 
   /**
-   * Creates a new instance with given parameters.
+   * Creates a new english sequence data.
    *
    * @param  code  Error code used for message resolution.
    * @param  seqs  One or more character sequences.

@@ -46,7 +46,7 @@ public enum EnglishCharacterData implements CharacterData {
 
 
   /**
-   * Creates a new instance from given parameters.
+   * Creates a new english character data.
    *
    * @param  code  Error code.
    * @param  charString  Characters as string.
