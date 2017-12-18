@@ -142,4 +142,15 @@ public class WhitespaceRuleTest extends AbstractRuleTest
     AssertJUnit.assertFalse(result.isValid());
     AssertJUnit.assertEquals(Integer.valueOf(1), result.getMetadata().get("whitespaceCharacterCount", Integer.class));
   }
+
+
+  /**
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"passtest"}, expectedExceptions = IllegalArgumentException.class)
+  public void checkValidCharacters()
+    throws Exception
+  {
+    new WhitespaceRule(new char[] {' ', 'a'});
+  }
 }
