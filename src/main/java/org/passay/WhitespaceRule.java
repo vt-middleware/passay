@@ -29,6 +29,9 @@ public class WhitespaceRule implements Rule
   /** Whether to report all whitespace matches or just the first. */
   protected boolean reportAllFailures;
 
+  /** Stores the whitespace characters that are allowed. */
+  private final char[] whitespaceCharacters;
+
   /** Where to match whitespace. */
   private final MatchBehavior matchBehavior;
 
@@ -38,7 +41,7 @@ public class WhitespaceRule implements Rule
    */
   public WhitespaceRule()
   {
-    this(MatchBehavior.Contains);
+    this(CHARS, MatchBehavior.Contains, true);
   }
 
 
@@ -49,7 +52,18 @@ public class WhitespaceRule implements Rule
    */
   public WhitespaceRule(final MatchBehavior behavior)
   {
-    this(behavior, true);
+    this(CHARS, behavior, true);
+  }
+
+
+  /**
+   * Creates a new whitespace rule.
+   *
+   * @param  chars  characters that are whitespace
+   */
+  public WhitespaceRule(final char[] chars)
+  {
+    this(chars, MatchBehavior.Contains, true);
   }
 
 
@@ -61,6 +75,49 @@ public class WhitespaceRule implements Rule
    */
   public WhitespaceRule(final MatchBehavior behavior, final boolean reportAll)
   {
+    this(CHARS, behavior, reportAll);
+  }
+
+
+  /**
+   * Creates a new whitespace rule.
+   *
+   * @param  chars  whitespace characters
+   * @param  behavior  how to match whitespace
+   */
+  public WhitespaceRule(final char[] chars, final MatchBehavior behavior)
+  {
+    this(chars, behavior, true);
+  }
+
+
+  /**
+   * Creates a new whitespace rule.
+   *
+   * @param  chars  whitespace characters
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public WhitespaceRule(final char[] chars, final boolean reportAll)
+  {
+    this(chars, MatchBehavior.Contains, reportAll);
+  }
+
+
+  /**
+   * Creates a new whitespace rule.
+   *
+   * @param  chars  whitespace characters
+   * @param  behavior  how to match whitespace
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public WhitespaceRule(final char[] chars, final MatchBehavior behavior, final boolean reportAll)
+  {
+    for (char c : chars) {
+      if (!Character.isWhitespace(c)) {
+        throw new IllegalArgumentException("Character '" + c + "' is not whitespace");
+      }
+    }
+    whitespaceCharacters = chars;
     matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
@@ -71,7 +128,7 @@ public class WhitespaceRule implements Rule
   {
     final RuleResult result = new RuleResult(true);
     final String text = passwordData.getPassword();
-    for (char c : CHARS) {
+    for (char c : whitespaceCharacters) {
       if (matchBehavior.match(text, c)) {
         result.setValid(false);
         result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
@@ -80,6 +137,7 @@ public class WhitespaceRule implements Rule
         }
       }
     }
+    result.setMetadata(createRuleResultMetadata(passwordData));
     return result;
   }
 
@@ -97,6 +155,23 @@ public class WhitespaceRule implements Rule
     m.put("whitespaceCharacter", c);
     m.put("matchBehavior", matchBehavior);
     return m;
+  }
+
+
+  /**
+   * Creates the rule result metadata.
+   *
+   * @param  password  data used for metadata creation
+   *
+   * @return  rule result metadata
+   */
+  protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
+  {
+    final Map<String, Object> m = new LinkedHashMap<>();
+    m.put(
+      "whitespaceCharacterCount",
+      PasswordUtils.countMatchingCharacters(String.valueOf(whitespaceCharacters), password.getPassword()));
+    return new RuleResultMetadata(m);
   }
 
 

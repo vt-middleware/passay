@@ -1,7 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link LengthRule}.
@@ -107,5 +109,23 @@ public class LengthRuleTest extends AbstractRuleTest
           new String[] {String.format("Password must be %s or more characters in length.", 8), },
         },
       };
+  }
+
+
+  /**
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"passtest"})
+  public void checkMetadata()
+    throws Exception
+  {
+    final LengthRule rule = new LengthRule(4, 10);
+    RuleResult result = rule.validate(new PasswordData("metadata"));
+    AssertJUnit.assertTrue(result.isValid());
+    AssertJUnit.assertEquals(Integer.valueOf(8), result.getMetadata().get("passwordLength", Integer.class));
+
+    result = rule.validate(new PasswordData("md"));
+    AssertJUnit.assertFalse(result.isValid());
+    AssertJUnit.assertEquals(Integer.valueOf(2), result.getMetadata().get("passwordLength", Integer.class));
   }
 }

@@ -1,7 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link IllegalCharacterRule}.
@@ -121,5 +123,23 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
           new String[] {String.format("Password ends with the illegal character '%s'.", "$"), },
         },
       };
+  }
+
+
+  /**
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"passtest"})
+  public void checkMetadata()
+    throws Exception
+  {
+    final IllegalCharacterRule rule = new IllegalCharacterRule(new char[] {'@', '$'});
+    RuleResult result = rule.validate(new PasswordData("metadata"));
+    AssertJUnit.assertTrue(result.isValid());
+    AssertJUnit.assertEquals(Integer.valueOf(0), result.getMetadata().get("illegalCharacterCount", Integer.class));
+
+    result = rule.validate(new PasswordData("met@data$"));
+    AssertJUnit.assertFalse(result.isValid());
+    AssertJUnit.assertEquals(Integer.valueOf(2), result.getMetadata().get("illegalCharacterCount", Integer.class));
   }
 }

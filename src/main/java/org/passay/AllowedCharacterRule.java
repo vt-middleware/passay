@@ -124,6 +124,7 @@ public class AllowedCharacterRule implements Rule
         }
       }
     }
+    result.setMetadata(createRuleResultMetadata(passwordData));
     return result;
   }
 
@@ -141,6 +142,23 @@ public class AllowedCharacterRule implements Rule
     m.put("illegalCharacter", c);
     m.put("matchBehavior", matchBehavior);
     return m;
+  }
+
+
+  /**
+   * Creates the rule result metadata.
+   *
+   * @param  password  data used for metadata creation
+   *
+   * @return  rule result metadata
+   */
+  protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
+  {
+    final Map<String, Object> m = new LinkedHashMap<>();
+    m.put(
+      "allowedCharacterCount",
+      PasswordUtils.countMatchingCharacters(String.valueOf(allowedCharacters), password.getPassword()));
+    return new RuleResultMetadata(m);
   }
 
 

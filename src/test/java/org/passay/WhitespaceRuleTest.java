@@ -1,7 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link WhitespaceRule}.
@@ -121,5 +123,23 @@ public class WhitespaceRuleTest extends AbstractRuleTest
           new String[] {"Password ends with a whitespace character.", },
         },
       };
+  }
+
+
+  /**
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"passtest"})
+  public void checkMetadata()
+    throws Exception
+  {
+    final WhitespaceRule rule = new WhitespaceRule();
+    RuleResult result = rule.validate(new PasswordData("metadata"));
+    AssertJUnit.assertTrue(result.isValid());
+    AssertJUnit.assertEquals(Integer.valueOf(0), result.getMetadata().get("whitespaceCharacterCount", Integer.class));
+
+    result = rule.validate(new PasswordData("meta data"));
+    AssertJUnit.assertFalse(result.isValid());
+    AssertJUnit.assertEquals(Integer.valueOf(1), result.getMetadata().get("whitespaceCharacterCount", Integer.class));
   }
 }

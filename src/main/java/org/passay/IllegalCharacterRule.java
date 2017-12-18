@@ -121,6 +121,7 @@ public class IllegalCharacterRule implements Rule
         matches.add(c);
       }
     }
+    result.setMetadata(createRuleResultMetadata(passwordData));
     return result;
   }
 
@@ -138,6 +139,23 @@ public class IllegalCharacterRule implements Rule
     m.put("illegalCharacter", c);
     m.put("matchBehavior", matchBehavior);
     return m;
+  }
+
+
+  /**
+   * Creates the rule result metadata.
+   *
+   * @param  password  data used for metadata creation
+   *
+   * @return  rule result metadata
+   */
+  protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
+  {
+    final Map<String, Object> m = new LinkedHashMap<>();
+    m.put(
+      "illegalCharacterCount",
+      PasswordUtils.countMatchingCharacters(String.valueOf(illegalCharacters), password.getPassword()));
+    return new RuleResultMetadata(m);
   }
 
 

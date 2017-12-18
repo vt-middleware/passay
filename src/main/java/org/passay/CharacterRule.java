@@ -101,9 +101,10 @@ public class CharacterRule implements Rule
     if (matchingChars.length() < numCharacters) {
       return new RuleResult(
         false,
-        new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)));
+        new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)),
+        createRuleResultMetadata(passwordData));
     }
-    return new RuleResult(true);
+    return new RuleResult(true, createRuleResultMetadata(passwordData));
   }
 
 
@@ -122,6 +123,23 @@ public class CharacterRule implements Rule
     m.put("validCharacters", String.valueOf(characterData.getCharacters()));
     m.put("matchingCharacters", matchingChars);
     return m;
+  }
+
+
+  /**
+   * Creates the rule result metadata.
+   *
+   * @param  password  data used for metadata creation
+   *
+   * @return  rule result metadata
+   */
+  protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
+  {
+    final Map<String, Object> m = new LinkedHashMap<>();
+    m.put(
+      characterData.toString().toLowerCase() + "CharacterCount",
+      PasswordUtils.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+    return new RuleResultMetadata(m);
   }
 
 
