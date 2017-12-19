@@ -109,12 +109,12 @@ public class RuleResultMetadata
    * Adds a count to the metadata.
    *
    * @param  category  of the count.
-   * @param  value  of the count.
+   * @param  value  non-negative character count.
    */
   public void putCount(final CountCategory category, final int value)
   {
     if (value < 0) {
-      throw new IllegalArgumentException("Count value must be greater than zero");
+      throw new IllegalArgumentException("Count value must be greater than or equals to zero");
     }
     counts.put(category, value);
   }
