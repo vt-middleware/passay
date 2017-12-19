@@ -136,10 +136,10 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
     final IllegalCharacterRule rule = new IllegalCharacterRule(new char[] {'@', '$'});
     RuleResult result = rule.validate(new PasswordData("metadata"));
     AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(0), result.getMetadata().get("illegalCharacterCount", Integer.class));
+    AssertJUnit.assertEquals(0, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Illegal));
 
     result = rule.validate(new PasswordData("met@data$"));
     AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(2), result.getMetadata().get("illegalCharacterCount", Integer.class));
+    AssertJUnit.assertEquals(2, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Illegal));
   }
 }

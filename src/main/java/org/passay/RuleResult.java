@@ -20,7 +20,7 @@ public class RuleResult
   protected List<RuleResultDetail> details = new ArrayList<>();
 
   /** Metadata produced by a password rule. */
-  protected RuleResultMetadata metadata = new RuleResultMetadata(null);
+  protected RuleResultMetadata metadata = new RuleResultMetadata();
 
 
   /** Default constructor. */

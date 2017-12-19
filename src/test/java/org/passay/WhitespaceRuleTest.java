@@ -136,11 +136,11 @@ public class WhitespaceRuleTest extends AbstractRuleTest
     final WhitespaceRule rule = new WhitespaceRule();
     RuleResult result = rule.validate(new PasswordData("metadata"));
     AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(0), result.getMetadata().get("whitespaceCharacterCount", Integer.class));
+    AssertJUnit.assertEquals(0, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Whitespace));
 
     result = rule.validate(new PasswordData("meta data"));
     AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(1), result.getMetadata().get("whitespaceCharacterCount", Integer.class));
+    AssertJUnit.assertEquals(1, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Whitespace));
   }
 
 

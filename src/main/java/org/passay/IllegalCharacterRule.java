@@ -151,11 +151,9 @@ public class IllegalCharacterRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    final Map<String, Object> m = new LinkedHashMap<>();
-    m.put(
-      "illegalCharacterCount",
+    return new RuleResultMetadata(
+      RuleResultMetadata.CountCategory.Illegal,
       PasswordUtils.countMatchingCharacters(String.valueOf(illegalCharacters), password.getPassword()));
-    return new RuleResultMetadata(m);
   }
 
 

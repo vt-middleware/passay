@@ -135,11 +135,12 @@ public class CharacterRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    final Map<String, Object> m = new LinkedHashMap<>();
-    m.put(
-      characterData.toString().toLowerCase() + "CharacterCount",
-      PasswordUtils.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
-    return new RuleResultMetadata(m);
+    if (RuleResultMetadata.CountCategory.exists(characterData.toString())) {
+      return new RuleResultMetadata(
+        RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
+        PasswordUtils.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+    }
+    return new RuleResultMetadata();
   }
 
 

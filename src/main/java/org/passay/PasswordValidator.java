@@ -111,7 +111,7 @@ public class PasswordValidator implements Rule
         result.setValid(false);
         result.getDetails().addAll(rr.getDetails());
       }
-      result.getMetadata().putAll(rr.getMetadata().getAll());
+      result.getMetadata().merge(rr.getMetadata());
     }
     return result;
   }

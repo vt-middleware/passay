@@ -122,10 +122,10 @@ public class LengthRuleTest extends AbstractRuleTest
     final LengthRule rule = new LengthRule(4, 10);
     RuleResult result = rule.validate(new PasswordData("metadata"));
     AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(8), result.getMetadata().get("passwordLength", Integer.class));
+    AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Length));
 
     result = rule.validate(new PasswordData("md"));
     AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(2), result.getMetadata().get("passwordLength", Integer.class));
+    AssertJUnit.assertEquals(2, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Length));
   }
 }

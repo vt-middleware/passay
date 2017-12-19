@@ -211,7 +211,7 @@ public class CharacterCharacteristicsRule implements Rule
       } else {
         successCount++;
       }
-      result.getMetadata().putAll(rr.getMetadata().getAll());
+      result.getMetadata().merge(rr.getMetadata());
     }
     if (successCount < numCharacteristics) {
       result.setValid(false);

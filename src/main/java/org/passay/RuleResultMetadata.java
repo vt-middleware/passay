@@ -2,7 +2,7 @@
 package org.passay;
 
 import java.util.Collections;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -13,77 +13,127 @@ import java.util.Map;
 public class RuleResultMetadata
 {
 
-  /** Additional metadata that provide information about the rule. */
-  protected final Map<String, Object> metadata;
+  /** Count category. */
+  public enum CountCategory
+  {
+    /** password length. */
+    Length,
+
+    /** lowercase characters. */
+    LowerCase,
+
+    /** uppercase characters. */
+    UpperCase,
+
+    /** digit characters. */
+    Digit,
+
+    /** special characters. */
+    Special,
+
+    /** whitespace characters. */
+    Whitespace,
+
+    /** allowed characters. */
+    Allowed,
+
+    /** illegal characters. */
+    Illegal;
+
+
+    /**
+     * Returns whether a count category exists with the supplied name.
+     *
+     * @param  name  to check.
+     *
+     * @return  whether the supplied name exists.
+     */
+    public static boolean exists(final String name)
+    {
+      for (CountCategory cc : CountCategory.values()) {
+        if (cc.name().equals(name)) {
+          return true;
+        }
+      }
+      return false;
+    }
+  }
+
+  /** Character count metadata. */
+  protected final Map<CountCategory, Integer> counts = new HashMap<>();
+
+
+  /**
+   * Creates a new rule result metadata.
+   */
+  public RuleResultMetadata() {}
 
 
   /**
    * Creates a new rule result metadata.
    *
-   * @param  data  metadata.
+   * @param  category  count category.
+   * @param  value  count value.
    */
-  public RuleResultMetadata(final Map<String, Object> data)
+  public RuleResultMetadata(final CountCategory category, final int value)
   {
-    if (data == null) {
-      metadata = new LinkedHashMap<>();
-    } else {
-      metadata = new LinkedHashMap<>(data);
+    putCount(category, value);
+  }
+
+
+  /**
+   * Returns the count for the supplied category.
+   *
+   * @param  category  of the count.
+   *
+   * @return  character count.
+   */
+  public int getCount(final CountCategory category)
+  {
+    return counts.get(category);
+  }
+
+
+  /**
+   * Returns an unmodifiable map of all count metadata.
+   *
+   * @return  count metadata.
+   */
+  public Map<CountCategory, Integer> getCounts()
+  {
+    return Collections.unmodifiableMap(counts);
+  }
+
+
+  /**
+   * Adds a count to the metadata.
+   *
+   * @param  category  of the count.
+   * @param  value  of the count.
+   */
+  public void putCount(final CountCategory category, final int value)
+  {
+    if (value < 0) {
+      throw new IllegalArgumentException("Count value must be greater than zero");
     }
+    counts.put(category, value);
   }
 
 
   /**
-   * Puts the supplied key and value into this metadata object.
+   * Merges the supplied metadata with this metadata. This method will overwrite any existing categories.
    *
-   * @param  key  of the metadata.
-   * @param  value  of the metadata.
+   * @param  metadata  to merge.
    */
-  public void put(final String key, final Object value)
+  public void merge(final RuleResultMetadata metadata)
   {
-    metadata.put(key, value);
-  }
-
-
-  /**
-   * Puts all the supplied metadata into this metadata object.
-   *
-   * @param  data  to add.
-   */
-  public void putAll(final Map<String, Object> data)
-  {
-    metadata.putAll(data);
-  }
-
-
-  /**
-   * Returns the metadata value for the supplied key.
-   *
-   * @param  <T>  type of value to return
-   * @param  key  to the metadata to retrieve.
-   * @param  type  to cast the metadata value to.
-   *
-   * @return  metadata value.
-   */
-  public <T> T get(final String key, final Class<T> type)
-  {
-    return type.cast(metadata.get(key));
-  }
-
-
-  /**
-   * Returns an unmodifiable map of all the metadata.
-   *
-   * @return  all metadata.
-   */
-  public Map<String, Object> getAll()
-  {
-    return Collections.unmodifiableMap(metadata);
+    counts.putAll(metadata.getCounts());
   }
 
 
   @Override
   public String toString()
   {
-    return String.format("%s", metadata);
+    return String.format("counts=%s", counts);
   }
 }

@@ -154,11 +154,9 @@ public class AllowedCharacterRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    final Map<String, Object> m = new LinkedHashMap<>();
-    m.put(
-      "allowedCharacterCount",
+    return new RuleResultMetadata(
+      RuleResultMetadata.CountCategory.Allowed,
       PasswordUtils.countMatchingCharacters(String.valueOf(allowedCharacters), password.getPassword()));
-    return new RuleResultMetadata(m);
   }
 
 

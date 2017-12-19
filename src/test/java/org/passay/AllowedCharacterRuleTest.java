@@ -141,10 +141,10 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
     final AllowedCharacterRule rule = new AllowedCharacterRule(ALLOWED_CHARS);
     RuleResult result = rule.validate(new PasswordData("metadata"));
     AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(8), result.getMetadata().get("allowedCharacterCount", Integer.class));
+    AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed));
 
     result = rule.validate(new PasswordData("metaDATA"));
     AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(Integer.valueOf(4), result.getMetadata().get("allowedCharacterCount", Integer.class));
+    AssertJUnit.assertEquals(4, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed));
   }
 }

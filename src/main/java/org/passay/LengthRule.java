@@ -145,9 +145,7 @@ public class LengthRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("passwordLength", password.getPassword().length());
-    return new RuleResultMetadata(m);
+    return new RuleResultMetadata(RuleResultMetadata.CountCategory.Length, password.getPassword().length());
   }
 
 

@@ -190,11 +190,9 @@ public class WhitespaceRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    final Map<String, Object> m = new LinkedHashMap<>();
-    m.put(
-      "whitespaceCharacterCount",
+    return new RuleResultMetadata(
+      RuleResultMetadata.CountCategory.Whitespace,
       PasswordUtils.countMatchingCharacters(String.valueOf(whitespaceCharacters), password.getPassword()));
-    return new RuleResultMetadata(m);
   }
 
 
