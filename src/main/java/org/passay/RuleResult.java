@@ -19,6 +19,9 @@ public class RuleResult
   /** Details associated with a password rule result. */
   protected List<RuleResultDetail> details = new ArrayList<>();
 
+  /** Metadata produced by a password rule. */
+  protected RuleResultMetadata metadata = new RuleResultMetadata();
+
 
   /** Default constructor. */
   public RuleResult() {}
@@ -45,6 +48,34 @@ public class RuleResult
   {
     setValid(b);
     details.add(rrd);
+  }
+
+
+  /**
+   * Creates a new rule result.
+   *
+   * @param  b  result validity
+   * @param  rrm  metadata associated by the rule with the password
+   */
+  public RuleResult(final boolean b, final RuleResultMetadata rrm)
+  {
+    setValid(b);
+    setMetadata(rrm);
+  }
+
+
+  /**
+   * Creates a new rule result.
+   *
+   * @param  b  result validity
+   * @param  rrd  details associated with this result
+   * @param  rrm  metadata associated by the rule with the password
+   */
+  public RuleResult(final boolean b, final RuleResultDetail rrd, final RuleResultMetadata rrm)
+  {
+    setValid(b);
+    details.add(rrd);
+    setMetadata(rrm);
   }
 
 
@@ -103,9 +134,37 @@ public class RuleResult
   }
 
 
+  /**
+   * Returns metadata associated with the rule verification.
+   *
+   * @return  rule result metadata
+   */
+  public RuleResultMetadata getMetadata()
+  {
+    return metadata;
+  }
+
+
+  /**
+   * Sets metadata associated with the rule verification.
+   *
+   * @param  rrm  rule result metadata
+   */
+  public void setMetadata(final RuleResultMetadata rrm)
+  {
+    metadata = rrm;
+  }
+
+
   @Override
   public String toString()
   {
-    return String.format("%s@%h::valid=%s,details=%s", getClass().getName(), hashCode(), valid, details);
+    return String.format(
+      "%s@%h::valid=%s,details=%s,metadata=%s",
+      getClass().getName(),
+      hashCode(),
+      valid,
+      details,
+      metadata);
   }
 }

@@ -187,4 +187,25 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
         2),
       resolver.resolve(detail));
   }
+
+
+  /**
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"passtest"})
+  public void checkMetadata()
+    throws Exception
+  {
+    final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
+      2, new CharacterRule(EnglishCharacterData.Digit, 1), new CharacterRule(EnglishCharacterData.LowerCase, 1));
+    RuleResult result = rule.validate(new PasswordData("meTAdata01"));
+    AssertJUnit.assertTrue(result.isValid());
+    AssertJUnit.assertEquals(2, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Digit));
+    AssertJUnit.assertEquals(6, result.getMetadata().getCount(RuleResultMetadata.CountCategory.LowerCase));
+
+    result = rule.validate(new PasswordData("meTAdataOne"));
+    AssertJUnit.assertFalse(result.isValid());
+    AssertJUnit.assertEquals(0, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Digit));
+    AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.LowerCase));
+  }
 }

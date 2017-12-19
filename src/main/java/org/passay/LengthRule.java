@@ -117,6 +117,7 @@ public class LengthRule implements Rule
         result.getDetails().add(new RuleResultDetail(ERROR_CODE_MAX, createRuleResultDetailParameters()));
       }
     }
+    result.setMetadata(createRuleResultMetadata(passwordData));
     return result;
   }
 
@@ -132,6 +133,19 @@ public class LengthRule implements Rule
     m.put("minimumLength", minimumLength);
     m.put("maximumLength", maximumLength);
     return m;
+  }
+
+
+  /**
+   * Creates the rule result metadata.
+   *
+   * @param  password  data used for metadata creation
+   *
+   * @return  rule result metadata
+   */
+  protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
+  {
+    return new RuleResultMetadata(RuleResultMetadata.CountCategory.Length, password.getPassword().length());
   }
 
 

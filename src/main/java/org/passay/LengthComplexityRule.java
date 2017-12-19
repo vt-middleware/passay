@@ -149,6 +149,7 @@ public class LengthComplexityRule implements Rule
       } else {
         successCount++;
       }
+      result.getMetadata().merge(rr.getMetadata());
     }
     if (successCount < rulesByLength.size()) {
       result.setValid(false);

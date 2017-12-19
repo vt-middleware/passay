@@ -31,7 +31,7 @@ public final class PasswordUtils
 
 
   /**
-   * Returns all the characters in the input string that are also in the characters array.
+   * Returns all the characters in the input string that are also in the characters string.
    *
    * @param  characters  that contains characters to match
    * @param  input  to search for matches
@@ -53,6 +53,20 @@ public final class PasswordUtils
       }
     }
     return sb.toString();
+  }
+
+
+  /**
+   * Returns the number of characters in the supplied input that existing from the supplied characters string.
+   *
+   * @param  characters  that contains characters to match
+   * @param  input  to search for matches
+   *
+   * @return  character count
+   */
+  public static int countMatchingCharacters(final String characters, final String input)
+  {
+    return (int) input.chars().filter(x -> characters.indexOf(x) != -1).count();
   }
 
 
