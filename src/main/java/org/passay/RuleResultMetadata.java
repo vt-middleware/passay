@@ -82,6 +82,19 @@ public class RuleResultMetadata
 
 
   /**
+   * Returns whether a count exists for the supplied category.
+   *
+   * @param  category  of the count.
+   *
+   * @return  whether a count exists.
+   */
+  public boolean hasCount(final CountCategory category)
+  {
+    return counts.containsKey(category);
+  }
+
+
+  /**
    * Returns the count for the supplied category.
    *
    * @param  category  of the count.
