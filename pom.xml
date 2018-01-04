@@ -333,7 +333,7 @@
           <links>
             <link>http://download.oracle.com/javase/8/docs/api</link>
           </links>
-          <bottom><![CDATA[<i>Copyright &#169; 2003-2017 Virginia Tech. All Rights Reserved.</i>]]></bottom>
+          <bottom><![CDATA[<i>Copyright &#169; 2003-2018 Virginia Tech. All Rights Reserved.</i>]]></bottom>
         </configuration>
         <executions>
           <execution>
