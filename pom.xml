@@ -95,14 +95,14 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>4.3.11.RELEASE</version>
+      <version>4.3.14.RELEASE</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>6.11</version>
+      <version>6.14.2</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -184,7 +184,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>3.6</version>
+        <version>3.7</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -211,12 +211,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>2.17</version>
+        <version>3.0.0</version>
         <dependencies>
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.4</version>
+            <version>8.8</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -328,7 +328,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.0.0-M1</version>
+        <version>3.0.0</version>
         <configuration>
           <links>
             <link>http://download.oracle.com/javase/8/docs/api</link>
@@ -381,7 +381,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.5.0</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
