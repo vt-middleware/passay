@@ -21,6 +21,17 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.3.1 - 22Feb2018
+
+Issue | Description
+:---- | :----------
+[passay-71]({{ site.issueURL }}71) | Add RuleResultMetadata
+[passay-68]({{ site.issueURL }}68) | Always return only one result for HistoryRule
+[passay-67]({{ site.issueURL }}67) | JDBCDictionary size throws exception
+[passay-64]({{ site.issueURL }}64) | Bug in PasswordData#newPasswordData
+[passay-63]({{ site.issueURL }}63) | Support Spring MessageResolver
+[passay-58]({{ site.issueURL }}58) | PasswordValidator should use PECS generic
+
 ### Version 1.3.0 - 18Jul2017 (Requires Java 8)
 
 Note that cryptacular is now an optional dependency. If you use the DigestHistoryRule or DigestSourceRule, you must add an explicit dependency on org.cryptacular.
