@@ -354,8 +354,12 @@ public abstract class AbstractFileWordList extends AbstractWordList
         throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
       }
       allocateDirect = direct;
-      final long cacheSize = (fileSize / 100) * cachePercent;
+      long cacheSize = (fileSize / 100) * cachePercent;
       if (cacheSize > 0) {
+        // buffer implementation requires at least 2 bytes
+        if (cacheSize < Byte.SIZE * 2) {
+          cacheSize = Byte.SIZE * 2;
+        }
         modulus = (int) (fileSize / cacheSize);
         resize(cacheSize);
       }
