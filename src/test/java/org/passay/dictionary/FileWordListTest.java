@@ -62,4 +62,17 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
     fwl = new FileWordList(new RandomAccessFile(file2, "r"), false, 0);
     fwl.close();
   }
+
+
+  /**
+   * @param  file  dictionary to load.
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Parameters("eignFileSorted")
+  @Test(groups = {"wltest"})
+  public void smallFileCache(final String file) throws Exception
+  {
+    new FileWordList(new RandomAccessFile(file, "r"), true, 1);
+  }
 }

@@ -16,6 +16,7 @@
   <parameter name="fbsdFileLowerCase" value="src/test/resources/freebsd.lc"/>
   <parameter name="fbsdFileLowerCaseSorted" value="src/test/resources/freebsd.lc.sort"/>
   <parameter name="eignFile" value="src/test/resources/eign"/>
+  <parameter name="eignFileSorted" value="src/test/resources/eign.sort"/>
   <parameter name="newLinesUnix" value="src/test/resources/newlines.unix"/>
   <parameter name="newLinesMac" value="src/test/resources/newlines.mac"/>
   <parameter name="newLinesDos" value="src/test/resources/newlines.dos"/>
