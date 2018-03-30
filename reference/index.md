@@ -172,7 +172,7 @@ The password generation API uses a specialized ruleset consisting exclusively of
 password generation for the following policy:
 
 1. Length of 8 to 16 characters
-2. Must contain at least one of the following: upper case, lower case, digit, and symbol
+2. Must contain at least one of the following: upper case, lower case and digit
 3. No whitespace characters
 
 {% highlight java %}

@@ -6,10 +6,7 @@ List<CharacterRule> rules = Arrays.asList(
   new CharacterRule(EnglishCharacterData.LowerCase, 1),
 
   // at least one digit character
-  new CharacterRule(EnglishCharacterData.Digit, 1),
-
-  // at least one symbol (special character)
-  new CharacterRule(EnglishCharacterData.Special, 1));
+  new CharacterRule(EnglishCharacterData.Digit, 1));
 
 PasswordGenerator generator = new PasswordGenerator();
 
