@@ -33,7 +33,7 @@ public class WordListDictionary implements Dictionary
 
 
   /**
-   * Returns the word list to used for searching.
+   * Returns the word list used for searching.
    *
    * @return  word list
    */
