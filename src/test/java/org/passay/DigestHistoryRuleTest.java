@@ -40,7 +40,7 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
     new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"), 1, false));
 
   /** For testing. */
-  private final DigestHistoryRule bcryptDigestRule = new DigestHistoryRule(new BCryptHashBean(5));
+  private final DigestHistoryRule bcryptDigestRule = new DigestHistoryRule(new BCryptHashBean());
 
 
   /** Initialize rules for this test. */
