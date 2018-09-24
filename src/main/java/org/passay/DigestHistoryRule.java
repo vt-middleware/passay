@@ -4,6 +4,7 @@ package org.passay;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.EncodingHashBean;
+import org.cryptacular.bean.HashBean;
 
 /**
  * Rule for determining if a password matches one of any previous digested password a user has chosen. If no password
@@ -16,17 +17,31 @@ public class DigestHistoryRule extends HistoryRule
 {
 
   /** Hash bean to use for comparing hashed passwords. */
-  private final EncodingHashBean hashBean;
+  private final HashBean<String> hashBean;
 
   /** Character set to use for undigested passwords. */
   private Charset charset = StandardCharsets.UTF_8;
 
 
   /**
-   * Creates new digest history rule which operates on password references with the supplied label.
+   * Creates new digest history rule which operates on password references that were digested with the supplied hash.
    *
    * @param  bean  encoding hash bean
    */
+  public DigestHistoryRule(final HashBean<String> bean)
+  {
+    hashBean = bean;
+  }
+
+
+  /**
+   * Creates new digest history rule which operates on password references that were digested with the supplied hash.
+   *
+   * @param  bean  encoding hash bean
+   *
+   * @deprecated  use {@link #DigestHistoryRule(HashBean)}
+   */
+  @Deprecated
   public DigestHistoryRule(final EncodingHashBean bean)
   {
     hashBean = bean;

@@ -79,7 +79,7 @@
     <dependency>
       <groupId>org.cryptacular</groupId>
       <artifactId>cryptacular</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.3-SNAPSHOT</version>
       <optional>true</optional>
     </dependency>
     <dependency>
