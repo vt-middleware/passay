@@ -3,7 +3,7 @@ package org.passay;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import org.cryptacular.bean.EncodingHashBean;
+import org.cryptacular.bean.HashBean;
 
 /**
  * Rule for determining if a password matches a digested password from a different source. Useful for when separate
@@ -16,7 +16,7 @@ public class DigestSourceRule extends SourceRule
 {
 
   /** Hash bean to use for comparing hashed passwords. */
-  private final EncodingHashBean hashBean;
+  private final HashBean<String> hashBean;
 
   /** Character set to use for undigested passwords. */
   private Charset charset = StandardCharsets.UTF_8;
@@ -27,7 +27,7 @@ public class DigestSourceRule extends SourceRule
    *
    * @param  bean  encoding hash bean
    */
-  public DigestSourceRule(final EncodingHashBean bean)
+  public DigestSourceRule(final HashBean<String> bean)
   {
     hashBean = bean;
   }

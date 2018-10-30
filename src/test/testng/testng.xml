@@ -5,6 +5,7 @@
 
   <!-- passay test parameters -->
   <parameter name="dictionaryFile" value="src/test/resources/web2-gt3"/>
+  <parameter name="digestDictionaryFile" value="src/test/resources/sha1s.txt"/>
 
   <!-- dictionary test parameters -->
   <parameter name="webFile" value="src/test/resources/web2"/>
