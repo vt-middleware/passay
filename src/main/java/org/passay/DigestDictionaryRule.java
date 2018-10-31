@@ -38,7 +38,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
 
 
   /**
-   * Sets the character set to use for undigested passwords.
+   * Sets the character set to use when converting a candidate password to bytes prior to hashing.
    *
    * @param  set  to use for undigested passwords
    */
