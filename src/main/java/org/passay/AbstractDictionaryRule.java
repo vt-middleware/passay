@@ -13,12 +13,6 @@ import org.passay.dictionary.Dictionary;
 public abstract class AbstractDictionaryRule implements Rule
 {
 
-  /** Error code for matching dictionary word. */
-  public static final String ERROR_CODE = "ILLEGAL_WORD";
-
-  /** Error code for matching reversed dictionary word. */
-  public static final String ERROR_CODE_REVERSED = "ILLEGAL_WORD_REVERSED";
-
   /** Dictionary of words. */
   private Dictionary dictionary;
 
@@ -82,7 +76,8 @@ public abstract class AbstractDictionaryRule implements Rule
     String matchingWord = doWordSearch(text);
     if (matchingWord != null) {
       result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(matchingWord)));
+      result.getDetails().add(
+        new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord)));
     }
     if (matchBackwards && text.length() > 1) {
       text = new StringBuilder(passwordData.getPassword()).reverse().toString();
@@ -90,7 +85,7 @@ public abstract class AbstractDictionaryRule implements Rule
       if (matchingWord != null) {
         result.setValid(false);
         result.getDetails().add(
-          new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(matchingWord)));
+          new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord)));
       }
     }
     return result;
@@ -110,6 +105,16 @@ public abstract class AbstractDictionaryRule implements Rule
     m.put("matchingWord", word);
     return m;
   }
+
+
+  /**
+   * Returns the error code for this rule.
+   *
+   * @param  backwards  whether to return the error code for a backwards match
+   *
+   * @return  properties error code
+   */
+  protected abstract String getErrorCode(boolean backwards);
 
 
   /**

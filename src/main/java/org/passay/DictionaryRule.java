@@ -12,6 +12,13 @@ import org.passay.dictionary.Dictionary;
 public class DictionaryRule extends AbstractDictionaryRule
 {
 
+  /** Error code for matching dictionary word. */
+  public static final String ERROR_CODE = "ILLEGAL_WORD";
+
+  /** Error code for matching reversed dictionary word. */
+  public static final String ERROR_CODE_REVERSED = "ILLEGAL_WORD_REVERSED";
+
+
   /**
    * Creates a new dictionary rule without supplying a dictionary. The dictionary should be set using {@link
    * #setDictionary(Dictionary)}.
@@ -37,5 +44,12 @@ public class DictionaryRule extends AbstractDictionaryRule
       return text;
     }
     return null;
+  }
+
+
+  @Override
+  protected String getErrorCode(final boolean backwards)
+  {
+    return backwards ? ERROR_CODE_REVERSED : ERROR_CODE;
   }
 }

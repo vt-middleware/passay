@@ -11,6 +11,13 @@ import org.passay.dictionary.Dictionary;
 public class DictionarySubstringRule extends AbstractDictionaryRule
 {
 
+  /** Error code for matching dictionary word. */
+  public static final String ERROR_CODE = "ILLEGAL_WORD";
+
+  /** Error code for matching reversed dictionary word. */
+  public static final String ERROR_CODE_REVERSED = "ILLEGAL_WORD_REVERSED";
+
+
   /**
    * Creates a new dictionary substring rule. The dictionary should be set using the {@link #setDictionary(Dictionary)}
    * method.
@@ -41,5 +48,12 @@ public class DictionarySubstringRule extends AbstractDictionaryRule
       }
     }
     return null;
+  }
+
+
+  @Override
+  protected String getErrorCode(final boolean backwards)
+  {
+    return backwards ? ERROR_CODE_REVERSED : ERROR_CODE;
   }
 }
