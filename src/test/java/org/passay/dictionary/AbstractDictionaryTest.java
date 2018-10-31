@@ -133,7 +133,7 @@ public abstract class AbstractDictionaryTest
       "fbsdFileLowerCase",
       "fbsdFileLowerCaseSorted"
     })
-  @BeforeClass(groups = {"jdbcdicttest", "ttdicttest", "wldicttest"})
+  @BeforeClass(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
   public void createDictionaries(
     final String dict1,
     final String dict2,
@@ -166,7 +166,7 @@ public abstract class AbstractDictionaryTest
 
 
   /** @throws  Exception  On test failure. */
-  @AfterSuite(groups = {"jdbcdicttest", "ttdicttest", "wldicttest"})
+  @AfterSuite(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
   public void tearDown()
     throws Exception
   {
