@@ -408,6 +408,13 @@
       </plugin>
     </plugins>
   </build>
+  <repositories>
+    <repository>
+      <id>vt-middleware</id>
+      <name>Middleware Open Source Repository</name>
+      <url>https://raw.github.com/vt-middleware/maven-repo/master</url>
+    </repository>
+  </repositories>
   <profiles>
     <profile>
       <id>sign-artifacts</id>
