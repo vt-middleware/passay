@@ -29,6 +29,8 @@
   <parameter name="nearSearchDistance" value="2"/>
   <parameter name="nearSearchResults" value="Jicaque|Jicaquean|Xicaque|macaque"/>
 
+  <parameter name="bloomFile" value="src/test/resources/bloom.bin"/>
+
   <test name="coretests" parallel="methods" thread-count="2">
     <groups>
       <run>
@@ -51,6 +53,7 @@
         <include name="wldicttest" />
         <include name="ttdicttest" />
         <include name="jdbcdicttest" />
+        <include name="bloomdicttest" />
       </run>
     </groups>
     <packages>
