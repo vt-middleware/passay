@@ -18,7 +18,11 @@ public class BloomFilterDictionary implements Dictionary
 
 
   /**
-   * Creates a new dictionary instance from the supplied {@link BloomFilter}.
+   * Creates a new dictionary instance from the supplied {@link BloomFilter}. The fpp (false-positive probability)
+   * parameter of the given Bloom filter is a vitally important configuration concern. If it is too high, one risks user
+   * frustration due to rejection of valid passwords; if it is too low, one risks excessive storage costs. Finding the
+   * proper balance between acceptable user experience and storage costs is worth the time and effort required in
+   * testing. The Guava default value of 3% is likely unsuitable for many if not most deployments.
    *
    * @param  bf  bloom filter used to determine if a word exists.
    */
