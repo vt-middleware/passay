@@ -20,6 +20,12 @@ public class HistoryRule implements Rule
   /** Whether to report all history matches or just the first. */
   protected boolean reportAllFailures;
 
+  /** The size of the password history to be displayed in the error message
+   *  instead of the size of provided password reference list
+   *  (e.g. message is "password can't match the previous 4 passwords" but
+   *  the historical password reference list size is only 1) */
+  protected Integer sizeToReport;
+
 
   /**
    * Creates a new history rule.
@@ -92,7 +98,17 @@ public class HistoryRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int size)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("historySize", size);
+    m.put("historySize", sizeToReport == null ? size : sizeToReport);
     return m;
+  }
+
+
+  /**
+   * Sets the size to report if the password is not valid
+   *
+   * @param sizeToReport The size to report
+   */
+  public void setSizeToReport(int sizeToReport) {
+    this.sizeToReport = sizeToReport;
   }
 }
