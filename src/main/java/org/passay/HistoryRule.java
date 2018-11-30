@@ -106,9 +106,10 @@ public class HistoryRule implements Rule
   /**
    * Sets the size to report if the password is not valid
    *
-   * @param sizeToReport The size to report
+   * @param size The size to report
    */
-  public void setSizeToReport(int sizeToReport) {
-    this.sizeToReport = sizeToReport;
+  public void setSizeToReport(final int size)
+  {
+    sizeToReport = size;
   }
 }
