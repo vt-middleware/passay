@@ -24,6 +24,9 @@ public class HistoryRuleTest extends AbstractRuleTest
   private final HistoryRule ruleReportFirst = new HistoryRule(false);
 
   /** For testing. */
+  private final HistoryRule ruleSizeToReport = new HistoryRule();
+
+    /** For testing. */
   private final HistoryRule emptyRule = new HistoryRule();
 
 
@@ -35,6 +38,7 @@ public class HistoryRuleTest extends AbstractRuleTest
     history.add(new PasswordData.HistoricalReference("history", "t3stUs3r02"));
     history.add(new PasswordData.HistoricalReference("history", "t3stUs3r03"));
     history.add(new PasswordData.HistoricalReference("history", "t3stUs3r02"));
+    ruleSizeToReport.setSizeToReport(100);
   }
 
 
@@ -84,6 +88,12 @@ public class HistoryRuleTest extends AbstractRuleTest
           codes(HistoryRule.ERROR_CODE),
         },
 
+        {
+          ruleSizeToReport,
+          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, history),
+          codes(HistoryRule.ERROR_CODE),
+        },
+
         {emptyRule, TestUtils.newPasswordData("t3stUs3r00", "testuser"), null, },
         {emptyRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
         {emptyRule, TestUtils.newPasswordData("t3stUs3r02", "testuser"), null, },
@@ -120,6 +130,11 @@ public class HistoryRuleTest extends AbstractRuleTest
           ruleReportFirst,
           TestUtils.newPasswordData("t3stUs3r02", "testuser", null, history),
           new String[] {String.format("Password matches one of %s previous passwords.", history.size()), },
+        },
+        {
+          ruleSizeToReport,
+          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, history),
+          new String[] {String.format("Password matches one of 100 previous passwords."), },
         },
       };
   }
