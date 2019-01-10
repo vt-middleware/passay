@@ -3,7 +3,7 @@
 # Exit with nonzero exit code if anything fails
 set -e
 
-DOCKER_IMAGE="maven:3.5.0-jdk-8"
+DOCKER_IMAGE="maven:3.6.0-jdk-8"
 DOCKER_VOLUME="/apps/src"
 DOCKER_ENV="$DOCKER_ENV -e TRAVIS_PULL_REQUEST"
 DOCKER_ENV="$DOCKER_ENV -e TRAVIS_TAG"
