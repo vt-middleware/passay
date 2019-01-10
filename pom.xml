@@ -87,6 +87,7 @@
       <artifactId>guava</artifactId>
       <version>25.1-jre</version>
       <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
