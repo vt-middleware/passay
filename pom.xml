@@ -79,7 +79,7 @@
     <dependency>
       <groupId>org.cryptacular</groupId>
       <artifactId>cryptacular</artifactId>
-      <version>1.2.3-SNAPSHOT</version>
+      <version>1.2.3</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -415,13 +415,6 @@
       </plugin>
     </plugins>
   </build>
-  <repositories>
-    <repository>
-      <id>vt-middleware</id>
-      <name>Middleware Open Source Repository</name>
-      <url>https://raw.github.com/vt-middleware/maven-repo/master</url>
-    </repository>
-  </repositories>
   <profiles>
     <profile>
       <id>sign-artifacts</id>
