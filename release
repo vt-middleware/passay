@@ -8,15 +8,15 @@ function user_continue() {
   fi
 }
 
-if [ "$#" -ne 4 ]; then
-  echo "USAGE: `basename $0` <project> <branch> <release-version> <next-version>"
+if [ "$#" -ne 3 ]; then
+  echo "USAGE: `basename $0` <branch> <release-version> <next-version>"
   exit
 fi
 
-PROJECT="${1}"
-BRANCH="${2}"
-RELEASE_VERSION="${3}"
-NEXT_VERSION="${4}"
+PROJECT="passay"
+BRANCH="${1}"
+RELEASE_VERSION="${2}"
+NEXT_VERSION="${3}"
 echo "================================================================="
 echo "BEGIN RELEASE"
 echo "PROJECT:         ${PROJECT}"
