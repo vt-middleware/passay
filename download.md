@@ -21,6 +21,15 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.4.0 - 09Jan2019
+
+Issue | Description
+:---- | :----------
+[passay-80]({{ site.issueURL }}80) | Add BloomFilter dictionary
+[passay-78]({{ site.issueURL }}78) | Add support for digested dictionaries
+[passay-76]({{ site.issueURL }}76) | Support BCryptHashBean
+[passay-72]({{ site.issueURL }}72) | BufferOverflowException for certain cachePercent and file sizes
+
 ### Version 1.3.1 - 22Feb2018
 
 Issue | Description
