@@ -1,0 +1,94 @@
+#!/bin/bash
+
+function user_continue() {
+  read -p "Do you want to continue? [y/n]" -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    exit 1
+  fi
+}
+
+if [ "$#" -ne 4 ]; then
+  echo "USAGE: `basename $0` <project> <branch> <release-version> <next-version>"
+  exit
+fi
+
+PROJECT="${1}"
+BRANCH="${2}"
+RELEASE_VERSION="${3}"
+NEXT_VERSION="${4}"
+echo "================================================================="
+echo "BEGIN RELEASE"
+echo "PROJECT:         ${PROJECT}"
+echo "BRANCH TO TAG:   ${BRANCH}"
+echo "RELEASE VERSION: ${RELEASE_VERSION}"
+echo "NEXT VERSION:    ${NEXT_VERSION}"
+echo "================================================================="
+user_continue
+
+# update pom to release version
+mvn clean
+mvn versions:set -DnewVersion=${RELEASE_VERSION} -DgenerateBackupPoms=false
+echo "Updated pom to release version ${RELEASE_VERSION}"
+user_continue
+
+# commit pom changes
+git commit pom.xml -m "Update version for ${RELEASE_VERSION} release."
+
+# tag the release version
+git tag -a v${RELEASE_VERSION} -m "Tagging ${RELEASE_VERSION} release."
+echo "Tagged release ${RELEASE_VERSION}"
+
+# update pom to the next version
+mvn versions:set -DnewVersion=${NEXT_VERSION} -DgenerateBackupPoms=false
+echo "Updated pom to next version ${NEXT_VERSION}"
+
+# commit pom changes
+git commit pom.xml -m "Bump version to ${NEXT_VERSION}."
+
+# push commits
+git push origin ${BRANCH}
+
+# push release tag
+git push origin v${RELEASE_VERSION}
+
+# checkout the release tag
+git checkout v${RELEASE_VERSION}
+echo "Switched to the tag version ${RELEASE_VERSION}"
+
+# build the release distribution
+mvn -Dsign=true repository:bundle-create
+gpg --armor --detach-sign target/${PROJECT}-${RELEASE_VERSION}-dist.tar.gz
+gpg --armor --detach-sign target/${PROJECT}-${RELEASE_VERSION}-dist.zip
+
+# update the javadocs
+echo "Updating javadocs"
+user_continue
+
+git checkout gh-pages
+git pull origin gh-pages
+# remove root directory javadocs
+git rm -r javadocs/org javadocs/*.html javadocs/*.css javadocs/*.js javadocs/package-list
+# add new javadocs to root directory
+cp -Rp target/apidocs/ javadocs
+# add new javadocs to release version directory
+cp -Rp target/apidocs/ javadocs/${RELEASE_VERSION}
+git add javadocs
+git commit -a -m "Updated javadocs for ${RELEASE_VERSION} release."
+echo "Committed new javadocs"
+
+# add new binaries
+echo "Adding release binaries"
+user_continue
+
+mkdir downloads/${RELEASE_VERSION}
+cp target/*-dist* downloads/${RELEASE_VERSION}
+git add downloads/${RELEASE_VERSION}
+git commit -a -m "Added binaries for ${RELEASE_VERSION} release."
+echo "Committed new release binaries"
+
+# push changes to the server
+git push origin gh-pages
+
+echo "Finished release ${RELEASE_VERSION} for ${PROJECT}"
+
