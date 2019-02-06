@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Implementation of a ternary tree. Methods are provided for inserting strings and searching for strings. The
@@ -209,7 +208,9 @@ public class TernaryTree
   public void print(final Writer out)
     throws IOException
   {
-    out.write(printNode(root, "", 0));
+    final StringBuilder buffer = new StringBuilder();
+    printNode(root, "", 0, buffer);
+    out.write(buffer.toString());
     out.flush();
   }
 
@@ -456,39 +457,31 @@ public class TernaryTree
 
 
   /**
-   * Recursively traverses every node in the ternary tree one node at a time beginning at the supplied node. The result
-   * is an ASCII string representation of the tree beginning at the supplied node.
+   * Recursively traverses every node in the ternary tree rooted at the supplied node.
+   * The result is an ASCII string representation of the tree rooted at the supplied node.
    *
    * @param  node  to begin traversing
-   * @param  s  string of words found at the supplied node
-   * @param  depth  of the current node
-   *
-   * @return  string containing all words from the supplied node
+   * @param  s  the string representation of the current chain of equal kid nodes
+   * @param  depth  depth of the current chain of nodes
+   * @param  buffer  the buffer to which the output is printed
    */
-  private String printNode(final TernaryNode node, final String s, final int depth)
+  private void printNode(final TernaryNode node, final String s, final int depth, final StringBuilder buffer)
   {
-    final StringBuilder buffer = new StringBuilder();
     if (node != null) {
-      buffer.append(printNode(node.getLokid(), " <-", depth + 1));
+      printNode(node.getLokid(), " <-", depth + 1, buffer);
 
-      final String c = String.valueOf(node.getSplitChar());
-      final StringBuilder eq = new StringBuilder();
+      final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
-        eq.append(printNode(node.getEqkid(), s + c + "--", depth + 1));
+        printNode(node.getEqkid(), s + c + "--", depth + 1, buffer);
       } else {
-        int count = (new StringTokenizer(s, "--")).countTokens();
-        if (count > 0) {
-          count--;
+        final int count = s.split("[-<>]-").length;
+        for (int i = 1; i < depth - count; i++) {
+          buffer.append("   ");
         }
-        for (int i = 1; i < depth - count - 1; i++) {
-          eq.append("   ");
-        }
-        eq.append(s).append(c).append(TernaryTree.LINE_SEPARATOR);
+        buffer.append(s).append(c).append(TernaryTree.LINE_SEPARATOR);
       }
-      buffer.append(eq);
 
-      buffer.append(printNode(node.getHikid(), " >-", depth + 1));
+      printNode(node.getHikid(), " >-", depth + 1, buffer);
     }
-    return buffer.toString();
   }
 }
