@@ -210,6 +210,7 @@ public class TernaryTree
     throws IOException
   {
     out.write(printNode(root, "", 0));
+    out.flush();
   }
 
 
