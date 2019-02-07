@@ -468,20 +468,18 @@ public class TernaryTree
   private void printNode(final TernaryNode node, final String s, final int depth, final StringBuilder buffer)
   {
     if (node != null) {
-      printNode(node.getLokid(), " <-", depth + 1, buffer);
+      printNode(node.getLokid(), s + " <-", depth + 1, buffer);
 
       final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
         printNode(node.getEqkid(), s + c + "--", depth + 1, buffer);
       } else {
-        final int count = s.split("[-<>]-").length;
-        for (int i = 1; i < depth - count; i++) {
-          buffer.append("   ");
-        }
-        buffer.append(s).append(c).append(TernaryTree.LINE_SEPARATOR);
+        final int i = Math.max(s.lastIndexOf(" <-"), s.lastIndexOf(" >-"));
+        final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
+        buffer.append(line).append(c).append(TernaryTree.LINE_SEPARATOR);
       }
 
-      printNode(node.getHikid(), " >-", depth + 1, buffer);
+      printNode(node.getHikid(), s + " >-", depth + 1, buffer);
     }
   }
 }
