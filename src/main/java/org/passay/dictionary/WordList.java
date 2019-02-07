@@ -41,7 +41,7 @@ public interface WordList
 
 
   /**
-   * Returns an iterator to traverse this word list from the median.
+   * Returns an iterator to traverse this word list by following a recursive sequence of medians.
    *
    * @return  iterator for this word list
    */
