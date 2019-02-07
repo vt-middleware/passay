@@ -202,16 +202,33 @@ public class TernaryTree
    * whether or not your tree is balanced.
    *
    * @param  out  to print to
+   * @param  fullPath  specifies whether each line should show the full path from root or only the suffix
+   *
+   * @throws  IOException  if an error occurs
+   */
+  public void print(final Writer out, final boolean fullPath)
+    throws IOException
+  {
+    final StringBuilder buffer = new StringBuilder();
+    printNode(root, "", 0, fullPath, buffer);
+    out.write(buffer.toString());
+    out.flush();
+  }
+
+
+  /**
+   * Prints an ASCII representation of this ternary tree to the supplied writer. This is a very expensive operation,
+   * every node in the tree is traversed. The output produced is hard to read, but it should give an indication of
+   * whether or not your tree is balanced.
+   *
+   * @param  out  to print to
    *
    * @throws  IOException  if an error occurs
    */
   public void print(final Writer out)
-    throws IOException
+          throws IOException
   {
-    final StringBuilder buffer = new StringBuilder();
-    printNode(root, "", 0, buffer);
-    out.write(buffer.toString());
-    out.flush();
+    print(out, false);
   }
 
 
@@ -463,24 +480,27 @@ public class TernaryTree
    * @param  node  to begin traversing
    * @param  s  the string representation of the current chain of equal kid nodes
    * @param  depth  depth of the current chain of nodes
+   * @param  fullPath  specifies whether each line should show the full path from root or only the suffix
    * @param  buffer  the buffer to which the output is printed
    */
-  private void printNode(final TernaryNode node, final String s, final int depth, final StringBuilder buffer)
+  private void printNode(
+    final TernaryNode node, final String s, final int depth,
+    final boolean fullPath, final StringBuilder buffer)
   {
     if (node != null) {
-      printNode(node.getLokid(), s + " <-", depth + 1, buffer);
+      printNode(node.getLokid(), s + " <-", depth + 1, fullPath, buffer);
 
       final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
         final String suffix = node.isEndOfWord() ? "=-" : "--";
-        printNode(node.getEqkid(), s + c + suffix, depth + 1, buffer);
+        printNode(node.getEqkid(), s + c + suffix, depth + 1, fullPath, buffer);
       } else {
-        final int i = Math.max(s.lastIndexOf(" <-"), s.lastIndexOf(" >-"));
+        final int i = fullPath ? -1 : Math.max(s.lastIndexOf(" <-"), s.lastIndexOf(" >-"));
         final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
         buffer.append(line).append(c).append(TernaryTree.LINE_SEPARATOR);
       }
 
-      printNode(node.getHikid(), s + " >-", depth + 1, buffer);
+      printNode(node.getHikid(), s + " >-", depth + 1, fullPath, buffer);
     }
   }
 }

@@ -165,6 +165,7 @@ public class TernaryTreeDictionary implements Dictionary
       boolean partialSearch = false;
       boolean nearSearch = false;
       boolean print = false;
+      boolean printPath = false;
 
       // operation parameters
       String word = null;
@@ -187,6 +188,8 @@ public class TernaryTreeDictionary implements Dictionary
           distance = Integer.parseInt(args[++i]);
         } else if ("-p".equals(args[i])) {
           print = true;
+        } else if ("-pp".equals(args[i])) {
+          printPath = true;
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();
         } else {
@@ -226,8 +229,8 @@ public class TernaryTreeDictionary implements Dictionary
             word,
             distance,
             Arrays.asList(matches)));
-      } else if (print) {
-        dict.getTernaryTree().print(new PrintWriter(System.out, true));
+      } else if (print || printPath) {
+        dict.getTernaryTree().print(new PrintWriter(System.out, true), printPath);
       } else {
         throw new ArrayIndexOutOfBoundsException();
       }
