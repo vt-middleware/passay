@@ -472,7 +472,8 @@ public class TernaryTree
 
       final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
-        printNode(node.getEqkid(), s + c + "--", depth + 1, buffer);
+        final String suffix = node.isEndOfWord() ? "=-" : "--";
+        printNode(node.getEqkid(), s + c + suffix, depth + 1, buffer);
       } else {
         final int i = Math.max(s.lastIndexOf(" <-"), s.lastIndexOf(" >-"));
         final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
