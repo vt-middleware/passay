@@ -488,19 +488,19 @@ public class TernaryTree
     final boolean fullPath, final StringBuilder buffer)
   {
     if (node != null) {
-      printNode(node.getLokid(), s + " <-", depth + 1, fullPath, buffer);
+      printNode(node.getLokid(), s + "  /", depth + 1, fullPath, buffer);
 
       final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
-        final String suffix = node.isEndOfWord() ? "=-" : "--";
-        printNode(node.getEqkid(), s + c + suffix, depth + 1, fullPath, buffer);
+        final String suffix = node.isEndOfWord() ? "=" : "-";
+        printNode(node.getEqkid(), s + '-' + c + suffix, depth + 1, fullPath, buffer);
       } else {
-        final int i = fullPath ? -1 : Math.max(s.lastIndexOf(" <-"), s.lastIndexOf(" >-"));
+        final int i = fullPath ? -1 : Math.max(s.lastIndexOf("  /"), s.lastIndexOf("  \\"));
         final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
-        buffer.append(line).append(c).append(TernaryTree.LINE_SEPARATOR);
+        buffer.append(line).append('-').append(c).append(TernaryTree.LINE_SEPARATOR);
       }
 
-      printNode(node.getHikid(), s + " >-", depth + 1, fullPath, buffer);
+      printNode(node.getHikid(), s + "  \\", depth + 1, fullPath, buffer);
     }
   }
 }
