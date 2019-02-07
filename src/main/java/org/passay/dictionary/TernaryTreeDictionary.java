@@ -161,6 +161,7 @@ public class TernaryTreeDictionary implements Dictionary
       boolean nearSearch = false;
       boolean print = false;
       boolean printPath = false;
+      boolean stats = false;
 
       // operation parameters
       String word = null;
@@ -185,6 +186,8 @@ public class TernaryTreeDictionary implements Dictionary
           print = true;
         } else if ("-pp".equals(args[i])) {
           printPath = true;
+        } else if ("-st".equals(args[i])) {
+          stats = true;
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();
         } else {
@@ -226,6 +229,9 @@ public class TernaryTreeDictionary implements Dictionary
             Arrays.asList(matches)));
       } else if (print || printPath) {
         dict.getTernaryTree().print(new PrintWriter(System.out, true), printPath);
+      } else if (stats) {
+        System.out.println("word path depths histogram:");
+        System.out.println(dict.getTernaryTree().getNodeStats());
       } else {
         throw new ArrayIndexOutOfBoundsException();
       }
@@ -246,6 +252,7 @@ public class TernaryTreeDictionary implements Dictionary
         "(Near search for a word) \\");
       System.out.println("       -p (Print the entire dictionary " + "in tree form, path suffixes only) \\");
       System.out.println("       -pp (Print the entire dictionary " + "in tree form, full paths) \\");
+      System.out.println("       -st (Print the tree node depth statistics) \\");
       System.out.println("       -h (Print this message) \\");
       System.exit(1);
     }
