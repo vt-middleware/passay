@@ -50,6 +50,11 @@ public class TernaryTree
   /** File system line separator. */
   private static final String LINE_SEPARATOR = System.getProperty("line.separator");
 
+  /**
+   * An empty results array.
+   */
+  private static final String[] EMPTY_ARRAY = new String[0];
+
   /** Character comparator. */
   protected final Comparator<Character> comparator;
 
@@ -142,9 +147,9 @@ public class TernaryTree
     }
 
     final String[] results;
-    final List<String> matches = partialSearchNode(root, new ArrayList<>(), "", word, 0);
+    final List<String> matches = partialSearchNode(root, null, "", word, 0);
     if (matches == null) {
-      results = new String[] {};
+      results = EMPTY_ARRAY;
     } else {
       results = matches.toArray(new String[matches.size()]);
     }
@@ -174,9 +179,9 @@ public class TernaryTree
     }
 
     final String[] results;
-    final List<String> matches = nearSearchNode(root, distance, new ArrayList<>(), "", word, 0);
+    final List<String> matches = nearSearchNode(root, distance, null, "", word, 0);
     if (matches == null) {
-      results = new String[] {};
+      results = EMPTY_ARRAY;
     } else {
       results = matches.toArray(new String[matches.size()]);
     }
@@ -323,6 +328,11 @@ public class TernaryTree
       if (c == '.' || cmp == 0) {
         if (index == word.length() - 1) {
           if (node.isEndOfWord()) {
+            if (matches == null) {
+              // CheckStyle:ParameterAssignmentCheck OFF
+              matches = new ArrayList<>();
+              // CheckStyle:ParameterAssignmentCheck ON
+            }
             matches.add(match + split);
           }
         } else {
@@ -385,6 +395,11 @@ public class TernaryTree
       if (cmp == 0) {
 
         if (node.isEndOfWord() && distance >= 0 && newMatch.length() + distance >= word.length()) {
+          if (matches == null) {
+            // CheckStyle:ParameterAssignmentCheck OFF
+            matches = new ArrayList<>();
+            // CheckStyle:ParameterAssignmentCheck ON
+          }
           matches.add(newMatch);
         }
 
@@ -394,6 +409,11 @@ public class TernaryTree
       } else {
 
         if (node.isEndOfWord() && distance - 1 >= 0 && newMatch.length() + distance - 1 >= word.length()) {
+          if (matches == null) {
+            // CheckStyle:ParameterAssignmentCheck OFF
+            matches = new ArrayList<>();
+            // CheckStyle:ParameterAssignmentCheck ON
+          }
           matches.add(newMatch);
         }
 
