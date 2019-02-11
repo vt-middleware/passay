@@ -65,12 +65,7 @@ public class TernaryTreeDictionary implements Dictionary
       tree = new TernaryTree(true);
     }
 
-    final Iterator<String> iterator;
-    if (useMedian) {
-      iterator = wordList.medianIterator();
-    } else {
-      iterator = wordList.iterator();
-    }
+    final Iterator<String> iterator = useMedian ? wordList.medianIterator() : wordList.iterator();
     while (iterator.hasNext()) {
       tree.insert(iterator.next());
     }

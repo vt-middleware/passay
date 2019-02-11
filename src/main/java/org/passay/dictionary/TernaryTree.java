@@ -20,32 +20,12 @@ import java.util.StringTokenizer;
 public class TernaryTree
 {
 
-  // CheckStyle:JavadocVariable OFF
   /** Case sensitive comparator. */
-  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR = (a, b) -> {
-    int result = 0;
-    final char c1 = a;
-    final char c2 = b;
-    if (c1 < c2) {
-      result = -1;
-    } else if (c1 > c2) {
-      result = 1;
-    }
-    return result;
-  };
+  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR =
+    (a, b) -> a - b;
   /** Case insensitive comparator. */
-  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR = (a, b) -> {
-    int result = 0;
-    final char c1 = Character.toLowerCase(a.charValue());
-    final char c2 = Character.toLowerCase(b.charValue());
-    if (c1 < c2) {
-      result = -1;
-    } else if (c1 > c2) {
-      result = 1;
-    }
-    return result;
-  };
-  // CheckStyle:JavadocVariable ON
+  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR =
+    (a, b) -> Character.toLowerCase(a) - Character.toLowerCase(b);
 
   /** File system line separator. */
   private static final String LINE_SEPARATOR = System.getProperty("line.separator");
@@ -76,11 +56,7 @@ public class TernaryTree
    */
   public TernaryTree(final boolean caseSensitive)
   {
-    if (caseSensitive) {
-      comparator = CASE_SENSITIVE_COMPARATOR;
-    } else {
-      comparator = CASE_INSENSITIVE_COMPARATOR;
-    }
+    comparator = caseSensitive ? CASE_SENSITIVE_COMPARATOR : CASE_INSENSITIVE_COMPARATOR;
   }
 
 
@@ -146,14 +122,8 @@ public class TernaryTree
       throw new UnsupportedOperationException("Partial search is not supported for case insensitive ternary trees");
     }
 
-    final String[] results;
     final List<String> matches = partialSearchNode(root, null, "", word, 0);
-    if (matches == null) {
-      results = EMPTY_ARRAY;
-    } else {
-      results = matches.toArray(new String[matches.size()]);
-    }
-    return results;
+    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[matches.size()]);
   }
 
 
@@ -178,14 +148,8 @@ public class TernaryTree
       throw new UnsupportedOperationException("Near search is not supported for case insensitive ternary trees");
     }
 
-    final String[] results;
     final List<String> matches = nearSearchNode(root, distance, null, "", word, 0);
-    if (matches == null) {
-      results = EMPTY_ARRAY;
-    } else {
-      results = matches.toArray(new String[matches.size()]);
-    }
-    return results;
+    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[matches.size()]);
   }
 
 
@@ -247,13 +211,12 @@ public class TernaryTree
       final int cmp = comparator.compare(c, split);
       if (cmp < 0) {
         node.setLokid(insertNode(node.getLokid(), word, index));
-      } else if (cmp == 0) {
-        if (index == word.length() - 1) {
-          node.setEndOfWord(true);
-        }
-        node.setEqkid(insertNode(node.getEqkid(), word, index + 1));
-      } else {
+      } else if (cmp > 0) {
         node.setHikid(insertNode(node.getHikid(), word, index));
+      } else if (index == word.length() - 1) {
+        node.setEndOfWord(true);
+      } else {
+        node.setEqkid(insertNode(node.getEqkid(), word, index + 1));
       }
     }
     return node;
@@ -272,7 +235,6 @@ public class TernaryTree
   // CheckStyle:ReturnCount OFF
   private boolean searchNode(final TernaryNode node, final String word, final int index)
   {
-    boolean success = false;
     if (node != null && index < word.length()) {
       final char c = word.charAt(index);
       final char split = node.getSplitChar();
@@ -281,17 +243,13 @@ public class TernaryTree
         return searchNode(node.getLokid(), word, index);
       } else if (cmp > 0) {
         return searchNode(node.getHikid(), word, index);
+      } else if (index == word.length() - 1) {
+        return node.isEndOfWord();
       } else {
-        if (index == word.length() - 1) {
-          if (node.isEndOfWord()) {
-            success = true;
-          }
-        } else {
-          return searchNode(node.getEqkid(), word, index + 1);
-        }
+        return searchNode(node.getEqkid(), word, index + 1);
       }
     }
-    return success;
+    return false;
   }
   // CheckStyle:ReturnCount ON
 
@@ -375,13 +333,7 @@ public class TernaryTree
   {
     if (node != null && distance >= 0) {
 
-      final char c;
-      if (index < word.length()) {
-        c = word.charAt(index);
-      } else {
-        c = (char) -1;
-      }
-
+      final char c = index < word.length() ? word.charAt(index) : Character.MAX_VALUE;
       final char split = node.getSplitChar();
       final int cmp = comparator.compare(c, split);
 
@@ -393,8 +345,7 @@ public class TernaryTree
 
       final String newMatch = match + split;
       if (cmp == 0) {
-
-        if (node.isEndOfWord() && distance >= 0 && newMatch.length() + distance >= word.length()) {
+        if (node.isEndOfWord() && newMatch.length() + distance >= word.length()) {
           if (matches == null) {
             // CheckStyle:ParameterAssignmentCheck OFF
             matches = new ArrayList<>();
@@ -407,7 +358,6 @@ public class TernaryTree
         matches = nearSearchNode(node.getEqkid(), distance, matches, newMatch, word, index + 1);
         // CheckStyle:ParameterAssignmentCheck ON
       } else {
-
         if (node.isEndOfWord() && distance - 1 >= 0 && newMatch.length() + distance - 1 >= word.length()) {
           if (matches == null) {
             // CheckStyle:ParameterAssignmentCheck OFF
@@ -455,7 +405,7 @@ public class TernaryTree
       words = traverseNode(node.getLokid(), s, words);
       // CheckStyle:ParameterAssignmentCheck ON
 
-      final String c = String.valueOf(node.getSplitChar());
+      final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
         // CheckStyle:ParameterAssignmentCheck OFF
         words = traverseNode(node.getEqkid(), s + c, words);
