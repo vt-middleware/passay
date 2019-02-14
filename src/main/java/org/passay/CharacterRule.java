@@ -135,12 +135,13 @@ public class CharacterRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    if (RuleResultMetadata.CountCategory.exists(characterData.toString())) {
+    try {
       return new RuleResultMetadata(
         RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
         PasswordUtils.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+    } catch (IllegalArgumentException iae) {
+      return new RuleResultMetadata();
     }
-    return new RuleResultMetadata();
   }
 
 

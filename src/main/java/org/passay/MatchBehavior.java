@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.function.BiFunction;
+
 /**
  * Enum that defines how string matching should occur.
  *
@@ -10,13 +12,31 @@ public enum MatchBehavior
 {
 
   /** Use {@link String#startsWith(String)}. */
-  StartsWith,
+  StartsWith("starts with", String::startsWith),
 
   /** Use {@link String#endsWith(String)}. */
-  EndsWith,
+  EndsWith("ends with", String::endsWith),
 
   /** Use {@link String#contains(CharSequence)}. */
-  Contains;
+  Contains("contains", String::contains);
+
+  /** The description of the match behavior. **/
+  private final String description;
+
+  /** The matcher function. **/
+  private final BiFunction<String, String, Boolean> matcher;
+
+  /**
+   * Constructs a MatchBehavior constant.
+   *
+   * @param desc the behavior description
+   * @param matcherFunction the matcher function
+   */
+  MatchBehavior(final String desc, final BiFunction<String, String, Boolean> matcherFunction)
+  {
+    this.description = desc;
+    this.matcher = matcherFunction;
+  }
 
 
   /**
@@ -43,47 +63,13 @@ public enum MatchBehavior
    */
   public boolean match(final String text, final String s)
   {
-    final boolean match;
-    switch(this) {
-
-    case StartsWith:
-      match = text.startsWith(s);
-      break;
-
-    case EndsWith:
-      match = text.endsWith(s);
-      break;
-
-    case Contains:
-      match = text.contains(s);
-      break;
-
-    default: throw new IllegalStateException("Unknown match type: " + this);
-    }
-    return match;
+    return matcher.apply(text, s);
   }
 
 
   @Override
   public String toString()
   {
-    final String s;
-    switch(this) {
-
-    case StartsWith:
-      s = "starts with";
-      break;
-
-    case EndsWith:
-      s = "ends with";
-      break;
-
-    case Contains:
-      s = "contains";
-      break;
-
-    default: throw new IllegalStateException("Unknown match type: " + this);
-    }
-    return s;
+    return description;
   }
 }

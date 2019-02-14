@@ -47,7 +47,9 @@ public class RuleResultMetadata
      * @param  name  to check.
      *
      * @return  whether the supplied name exists.
+     * @deprecated use the standard {@link CountCategory#valueOf(String)} instead
      */
+    @Deprecated
     public static boolean exists(final String name)
     {
       for (CountCategory cc : CountCategory.values()) {
