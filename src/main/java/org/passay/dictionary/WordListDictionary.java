@@ -124,17 +124,19 @@ public class WordListDictionary implements Dictionary
       }
 
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.out.println("Usage: java " + WordListDictionary.class.getName() + " \\");
-      System.out.println("       <dictionary1> <dictionary2> ... " +
-        "<options> <operation> \\");
-      System.out.println("");
-      System.out.println("where <options> includes:");
-      System.out.println("       -ci (Make search case-insensitive) \\");
-      System.out.println("");
-      System.out.println("where <operation> includes:");
-      System.out.println("       -s <word> (Search for a word) \\");
-      System.out.println("       -p (Print the entire dictionary) \\");
-      System.out.println("       -h (Print this message) \\");
+      System.out.println("Usage: java " + WordListDictionary.class.getName());
+      System.out.println("            <dict1> [... <dictN>] [options] <operation>");
+      System.out.println();
+      System.out.println("Where <dict1>...<dictN> are files containing dictionary words.");
+      System.out.println();
+      System.out.println("Options:");
+      System.out.println("    -ci make search case-insensitive");
+      System.out.println();
+      System.out.println("Operations:");
+      System.out.println("    -s <word>");
+      System.out.println("       search for a word");
+      System.out.println("    -p print the entire dictionary");
+      System.out.println("    -h print this help message");
       System.exit(1);
     }
   }
