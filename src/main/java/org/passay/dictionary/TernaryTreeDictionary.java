@@ -249,7 +249,8 @@ public class TernaryTreeDictionary implements Dictionary
       System.out.println("           (where word like '.a.a.a') \\");
       System.out.println("       -ns <word> <distance> " +
         "(Near search for a word) \\");
-      System.out.println("       -p (Print the entire dictionary " + "in tree form) \\");
+      System.out.println("       -p (Print the entire dictionary " + "in tree form, path suffixes only) \\");
+      System.out.println("       -pp (Print the entire dictionary " + "in tree form, full paths) \\");
       System.out.println("       -h (Print this message) \\");
       System.exit(1);
     }
