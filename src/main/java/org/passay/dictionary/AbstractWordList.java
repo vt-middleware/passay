@@ -56,7 +56,9 @@ public abstract class AbstractWordList implements WordList
    * Throws a {@link ClassCastException} if the supplied object is not an instance of {@link String}.
    *
    * @param  o  object to check
+   * @deprecated this method is no longer used and will be removed in a future release
    */
+  @Deprecated
   protected void checkIsString(final Object o)
   {
     if (!String.class.isInstance(o)) {

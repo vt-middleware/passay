@@ -253,7 +253,7 @@ public class LengthComplexityRule implements Rule
     }
 
     /** Pattern for matching intervals. */
-    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+|\\*)([\\)|\\]])$");
+    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([(|\\[])(\\d+),(\\d+|\\*)([)|\\]])$");
 
     /** Lower bound of the interval. */
     private final Bound lowerBound;
