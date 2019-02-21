@@ -86,7 +86,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * This test is disabled by default. It produces a lot of testng report data which runs the process OOM.
+   * This test is disabled by default. It produces a lot of testing report data which runs the process OOM.
    *
    * @param  word  to search for.
    *

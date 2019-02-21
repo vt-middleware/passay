@@ -55,7 +55,7 @@ public class ClassGenerator
   private static final String IMPORT_STATEMENTS;
 
   /** Buffer size for reading and writing files. */
-  private static final int BUFFER_SZIE = 2048;
+  private static final int BUFFER_SIZE = 2048;
 
   /** Code model for java class creation. */
   private final JCodeModel codeModel = new JCodeModel();
@@ -152,7 +152,7 @@ public class ClassGenerator
       directory.mkdirs();
     }
     // buffer for read and write data to file
-    final byte[] buffer = new byte[BUFFER_SZIE];
+    final byte[] buffer = new byte[BUFFER_SIZE];
     final ZipInputStream zipInput = new ZipInputStream(new FileInputStream(file));
     ZipEntry entry = zipInput.getNextEntry();
     try {
