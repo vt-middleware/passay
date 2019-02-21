@@ -76,6 +76,11 @@ public abstract class AbstractWordList implements WordList
     /** Index of next word in the iterator sequence. */
     protected int index;
 
+    @Override
+    public boolean hasNext()
+    {
+      return index < size();
+    }
 
     @Override
     public void remove()
@@ -93,18 +98,12 @@ public abstract class AbstractWordList implements WordList
    */
   private class SequentialIterator extends AbstractWordListIterator
   {
-
-
-    @Override
-    public boolean hasNext()
-    {
-      return index < size();
-    }
-
-
     @Override
     public String next()
     {
+      if (!hasNext()) {
+        throw new NoSuchElementException();
+      }
       return get(index++);
     }
   }
@@ -157,12 +156,6 @@ public abstract class AbstractWordList implements WordList
         // rounding them down properly)
         return (int) ((size * remainder - 1) / leftovers);
       }
-    }
-
-    @Override
-    public boolean hasNext()
-    {
-      return index < size();
     }
 
     @Override
