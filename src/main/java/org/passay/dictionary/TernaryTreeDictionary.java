@@ -165,6 +165,7 @@ public class TernaryTreeDictionary implements Dictionary
       boolean partialSearch = false;
       boolean nearSearch = false;
       boolean print = false;
+      boolean printPath = false;
 
       // operation parameters
       String word = null;
@@ -187,6 +188,8 @@ public class TernaryTreeDictionary implements Dictionary
           distance = Integer.parseInt(args[++i]);
         } else if ("-p".equals(args[i])) {
           print = true;
+        } else if ("-pp".equals(args[i])) {
+          printPath = true;
         } else if ("-h".equals(args[i])) {
           throw new ArrayIndexOutOfBoundsException();
         } else {
@@ -226,8 +229,8 @@ public class TernaryTreeDictionary implements Dictionary
             word,
             distance,
             Arrays.asList(matches)));
-      } else if (print) {
-        dict.getTernaryTree().print(new PrintWriter(System.out, true));
+      } else if (print || printPath) {
+        dict.getTernaryTree().print(new PrintWriter(System.out, true), printPath);
       } else {
         throw new ArrayIndexOutOfBoundsException();
       }
@@ -246,7 +249,8 @@ public class TernaryTreeDictionary implements Dictionary
       System.out.println("           (where word like '.a.a.a') \\");
       System.out.println("       -ns <word> <distance> " +
         "(Near search for a word) \\");
-      System.out.println("       -p (Print the entire dictionary " + "in tree form) \\");
+      System.out.println("       -p (Print the entire dictionary " + "in tree form, path suffixes only) \\");
+      System.out.println("       -pp (Print the entire dictionary " + "in tree form, full paths) \\");
       System.out.println("       -h (Print this message) \\");
       System.exit(1);
     }

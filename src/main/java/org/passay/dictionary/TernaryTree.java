@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Implementation of a ternary tree. Methods are provided for inserting strings and searching for strings. The
@@ -203,13 +202,33 @@ public class TernaryTree
    * whether or not your tree is balanced.
    *
    * @param  out  to print to
+   * @param  fullPath  specifies whether each line should show the full path from root or only the suffix
+   *
+   * @throws  IOException  if an error occurs
+   */
+  public void print(final Writer out, final boolean fullPath)
+    throws IOException
+  {
+    final StringBuilder buffer = new StringBuilder();
+    printNode(root, "", 0, fullPath, buffer);
+    out.write(buffer.toString());
+    out.flush();
+  }
+
+
+  /**
+   * Prints an ASCII representation of this ternary tree to the supplied writer. This is a very expensive operation,
+   * every node in the tree is traversed. The output produced is hard to read, but it should give an indication of
+   * whether or not your tree is balanced.
+   *
+   * @param  out  to print to
    *
    * @throws  IOException  if an error occurs
    */
   public void print(final Writer out)
-    throws IOException
+          throws IOException
   {
-    out.write(printNode(root, "", 0));
+    print(out, false);
   }
 
 
@@ -455,39 +474,33 @@ public class TernaryTree
 
 
   /**
-   * Recursively traverses every node in the ternary tree one node at a time beginning at the supplied node. The result
-   * is an ASCII string representation of the tree beginning at the supplied node.
+   * Recursively traverses every node in the ternary tree rooted at the supplied node.
+   * The result is an ASCII string representation of the tree rooted at the supplied node.
    *
    * @param  node  to begin traversing
-   * @param  s  string of words found at the supplied node
-   * @param  depth  of the current node
-   *
-   * @return  string containing all words from the supplied node
+   * @param  s  the string representation of the current chain of equal kid nodes
+   * @param  depth  depth of the current chain of nodes
+   * @param  fullPath  specifies whether each line should show the full path from root or only the suffix
+   * @param  buffer  the buffer to which the output is printed
    */
-  private String printNode(final TernaryNode node, final String s, final int depth)
+  private void printNode(
+    final TernaryNode node, final String s, final int depth,
+    final boolean fullPath, final StringBuilder buffer)
   {
-    final StringBuilder buffer = new StringBuilder();
     if (node != null) {
-      buffer.append(printNode(node.getLokid(), " <-", depth + 1));
+      printNode(node.getLokid(), s + "  /", depth + 1, fullPath, buffer);
 
-      final String c = String.valueOf(node.getSplitChar());
-      final StringBuilder eq = new StringBuilder();
+      final char c = node.getSplitChar();
       if (node.getEqkid() != null) {
-        eq.append(printNode(node.getEqkid(), s + c + "--", depth + 1));
+        final String suffix = node.isEndOfWord() ? "=" : "-";
+        printNode(node.getEqkid(), s + '-' + c + suffix, depth + 1, fullPath, buffer);
       } else {
-        int count = (new StringTokenizer(s, "--")).countTokens();
-        if (count > 0) {
-          count--;
-        }
-        for (int i = 1; i < depth - count - 1; i++) {
-          eq.append("   ");
-        }
-        eq.append(s).append(c).append(TernaryTree.LINE_SEPARATOR);
+        final int i = fullPath ? -1 : Math.max(s.lastIndexOf("  /"), s.lastIndexOf("  \\"));
+        final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
+        buffer.append(line).append('-').append(c).append(TernaryTree.LINE_SEPARATOR);
       }
-      buffer.append(eq);
 
-      buffer.append(printNode(node.getHikid(), " >-", depth + 1));
+      printNode(node.getHikid(), s + "  \\", depth + 1, fullPath, buffer);
     }
-    return buffer.toString();
   }
 }
