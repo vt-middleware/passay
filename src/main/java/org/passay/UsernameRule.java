@@ -123,19 +123,20 @@ public class UsernameRule implements Rule
   {
     final RuleResult result = new RuleResult();
     String user = passwordData.getUsername();
-    if (user != null && !"".equals(user)) {
+    if (user != null && !user.isEmpty()) {
       String text = passwordData.getPassword();
-      String reverseUser = new StringBuilder(user).reverse().toString();
       if (ignoreCase) {
         text = text.toLowerCase();
         user = user.toLowerCase();
-        reverseUser = reverseUser.toLowerCase();
       }
       if (matchBehavior.match(text, user)) {
         result.addError(ERROR_CODE, createRuleResultDetailParameters(user));
       }
-      if (matchBackwards && matchBehavior.match(text, reverseUser)) {
-        result.addError(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user));
+      if (matchBackwards) {
+        final String reverseUser = new StringBuilder(user).reverse().toString();
+        if (matchBehavior.match(text, reverseUser)) {
+          result.addError(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user));
+        }
       }
     }
     return result;
