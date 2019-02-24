@@ -168,6 +168,6 @@ public class AllowedCharacterRule implements Rule
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        allowedCharacters != null ? Arrays.toString(allowedCharacters) : null);
+        Arrays.toString(allowedCharacters));
   }
 }

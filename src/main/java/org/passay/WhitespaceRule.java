@@ -205,6 +205,6 @@ public class WhitespaceRule implements Rule
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        whitespaceCharacters != null ? Arrays.toString(whitespaceCharacters) : null);
+        Arrays.toString(whitespaceCharacters));
   }
 }

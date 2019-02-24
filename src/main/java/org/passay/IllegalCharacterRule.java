@@ -166,6 +166,6 @@ public class IllegalCharacterRule implements Rule
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        illegalCharacters != null ? Arrays.toString(illegalCharacters) : null);
+        Arrays.toString(illegalCharacters));
   }
 }
