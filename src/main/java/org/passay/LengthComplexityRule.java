@@ -139,7 +139,7 @@ public class LengthComplexityRule implements Rule
         new RuleResultDetail(ERROR_CODE_RULES, createRuleResultDetailParameters(passwordLength, 0, 0)));
     }
     int successCount = 0;
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     for (Rule rule : rulesByLength) {
       final RuleResult rr = rule.validate(passwordData);
       if (!rr.isValid()) {
@@ -154,10 +154,9 @@ public class LengthComplexityRule implements Rule
     if (successCount < rulesByLength.size()) {
       result.setValid(false);
       if (reportFailure) {
-        result.getDetails().add(
-          new RuleResultDetail(
+        result.addError(
             ERROR_CODE,
-            createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
+            createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size()));
       }
     }
     return result;

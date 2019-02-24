@@ -47,11 +47,10 @@ public class AllowedRegexRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final Matcher m = pattern.matcher(passwordData.getPassword());
     if (!m.find()) {
-      result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
+      result.addError(ERROR_CODE, createRuleResultDetailParameters());
     }
     return result;
   }

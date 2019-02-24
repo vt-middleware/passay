@@ -104,7 +104,7 @@ public class PasswordValidator implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     for (Rule rule : passwordRules) {
       final RuleResult rr = rule.validate(passwordData);
       if (!rr.isValid()) {

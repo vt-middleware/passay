@@ -44,7 +44,7 @@ public class HistoryRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final List<PasswordData.HistoricalReference> references = passwordData.getPasswordReferences(
       PasswordData.HistoricalReference.class);
     final int size = references.size();
@@ -54,15 +54,11 @@ public class HistoryRule implements Rule
 
     final String cleartext = passwordData.getPassword();
     if (reportAllFailures) {
-      references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
-      });
+      references.stream().filter(reference -> matches(cleartext, reference)).forEach(
+        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(size)));
     } else {
-      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(reference -> {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)));
-      });
+      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(
+        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(size)));
     }
     return result;
   }

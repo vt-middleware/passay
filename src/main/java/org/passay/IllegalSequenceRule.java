@@ -100,7 +100,7 @@ public class IllegalSequenceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final String password = passwordData.getPassword() + '\uffff';
     final StringBuilder match = new StringBuilder(password.length());
     for (CharacterSequence cs : sequenceData.getSequences()) {
@@ -182,8 +182,7 @@ public class IllegalSequenceRule implements Rule
     if (reportAllFailures || result.getDetails().isEmpty()) {
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
-      result.setValid(false);
-      result.getDetails().add(new RuleResultDetail(sequenceData.getErrorCode(), m));
+      result.addError(sequenceData.getErrorCode(), m);
     }
   }
 

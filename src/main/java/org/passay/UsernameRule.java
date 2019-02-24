@@ -121,7 +121,7 @@ public class UsernameRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     String user = passwordData.getUsername();
     if (user != null && !"".equals(user)) {
       String text = passwordData.getPassword();
@@ -132,12 +132,10 @@ public class UsernameRule implements Rule
         reverseUser = reverseUser.toLowerCase();
       }
       if (matchBehavior.match(text, user)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(user));
       }
       if (matchBackwards && matchBehavior.match(text, reverseUser)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
+        result.addError(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user));
       }
     }
     return result;

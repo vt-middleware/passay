@@ -45,7 +45,7 @@ public class SourceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final List<PasswordData.SourceReference> references = passwordData.getPasswordReferences(
       PasswordData.SourceReference.class);
     if (references.isEmpty()) {
@@ -54,17 +54,11 @@ public class SourceRule implements Rule
 
     final String cleartext = passwordData.getPassword();
     if (reportAllFailures) {
-      references.stream().filter(reference -> matches(cleartext, reference)).forEach(reference -> {
-        result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
-      });
+      references.stream().filter(reference -> matches(cleartext, reference)).forEach(
+        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
     } else {
-      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(reference -> {
-        result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
-      });
+      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(
+        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(reference.getLabel())));
     }
     return result;
   }

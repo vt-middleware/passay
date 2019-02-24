@@ -65,14 +65,13 @@ public class IllegalRegexRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final Matcher m = pattern.matcher(passwordData.getPassword());
     final Set<String> matches = new HashSet<>();
     while (m.find()) {
       final String match = m.group();
       if (!matches.contains(match)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(match)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(match));
         if (!reportAllFailures) {
           break;
         }

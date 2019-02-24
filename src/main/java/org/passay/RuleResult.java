@@ -4,6 +4,7 @@ package org.passay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Result of a password rule validation.
@@ -23,8 +24,13 @@ public class RuleResult
   protected RuleResultMetadata metadata = new RuleResultMetadata();
 
 
-  /** Default constructor. */
-  public RuleResult() {}
+  /**
+   * Creates a new rule result with its validity set to true.
+   */
+  public RuleResult()
+  {
+    this(true);
+  }
 
 
   /**
@@ -109,6 +115,20 @@ public class RuleResult
   public List<RuleResultDetail> getDetails()
   {
     return details;
+  }
+
+
+  /**
+   * Adds a new rule result detail with the given error details and
+   * sets the result of the rule verification to invalid.
+   *
+   * @param  code  error code
+   * @param  params  error details
+   */
+  public void addError(final String code, final Map<String, Object> params)
+  {
+    setValid(false);
+    details.add(new RuleResultDetail(code, params));
   }
 
 

@@ -201,7 +201,7 @@ public class CharacterCharacteristicsRule implements Rule
     }
 
     int successCount = 0;
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     for (CharacterRule rule : rules) {
       final RuleResult rr = rule.validate(passwordData);
       if (!rr.isValid()) {
@@ -216,7 +216,7 @@ public class CharacterCharacteristicsRule implements Rule
     if (successCount < numCharacteristics) {
       result.setValid(false);
       if (reportFailure) {
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(successCount));
       }
     }
     return result;

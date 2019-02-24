@@ -149,12 +149,11 @@ public class WhitespaceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final String text = passwordData.getPassword();
     for (char c : whitespaceCharacters) {
       if (matchBehavior.match(text, c)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
         if (!reportAllFailures) {
           break;
         }
