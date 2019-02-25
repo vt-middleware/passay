@@ -101,41 +101,36 @@ public class IllegalSequenceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult(true);
-    final String password = passwordData.getPassword();
-    final int max = password.length() - sequenceLength + 1;
-    SequenceIterator sequence;
-    int position;
-    char c;
-    for (int i = 0; i < sequenceData.getSequences().length; i++) {
-      for (int j = 0; j < max; j++) {
-        sequence = newSequenceIterator(sequenceData.getSequences()[i], password.charAt(j));
-        if (sequence != null) {
-          position = j;
-          while (sequence.forward()) {
-            c = password.charAt(++position);
-            if (sequence.matches(c)) {
-              sequence.addMatchCharacter(c);
-            } else {
-              break;
-            }
-          }
-          if (sequence.matchCount() == sequenceLength) {
-            recordFailure(result, sequence.matchString());
-          }
-          sequence.reset();
-          position = j;
-          while (sequence.backward()) {
-            c = password.charAt(++position);
-            if (sequence.matches(c)) {
-              sequence.addMatchCharacter(c);
-            } else {
-              break;
-            }
-          }
-          if (sequence.matchCount() == sequenceLength) {
-            recordFailure(result, sequence.matchString());
-          }
+    final String password = passwordData.getPassword() + '\uffff';
+    final StringBuilder match = new StringBuilder(password.length());
+    for (CharacterSequence cs : sequenceData.getSequences()) {
+      final int csLength = cs.length();
+      int direction = 0;
+      int prevPosition = -1;
+      for (int i = 0; i < password.length(); i++) {
+        final char c = password.charAt(i);
+        final int position = indexOf(cs, c);
+        // set diff to +1 for increase in sequence, -1 for decrease, anything else for neither
+        int diff = (position | prevPosition) < 0 ? 0 : position - prevPosition;
+        if (wrapSequence && (diff == csLength - 1 || diff == 1 - csLength)) {
+          diff -= Integer.signum(diff) * csLength;
         }
+        // if we have a sequence and reached its end, add it to result
+        if (diff != direction && match.length() >= this.sequenceLength) {
+          addError(result, match.toString());
+        }
+        // update the current potential sequence
+        if (diff == 1 || diff == -1) {
+          if (diff != direction) {
+            match.delete(0, match.length() - 1);
+            direction = diff;
+          }
+        } else {
+          match.setLength(0);
+          direction = 0;
+        }
+        match.append(c);
+        prevPosition = position;
       }
     }
     return result;
@@ -157,34 +152,32 @@ public class IllegalSequenceRule implements Rule
 
 
   /**
-   * Creates an iterator that iterates over a character sequence positioned at the first matching character, if any, in
-   * the given password.
+   * Returns the index of the given character within the given sequence,
+   * or -1 if it is not found.
    *
-   * @param  sequence  defined sequence of illegal characters.
-   * @param  first  first character to match in character sequence.
+   * @param  sequence  a sequence of characters
+   * @param  c  the character to find in the character sequence
    *
-   * @return  forward sequence iterator.
+   * @return  the index of the character within the sequence, or -1
    */
-  private SequenceIterator newSequenceIterator(final CharacterSequence sequence, final char first)
+  private int indexOf(final CharacterSequence sequence, final char c)
   {
     for (int i = 0; i < sequence.length(); i++) {
-      if (sequence.matches(i, first)) {
-        final SequenceIterator s = new SequenceIterator(sequence, i, sequenceLength, wrapSequence);
-        s.addMatchCharacter(first);
-        return s;
+      if (sequence.matches(i, c)) {
+        return i;
       }
     }
-    return null;
+    return -1;
   }
 
 
   /**
-   * Records a validation failure.
+   * Adds a validation error to a result.
    *
-   * @param  result  rule result holding failure details.
-   * @param  match  illegal string matched in the password that caused failure.
+   * @param  result  the rule result to which the error is added
+   * @param  match  the illegal sequence in the password that caused the error
    */
-  private void recordFailure(final RuleResult result, final String match)
+  private void addError(final RuleResult result, final String match)
   {
     if (reportAllFailures || result.getDetails().isEmpty()) {
       final Map<String, Object> m = new LinkedHashMap<>();
@@ -194,145 +187,4 @@ public class IllegalSequenceRule implements Rule
     }
   }
 
-
-  /**
-   * Iterates over a {@link CharacterSequence} and stores matched characters.
-   *
-   * @author  Middleware Services
-   */
-  private class SequenceIterator
-  {
-
-    /** Defined illegal character sequence. */
-    private final CharacterSequence illegal;
-
-    /** 0-based iterator start position. */
-    private final int start;
-
-    /** Number of characters to iterate over. */
-    private final int length;
-
-    /** Index upper bound. */
-    private int ubound;
-
-    /** Index lower bound. */
-    private int lbound;
-
-    /** Current 0-based iterator position. */
-    private int position;
-
-    /** Stores matched characters. */
-    private final StringBuilder matches;
-
-
-    /**
-     * Creates a new sequence.
-     *
-     * @param  sequence  Illegal sequence of characters.
-     * @param  startIndex  in the characters array
-     * @param  count  length of this sequence
-     * @param  wrap  whether this sequence wraps
-     */
-    SequenceIterator(final CharacterSequence sequence, final int startIndex, final int count, final boolean wrap)
-    {
-      illegal = sequence;
-      start = startIndex;
-      length = count;
-      lbound = start - length;
-      ubound = start + length;
-      if (lbound < -1 && !wrap) {
-        lbound = -1;
-      }
-      if (ubound >= sequence.length() && !wrap) {
-        ubound = sequence.length();
-      }
-      position = start;
-      matches = new StringBuilder(length);
-    }
-
-
-    /**
-     * Advances the iterator one unit in the forward direction.
-     *
-     * @return  true if characters remain, false otherwise.
-     */
-    public boolean forward()
-    {
-      return ++position < ubound;
-    }
-
-
-    /**
-     * Advances the iterator one unit in the backward direction.
-     *
-     * @return  true if characters remain, false otherwise.
-     */
-    public boolean backward()
-    {
-      return --position > lbound;
-    }
-
-
-    /** Resets the sequence to its original position and discards all but the initial match character. */
-    public void reset()
-    {
-      position = start;
-      matches.delete(1, length);
-    }
-
-
-    /**
-     * Determines whether the character at the current iterator position in the illegal sequence matches the given
-     * character.
-     *
-     * @param  c  Character to check for.
-     *
-     * @return  True if character matches, false otherwise.
-     */
-    public boolean matches(final char c)
-    {
-      final int i;
-      if (position < 0) {
-        i = illegal.length() + position;
-      } else if (position >= illegal.length()) {
-        i = position - illegal.length();
-      } else {
-        i = position;
-      }
-      return illegal.matches(i, c);
-    }
-
-
-    /**
-     * Adds the given character to the set of matched characters.
-     *
-     * @param  c  match character.
-     */
-    public void addMatchCharacter(final char c)
-    {
-      matches.append(c);
-    }
-
-
-    /**
-     * Returns the number of matched characters.
-     *
-     * @return  matched character count.
-     */
-    public int matchCount()
-    {
-      return matches.length();
-    }
-
-
-    /**
-     * Returns the string of matched characters.
-     *
-     * @return  match string.
-     */
-    public String matchString()
-    {
-      return matches.toString();
-    }
-  }
 }

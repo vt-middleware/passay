@@ -588,10 +588,6 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.UpperCase.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode(),
-            EnglishSequenceData.Numerical.getErrorCode(),
-            EnglishSequenceData.Numerical.getErrorCode(),
-            EnglishSequenceData.Numerical.getErrorCode(),
-            EnglishSequenceData.Numerical.getErrorCode(),
             LengthRule.ERROR_CODE_MIN),
         },
       };
