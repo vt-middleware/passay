@@ -2,6 +2,7 @@
 package org.passay.dictionary;
 
 import java.io.RandomAccessFile;
+import java.util.Map;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -39,6 +40,8 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
     ttd = new TernaryTreeDictionary(new FileWordList(new RandomAccessFile(webFile, "r")));
     t = System.currentTimeMillis() - t;
     System.out.println(ttd.getClass().getSimpleName() + " time to construct: " + t + "ms");
+    final Map<Integer, Integer> depths = ttd.getTernaryTree().getNodeStats();
+    System.out.println(ttd.getClass().getSimpleName() + " depth histogram: " + depths);
   }
 
 

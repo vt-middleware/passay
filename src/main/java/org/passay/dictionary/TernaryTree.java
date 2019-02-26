@@ -6,7 +6,9 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Implementation of a ternary tree. Methods are provided for inserting strings and searching for strings. The
@@ -472,5 +474,38 @@ public class TernaryTree
 
       printNode(node.getHikid(), s + "  \\", depth + 1, fullPath, buffer);
     }
+  }
+
+  /**
+   * Returns a histogram of how many words end at each depth.
+   *
+   * @param node the node at the root of the tree to count
+   * @param depth the depth of the node from root
+   * @param histogram the depth count histogram to update
+   * @return a histogram of how many words end at each depth
+   */
+  private Map<Integer, Integer> getNodeStats(
+    final TernaryNode node, final int depth,
+    final Map<Integer, Integer> histogram)
+  {
+    if (node != null) {
+      if (node.isEndOfWord()) {
+        histogram.put(depth, histogram.getOrDefault(depth, 0) + 1);
+      }
+      getNodeStats(node.getLokid(), depth + 1, histogram);
+      getNodeStats(node.getEqkid(), depth + 1, histogram);
+      getNodeStats(node.getHikid(), depth + 1, histogram);
+    }
+    return histogram;
+  }
+
+  /**
+   * Returns a histogram of how many words end at each depth.
+   *
+   * @return a histogram of how many words end at each depth
+   */
+  protected Map<Integer, Integer> getNodeStats()
+  {
+    return getNodeStats(root, 0, new HashMap<>());
   }
 }
