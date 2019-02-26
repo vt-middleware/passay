@@ -4,8 +4,14 @@ package org.passay.dictionary;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.IntStream;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
@@ -198,25 +204,84 @@ public abstract class AbstractWordListTest<T extends WordList>
    * Test for {@link WordList#medianIterator()}.
    *
    * @param  list  Word list to test.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"wltest"}, dataProvider = "shortWordLists")
-  public void medianIterator(final T list) throws Exception
+  public void medianIterator(final T list)
   {
-    final Iterator<String> i = list.medianIterator();
-    int index = list.size() / 2;
-    int count = 0;
-    while (i.hasNext()) {
-      final String s = i.next();
-      AssertJUnit.assertEquals(list.get(index), s);
-      count++;
-      if (count % 2 == 0) {
-        index = index + count;
-      } else {
-        index = index - count;
-      }
+    final Iterator<String> iterator = list.medianIterator();
+    final Set<String> found = new HashSet<>();
+    final int size = list.size();
+    final double[] fractions = {1 / 2d, 1 / 4d, 3 / 4d, 1 / 8d, 3 / 8d, 5 / 8d, 7 / 8d, 1 / 16d};
+    for (int i = 0; i < fractions.length; i++) {
+      final int index = (int) (size * fractions[i]);
+      AssertJUnit.assertTrue(iterator.hasNext());
+      AssertJUnit.assertEquals(list.get(index), iterator.next());
+      found.add(list.get(index));
     }
+    while (iterator.hasNext()) {
+      found.add(iterator.next());
+    }
+    AssertJUnit.assertEquals(size, found.size());
+  }
+
+
+  /**
+   * Checks that an iterator is correct, i.e. each
+   * element is returned exactly once (regardless of order).
+   *
+   * @param iterator an iterator supplying unique elements
+   * @param size the expected number of elements
+   */
+  private void assertIteratorCorrect(final Iterator<String> iterator, final int size)
+  {
+    final Map<String, Integer> found = new HashMap<>(size);
+    found.clear();
+    while (iterator.hasNext()) {
+      final String next = iterator.next();
+      AssertJUnit.assertFalse("got duplicate: " + next + " (size " + size + ")", found.containsKey(next));
+      found.put(next, 1);
+    }
+    AssertJUnit.assertEquals("missing items (size " + size + ")", size, found.size());
+  }
+
+  /**
+   * Test for {@link WordList#medianIterator()} of various edge-cases and sizes.
+   */
+  @Test(groups = {"wltest"})
+  public void medianIterator()
+  {
+    // ensure median order in edge cases of 0-4 elements.
+    Iterator<String> iterator;
+    iterator = new ArrayWordList(new String[] {}).medianIterator();
+    AssertJUnit.assertFalse(iterator.hasNext());
+    iterator = new ArrayWordList(new String[] {"0"}).medianIterator();
+    AssertJUnit.assertTrue(iterator.hasNext());
+    AssertJUnit.assertEquals("0", iterator.next());
+    AssertJUnit.assertFalse(iterator.hasNext());
+    iterator = new ArrayWordList(new String[] {"0", "1"}).medianIterator();
+    AssertJUnit.assertTrue(iterator.hasNext());
+    AssertJUnit.assertEquals("1", iterator.next());
+    AssertJUnit.assertEquals("0", iterator.next());
+    AssertJUnit.assertFalse(iterator.hasNext());
+    iterator = new ArrayWordList(new String[] {"0", "1", "2"}).medianIterator();
+    AssertJUnit.assertEquals("1", iterator.next());
+    AssertJUnit.assertEquals("0", iterator.next());
+    AssertJUnit.assertEquals("2", iterator.next());
+    AssertJUnit.assertFalse(iterator.hasNext());
+    iterator = new ArrayWordList(new String[] {"0", "1", "2", "3"}).medianIterator();
+    AssertJUnit.assertEquals("2", iterator.next());
+    AssertJUnit.assertEquals("1", iterator.next());
+    AssertJUnit.assertEquals("3", iterator.next());
+    AssertJUnit.assertEquals("0", iterator.next());
+    AssertJUnit.assertFalse(iterator.hasNext());
+
+    // ensure correctness (each item returned exactly once) for a range of sizes
+    final String[] data = IntStream.range(0, 1000000).boxed().map(String::valueOf).sorted().toArray(String[]::new);
+    for (int i = 0; i < 4200; i++) {
+      assertIteratorCorrect(new ArrayWordList(Arrays.copyOfRange(data, 0, i)).medianIterator(), i);
+    }
+    // ensure correctness and no integer overflow with a large size
+    assertIteratorCorrect(new ArrayWordList(Arrays.copyOfRange(data, 0, 1000000)).medianIterator(), 1000000);
   }
 
 

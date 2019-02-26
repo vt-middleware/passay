@@ -241,7 +241,7 @@ public class TernaryTreeDictionary implements Dictionary
         "<options> <operation> \\");
       System.out.println("");
       System.out.println("where <options> includes:");
-      System.out.println("       -m (Insert dictionary using it's median) \\");
+      System.out.println("       -m (Insert dictionary using its medians) \\");
       System.out.println("       -ci (Make search case-insensitive) \\");
       System.out.println("");
       System.out.println("where <operation> includes:");

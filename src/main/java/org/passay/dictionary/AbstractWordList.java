@@ -3,6 +3,7 @@ package org.passay.dictionary;
 
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Provides common operations implementations for word lists.
@@ -72,9 +73,14 @@ public abstract class AbstractWordList implements WordList
   private abstract class AbstractWordListIterator implements Iterator<String>
   {
 
-    /** Index of next word in list. */
+    /** Index of next word in the iterator sequence. */
     protected int index;
 
+    @Override
+    public boolean hasNext()
+    {
+      return index < size();
+    }
 
     @Override
     public void remove()
@@ -92,73 +98,73 @@ public abstract class AbstractWordList implements WordList
    */
   private class SequentialIterator extends AbstractWordListIterator
   {
-
-
-    @Override
-    public boolean hasNext()
-    {
-      return index < size();
-    }
-
-
     @Override
     public String next()
     {
+      if (!hasNext()) {
+        throw new NoSuchElementException();
+      }
       return get(index++);
     }
   }
 
 
   /**
-   * Iterator that iterates over a word list from the median outward to either end. In particular, for a word list of N
-   * elements whose median index is M, and for each i such that M-i >= 0 and M+i < N, the M-i element is visited before
-   * the M+i element.
+   * Iterator that iterates over a word list by following a sequence of medians.
+   * This enables the creation of a well-balanced search tree from a sorted word list.
+   * <p>
+   * The sequence of median indices starts with the global median,
+   * followed by the median of the left half, the median of the right half,
+   * the median of the left half of the left half, etc. (recursively).
    *
-   * @author  Middleware Services
+   * @author  Amichai Rothman
+   * @author  Ronen Zilberman
    */
   private class MedianIterator extends AbstractWordListIterator
   {
 
-    /** Index of median element in given list. */
-    private final int median = size() / 2;
-
-    /** Indicates direction of next item. */
-    private int sign;
-
-
-    @Override
-    public boolean hasNext()
+    /**
+     * Returns the i-th element in the sequence of median indices of the given size.
+     *
+     * @param i the index within the median sequence of the element to return
+     * @param size the size of the sequence
+     * @return the i-th element in the median indices sequence
+     */
+    int toMedianIndex(final int i, final int size)
     {
-      final int n = size();
-      final boolean result;
-      if (sign > 0) {
-        result = median + index < n;
-      } else if (sign < 0) {
-        result = median - index >= 0;
+      // we use long multiplication to avoid int overflow
+      // (good for all int inputs, beyond that double arithmetic is required)
+      final int powerOfTwo = Integer.highestOneBit(i + 1);
+      final long remainder = (i + 1) - powerOfTwo;
+      final int leftovers = size - powerOfTwo;
+      // all power of two levels that we can fill up completely go to the first case,
+      // the leftovers in the last incomplete power of two level go to the second case
+      // (also the special case of index 0 of the leftovers goes to the first
+      // case just so it'll return 0 and not fail due to an edge-case of rounding)
+      if (leftovers >= powerOfTwo || remainder == 0) {
+        // find the correct fraction (power of two denominator
+        // and indexed odd-numbered numerator), and multiply by size
+        // to get our median index
+        return (int) (size * (2 * remainder + 1) / (2 * powerOfTwo));
       } else {
-        result = n > 0;
+        // find the correct fraction (denominator is the number of leftover
+        // items in the incomplete last power of two level, and indexed
+        // numerator), and multiply by size to get our median index.
+        // note that the leftovers (indices that were not returned by
+        // any of the smaller power of two levels) are evenly spaced,
+        // so they can be trivially calculated, with the added -1 for
+        // rounding them down properly)
+        return (int) ((size * remainder - 1) / leftovers);
       }
-      return result;
     }
-
 
     @Override
     public String next()
     {
-      final String next;
-      if (sign > 0) {
-        next = get(median + index);
-        sign = -1;
-        index++;
-      } else if (sign < 0) {
-        next = get(median - index);
-        sign = 1;
-      } else {
-        next = get(median);
-        sign = -1;
-        index = 1;
+      if (!hasNext()) {
+        throw new NoSuchElementException();
       }
-      return next;
+      return get(toMedianIndex(index++, size()));
     }
   }
 }
