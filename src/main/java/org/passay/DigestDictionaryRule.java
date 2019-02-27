@@ -54,10 +54,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
   @Override
   protected String doWordSearch(final String text)
   {
-    if (getDictionary().search(hashBean.hash(text.getBytes(charset)))) {
-      return text;
-    }
-    return null;
+    return getDictionary().search(hashBean.hash(text.getBytes(charset))) ? text : null;
   }
 
 

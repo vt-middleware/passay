@@ -31,11 +31,7 @@ public class RuleResultDetail
       throw new IllegalArgumentException("Code cannot be null or empty.");
     }
     errorCode = code;
-    if (params == null) {
-      parameters = new LinkedHashMap<>();
-    } else {
-      parameters = new LinkedHashMap<>(params);
-    }
+    parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
   }
 
 

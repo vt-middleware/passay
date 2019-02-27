@@ -40,10 +40,7 @@ public class DictionaryRule extends AbstractDictionaryRule
   @Override
   protected String doWordSearch(final String text)
   {
-    if (getDictionary().search(text)) {
-      return text;
-    }
-    return null;
+    return getDictionary().search(text) ? text : null;
   }
 
 

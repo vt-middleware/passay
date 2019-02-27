@@ -18,14 +18,7 @@ public class WhitespaceRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */
-  protected static final char[] CHARS = new char[] {
-    (byte) 0x09,
-    (byte) 0x0A,
-    (byte) 0x0B,
-    (byte) 0x0C,
-    (byte) 0x0D,
-    (byte) 0x20,
-  };
+  protected static final char[] CHARS = {(byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20};
 
   /** Whether to report all whitespace matches or just the first. */
   protected boolean reportAllFailures;

@@ -8,7 +8,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -172,9 +171,10 @@ public class LengthComplexityRule implements Rule
    */
   private List<Rule> getRulesByLength(final int length)
   {
-    final Optional<List<Rule>> match = rules.entrySet().stream().filter(
-      e -> e.getKey().includes(length)).map(Map.Entry::getValue).findFirst();
-    return match.isPresent() ? match.get() : null;
+    return rules.entrySet().stream()
+      .filter(e -> e.getKey().includes(length))
+      .map(Map.Entry::getValue)
+      .findFirst().orElse(null);
   }
 
 
