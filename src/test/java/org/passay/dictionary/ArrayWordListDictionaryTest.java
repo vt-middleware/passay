@@ -41,21 +41,22 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
     caseInsensitive = new WordListDictionary(awl2);
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"wldicttest"})
   public void closeDictionary()
-    throws Exception
   {
     caseSensitive = null;
     caseInsensitive = null;
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test search.
+   */
   @Test(groups = {"wldicttest"})
   public void search()
-    throws Exception
   {
     AssertJUnit.assertTrue(caseSensitive.search("TrustedBSD"));
     AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
@@ -66,12 +67,9 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
 
   /**
    * @param  word  to search for.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"wldicttest"}, dataProvider = "all-fbsd-words")
   public void searchAll(final String word)
-    throws Exception
   {
     AssertJUnit.assertTrue(caseSensitive.search(word));
     AssertJUnit.assertTrue(caseInsensitive.search(word));

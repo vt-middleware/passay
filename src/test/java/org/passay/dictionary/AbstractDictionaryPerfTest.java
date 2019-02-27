@@ -68,11 +68,11 @@ public abstract class AbstractDictionaryPerfTest
     }
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterSuite(groups = {"ttperftest", "wlperftest"})
   public void tearDown()
-    throws Exception
   {
     randomFbsdWordsLarge = null;
     randomFbsdWordsSmall = null;

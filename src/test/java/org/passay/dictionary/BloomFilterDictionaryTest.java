@@ -56,21 +56,21 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
     filterFromTxt = new BloomFilterDictionary(filter2);
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"bloomdicttest"})
   public void closeDictionary()
-    throws Exception
   {
     filterFromSerialized = null;
     filterFromTxt = null;
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test search.
+   */
   @Test(groups = {"bloomdicttest"})
   public void search()
-    throws Exception
   {
     AssertJUnit.assertTrue(filterFromTxt.search("manipular"));
     AssertJUnit.assertFalse(filterFromTxt.search(FALSE_SEARCH));

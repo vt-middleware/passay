@@ -50,13 +50,11 @@ public abstract class AbstractFileWordList extends AbstractWordList
    * @param  decoder  Charset decoder for converting file bytes to characters
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
-   * @throws  IOException  if an error occurs reading the supplied file
    */
   public AbstractFileWordList(
     final RandomAccessFile raf,
     final boolean caseSensitive,
     final CharsetDecoder decoder)
-    throws IOException
   {
     file = raf;
 

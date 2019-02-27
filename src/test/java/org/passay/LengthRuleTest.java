@@ -16,12 +16,9 @@ public class LengthRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -87,12 +84,9 @@ public class LengthRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {
@@ -111,13 +105,11 @@ public class LengthRuleTest extends AbstractRuleTest
       };
   }
 
-
   /**
-   * @throws  Exception  On test failure.
+   * Test Metadata.
    */
   @Test(groups = {"passtest"})
   public void checkMetadata()
-    throws Exception
   {
     final LengthRule rule = new LengthRule(4, 10);
     RuleResult result = rule.validate(new PasswordData("metadata"));

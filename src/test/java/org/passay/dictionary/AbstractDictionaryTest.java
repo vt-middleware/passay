@@ -164,11 +164,11 @@ public abstract class AbstractDictionaryTest
     }
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterSuite(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
   public void tearDown()
-    throws Exception
   {
     webWords = null;
     fbsdWords = null;
@@ -201,12 +201,9 @@ public abstract class AbstractDictionaryTest
    * Sample word data.
    *
    * @return  word data
-   *
-   * @throws  IOException  if an error occurs reading {@link #webFile}
    */
   @DataProvider(name = "all-web-words")
   public Object[][] createAllWebWords()
-    throws IOException
   {
     return webWords;
   }
@@ -216,12 +213,9 @@ public abstract class AbstractDictionaryTest
    * Sample word data.
    *
    * @return  word data
-   *
-   * @throws  IOException  if an error occurs reading {@link #fbsdFile}
    */
   @DataProvider(name = "all-fbsd-words")
   public Object[][] createAllFbsdWords()
-    throws IOException
   {
     return fbsdWords;
   }

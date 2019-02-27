@@ -31,12 +31,9 @@ public class CharacterSequenceTest
 
   /**
    * Tests the {@link org.passay.CharacterSequence#matches(int, char)} method.
-   *
-   * @throws  Exception  On errors.
    */
   @Test
   public void testMatches()
-    throws Exception
   {
     final CharacterSequence sequence = new CharacterSequence("12345", "ABCDE", "abcde");
     Assert.assertTrue(sequence.matches(0, '1'));

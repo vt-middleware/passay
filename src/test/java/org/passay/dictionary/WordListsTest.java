@@ -48,11 +48,11 @@ public class WordListsTest
       new ArraysSort());
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"wltest"})
   public void closeWordLists()
-    throws Exception
   {
     caseSensitiveWordList = null;
     caseInsensitiveWordList = null;
@@ -61,12 +61,9 @@ public class WordListsTest
 
   /**
    * @return  Test data for creating key pair entries.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "searchData")
   public Object[][] createTestData()
-    throws Exception
   {
     final ArrayWordList oneWord = new ArrayWordList(new String[] {"a"});
     final ArrayWordList twoWords = new ArrayWordList(new String[] {"a", "b"});

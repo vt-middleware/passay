@@ -34,11 +34,11 @@ public class SorterTest
     sortedArray = TestUtil.fileToArray(dict);
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"sorttest"})
   public void destroy()
-    throws Exception
   {
     sortedArray = null;
   }

@@ -32,13 +32,10 @@ public class DictionaryRuleTest extends AbstractRuleTest
    * Initialize rules for this test.
    *
    * @param  dictFile  dictionary file to read
-   *
-   * @throws  Exception  if dictionary files cannot be read
    */
   @Parameters("dictionaryFile")
   @BeforeClass(groups = {"passtest"})
   public void createRules(final String dictFile)
-    throws Exception
   {
     final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
     final Dictionary caseInsensitiveDict = new DictionaryBuilder().addFile(dictFile).build();
@@ -57,12 +54,9 @@ public class DictionaryRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -151,12 +145,9 @@ public class DictionaryRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {

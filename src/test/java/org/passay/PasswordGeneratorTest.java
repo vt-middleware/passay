@@ -35,11 +35,11 @@ public class PasswordGeneratorTest
   /** Rules to test. */
   private final List<CharacterRule> failRules = new ArrayList<>();
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Setup test resources.
+   */
   @BeforeClass(groups = {"passgentest"})
   public void initializeRules()
-    throws Exception
   {
     rules.add(new CharacterRule(EnglishCharacterData.Digit, 2));
     rules.add(new CharacterRule(EnglishCharacterData.Special, 2));
@@ -64,12 +64,9 @@ public class PasswordGeneratorTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "randomPasswords")
   public Object[][] randomPasswords()
-    throws Exception
   {
     final Object[][] passwords = new Object[100][1];
     final int length = 10;
@@ -85,12 +82,9 @@ public class PasswordGeneratorTest
 
   /**
    * @param  pass  to verify
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"passgentest"}, dataProvider = "randomPasswords")
   public void testGenerator(final String pass)
-    throws Exception
   {
     AssertJUnit.assertFalse(failCharRule.validate(new PasswordData(pass)).isValid());
     AssertJUnit.assertTrue(verifyCharRule.validate(new PasswordData(pass)).isValid());

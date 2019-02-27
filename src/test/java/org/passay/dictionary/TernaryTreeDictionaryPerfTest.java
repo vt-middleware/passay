@@ -44,11 +44,11 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
     System.out.println(ttd.getClass().getSimpleName() + " depth histogram: " + depths);
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"ttperftest"})
   public void closeDictionary()
-    throws Exception
   {
     System.out.println(ttd.getClass().getSimpleName() + " search time: " + (ttdSearchTime / 1000 / 1000) + "ms");
     System.out.println(ttd.getClass().getSimpleName() + " avg time per search: " + (ttdSearchTime / 10000) + "ns");
@@ -58,12 +58,9 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
 
   /**
    * @param  word  to search for
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"ttperftest"}, dataProvider = "search-words-web-large")
   public void ternaryTreeSearch(final String word)
-    throws Exception
   {
     ttdSearchTime += doSearch(ttd, word);
   }

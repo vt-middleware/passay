@@ -141,7 +141,6 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
 
   @Override
   protected void seek(final long offset)
-    throws IOException
   {
     buffer.clear().position((int) offset);
   }
@@ -155,5 +154,5 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
 
 
   @Override
-  protected void fill() throws IOException {}
+  protected void fill() {}
 }

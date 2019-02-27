@@ -22,9 +22,11 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test construct.
+   */
   @Test(groups = {"wltest"})
-  public void construct() throws Exception
+  public void construct()
   {
     try {
       new ArrayWordList(null, true);
@@ -46,10 +48,11 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
     }
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test words with space.
+   */
   @Test(groups = {"wltest"})
-  public void wordsWithSpace() throws Exception
+  public void wordsWithSpace()
   {
     final String[] arrayWithSpaces = new String[] {
       " Man",

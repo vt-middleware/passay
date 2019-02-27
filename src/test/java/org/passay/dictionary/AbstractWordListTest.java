@@ -148,11 +148,9 @@ public abstract class AbstractWordListTest<T extends WordList>
    * @param  list  Word list to test.
    * @param  expectedSize  Expected size of the word list.
    * @param  expectedWords  Test list of words to get and compare to expected result.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"wltest"}, dataProvider = "wordListsWithExpectedWords")
-  public void get(final T list, final int expectedSize, final ExpectedWord ... expectedWords) throws Exception
+  public void get(final T list, final int expectedSize, final ExpectedWord ... expectedWords)
   {
     AssertJUnit.assertEquals(expectedSize, list.size());
 
@@ -184,11 +182,9 @@ public abstract class AbstractWordListTest<T extends WordList>
    * Test for {@link WordList#iterator()}.
    *
    * @param  list  Word list to test.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"wltest"}, dataProvider = "shortWordLists")
-  public void iterator(final T list) throws Exception
+  public void iterator(final T list)
   {
     final Iterator<String> i = list.iterator();
     int index = 0;
