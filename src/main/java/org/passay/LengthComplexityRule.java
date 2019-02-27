@@ -219,7 +219,12 @@ public class LengthComplexityRule implements Rule
   public static class Interval
   {
 
-    /** Type of bound type. */
+    /**
+     * Type of bound type.
+     *
+     * @deprecated this class is no longer used and will be removed in a future version
+     */
+    @Deprecated
     public enum BoundType {
 
       /** closed value. */
@@ -252,14 +257,16 @@ public class LengthComplexityRule implements Rule
     }
 
     /** Pattern for matching intervals. */
-    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([(|\\[])(\\d+),(\\d+|\\*)([)|\\]])$");
+    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([(\\[])(\\d+),(\\d+|\\*)([)\\]])$");
 
-    /** Lower bound of the interval. */
-    private final Bound lowerBound;
+    /** Interval pattern. */
+    private final String boundsPattern;
 
-    /** Upper bound of the interval. */
-    private final Bound upperBound;
+    /** Lower bound of the interval (inclusive). */
+    private final int lower;
 
+    /** Upper bound of the interval (inclusive). */
+    private final int upper;
 
     /**
      * Creates a new interval.
@@ -274,16 +281,16 @@ public class LengthComplexityRule implements Rule
       }
 
       final String lowerType = m.group(1);
-      final String lower = m.group(2);
-      final String upper = m.group(3);
+      final String lowerVal = m.group(2);
+      final String upperVal = m.group(3);
       final String upperType = m.group(4);
 
-      lowerBound = new Bound(Integer.parseInt(lower), BoundType.parse(lowerType));
-      upperBound = new Bound(
-        "*".equals(upper) ? Integer.MAX_VALUE : Integer.parseInt(upper),
-        BoundType.parse(upperType));
+      // parse the bounds and convert them to a closed (inclusive) interval
+      lower = Integer.parseInt(lowerVal) + ("(".equals(lowerType) ? 1 : 0);
+      upper = "*".equals(upperVal) ? Integer.MAX_VALUE : (Integer.parseInt(upperVal) - (")".equals(upperType) ? 1 : 0));
+      boundsPattern = pattern;
 
-      if (getUpperBoundClosed() - getLowerBoundClosed() < 0) {
+      if (upper < lower) {
         throw new IllegalArgumentException("Invalid interval notation: " + pattern + " produced an empty set");
       }
     }
@@ -298,17 +305,7 @@ public class LengthComplexityRule implements Rule
      */
     public boolean includes(final int i)
     {
-      boolean includes = false;
-      if (i >= lowerBound.value && i <= upperBound.value) {
-        if (i > lowerBound.value && i < upperBound.value) {
-          includes = true;
-        } else if (i == lowerBound.value && lowerBound.isClosed()) {
-          includes = true;
-        } else if (i == upperBound.value && upperBound.isClosed()) {
-          includes = true;
-        }
-      }
-      return includes;
+      return lower <= i && i <= upper;
     }
 
 
@@ -321,7 +318,7 @@ public class LengthComplexityRule implements Rule
      */
     public boolean includes(final Interval i)
     {
-      return includes(i.getLowerBoundClosed()) && includes(i.getUpperBoundClosed());
+      return includes(i.lower) && includes(i.upper);
     }
 
 
@@ -334,69 +331,23 @@ public class LengthComplexityRule implements Rule
      */
     public boolean intersects(final Interval i)
     {
-      return includes(i.getLowerBoundClosed()) || includes(i.getUpperBoundClosed());
-    }
-
-
-    /**
-     * Returns the closed lower bound for this interval.
-     *
-     * @return  closed lower bound
-     */
-    private int getLowerBoundClosed()
-    {
-      return lowerBound.isClosed() ? lowerBound.value : lowerBound.value + 1;
-    }
-
-
-    /**
-     * Returns the closed upper bound for this interval.
-     *
-     * @return  closed upper bound
-     */
-    private int getUpperBoundClosed()
-    {
-      return upperBound.isClosed() ? upperBound.value : upperBound.value - 1;
-    }
-
-
-    @Override
-    public boolean equals(final Object o)
-    {
-      if (o == this) {
-        return true;
-      }
-      if (o != null && getClass() == o.getClass())  {
-        final Interval other = (Interval) o;
-        return lowerBound.equals(other.lowerBound) && upperBound.equals(other.upperBound);
-      }
-      return false;
-    }
-
-
-    @Override
-    public int hashCode()
-    {
-      return Objects.hash(lowerBound, upperBound);
+      return includes(i.lower) || includes(i.upper);
     }
 
 
     @Override
     public String toString()
     {
-      return
-        String.format(
-          "%s%s,%s%s",
-          lowerBound.isClosed() ? '[' : '(',
-          lowerBound.value,
-          upperBound.value,
-          upperBound.isClosed() ? ']' : ')');
+      return boundsPattern;
     }
 
 
     /**
      * Class that represents a single value in an interval.
+     *
+     * @deprecated this class is no longer used and will be removed in a future version
      */
+    @Deprecated
     private class Bound
     {
 
