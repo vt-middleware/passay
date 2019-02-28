@@ -68,7 +68,7 @@ public final class WordLists
     int high = wordList.size() - 1;
     int mid;
     while (low <= high) {
-      mid = (low + high) / 2;
+      mid = (low + high) >>> 1;
 
       final int cmp = comparator.compare(wordList.get(mid), word);
       if (cmp < 0) {
