@@ -34,8 +34,7 @@ public class TernaryTreeTest
    */
   @Parameters({ "webFile", "webFileSorted" })
   @BeforeClass(groups = {"tttest"})
-  public void createTernaryTrees(final String dict1, final String dict2)
-    throws Exception
+  public void createTernaryTrees(final String dict1, final String dict2) throws Exception
   {
     caseSensitive.insert(TestUtil.fileToArray(dict1));
     caseInsensitive.insert(TestUtil.fileToArray(dict2));

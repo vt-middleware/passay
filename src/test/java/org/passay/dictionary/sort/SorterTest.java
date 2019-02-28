@@ -28,8 +28,7 @@ public class SorterTest
    */
   @Parameters("fbsdFileSorted")
   @BeforeClass(groups = {"sorttest"})
-  public void create(final String dict)
-    throws Exception
+  public void create(final String dict) throws Exception
   {
     sortedArray = TestUtil.fileToArray(dict);
   }
@@ -51,8 +50,7 @@ public class SorterTest
    */
   @Parameters("fbsdFile")
   @Test(groups = {"sorttest"})
-  public void bubbleSort(final String dict)
-    throws Exception
+  public void bubbleSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
@@ -68,8 +66,7 @@ public class SorterTest
    */
   @Parameters("fbsdFile")
   @Test(groups = {"sorttest"})
-  public void collectionsSort(final String dict)
-    throws Exception
+  public void collectionsSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
@@ -85,8 +82,7 @@ public class SorterTest
    */
   @Parameters("fbsdFile")
   @Test(groups = {"sorttest"})
-  public void insertionSort(final String dict)
-    throws Exception
+  public void insertionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
@@ -102,8 +98,7 @@ public class SorterTest
    */
   @Parameters("fbsdFile")
   @Test(groups = {"sorttest"})
-  public void quickSort(final String dict)
-    throws Exception
+  public void quickSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
@@ -119,8 +114,7 @@ public class SorterTest
    */
   @Parameters("fbsdFile")
   @Test(groups = {"sorttest"})
-  public void selectionSort(final String dict)
-    throws Exception
+  public void selectionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));

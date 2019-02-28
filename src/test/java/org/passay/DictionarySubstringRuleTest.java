@@ -40,8 +40,7 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
    */
   @Parameters("dictionaryFile")
   @BeforeClass(groups = {"passtest"})
-  public void createRules(final String dictFile)
-    throws Exception
+  public void createRules(final String dictFile) throws Exception
   {
     final ArrayWordList caseSensitiveWordList = WordLists.createFromReader(
       new FileReader[] {new FileReader(dictFile)},

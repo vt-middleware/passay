@@ -28,8 +28,7 @@ public final class PasswordCli
    *
    * @throws  Exception  if an error occurs
    */
-  public static void main(final String[] args)
-    throws Exception
+  public static void main(final String[] args) throws Exception
   {
     final List<Rule> rules = new ArrayList<>();
     String username = null;

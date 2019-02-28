@@ -30,8 +30,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
    */
   @Parameters({ "webFileSorted", "fbsdFileSorted" })
   @BeforeClass(groups = {"wlperftest"})
-  public void createDictionary(final String dict1, final String dict2)
-    throws Exception
+  public void createDictionary(final String dict1, final String dict2) throws Exception
   {
     super.initialize(dict1, dict2);
 

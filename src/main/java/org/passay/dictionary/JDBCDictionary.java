@@ -103,8 +103,7 @@ public class JDBCDictionary implements Dictionary
    *
    * @throws  SQLException  if a connection is not available
    */
-  protected Connection getConnection()
-    throws SQLException
+  protected Connection getConnection() throws SQLException
   {
     return dataSource.getConnection();
   }

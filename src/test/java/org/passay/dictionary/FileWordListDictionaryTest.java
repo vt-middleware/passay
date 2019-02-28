@@ -24,8 +24,7 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"wldicttest"})
-  public void createDictionary()
-    throws Exception
+  public void createDictionary() throws Exception
   {
     final FileWordList fwl1 = new FileWordList(new RandomAccessFile(fbsdFileSorted, "r"), true, 25);
     caseSensitive = new WordListDictionary(fwl1);

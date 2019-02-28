@@ -177,8 +177,7 @@ public class TernaryTree
    *
    * @throws  IOException  if an error occurs
    */
-  public void print(final Writer out, final boolean fullPath)
-    throws IOException
+  public void print(final Writer out, final boolean fullPath) throws IOException
   {
     final StringBuilder buffer = new StringBuilder();
     printNode(root, "", 0, fullPath, buffer);
@@ -196,8 +195,7 @@ public class TernaryTree
    *
    * @throws  IOException  if an error occurs
    */
-  public void print(final Writer out)
-          throws IOException
+  public void print(final Writer out) throws IOException
   {
     print(out, false);
   }

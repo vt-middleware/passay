@@ -29,8 +29,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"jdbcdicttest"})
-  public void createDictionary()
-    throws Exception
+  public void createDictionary() throws Exception
   {
     Class.forName("org.hsqldb.jdbcDriver");
     final JDBCDataSource dataSource = new JDBCDataSource();

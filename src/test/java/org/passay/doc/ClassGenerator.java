@@ -81,8 +81,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if the source cannot be downloaded, unzipped and read
    */
-  public ClassGenerator(final String url, final String path)
-    throws IOException
+  public ClassGenerator(final String url, final String path) throws IOException
   {
     // download the zipped source
     download(url, path + "/source.zip");
@@ -94,8 +93,7 @@ public class ClassGenerator
     final Path sourceDir = Paths.get(path + "/doc-sources");
     Files.walkFileTree(sourceDir, new SimpleFileVisitor<Path>() {
       @Override
-      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-        throws IOException
+      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException
       {
         if (attrs.isRegularFile()) {
           final String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
@@ -123,8 +121,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if an error occurs
    */
-  private static void download(final String url, final String destination)
-    throws IOException
+  private static void download(final String url, final String destination) throws IOException
   {
     final URL download = new URL(url);
     final ReadableByteChannel rbc = Channels.newChannel(download.openStream());
@@ -143,8 +140,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if an error occurs
    */
-  private static void unzip(final String file, final String destination)
-    throws IOException
+  private static void unzip(final String file, final String destination) throws IOException
   {
     final File directory = new File(destination);
     // if the output directory doesn't exist, create it
@@ -256,8 +252,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if the write fails
    */
-  public void write(final String path)
-    throws IOException
+  public void write(final String path) throws IOException
   {
     final File f = new File(path);
     if (!f.exists()) {
@@ -269,8 +264,7 @@ public class ClassGenerator
     final Path sourceDir = Paths.get(path);
     Files.walkFileTree(sourceDir, new SimpleFileVisitor<Path>() {
       @Override
-      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-        throws IOException
+      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException
       {
         if (attrs.isRegularFile()) {
           String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
@@ -298,8 +292,7 @@ public class ClassGenerator
    *
    * @throws  Exception  if any error occurs
    */
-  public static void main(final String[] args)
-    throws Exception
+  public static void main(final String[] args) throws Exception
   {
     final String url = args[0];
     final String targetPath = args[1];

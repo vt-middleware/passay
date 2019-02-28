@@ -37,8 +37,7 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf)
-    throws IOException
+  public FileWordList(final RandomAccessFile raf) throws IOException
   {
     this(raf, true);
   }
@@ -56,8 +55,7 @@ public class FileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive)
-    throws IOException
+  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive) throws IOException
   {
     this(raf, caseSensitive, DEFAULT_CACHE_PERCENT);
   }
@@ -99,12 +97,8 @@ public class FileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(
-    final RandomAccessFile raf,
-    final boolean caseSensitive,
-    final int cachePercent,
-    final CharsetDecoder decoder)
-    throws IOException
+  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent,
+    final CharsetDecoder decoder) throws IOException
   {
     this(raf, caseSensitive, cachePercent, decoder, false);
   }
@@ -126,13 +120,8 @@ public class FileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public FileWordList(
-    final RandomAccessFile raf,
-    final boolean caseSensitive,
-    final int cachePercent,
-    final CharsetDecoder decoder,
-    final boolean allocateDirect)
-    throws IOException
+  public FileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent,
+    final CharsetDecoder decoder, final boolean allocateDirect) throws IOException
   {
     super(raf, caseSensitive, decoder);
     initialize(cachePercent, allocateDirect);
@@ -140,8 +129,7 @@ public class FileWordList extends AbstractFileWordList
 
 
   @Override
-  protected void seek(final long offset)
-    throws IOException
+  protected void seek(final long offset) throws IOException
   {
     file.seek(offset);
     buffer.clear();
@@ -157,8 +145,7 @@ public class FileWordList extends AbstractFileWordList
 
 
   @Override
-  protected void fill()
-    throws IOException
+  protected void fill() throws IOException
   {
     buffer.clear();
     final int count = file.read(bytes);

@@ -32,8 +32,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"ttdicttest"})
-  public void createDictionary()
-    throws Exception
+  public void createDictionary() throws Exception
   {
     final ArrayWordList awl1 = WordLists.createFromReader(
       new FileReader[] {new FileReader(webFile)},
@@ -139,7 +138,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void bubbleSort()
-    throws Exception
   {
     testSort(new BubbleSort());
   }
@@ -148,7 +146,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void selectionSort()
-    throws Exception
   {
     testSort(new SelectionSort());
   }
@@ -157,7 +154,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void insertionSort()
-    throws Exception
   {
     testSort(new InsertionSort());
   }
@@ -166,7 +162,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void quickSort()
-    throws Exception
   {
     testSort(new QuickSort());
   }

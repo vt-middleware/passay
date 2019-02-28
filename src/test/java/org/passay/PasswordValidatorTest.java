@@ -56,8 +56,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
    */
   @Parameters("dictionaryFile")
   @BeforeClass(groups = {"passtest"})
-  public void createDictionary(final String dictFile)
-    throws Exception
+  public void createDictionary(final String dictFile) throws Exception
   {
     final ArrayWordList awl = WordLists.createFromReader(
       new FileReader[] {new FileReader(dictFile)},

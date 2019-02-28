@@ -35,8 +35,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf)
-    throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile raf) throws IOException
   {
     this(raf, true);
   }
@@ -54,8 +53,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive)
-    throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive) throws IOException
   {
     this(raf, caseSensitive, DEFAULT_CACHE_PERCENT);
   }
@@ -97,12 +95,8 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(
-    final RandomAccessFile raf,
-    final boolean caseSensitive,
-    final int cachePercent,
-    final CharsetDecoder decoder)
-    throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent,
+    final CharsetDecoder decoder) throws IOException
   {
     this(raf, caseSensitive, cachePercent, decoder, false);
   }
@@ -124,13 +118,8 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(
-    final RandomAccessFile raf,
-    final boolean caseSensitive,
-    final int cachePercent,
-    final CharsetDecoder decoder,
-    final boolean allocateDirect)
-    throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent,
+    final CharsetDecoder decoder, final boolean allocateDirect) throws IOException
   {
     super(raf, caseSensitive, decoder);
     final FileChannel channel = file.getChannel();

@@ -25,8 +25,7 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"wldicttest"})
-  public void createDictionary()
-    throws Exception
+  public void createDictionary() throws Exception
   {
     final ArrayWordList awl1 = WordLists.createFromReader(
       new FileReader[] {new FileReader(fbsdFile)},

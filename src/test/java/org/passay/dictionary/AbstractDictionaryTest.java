@@ -184,8 +184,7 @@ public abstract class AbstractDictionaryTest
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  private Object[][] createWords(final String dictFile)
-    throws IOException
+  private Object[][] createWords(final String dictFile) throws IOException
   {
     final FileWordList fwl = new FileWordList(new RandomAccessFile(dictFile, "r"));
     final Object[][] allWords = new Object[fwl.size()][1];

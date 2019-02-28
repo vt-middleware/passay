@@ -43,8 +43,7 @@ public abstract class AbstractDictionaryPerfTest
    *
    * @throws  Exception  On test failure.
    */
-  public void initialize(final String dict1, final String dict2)
-    throws Exception
+  public void initialize(final String dict1, final String dict2) throws Exception
   {
     synchronized (LOCK) {
       if (webFile == null) {
@@ -91,8 +90,7 @@ public abstract class AbstractDictionaryPerfTest
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  private Object[][] createRandomWords(final String dictFile, final int size)
-    throws IOException
+  private Object[][] createRandomWords(final String dictFile, final int size) throws IOException
   {
     final FileWordList fwl = new FileWordList(new RandomAccessFile(dictFile, "r"));
     final Object[][] allWords = new Object[size][1];

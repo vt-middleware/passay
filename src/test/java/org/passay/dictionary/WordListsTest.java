@@ -34,8 +34,7 @@ public class WordListsTest
    */
   @Parameters({ "fbsdFile", "webFile" })
   @BeforeClass(groups = {"wltest"})
-  public void createWordLists(final String file1, final String file2)
-    throws Exception
+  public void createWordLists(final String file1, final String file2) throws Exception
   {
     caseSensitiveWordList = WordLists.createFromReader(
       new FileReader[] {new FileReader(file1)},
@@ -107,8 +106,7 @@ public class WordListsTest
    * @throws  Exception  On test failure.
    */
   @Test(groups = {"wltest"})
-  public void createFromReader()
-    throws Exception
+  public void createFromReader() throws Exception
   {
     // sorted list of words
     final String[] words = {

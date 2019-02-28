@@ -141,8 +141,7 @@ public class TernaryTreeDictionary implements Dictionary
    *
    * @throws  Exception  if an error occurs
    */
-  public static void main(final String[] args)
-    throws Exception
+  public static void main(final String[] args) throws Exception
   {
     final List<FileReader> files = new ArrayList<>();
     try {

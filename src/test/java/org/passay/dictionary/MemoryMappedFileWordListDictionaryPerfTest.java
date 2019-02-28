@@ -30,8 +30,7 @@ public class MemoryMappedFileWordListDictionaryPerfTest extends AbstractDictiona
    */
   @Parameters({ "webFileSorted", "fbsdFileSorted" })
   @BeforeClass(groups = {"wlperftest"})
-  public void createDictionary(final String dict1, final String dict2)
-    throws Exception
+  public void createDictionary(final String dict1, final String dict2) throws Exception
   {
     super.initialize(dict1, dict2);
 
