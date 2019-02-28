@@ -51,10 +51,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
    */
-  public AbstractFileWordList(
-    final RandomAccessFile raf,
-    final boolean caseSensitive,
-    final CharsetDecoder decoder)
+  public AbstractFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final CharsetDecoder decoder)
   {
     file = raf;
 

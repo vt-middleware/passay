@@ -187,9 +187,7 @@ public class LengthComplexityRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final int length,
-    final int success,
+  protected Map<String, Object> createRuleResultDetailParameters(final int length, final int success,
     final int ruleCount)
   {
     final Map<String, Object> m = new LinkedHashMap<>();

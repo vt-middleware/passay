@@ -134,16 +134,8 @@ public abstract class AbstractDictionaryTest
       "fbsdFileLowerCaseSorted"
     })
   @BeforeClass(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
-  public void createDictionaries(
-    final String dict1,
-    final String dict2,
-    final String dict3,
-    final String dict4,
-    final String dict5,
-    final String dict6,
-    final String dict7,
-    final String dict8)
-    throws Exception
+  public void createDictionaries(final String dict1, final String dict2, final String dict3, final String dict4,
+    final String dict5, final String dict6, final String dict7, final String dict8) throws Exception
   {
     webFile = dict1;
     webFileSorted = dict2;

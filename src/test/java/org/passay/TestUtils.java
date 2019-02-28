@@ -71,11 +71,8 @@ public final class TestUtils
    *
    * @return  password data
    */
-  public static PasswordData newPasswordData(
-    final String p,
-    final String u,
-    final PasswordData.Origin o,
-    final PasswordData.Reference... r)
+  public static PasswordData newPasswordData(final String p, final String u,
+    final PasswordData.Origin o, final PasswordData.Reference... r)
   {
     return newPasswordData(p, u, o, r != null ? Arrays.asList(r) : null);
   }
@@ -92,11 +89,8 @@ public final class TestUtils
    *
    * @return  password data
    */
-  public static PasswordData newPasswordData(
-    final String p,
-    final String u,
-    final PasswordData.Origin o,
-    final List<PasswordData.Reference> r)
+  public static PasswordData newPasswordData(final String p, final String u,
+    final PasswordData.Origin o, final List<PasswordData.Reference> r)
   {
     final PasswordData pd = new PasswordData();
     if (p != null) {
