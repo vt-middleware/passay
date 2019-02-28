@@ -59,11 +59,8 @@ public class TernaryTreeDictionary implements Dictionary
   public TernaryTreeDictionary(final WordList wordList, final boolean useMedian)
   {
     // Respect case sensitivity of word list in ternary tree
-    if (wordList.getComparator().compare("A", "a") == 0) {
-      tree = new TernaryTree(false);
-    } else {
-      tree = new TernaryTree(true);
-    }
+    final boolean caseSensitive = wordList.getComparator().compare("A", "a") != 0;
+    tree = new TernaryTree(caseSensitive);
 
     final Iterator<String> iterator = useMedian ? wordList.medianIterator() : wordList.iterator();
     while (iterator.hasNext()) {
