@@ -40,7 +40,7 @@ public class ClassGenerator
   private static final String PACKAGE_TO_CREATE = "org.passay.doc";
 
   /** Packages to import for compilation. */
-  private static final String[] PACKAGES_TO_IMPORT = new String[] {
+  private static final String[] PACKAGES_TO_IMPORT = {
     "java.io",
     "java.util",
     "org.cryptacular.bean",

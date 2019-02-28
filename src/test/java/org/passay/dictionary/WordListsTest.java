@@ -111,7 +111,7 @@ public class WordListsTest
     throws Exception
   {
     // sorted list of words
-    final String[] words = new String[] {
+    final String[] words = {
       " leading whitespace",
       " surrounding whitespace ",
       "bar",

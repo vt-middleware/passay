@@ -32,10 +32,10 @@ public abstract class AbstractDictionaryTest
   public static final String ANIMAL_PARTIAL_SEARCH = ".a..us";
 
   /** Partial animal search results. */
-  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CS = new String[] {"Walrus", "Xantus"};
+  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CS = {"Walrus", "Xantus"};
 
   /** Partial animal search results. */
-  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CI = new String[] {"walrus", "xantus"};
+  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CI = {"walrus", "xantus"};
 
   /** Initialization lock. */
   private static final Object LOCK = new Object();

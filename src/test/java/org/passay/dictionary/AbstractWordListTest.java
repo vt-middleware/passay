@@ -41,7 +41,7 @@ public abstract class AbstractWordListTest<T extends WordList>
   @DataProvider(name = "wordListsWithExpectedWords")
   public Object[][] provideWordListsWithExpectedWords() throws IOException
   {
-    final Object[][] parameters = new Object[][] {
+    final Object[][] parameters = {
       new Object[] {
         createWordList("src/test/resources/dict-enUS.txt", true),
         48029,
@@ -131,7 +131,7 @@ public abstract class AbstractWordListTest<T extends WordList>
   @DataProvider(name = "shortWordLists")
   public Object[][] provideShortWordLists() throws IOException
   {
-    final Object[][] parameters = new Object[][] {
+    final Object[][] parameters = {
       new Object[] {createWordList("src/test/resources/freebsd.sort", true)},
       new Object[] {createWordList("src/test/resources/freebsd.lc.sort", false)},
     };

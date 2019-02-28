@@ -37,7 +37,7 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
       AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
 
-    final String[] arrayWithNull = new String[] {"a", "b", null, "c"};
+    final String[] arrayWithNull = {"a", "b", null, "c"};
     try {
       new ArrayWordList(arrayWithNull, true);
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
@@ -54,7 +54,7 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
   @Test(groups = {"wltest"})
   public void wordsWithSpace()
   {
-    final String[] arrayWithSpaces = new String[] {
+    final String[] arrayWithSpaces = {
       " Man",
       " cadet",
       "!@#$%^&*",
