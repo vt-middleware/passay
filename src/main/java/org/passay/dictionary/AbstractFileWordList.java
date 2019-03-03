@@ -29,8 +29,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
   /** Cache of indexes to file positions. */
   private Cache cache;
 
-  /** Character decoder. */
-  private final CharsetDecoder charDecoder;
+  /** Charset decoder. */
+  private final CharsetDecoder charsetDecoder;
 
   /** Buffer to hold word read from file. */
   private final ByteBuffer wordBuf = ByteBuffer.allocate(256);
@@ -48,19 +48,12 @@ public abstract class AbstractFileWordList extends AbstractWordList
    * @param  raf  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  decoder  Charset decoder for converting file bytes to characters
-   *
-   * @throws  IllegalArgumentException  if cache percent is out of range.
    */
   public AbstractFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final CharsetDecoder decoder)
   {
     file = raf;
-
-    if (caseSensitive) {
-      comparator = WordLists.CASE_SENSITIVE_COMPARATOR;
-    } else {
-      comparator = WordLists.CASE_INSENSITIVE_COMPARATOR;
-    }
-    charDecoder = decoder;
+    charsetDecoder = decoder;
+    comparator = caseSensitive ? WordLists.CASE_SENSITIVE_COMPARATOR : WordLists.CASE_INSENSITIVE_COMPARATOR;
   }
 
 
@@ -114,22 +107,23 @@ public abstract class AbstractFileWordList extends AbstractWordList
    * @param  cachePercent  Percent of file in bytes to use for cache.
    * @param  allocateDirect  whether buffers should be allocated with {@link ByteBuffer#allocateDirect(int)}
    *
+   * @throws  IllegalArgumentException  if cachePercent is out of range
+   *          or the words are not sorted correctly according to the comparator
    * @throws  IOException  on I/O errors reading file data.
    */
   protected void initialize(final int cachePercent, final boolean allocateDirect) throws IOException
   {
     cache = new Cache(file.length(), cachePercent, allocateDirect);
-    FileWord a;
-    FileWord b = null;
+    FileWord word;
+    FileWord prev = null;
     synchronized (cache) {
-      position = 0;
-      seek(position);
-      while ((a = nextWord()) != null) {
-        if (b != null && comparator.compare(a.word, b.word) < 0) {
+      seek(0);
+      while ((word = readNextWord()) != null) {
+        if (prev != null && comparator.compare(word.word, prev.word) < 0) {
           throw new IllegalArgumentException("File is not sorted correctly for this comparator");
         }
-        b = a;
-        cache.put(size++, a.offset);
+        prev = word;
+        cache.put(size++, word.offset);
       }
       cache.initialized = true;
     }
@@ -147,16 +141,15 @@ public abstract class AbstractFileWordList extends AbstractWordList
    */
   protected String readWord(final int index) throws IOException
   {
-    FileWord w;
-    int i;
+    FileWord word;
     synchronized (cache) {
       final Cache.Entry entry = cache.get(index);
-      i = entry.index;
+      int i = entry.index;
       seek(entry.position);
       do {
-        w = nextWord();
-      } while (i++ < index && w != null);
-      return w != null ? w.word : null;
+        word = readNextWord();
+      } while (i++ < index && word != null);
+      return word != null ? word.word : null;
     }
   }
 
@@ -172,6 +165,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
 
   /**
+   * Returns the buffer providing the backing file data.
+   *
    * @return  Buffer around backing file.
    */
   protected abstract ByteBuffer buffer();
@@ -192,15 +187,14 @@ public abstract class AbstractFileWordList extends AbstractWordList
    *
    * @throws  IOException  on I/O errors reading file data.
    */
-  private FileWord nextWord() throws IOException
+  private FileWord readNextWord() throws IOException
   {
-    byte b;
-    long start = position;
     wordBuf.clear();
+    long start = position;
     while (hasRemaining()) {
-      b = buffer().get();
+      final byte b = buffer().get();
       position++;
-      if ((char) b == '\n' || (char) b == '\r') {
+      if (b == '\n' || b == '\r') {
         // Ignore leading line termination characters
         if (wordBuf.position() == 0) {
           start++;
@@ -216,7 +210,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
     charBuf.clear();
     wordBuf.flip();
-    final CoderResult result = charDecoder.decode(wordBuf, charBuf, true);
+    final CoderResult result = charsetDecoder.decode(wordBuf, charBuf, true);
     if (result.isError()) {
       result.throwException();
     }
@@ -247,12 +241,12 @@ public abstract class AbstractFileWordList extends AbstractWordList
   {
     return
       String.format(
-        "%s@%h::size=%s,cache=%s,charDecoder=%s",
+        "%s@%h::size=%s,cache=%s,charsetDecoder=%s",
         getClass().getName(),
         hashCode(),
         size,
         cache,
-        charDecoder);
+        charsetDecoder);
   }
 
 
@@ -342,11 +336,11 @@ public abstract class AbstractFileWordList extends AbstractWordList
         throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
       }
       allocateDirect = direct;
-      long cacheSize = (fileSize / 100) * cachePercent;
+      long cacheSize = fileSize * cachePercent / 100;
       if (cacheSize > 0) {
-        // buffer implementation requires at least 2 bytes
-        if (cacheSize < Byte.SIZE * 2) {
-          cacheSize = Byte.SIZE * 2;
+        // buffer implementation requires at least 2 longs
+        if (cacheSize < Long.BYTES * 2) {
+          cacheSize = Long.BYTES * 2;
         }
         modulus = (int) (fileSize / cacheSize);
         resize(cacheSize);
@@ -361,6 +355,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
      *
      * @param  index  Word at index.
      * @param  position  Byte offset into backing for file where word starts.
+     * @throws IllegalStateException if the cache has already been initialized
      */
     void put(final int index, final long position)
     {
@@ -389,12 +384,11 @@ public abstract class AbstractFileWordList extends AbstractWordList
      */
     Entry get(final int index)
     {
-      if (modulus == 0 || index < modulus) {
+      if (modulus == 0) {
         return new Entry(0, 0);
       }
       final int i = index / modulus;
-      map.position(i);
-      return new Entry(i * modulus, map.get());
+      return new Entry(i * modulus, map.get(i));
     }
 
 
@@ -413,13 +407,11 @@ public abstract class AbstractFileWordList extends AbstractWordList
       }
       final LongBuffer temp = allocateDirect ?
         ByteBuffer.allocateDirect((int) size).asLongBuffer() : ByteBuffer.allocate((int) size).asLongBuffer();
-      if (map == null) {
-        map = temp;
-      } else {
+      if (map != null) {
         map.rewind();
         temp.put(map);
-        map = temp;
       }
+      map = temp;
     }
 
 
