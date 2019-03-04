@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -214,45 +213,8 @@ public class LengthComplexityRule implements Rule
   /**
    * Class that represents an interval of numbers and parses interval notation.
    */
-  public static class Interval
+  private static class Interval
   {
-
-    /**
-     * Type of bound type.
-     *
-     * @deprecated this class is no longer used and will be removed in a future version
-     */
-    @Deprecated
-    public enum BoundType {
-
-      /** closed value. */
-      CLOSED,
-
-      /** open value. */
-      OPEN;
-
-
-      /**
-       * Returns the enum associated with the supplied text. '[' and ']' return {@link #CLOSED}. '(' and ')' return
-       * {@link #OPEN}.
-       *
-       * @param  text  to parse
-       *
-       * @return  bound type
-       *
-       * @throws  IllegalArgumentException  if text is not one of '[', ']', '(', ')'
-       */
-      public static BoundType parse(final String text)
-      {
-        if ("[".equals(text) || "]".equals(text)) {
-          return CLOSED;
-        }
-        if ("(".equals(text) || ")".equals(text)) {
-          return OPEN;
-        }
-        throw new IllegalArgumentException("Invalid interval notation: " + text);
-      }
-    }
 
     /** Pattern for matching intervals. */
     private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([(\\[])(\\d+),(\\d+|\\*)([)\\]])$");
@@ -271,7 +233,7 @@ public class LengthComplexityRule implements Rule
      *
      * @param  pattern  to parse
      */
-    public Interval(final String pattern)
+    Interval(final String pattern)
     {
       final Matcher m = INTERVAL_PATTERN.matcher(pattern);
       if (!m.matches()) {
@@ -308,19 +270,6 @@ public class LengthComplexityRule implements Rule
 
 
     /**
-     * Returns whether this interval includes the supplied interval.
-     *
-     * @param  i  interval to test for inclusion
-     *
-     * @return  whether this interval includes the supplied interval
-     */
-    public boolean includes(final Interval i)
-    {
-      return includes(i.lower) && includes(i.upper);
-    }
-
-
-    /**
      * Returns whether this interval intersects the supplied interval.
      *
      * @param  i  interval to test for intersection
@@ -339,77 +288,5 @@ public class LengthComplexityRule implements Rule
       return boundsPattern;
     }
 
-
-    /**
-     * Class that represents a single value in an interval.
-     *
-     * @deprecated this class is no longer used and will be removed in a future version
-     */
-    @Deprecated
-    private class Bound
-    {
-
-      /** Value in an interval. */
-      private final int value;
-
-      /** Bound type in an interval. */
-      private final BoundType type;
-
-
-      /**
-       * Creates a new bound.
-       *
-       * @param  i  value
-       * @param  bt  bound type
-       */
-      Bound(final int i, final BoundType bt)
-      {
-        value = i;
-        type = bt;
-      }
-
-
-      /**
-       * Whether this bound is closed.
-       *
-       * @return  whether this bound is closed
-       */
-      public boolean isClosed()
-      {
-        return BoundType.CLOSED == type;
-      }
-
-
-      /**
-       * Whether this bound is open.
-       *
-       * @return  whether this bound is open
-       */
-      public boolean isOpen()
-      {
-        return BoundType.OPEN == type;
-      }
-
-
-      @Override
-      public boolean equals(final Object o)
-      {
-        if (o == this) {
-          return true;
-        }
-        if (o != null && getClass() == o.getClass())  {
-          final Bound other = (Bound) o;
-          return value == other.value && type == other.type;
-        }
-        return false;
-      }
-
-
-      @Override
-      public int hashCode()
-      {
-        return Objects.hash(value, type);
-      }
-    }
   }
 }
