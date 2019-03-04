@@ -12,7 +12,6 @@ import java.util.Comparator;
 public class ArraysSort implements ArraySorter
 {
 
-
   @Override
   public void sort(final String[] array)
   {

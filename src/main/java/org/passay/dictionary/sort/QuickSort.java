@@ -2,7 +2,6 @@
 package org.passay.dictionary.sort;
 
 import java.util.Comparator;
-import org.passay.dictionary.WordLists;
 
 /**
  * Provides an implementation of the quick sort algorithm.
@@ -11,14 +10,6 @@ import org.passay.dictionary.WordLists;
  */
 public class QuickSort implements ArraySorter
 {
-
-
-  @Override
-  public void sort(final String[] array)
-  {
-    sort(array, WordLists.CASE_SENSITIVE_COMPARATOR);
-  }
-
 
   @Override
   public void sort(final String[] array, final Comparator<String> c)
