@@ -72,7 +72,7 @@
     <testng.dir>${basedir}/src/test/testng</testng.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
     <japicmp.enabled>false</japicmp.enabled>
-    <japicmp.oldVersion>1.5.0</japicmp.oldVersion>
+    <japicmp.oldVersion>1.4.0</japicmp.oldVersion>
   </properties>
 
   <dependencies>
