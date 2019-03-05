@@ -7,7 +7,7 @@
   <groupId>org.passay</groupId>
   <artifactId>passay</artifactId>
   <packaging>jar</packaging>
-  <version>1.4.1-SNAPSHOT</version>
+  <version>1.5.0-SNAPSHOT</version>
   <name>Passay Library</name>
   <description>Library for checking that a password complies with a custom set of rules</description>
   <url>http://www.passay.org</url>
@@ -62,7 +62,7 @@
   </developers>
 
   <prerequisites>
-    <maven>3.0.5</maven>
+    <maven>3.6.0</maven>
   </prerequisites>
 
   <properties>
@@ -71,8 +71,8 @@
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <testng.dir>${basedir}/src/test/testng</testng.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
-    <japicmp.enabled>true</japicmp.enabled>
-    <japicmp.oldVersion>1.4.0</japicmp.oldVersion>
+    <japicmp.enabled>false</japicmp.enabled>
+    <japicmp.oldVersion>1.5.0</japicmp.oldVersion>
   </properties>
 
   <dependencies>
@@ -85,14 +85,14 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>25.1-jre</version>
+      <version>27.0.1-jre</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>5.1.4.RELEASE</version>
+      <version>5.1.5.RELEASE</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>
@@ -171,12 +171,12 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>
-        <version>2.8.2</version>
+        <version>3.0.0-M1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-install-plugin</artifactId>
-        <version>2.5.2</version>
+        <version>3.0.0-M1</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -213,7 +213,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>8.16</version>
+            <version>8.18</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -238,7 +238,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>2.21.0</version>
+        <version>3.0.0-M3</version>
         <configuration>
           <argLine>-Xms128m -Xmx1g</argLine>
           <suiteXmlFiles>
@@ -289,7 +289,7 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.13.0</version>
+        <version>0.13.1</version>
         <configuration>
           <oldVersion>
             <dependency>
@@ -327,8 +327,9 @@
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.0.1</version>
         <configuration>
+          <source>8</source>
           <links>
-            <link>http://download.oracle.com/javase/8/docs/api</link>
+            <link>https://docs.oracle.com/javase/8/docs/api</link>
           </links>
           <bottom><![CDATA[<i>Copyright &#169; 2003-2019 Virginia Tech. All Rights Reserved.</i>]]></bottom>
         </configuration>
@@ -378,7 +379,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>4.0.0</version>
+        <version>4.1.0</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
