@@ -106,12 +106,9 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -209,12 +206,9 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "intervals")
   public Object[][] intervals()
-    throws Exception
   {
     return
       new Object[][] {
@@ -253,12 +247,9 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   /**
    * @param  interval  to check
    * @param  valid  whether the supplied interval is valid
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"passtest"}, dataProvider = "intervals")
   public void checkInterval(final String interval, final boolean valid)
-    throws Exception
   {
     final LengthComplexityRule lcr = new LengthComplexityRule();
     try {
@@ -275,10 +266,11 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test consistency.
+   */
   @Test(groups = {"passtest"})
   public void checkConsistency()
-    throws Exception
   {
     // no rules configured
     final LengthComplexityRule lcr = new LengthComplexityRule();
@@ -330,12 +322,9 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {

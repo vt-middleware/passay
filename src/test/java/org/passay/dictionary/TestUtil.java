@@ -29,8 +29,7 @@ public final class TestUtil
    *
    * @throws  IOException  if an error occurs reading the file
    */
-  public static String[] fileToArray(final String file)
-    throws IOException
+  public static String[] fileToArray(final String file) throws IOException
   {
     final List<String> words = new ArrayList<>();
     try (BufferedReader br = new BufferedReader(new FileReader(file))) {

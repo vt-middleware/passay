@@ -37,8 +37,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
    */
   @Parameters("bloomFile")
   @BeforeClass(groups = {"bloomdicttest"})
-  public void createDictionary(final String dict)
-    throws Exception
+  public void createDictionary(final String dict) throws Exception
   {
     final BloomFilter<String> filter1 = BloomFilter.readFrom(
       new FileInputStream(dict), Funnels.stringFunnel(StandardCharsets.UTF_8));
@@ -56,21 +55,21 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
     filterFromTxt = new BloomFilterDictionary(filter2);
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"bloomdicttest"})
   public void closeDictionary()
-    throws Exception
   {
     filterFromSerialized = null;
     filterFromTxt = null;
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test search.
+   */
   @Test(groups = {"bloomdicttest"})
   public void search()
-    throws Exception
   {
     AssertJUnit.assertTrue(filterFromTxt.search("manipular"));
     AssertJUnit.assertFalse(filterFromTxt.search(FALSE_SEARCH));
@@ -80,8 +79,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @Test(groups = {"bloomdicttest"})
-  public void searchSerialized()
-    throws Exception
+  public void searchSerialized() throws Exception
   {
     AssertJUnit.assertFalse(filterFromSerialized.search(hashPassword(FALSE_SEARCH)));
     AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("bbeegguumm...123")));
@@ -99,8 +97,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
    *
    * @throws  Exception  On encoding failure.
    */
-  private static String hashPassword(final String password)
-    throws Exception
+  private static String hashPassword(final String password) throws Exception
   {
     final byte[] hash = MessageDigest.getInstance("SHA-1").digest(password.getBytes(StandardCharsets.UTF_8));
     return BaseEncoding.base16().upperCase().encode(hash);

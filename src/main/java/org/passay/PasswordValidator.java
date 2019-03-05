@@ -104,7 +104,7 @@ public class PasswordValidator implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     for (Rule rule : passwordRules) {
       final RuleResult rr = rule.validate(passwordData);
       if (!rr.isValid()) {
@@ -154,9 +154,7 @@ public class PasswordValidator implements Rule
    */
   public List<String> getMessages(final RuleResult result)
   {
-    final List<String> messages = result.getDetails().stream().map(
-      messageResolver::resolve).collect(Collectors.toList());
-    return messages;
+    return result.getDetails().stream().map(messageResolver::resolve).collect(Collectors.toList());
   }
 
 

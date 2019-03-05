@@ -21,7 +21,6 @@ public class WhitespaceRuleTest extends AbstractRuleTest
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -93,7 +92,6 @@ public class WhitespaceRuleTest extends AbstractRuleTest
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {
@@ -125,13 +123,11 @@ public class WhitespaceRuleTest extends AbstractRuleTest
       };
   }
 
-
   /**
-   * @throws  Exception  On test failure.
+   * Test Metadata.
    */
   @Test(groups = {"passtest"})
   public void checkMetadata()
-    throws Exception
   {
     final WhitespaceRule rule = new WhitespaceRule();
     RuleResult result = rule.validate(new PasswordData("metadata"));
@@ -145,11 +141,10 @@ public class WhitespaceRuleTest extends AbstractRuleTest
 
 
   /**
-   * @throws  Exception  On test failure.
+   * Test valid characters.
    */
   @Test(groups = {"passtest"}, expectedExceptions = IllegalArgumentException.class)
   public void checkValidCharacters()
-    throws Exception
   {
     new WhitespaceRule(new char[] {' ', 'a'});
   }

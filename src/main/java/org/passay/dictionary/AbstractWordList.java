@@ -27,14 +27,14 @@ public abstract class AbstractWordList implements WordList
   @Override
   public Iterator<String> iterator()
   {
-    return new SequentialIterator();
+    return new WordListIterator(false);
   }
 
 
   @Override
   public Iterator<String> medianIterator()
   {
-    return new MedianIterator();
+    return new WordListIterator(true);
   }
 
 
@@ -56,7 +56,9 @@ public abstract class AbstractWordList implements WordList
    * Throws a {@link ClassCastException} if the supplied object is not an instance of {@link String}.
    *
    * @param  o  object to check
+   * @deprecated this method is no longer used and will be removed in a future release
    */
+  @Deprecated
   protected void checkIsString(final Object o)
   {
     if (!String.class.isInstance(o)) {
@@ -66,15 +68,34 @@ public abstract class AbstractWordList implements WordList
 
 
   /**
-   * Abstract base class for all internal word list iterators.
+   * An iterator over the {@link WordList}.
+   * <p>
+   * The iteration order can be either sequential, i.e. incrementing an index from 0 to {@link WordList#size()} - 1,
+   * or following a sequence of medians, i.e. the global median, followed by the median of the left half,
+   * the median of the right half, the median of the left half of the left half, etc. (recursively).
+   * The sequence of medians enables the creation of a well-balanced search tree from a sorted word list.
    *
-   * @author  Middleware Services
+   * @author  Amichai Rothman
+   * @author  Ronen Zilberman
    */
-  private abstract class AbstractWordListIterator implements Iterator<String>
+  private class WordListIterator implements Iterator<String>
   {
+
+    /** Specifies whether to use medians or sequential order. */
+    protected final boolean medians;
 
     /** Index of next word in the iterator sequence. */
     protected int index;
+
+    /**
+     * Constructs a word list iterator.
+     *
+     * @param useMedians specifies whether to iterate in medians order or sequential order
+     */
+    protected WordListIterator(final boolean useMedians)
+    {
+      medians = useMedians;
+    }
 
     @Override
     public boolean hasNext()
@@ -87,41 +108,15 @@ public abstract class AbstractWordList implements WordList
     {
       throw new UnsupportedOperationException("Remove not supported.");
     }
-  }
 
-
-  /**
-   * Iterator implementation that iterates over a {@link WordList} by incrementing an index from 0 to {@link
-   * WordList#size()} - 1.
-   *
-   * @author  Middleware Services
-   */
-  private class SequentialIterator extends AbstractWordListIterator
-  {
     @Override
     public String next()
     {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
-      return get(index++);
+      return get(medians ? toMedianIndex(index++, size()) : index++);
     }
-  }
-
-
-  /**
-   * Iterator that iterates over a word list by following a sequence of medians.
-   * This enables the creation of a well-balanced search tree from a sorted word list.
-   * <p>
-   * The sequence of median indices starts with the global median,
-   * followed by the median of the left half, the median of the right half,
-   * the median of the left half of the left half, etc. (recursively).
-   *
-   * @author  Amichai Rothman
-   * @author  Ronen Zilberman
-   */
-  private class MedianIterator extends AbstractWordListIterator
-  {
 
     /**
      * Returns the i-th element in the sequence of median indices of the given size.
@@ -156,15 +151,6 @@ public abstract class AbstractWordList implements WordList
         // rounding them down properly)
         return (int) ((size * remainder - 1) / leftovers);
       }
-    }
-
-    @Override
-    public String next()
-    {
-      if (!hasNext()) {
-        throw new NoSuchElementException();
-      }
-      return get(toMedianIndex(index++, size()));
     }
   }
 }

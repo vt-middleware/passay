@@ -32,6 +32,7 @@ public class DictionaryBuilder
 
   /**
    * Adds a word list to the dictionary to be built.
+   * The file is read using the platform default charset.
    *
    * @param  path  Path to word list, one word per line.
    *
@@ -82,14 +83,8 @@ public class DictionaryBuilder
   public Dictionary build()
   {
     try {
-      final List<String> wordList = new ArrayList<>();
-      for (Reader reader : sources) {
-        WordLists.readWordList(reader, wordList);
-      }
-
-      final String[] words = new String[wordList.size()];
-      wordList.toArray(words);
-      return new WordListDictionary(new ArrayWordList(words, caseSensitive, SORTER));
+      return new WordListDictionary(
+        WordLists.createFromReader(sources.toArray(new Reader[sources.size()]), caseSensitive, SORTER));
     } catch (IOException e) {
       throw new RuntimeException("IO error building dictionary", e);
     }

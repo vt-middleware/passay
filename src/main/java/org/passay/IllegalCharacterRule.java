@@ -108,13 +108,12 @@ public class IllegalCharacterRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final Set<Character> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (char c : illegalCharacters) {
       if (matchBehavior.match(text, c) && !matches.contains(c)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
         if (!reportAllFailures) {
           break;
         }
@@ -167,6 +166,6 @@ public class IllegalCharacterRule implements Rule
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        illegalCharacters != null ? Arrays.toString(illegalCharacters) : null);
+        Arrays.toString(illegalCharacters));
   }
 }

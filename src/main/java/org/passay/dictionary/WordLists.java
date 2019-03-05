@@ -68,7 +68,7 @@ public final class WordLists
     int high = wordList.size() - 1;
     int mid;
     while (low <= high) {
-      mid = (low + high) / 2;
+      mid = (low + high) >>> 1;
 
       final int cmp = comparator.compare(wordList.get(mid), word);
       if (cmp < 0) {
@@ -92,8 +92,7 @@ public final class WordLists
    *
    * @throws  IOException  if an error occurs reading from a reader
    */
-  public static ArrayWordList createFromReader(final Reader[] readers)
-    throws IOException
+  public static ArrayWordList createFromReader(final Reader[] readers) throws IOException
   {
     return createFromReader(readers, true);
   }
@@ -109,8 +108,7 @@ public final class WordLists
    *
    * @throws  IOException  if an error occurs reading from a reader
    */
-  public static ArrayWordList createFromReader(final Reader[] readers, final boolean caseSensitive)
-    throws IOException
+  public static ArrayWordList createFromReader(final Reader[] readers, final boolean caseSensitive) throws IOException
   {
     return createFromReader(readers, caseSensitive, null);
   }
@@ -127,11 +125,8 @@ public final class WordLists
    *
    * @throws  IOException  if an error occurs reading from a reader
    */
-  public static ArrayWordList createFromReader(
-    final Reader[] readers,
-    final boolean caseSensitive,
-    final ArraySorter sorter)
-    throws IOException
+  public static ArrayWordList createFromReader(final Reader[] readers, final boolean caseSensitive,
+    final ArraySorter sorter) throws IOException
   {
     final List<String> words = new ArrayList<>();
     for (Reader r : readers) {
@@ -149,8 +144,7 @@ public final class WordLists
    *
    * @throws  IOException  on IO errors reading from reader.
    */
-  public static void readWordList(final Reader reader, final List<String> wordList)
-    throws IOException
+  public static void readWordList(final Reader reader, final List<String> wordList) throws IOException
   {
     try {
       final BufferedReader bufferedReader;

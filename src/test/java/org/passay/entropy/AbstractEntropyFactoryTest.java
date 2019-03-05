@@ -23,10 +23,11 @@ public abstract class AbstractEntropyFactoryTest
   private final List<Rule> rules = new ArrayList<>();
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Setup test resources.
+   */
   @BeforeClass(groups = {"entrpytest"})
   public void createRules()
-    throws Exception
   {
     final AllowedCharacterRule allowedRule = new AllowedCharacterRule(
       new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
@@ -44,12 +45,9 @@ public abstract class AbstractEntropyFactoryTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "randomGeneratedData")
   public Object[][] randomPasswordData()
-    throws Exception
   {
     return
       new Object[][] {
@@ -63,12 +61,9 @@ public abstract class AbstractEntropyFactoryTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "userGeneratedData")
   public Object[][] userPasswordData()
-    throws Exception
   {
     return
       new Object[][] {

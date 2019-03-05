@@ -109,14 +109,13 @@ public class AllowedCharacterRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final Set<Character> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (char c : text.toCharArray()) {
       if (Arrays.binarySearch(allowedCharacters, c) < 0 && !matches.contains(c)) {
         if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, c)) {
-          result.setValid(false);
-          result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
+          result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
           if (!reportAllFailures) {
             break;
           }
@@ -169,6 +168,6 @@ public class AllowedCharacterRule implements Rule
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        allowedCharacters != null ? Arrays.toString(allowedCharacters) : null);
+        Arrays.toString(allowedCharacters));
   }
 }

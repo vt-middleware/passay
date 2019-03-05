@@ -22,9 +22,11 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test construct.
+   */
   @Test(groups = {"wltest"})
-  public void construct() throws Exception
+  public void construct()
   {
     try {
       new ArrayWordList(null, true);
@@ -35,7 +37,7 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
       AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
     }
 
-    final String[] arrayWithNull = new String[] {"a", "b", null, "c"};
+    final String[] arrayWithNull = {"a", "b", null, "c"};
     try {
       new ArrayWordList(arrayWithNull, true);
       AssertJUnit.fail("Should have thrown IllegalArgumentException");
@@ -46,12 +48,13 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
     }
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test words with space.
+   */
   @Test(groups = {"wltest"})
-  public void wordsWithSpace() throws Exception
+  public void wordsWithSpace()
   {
-    final String[] arrayWithSpaces = new String[] {
+    final String[] arrayWithSpaces = {
       " Man",
       " cadet",
       "!@#$%^&*",

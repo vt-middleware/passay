@@ -32,8 +32,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"ttdicttest"})
-  public void createDictionary()
-    throws Exception
+  public void createDictionary() throws Exception
   {
     final ArrayWordList awl1 = WordLists.createFromReader(
       new FileReader[] {new FileReader(webFile)},
@@ -49,20 +48,22 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"ttdicttest"})
   public void closeDictionary()
-    throws Exception
   {
     caseSensitive = null;
     caseInsensitive = null;
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test search.
+   */
   @Test(groups = {"ttdicttest"})
   public void search()
-    throws Exception
   {
     AssertJUnit.assertTrue(caseSensitive.search("manipular"));
     AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
@@ -75,15 +76,12 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * This test is disabled by default. It produces a lot of testng report data which runs the process OOM.
+   * This test is disabled by default. It produces a lot of testing report data which runs the process OOM.
    *
    * @param  word  to search for.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"ttdicttest"}, dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
-    throws Exception
   {
     AssertJUnit.assertTrue(caseSensitive.search(word));
     AssertJUnit.assertTrue(caseInsensitive.search(word));
@@ -95,13 +93,10 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /**
    * @param  word  to search for.
    * @param  results  case sensitive results
-   *
-   * @throws  Exception  On test failure.
    */
   @Parameters({ "partialSearchWord", "partialSearchResults" })
   @Test(groups = {"ttdicttest"})
   public void partialSearch(final String word, final String results)
-    throws Exception
   {
     AssertJUnit.assertArrayEquals(results.split("\\|"), caseSensitive.partialSearch(word));
     AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(FALSE_SEARCH)));
@@ -121,13 +116,10 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
    * @param  word  to search for.
    * @param  distance  for near search
    * @param  results  case sensitive results
-   *
-   * @throws  Exception  On test failure.
    */
   @Parameters({ "nearSearchWord", "nearSearchDistance", "nearSearchResults" })
   @Test(groups = {"ttdicttest"})
   public void nearSearch(final String word, final int distance, final String results)
-    throws Exception
   {
     AssertJUnit.assertArrayEquals(results.split("\\|"), caseSensitive.nearSearch(word, distance));
     AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(FALSE_SEARCH, distance)));
@@ -146,7 +138,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void bubbleSort()
-    throws Exception
   {
     testSort(new BubbleSort());
   }
@@ -155,7 +146,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void selectionSort()
-    throws Exception
   {
     testSort(new SelectionSort());
   }
@@ -164,7 +154,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void insertionSort()
-    throws Exception
   {
     testSort(new InsertionSort());
   }
@@ -173,7 +162,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /** @throws  Exception  On test failure. */
   @Test(groups = {"ttdicttest"})
   public void quickSort()
-    throws Exception
   {
     testSort(new QuickSort());
   }
@@ -181,11 +169,8 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
   /**
    * @param  sorter  to sort with
-   *
-   * @throws  Exception  On test failure.
    */
   public void testSort(final ArraySorter sorter)
-    throws Exception
   {
     ArrayWordList awl = new ArrayWordList(getAnimals(), true, sorter);
     final TernaryTreeDictionary sortCS = new TernaryTreeDictionary(awl);

@@ -177,8 +177,7 @@ public class TernaryTree
    *
    * @throws  IOException  if an error occurs
    */
-  public void print(final Writer out, final boolean fullPath)
-    throws IOException
+  public void print(final Writer out, final boolean fullPath) throws IOException
   {
     final StringBuilder buffer = new StringBuilder();
     printNode(root, "", 0, fullPath, buffer);
@@ -196,8 +195,7 @@ public class TernaryTree
    *
    * @throws  IOException  if an error occurs
    */
-  public void print(final Writer out)
-          throws IOException
+  public void print(final Writer out) throws IOException
   {
     print(out, false);
   }
@@ -212,13 +210,9 @@ public class TernaryTree
    *
    * @return  ternary node to insert
    */
-  private TernaryNode insertNode(
-
-    // CheckStyle:FinalParametersCheck OFF
-    TernaryNode node,
-    // CheckStyle:FinalParametersCheck ON
-    final String word,
-    final int index)
+  // CheckStyle:FinalParametersCheck OFF
+  private TernaryNode insertNode(TernaryNode node, final String word, final int index)
+  // CheckStyle:FinalParametersCheck ON
   {
     if (index < word.length()) {
       final char c = word.charAt(index);
@@ -286,14 +280,10 @@ public class TernaryTree
    *
    * @return  list of matches
    */
-  private List<String> partialSearchNode(
-    final TernaryNode node,
-    // CheckStyle:FinalParametersCheck OFF
-    List<String> matches,
-    // CheckStyle:FinalParametersCheck ON
-    final String match,
-    final String word,
-    final int index)
+  // CheckStyle:FinalParametersCheck OFF
+  private List<String> partialSearchNode(final TernaryNode node, List<String> matches,
+    final String match, final String word, final int index)
+  // CheckStyle:FinalParametersCheck ON
   {
     if (node != null && index < word.length()) {
       final char c = word.charAt(index);
@@ -342,15 +332,10 @@ public class TernaryTree
    *
    * @return  list of matches
    */
-  private List<String> nearSearchNode(
-    final TernaryNode node,
-    final int distance,
-    // CheckStyle:FinalParametersCheck OFF
-    List<String> matches,
-    // CheckStyle:FinalParametersCheck ON
-    final String match,
-    final String word,
-    final int index)
+  // CheckStyle:FinalParametersCheck OFF
+  private List<String> nearSearchNode(final TernaryNode node, final int distance, List<String> matches,
+    final String match, final String word, final int index)
+  // CheckStyle:FinalParametersCheck ON
   {
     if (node != null && distance >= 0) {
 
@@ -413,11 +398,8 @@ public class TernaryTree
    *
    * @return  string containing all words from the supplied node
    */
-  private List<String> traverseNode(
-    final TernaryNode node,
-    final String s,
-    // CheckStyle:FinalParametersCheck OFF
-    List<String> words)
+  // CheckStyle:FinalParametersCheck OFF
+  private List<String> traverseNode(final TernaryNode node, final String s, List<String> words)
   // CheckStyle:FinalParametersCheck ON
   {
     if (node != null) {

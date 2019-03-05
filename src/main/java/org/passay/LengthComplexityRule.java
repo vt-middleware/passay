@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -139,7 +137,7 @@ public class LengthComplexityRule implements Rule
         new RuleResultDetail(ERROR_CODE_RULES, createRuleResultDetailParameters(passwordLength, 0, 0)));
     }
     int successCount = 0;
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     for (Rule rule : rulesByLength) {
       final RuleResult rr = rule.validate(passwordData);
       if (!rr.isValid()) {
@@ -154,10 +152,9 @@ public class LengthComplexityRule implements Rule
     if (successCount < rulesByLength.size()) {
       result.setValid(false);
       if (reportFailure) {
-        result.getDetails().add(
-          new RuleResultDetail(
+        result.addError(
             ERROR_CODE,
-            createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
+            createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size()));
       }
     }
     return result;
@@ -173,9 +170,10 @@ public class LengthComplexityRule implements Rule
    */
   private List<Rule> getRulesByLength(final int length)
   {
-    final Optional<List<Rule>> match = rules.entrySet().stream().filter(
-      e -> e.getKey().includes(length)).map(Map.Entry::getValue).findFirst();
-    return match.isPresent() ? match.get() : null;
+    return rules.entrySet().stream()
+      .filter(e -> e.getKey().includes(length))
+      .map(Map.Entry::getValue)
+      .findFirst().orElse(null);
   }
 
 
@@ -188,9 +186,7 @@ public class LengthComplexityRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(
-    final int length,
-    final int success,
+  protected Map<String, Object> createRuleResultDetailParameters(final int length, final int success,
     final int ruleCount)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
@@ -217,57 +213,27 @@ public class LengthComplexityRule implements Rule
   /**
    * Class that represents an interval of numbers and parses interval notation.
    */
-  public static class Interval
+  private static class Interval
   {
 
-    /** Type of bound type. */
-    public enum BoundType {
-
-      /** closed value. */
-      CLOSED,
-
-      /** open value. */
-      OPEN;
-
-
-      /**
-       * Returns the enum associated with the supplied text. '[' and ']' return {@link #CLOSED}. '(' and ')' return
-       * {@link #OPEN}.
-       *
-       * @param  text  to parse
-       *
-       * @return  bound type
-       *
-       * @throws  IllegalArgumentException  if text is not one of '[', ']', '(', ')'
-       */
-      public static BoundType parse(final String text)
-      {
-        if ("[".equals(text) || "]".equals(text)) {
-          return CLOSED;
-        }
-        if ("(".equals(text) || ")".equals(text)) {
-          return OPEN;
-        }
-        throw new IllegalArgumentException("Invalid interval notation: " + text);
-      }
-    }
-
     /** Pattern for matching intervals. */
-    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([\\(|\\[])(\\d+),(\\d+|\\*)([\\)|\\]])$");
+    private static final Pattern INTERVAL_PATTERN = Pattern.compile("^([(\\[])(\\d+),(\\d+|\\*)([)\\]])$");
 
-    /** Lower bound of the interval. */
-    private final Bound lowerBound;
+    /** Interval pattern. */
+    private final String boundsPattern;
 
-    /** Upper bound of the interval. */
-    private final Bound upperBound;
+    /** Lower bound of the interval (inclusive). */
+    private final int lower;
 
+    /** Upper bound of the interval (inclusive). */
+    private final int upper;
 
     /**
      * Creates a new interval.
      *
      * @param  pattern  to parse
      */
-    public Interval(final String pattern)
+    Interval(final String pattern)
     {
       final Matcher m = INTERVAL_PATTERN.matcher(pattern);
       if (!m.matches()) {
@@ -275,16 +241,16 @@ public class LengthComplexityRule implements Rule
       }
 
       final String lowerType = m.group(1);
-      final String lower = m.group(2);
-      final String upper = m.group(3);
+      final String lowerVal = m.group(2);
+      final String upperVal = m.group(3);
       final String upperType = m.group(4);
 
-      lowerBound = new Bound(Integer.parseInt(lower), BoundType.parse(lowerType));
-      upperBound = new Bound(
-        "*".equals(upper) ? Integer.MAX_VALUE : Integer.parseInt(upper),
-        BoundType.parse(upperType));
+      // parse the bounds and convert them to a closed (inclusive) interval
+      lower = Integer.parseInt(lowerVal) + ("(".equals(lowerType) ? 1 : 0);
+      upper = "*".equals(upperVal) ? Integer.MAX_VALUE : (Integer.parseInt(upperVal) - (")".equals(upperType) ? 1 : 0));
+      boundsPattern = pattern;
 
-      if (getUpperBoundClosed() - getLowerBoundClosed() < 0) {
+      if (upper < lower) {
         throw new IllegalArgumentException("Invalid interval notation: " + pattern + " produced an empty set");
       }
     }
@@ -299,30 +265,7 @@ public class LengthComplexityRule implements Rule
      */
     public boolean includes(final int i)
     {
-      boolean includes = false;
-      if (i >= lowerBound.value && i <= upperBound.value) {
-        if (i > lowerBound.value && i < upperBound.value) {
-          includes = true;
-        } else if (i == lowerBound.value && lowerBound.isClosed()) {
-          includes = true;
-        } else if (i == upperBound.value && upperBound.isClosed()) {
-          includes = true;
-        }
-      }
-      return includes;
-    }
-
-
-    /**
-     * Returns whether this interval includes the supplied interval.
-     *
-     * @param  i  interval to test for inclusion
-     *
-     * @return  whether this interval includes the supplied interval
-     */
-    public boolean includes(final Interval i)
-    {
-      return includes(i.getLowerBoundClosed()) && includes(i.getUpperBoundClosed());
+      return lower <= i && i <= upper;
     }
 
 
@@ -335,133 +278,15 @@ public class LengthComplexityRule implements Rule
      */
     public boolean intersects(final Interval i)
     {
-      return includes(i.getLowerBoundClosed()) || includes(i.getUpperBoundClosed());
-    }
-
-
-    /**
-     * Returns the closed lower bound for this interval.
-     *
-     * @return  closed lower bound
-     */
-    private int getLowerBoundClosed()
-    {
-      return lowerBound.isClosed() ? lowerBound.value : lowerBound.value + 1;
-    }
-
-
-    /**
-     * Returns the closed upper bound for this interval.
-     *
-     * @return  closed upper bound
-     */
-    private int getUpperBoundClosed()
-    {
-      return upperBound.isClosed() ? upperBound.value : upperBound.value - 1;
-    }
-
-
-    @Override
-    public boolean equals(final Object o)
-    {
-      if (o == this) {
-        return true;
-      }
-      if (o != null && getClass() == o.getClass())  {
-        final Interval other = (Interval) o;
-        return lowerBound.equals(other.lowerBound) && upperBound.equals(other.upperBound);
-      }
-      return false;
-    }
-
-
-    @Override
-    public int hashCode()
-    {
-      return Objects.hash(lowerBound, upperBound);
+      return includes(i.lower) || includes(i.upper);
     }
 
 
     @Override
     public String toString()
     {
-      return
-        String.format(
-          "%s%s,%s%s",
-          lowerBound.isClosed() ? '[' : '(',
-          lowerBound.value,
-          upperBound.value,
-          upperBound.isClosed() ? ']' : ')');
+      return boundsPattern;
     }
 
-
-    /**
-     * Class that represents a single value in an interval.
-     */
-    private class Bound
-    {
-
-      /** Value in an interval. */
-      private final int value;
-
-      /** Bound type in an interval. */
-      private final BoundType type;
-
-
-      /**
-       * Creates a new bound.
-       *
-       * @param  i  value
-       * @param  bt  bound type
-       */
-      Bound(final int i, final BoundType bt)
-      {
-        value = i;
-        type = bt;
-      }
-
-
-      /**
-       * Whether this bound is closed.
-       *
-       * @return  whether this bound is closed
-       */
-      public boolean isClosed()
-      {
-        return BoundType.CLOSED == type;
-      }
-
-
-      /**
-       * Whether this bound is open.
-       *
-       * @return  whether this bound is open
-       */
-      public boolean isOpen()
-      {
-        return BoundType.OPEN == type;
-      }
-
-
-      @Override
-      public boolean equals(final Object o)
-      {
-        if (o == this) {
-          return true;
-        }
-        if (o != null && getClass() == o.getClass())  {
-          final Bound other = (Bound) o;
-          return value == other.value && type == other.type;
-        }
-        return false;
-      }
-
-
-      @Override
-      public int hashCode()
-      {
-        return Objects.hash(value, type);
-      }
-    }
   }
 }

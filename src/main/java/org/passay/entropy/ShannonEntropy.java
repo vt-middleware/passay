@@ -31,11 +31,10 @@ public class ShannonEntropy implements Entropy
   public static final double THIRD_PHASE_BONUS = 1.5;
 
   /** Array used for determining dictionary entropy "bonus" for calculating the Shannon entropy estimate. */
-  public static final int[] SHANNON_DICTIONARY_SIEVE =
-    new int[]{0, 0, 0, 4, 5, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0};
+  public static final int[] SHANNON_DICTIONARY_SIEVE = {0, 0, 0, 4, 5, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0};
 
   /** Array used for determining composition "bonus" for calculating the Shannon entropy estimate. **/
-  public static final int[] SHANNON_COMPOSITION_SIEVE = new int[]{0, 0, 0, 2, 3, 3, 5, 6};
+  public static final int[] SHANNON_COMPOSITION_SIEVE = {0, 0, 0, 2, 3, 3, 5, 6};
 
   /** Whether a dictionary was used to check the password. */
   private final boolean hasDictionaryCheck;

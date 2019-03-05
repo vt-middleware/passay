@@ -14,12 +14,9 @@ public class NumberRangeRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -59,12 +56,9 @@ public class NumberRangeRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {

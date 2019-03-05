@@ -28,8 +28,7 @@ public final class PasswordCli
    *
    * @throws  Exception  if an error occurs
    */
-  public static void main(final String[] args)
-    throws Exception
+  public static void main(final String[] args) throws Exception
   {
     final List<Rule> rules = new ArrayList<>();
     String username = null;
@@ -92,30 +91,22 @@ public final class PasswordCli
       }
 
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.out.println("Usage: java " + PasswordCli.class.getName() + " <options> <password> \\");
-      System.out.println("");
-      System.out.println("where <options> includes:");
-      System.out.println("       -l (Set the min & max password length) \\");
-      System.out.println("          <min> \\");
-      System.out.println("          <max> \\");
-      System.out.println("       -c (Set the characters which must be present" +
-        " in the password) \\");
-      System.out.println("          (Each of the following must be >= 0) \\");
-      System.out.println("          <digits> \\");
-      System.out.println("          <alphabetical> \\");
-      System.out.println("          <non-alphanumeric> \\");
-      System.out.println("          <uppercase> \\");
-      System.out.println("          <lowercase> \\");
-      System.out.println("          <num> (Number of these rules to" +
-        " enforce) \\");
-      System.out.println("       -d (Test password against a dictionary) \\");
-      System.out.println("          <file> (dictionary files) \\");
-      System.out.println("          <num> (number of characters in matching" +
-        " words) \\");
-      System.out.println("       -u (Test for a user id) \\");
-      System.out.println("          <userid> \\");
-      System.out.println("       -s (Test for sequences) \\");
-      System.out.println("       -h (Print this message) \\");
+      System.out.println("Usage: java " + PasswordCli.class.getName() + " <options> <password>");
+      System.out.println();
+      System.out.println("Options:");
+      System.out.println("    -l <min> <max>");
+      System.out.println("       set the min/max password length");
+      System.out.println("    -c <digits> <alphabetical> <non-alphanumeric> <uppercase> <lowercase> <num>");
+      System.out.println("       set the characters which must be present in the password");
+      System.out.println("       the value for each category must be >= 0");
+      System.out.println("       <num> is the number of these rules to enforce");
+      System.out.println("    -d <file> <num>");
+      System.out.println("       test password against a dictionary file");
+      System.out.println("       <file> is a dictionary files");
+      System.out.println("    -u <username>");
+      System.out.println("       test for a given username");
+      System.out.println("    -s test for sequences");
+      System.out.println("    -h print this help message");
       System.exit(1);
     }
   }

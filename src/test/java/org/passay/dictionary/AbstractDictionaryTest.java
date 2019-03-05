@@ -32,10 +32,10 @@ public abstract class AbstractDictionaryTest
   public static final String ANIMAL_PARTIAL_SEARCH = ".a..us";
 
   /** Partial animal search results. */
-  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CS = new String[] {"Walrus", "Xantus"};
+  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CS = {"Walrus", "Xantus"};
 
   /** Partial animal search results. */
-  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CI = new String[] {"walrus", "xantus"};
+  public static final String[] ANIMAL_PARTIAL_SEARCH_RESULTS_CI = {"walrus", "xantus"};
 
   /** Initialization lock. */
   private static final Object LOCK = new Object();
@@ -134,16 +134,8 @@ public abstract class AbstractDictionaryTest
       "fbsdFileLowerCaseSorted"
     })
   @BeforeClass(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
-  public void createDictionaries(
-    final String dict1,
-    final String dict2,
-    final String dict3,
-    final String dict4,
-    final String dict5,
-    final String dict6,
-    final String dict7,
-    final String dict8)
-    throws Exception
+  public void createDictionaries(final String dict1, final String dict2, final String dict3, final String dict4,
+    final String dict5, final String dict6, final String dict7, final String dict8) throws Exception
   {
     webFile = dict1;
     webFileSorted = dict2;
@@ -164,11 +156,11 @@ public abstract class AbstractDictionaryTest
     }
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterSuite(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
   public void tearDown()
-    throws Exception
   {
     webWords = null;
     fbsdWords = null;
@@ -184,8 +176,7 @@ public abstract class AbstractDictionaryTest
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  private Object[][] createWords(final String dictFile)
-    throws IOException
+  private Object[][] createWords(final String dictFile) throws IOException
   {
     final FileWordList fwl = new FileWordList(new RandomAccessFile(dictFile, "r"));
     final Object[][] allWords = new Object[fwl.size()][1];
@@ -201,12 +192,9 @@ public abstract class AbstractDictionaryTest
    * Sample word data.
    *
    * @return  word data
-   *
-   * @throws  IOException  if an error occurs reading {@link #webFile}
    */
   @DataProvider(name = "all-web-words")
   public Object[][] createAllWebWords()
-    throws IOException
   {
     return webWords;
   }
@@ -216,12 +204,9 @@ public abstract class AbstractDictionaryTest
    * Sample word data.
    *
    * @return  word data
-   *
-   * @throws  IOException  if an error occurs reading {@link #fbsdFile}
    */
   @DataProvider(name = "all-fbsd-words")
   public Object[][] createAllFbsdWords()
-    throws IOException
   {
     return fbsdWords;
   }

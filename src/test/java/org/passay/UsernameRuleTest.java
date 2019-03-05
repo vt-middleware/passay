@@ -14,12 +14,9 @@ public class UsernameRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -45,6 +42,11 @@ public class UsernameRuleTest extends AbstractRuleTest
           TestUtils.newPasswordData("p4testuser#n65", "testuser"),
           codes(UsernameRule.ERROR_CODE),
         },
+        {
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4TestUser#n65", "TestUser"),
+          codes(UsernameRule.ERROR_CODE),
+        },
         // negative testing for backwards and case sensitive
         {
           new UsernameRule(),
@@ -54,6 +56,11 @@ public class UsernameRuleTest extends AbstractRuleTest
         {
           new UsernameRule(),
           TestUtils.newPasswordData("p4TEStuSER#n65", "testuser"),
+          null,
+        },
+        {
+          new UsernameRule(),
+          TestUtils.newPasswordData("p4testuser#n65", "TestUser"),
           null,
         },
         {
@@ -100,6 +107,11 @@ public class UsernameRuleTest extends AbstractRuleTest
         },
         {
           new UsernameRule(false, true),
+          TestUtils.newPasswordData("p4testuser#n65", "TestUser"),
+          codes(UsernameRule.ERROR_CODE),
+        },
+        {
+          new UsernameRule(false, true),
           TestUtils.newPasswordData("p4resutset#n65", "testuser"),
           null,
         },
@@ -126,7 +138,17 @@ public class UsernameRuleTest extends AbstractRuleTest
         },
         {
           new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4testuser#n65", "TestUser"),
+          codes(UsernameRule.ERROR_CODE),
+        },
+        {
+          new UsernameRule(true, true),
           TestUtils.newPasswordData("p4resutset#n65", "testuser"),
+          codes(UsernameRule.ERROR_CODE_REVERSED),
+        },
+        {
+          new UsernameRule(true, true),
+          TestUtils.newPasswordData("p4resutset#n65", "TestUser"),
           codes(UsernameRule.ERROR_CODE_REVERSED),
         },
         {
@@ -166,12 +188,9 @@ public class UsernameRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {

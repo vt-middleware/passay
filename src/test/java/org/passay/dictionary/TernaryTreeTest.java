@@ -34,18 +34,18 @@ public class TernaryTreeTest
    */
   @Parameters({ "webFile", "webFileSorted" })
   @BeforeClass(groups = {"tttest"})
-  public void createTernaryTrees(final String dict1, final String dict2)
-    throws Exception
+  public void createTernaryTrees(final String dict1, final String dict2) throws Exception
   {
     caseSensitive.insert(TestUtil.fileToArray(dict1));
     caseInsensitive.insert(TestUtil.fileToArray(dict2));
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"tttest"})
   public void closeDictionary()
-    throws Exception
   {
     caseSensitive = null;
     caseInsensitive = null;
@@ -56,12 +56,9 @@ public class TernaryTreeTest
    * Creates search test data.
    *
    * @return  Search test data.
-   *
-   * @throws  Exception  On data creation.
    */
   @DataProvider(name = "searchData")
   public Object[][] createSearchData()
-    throws Exception
   {
     return
       new Object[][] {
@@ -77,12 +74,9 @@ public class TernaryTreeTest
    * Creates partial search test data.
    *
    * @return  Partial search test data.
-   *
-   * @throws  Exception  On data creation.
    */
   @DataProvider(name = "partialSearchData")
   public Object[][] createPartialSearchData()
-    throws Exception
   {
     return
       new Object[][] {
@@ -104,12 +98,9 @@ public class TernaryTreeTest
    * Creates near search test data.
    *
    * @return  Near search test data.
-   *
-   * @throws  Exception  On data creation.
    */
   @DataProvider(name = "nearSearchData")
   public Object[][] createNearSearchData()
-    throws Exception
   {
     return
       new Object[][] {
@@ -127,12 +118,9 @@ public class TernaryTreeTest
    * @param  tt  Ternary Tree searched for target word.
    * @param  word  Target word.
    * @param  expected  Expected search result.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"tttest"}, dataProvider = "searchData")
   public void search(final TernaryTree tt, final String word, final boolean expected)
-    throws Exception
   {
     AssertJUnit.assertEquals(expected, tt.search(word));
   }
@@ -142,12 +130,9 @@ public class TernaryTreeTest
    * @param  tt  Ternary Tree searched for target word.
    * @param  searchTerm  Partial search term.
    * @param  expected  Expected partial search results.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"tttest"}, dataProvider = "partialSearchData")
   public void partialSearch(final TernaryTree tt, final String searchTerm, final String[] expected)
-    throws Exception
   {
     final String[] actual = tt.partialSearch(searchTerm);
     System.out.println("Partial search results: " + Arrays.toString(actual));
@@ -161,12 +146,9 @@ public class TernaryTreeTest
    * @param  word  to search for.
    * @param  distance  for near search
    * @param  expected  Expected partial search results.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"tttest"}, dataProvider = "nearSearchData")
   public void nearSearch(final TernaryTree tt, final String word, final int distance, final String[] expected)
-    throws Exception
   {
     final String[] actual = tt.nearSearch(word, distance);
     System.out.println("Near search results: " + Arrays.toString(actual));

@@ -59,11 +59,7 @@ public class ArrayWordList extends AbstractWordList
     if (array == null) {
       throw new IllegalArgumentException("Array cannot be null.");
     }
-    if (caseSensitive) {
-      comparator = WordLists.CASE_SENSITIVE_COMPARATOR;
-    } else {
-      comparator = WordLists.CASE_INSENSITIVE_COMPARATOR;
-    }
+    comparator = caseSensitive ? WordLists.CASE_SENSITIVE_COMPARATOR : WordLists.CASE_INSENSITIVE_COMPARATOR;
     if (sorter != null) {
       sorter.sort(array, comparator);
     }

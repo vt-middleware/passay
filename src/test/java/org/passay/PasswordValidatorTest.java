@@ -56,8 +56,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
    */
   @Parameters("dictionaryFile")
   @BeforeClass(groups = {"passtest"})
-  public void createDictionary(final String dictFile)
-    throws Exception
+  public void createDictionary(final String dictFile) throws Exception
   {
     final ArrayWordList awl = WordLists.createFromReader(
       new FileReader[] {new FileReader(dictFile)},
@@ -67,11 +66,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
     validator = new PasswordValidator(rules);
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Setup test resources.
+   */
   @BeforeClass(groups = {"passtest"}, dependsOnMethods = {"createDictionary"})
   public void createChecker()
-    throws Exception
   {
     final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
       3,
@@ -122,9 +121,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
     rules.add(sourceRule);
   }
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test estimate entropy.
+   */
   @Test(groups = {"passtest"})
-  public void estimateEntropy() throws Exception
+  public void estimateEntropy()
   {
     /**
      * NIST: Table A1 from http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf
@@ -235,10 +236,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
       pvAl.estimateEntropy(length5CompositionPassword));
   }
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test validation.
+   */
   @Test(groups = {"passtest"})
   public void validate()
-    throws Exception
   {
     final List<Rule> l = new ArrayList<>();
     final PasswordValidator pv = new PasswordValidator(l);
@@ -283,13 +285,10 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   // CheckStyle:MethodLengthCheck OFF
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -597,12 +596,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {
@@ -618,10 +614,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
       };
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test producer extends.
+   */
   @Test(groups = {"passtest"})
-  public void producerExtends() throws Exception
+  public void producerExtends()
   {
     // test that password validator will accept any list of rules that extends Rule
     final List<CharacterRule> l = new ArrayList<>();

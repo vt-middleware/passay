@@ -40,7 +40,7 @@ public class QuickSort implements ArraySorter
    */
   public static void sort(final String[] array, final Comparator<String> c, final int lo, final int hi)
   {
-    final int m = (lo + hi) / 2;
+    final int m = (lo + hi) >>> 1;
     final String x = array[m];
 
     int i = lo;

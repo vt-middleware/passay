@@ -40,7 +40,7 @@ public class ClassGenerator
   private static final String PACKAGE_TO_CREATE = "org.passay.doc";
 
   /** Packages to import for compilation. */
-  private static final String[] PACKAGES_TO_IMPORT = new String[] {
+  private static final String[] PACKAGES_TO_IMPORT = {
     "java.io",
     "java.util",
     "org.cryptacular.bean",
@@ -55,7 +55,7 @@ public class ClassGenerator
   private static final String IMPORT_STATEMENTS;
 
   /** Buffer size for reading and writing files. */
-  private static final int BUFFER_SZIE = 2048;
+  private static final int BUFFER_SIZE = 2048;
 
   /** Code model for java class creation. */
   private final JCodeModel codeModel = new JCodeModel();
@@ -81,8 +81,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if the source cannot be downloaded, unzipped and read
    */
-  public ClassGenerator(final String url, final String path)
-    throws IOException
+  public ClassGenerator(final String url, final String path) throws IOException
   {
     // download the zipped source
     download(url, path + "/source.zip");
@@ -94,8 +93,7 @@ public class ClassGenerator
     final Path sourceDir = Paths.get(path + "/doc-sources");
     Files.walkFileTree(sourceDir, new SimpleFileVisitor<Path>() {
       @Override
-      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-        throws IOException
+      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException
       {
         if (attrs.isRegularFile()) {
           final String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
@@ -123,8 +121,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if an error occurs
    */
-  private static void download(final String url, final String destination)
-    throws IOException
+  private static void download(final String url, final String destination) throws IOException
   {
     final URL download = new URL(url);
     final ReadableByteChannel rbc = Channels.newChannel(download.openStream());
@@ -143,8 +140,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if an error occurs
    */
-  private static void unzip(final String file, final String destination)
-    throws IOException
+  private static void unzip(final String file, final String destination) throws IOException
   {
     final File directory = new File(destination);
     // if the output directory doesn't exist, create it
@@ -152,7 +148,7 @@ public class ClassGenerator
       directory.mkdirs();
     }
     // buffer for read and write data to file
-    final byte[] buffer = new byte[BUFFER_SZIE];
+    final byte[] buffer = new byte[BUFFER_SIZE];
     final ZipInputStream zipInput = new ZipInputStream(new FileInputStream(file));
     ZipEntry entry = zipInput.getNextEntry();
     try {
@@ -221,7 +217,7 @@ public class ClassGenerator
       fqClassName = String.format(
         "%s.%s",
         classPackage,
-        className.substring(0, 1).toUpperCase() + className.substring(1, className.length()));
+        className.substring(0, 1).toUpperCase() + className.substring(1));
     } else {
       fqClassName = String.format("%s.%s", classPackage, className);
     }
@@ -256,8 +252,7 @@ public class ClassGenerator
    *
    * @throws  IOException  if the write fails
    */
-  public void write(final String path)
-    throws IOException
+  public void write(final String path) throws IOException
   {
     final File f = new File(path);
     if (!f.exists()) {
@@ -269,8 +264,7 @@ public class ClassGenerator
     final Path sourceDir = Paths.get(path);
     Files.walkFileTree(sourceDir, new SimpleFileVisitor<Path>() {
       @Override
-      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
-        throws IOException
+      public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs) throws IOException
       {
         if (attrs.isRegularFile()) {
           String content = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
@@ -298,8 +292,7 @@ public class ClassGenerator
    *
    * @throws  Exception  if any error occurs
    */
-  public static void main(final String[] args)
-    throws Exception
+  public static void main(final String[] args) throws Exception
   {
     final String url = args[0];
     final String targetPath = args[1];

@@ -59,11 +59,8 @@ public class TernaryTreeDictionary implements Dictionary
   public TernaryTreeDictionary(final WordList wordList, final boolean useMedian)
   {
     // Respect case sensitivity of word list in ternary tree
-    if (wordList.getComparator().compare("A", "a") == 0) {
-      tree = new TernaryTree(false);
-    } else {
-      tree = new TernaryTree(true);
-    }
+    final boolean caseSensitive = wordList.getComparator().compare("A", "a") != 0;
+    tree = new TernaryTree(caseSensitive);
 
     final Iterator<String> iterator = useMedian ? wordList.medianIterator() : wordList.iterator();
     while (iterator.hasNext()) {
@@ -144,8 +141,7 @@ public class TernaryTreeDictionary implements Dictionary
    *
    * @throws  Exception  if an error occurs
    */
-  public static void main(final String[] args)
-    throws Exception
+  public static void main(final String[] args) throws Exception
   {
     final List<FileReader> files = new ArrayList<>();
     try {
@@ -236,24 +232,26 @@ public class TernaryTreeDictionary implements Dictionary
         throw new ArrayIndexOutOfBoundsException();
       }
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.out.println("Usage: java " + TernaryTreeDictionary.class.getName() + " \\");
-      System.out.println("       <dictionary1> <dictionary2> ... " +
-        "<options> <operation> \\");
-      System.out.println("");
-      System.out.println("where <options> includes:");
-      System.out.println("       -m (Insert dictionary using its medians) \\");
-      System.out.println("       -ci (Make search case-insensitive) \\");
-      System.out.println("");
-      System.out.println("where <operation> includes:");
-      System.out.println("       -s <word> (Search for a word) \\");
-      System.out.println("       -ps <word> (Partial search for a word) \\");
-      System.out.println("           (where word like '.a.a.a') \\");
-      System.out.println("       -ns <word> <distance> " +
-        "(Near search for a word) \\");
-      System.out.println("       -p (Print the entire dictionary " + "in tree form, path suffixes only) \\");
-      System.out.println("       -pp (Print the entire dictionary " + "in tree form, full paths) \\");
-      System.out.println("       -st (Print the tree node depth statistics) \\");
-      System.out.println("       -h (Print this message) \\");
+      System.out.println("Usage: java " + TernaryTreeDictionary.class.getName());
+      System.out.println("            <dict1> [... <dictN>] [options] <operation>");
+      System.out.println();
+      System.out.println("Where <dict1>...<dictN> are files containing dictionary words.");
+      System.out.println();
+      System.out.println("Options:");
+      System.out.println("    -m  insert dictionary using its median");
+      System.out.println("    -ci make search case-insensitive");
+      System.out.println();
+      System.out.println("Operations:");
+      System.out.println("    -s  <word>");
+      System.out.println("        search for a word");
+      System.out.println("    -ps <word>");
+      System.out.println("        partial search for a word (with wildcards, e.g. '.a.a.a')");
+      System.out.println("    -ns <word> <distance>");
+      System.out.println("        near search for a word");
+      System.out.println("    -p  print the entire dictionary in tree form, path suffixes only");
+      System.out.println("    -pp print the entire dictionary in tree form, full paths");
+      System.out.println("    -st print the tree node depth statistics");
+      System.out.println("    -h  print this help message");
       System.exit(1);
     }
   }

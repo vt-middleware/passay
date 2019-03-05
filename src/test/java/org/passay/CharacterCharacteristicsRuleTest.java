@@ -43,12 +43,9 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -103,10 +100,11 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test consistency.
+   */
   @Test(groups = {"passtest"})
   public void checkConsistency()
-    throws Exception
   {
     final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule();
     try {
@@ -120,12 +118,9 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {
@@ -157,10 +152,11 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test custom resolver.
+   */
   @Test(groups = {"passtest"})
   public void customResolver()
-    throws Exception
   {
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule();
     rule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 3));
@@ -188,13 +184,11 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
       resolver.resolve(detail));
   }
 
-
   /**
-   * @throws  Exception  On test failure.
+   * Test Metadata.
    */
   @Test(groups = {"passtest"})
   public void checkMetadata()
-    throws Exception
   {
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
       2, new CharacterRule(EnglishCharacterData.Digit, 1), new CharacterRule(EnglishCharacterData.LowerCase, 1));

@@ -18,14 +18,7 @@ public class WhitespaceRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */
-  protected static final char[] CHARS = new char[] {
-    (byte) 0x09,
-    (byte) 0x0A,
-    (byte) 0x0B,
-    (byte) 0x0C,
-    (byte) 0x0D,
-    (byte) 0x20,
-  };
+  protected static final char[] CHARS = {(byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20};
 
   /** Whether to report all whitespace matches or just the first. */
   protected boolean reportAllFailures;
@@ -149,12 +142,11 @@ public class WhitespaceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final String text = passwordData.getPassword();
     for (char c : whitespaceCharacters) {
       if (matchBehavior.match(text, c)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(c)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
         if (!reportAllFailures) {
           break;
         }
@@ -206,6 +198,6 @@ public class WhitespaceRule implements Rule
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        whitespaceCharacters != null ? Arrays.toString(whitespaceCharacters) : null);
+        Arrays.toString(whitespaceCharacters));
   }
 }

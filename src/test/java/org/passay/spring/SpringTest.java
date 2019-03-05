@@ -21,12 +21,9 @@ public class SpringTest
 
   /**
    * Attempts to load all Spring application context XML files to verify proper wiring.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"passtest"})
   public void testSpringWiring()
-    throws Exception
   {
     final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
       new String[] {"/spring-context.xml", });

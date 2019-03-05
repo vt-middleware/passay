@@ -29,8 +29,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
 
   /** @throws  Exception  On test failure. */
   @BeforeClass(groups = {"jdbcdicttest"})
-  public void createDictionary()
-    throws Exception
+  public void createDictionary() throws Exception
   {
     Class.forName("org.hsqldb.jdbcDriver");
     final JDBCDataSource dataSource = new JDBCDataSource();
@@ -59,21 +58,21 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
       "select count(*) from words");
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"jdbcdicttest"})
   public void closeDictionary()
-    throws Exception
   {
     caseSensitive = null;
     caseInsensitive = null;
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test search.
+   */
   @Test(groups = {"jdbcdicttest"})
   public void search()
-    throws Exception
   {
     AssertJUnit.assertTrue(caseSensitive.search("manipular"));
     AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
@@ -86,15 +85,12 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * This test is disabled by default. It produces a lot of testng report data which runs the process OOM.
+   * This test is disabled by default. It produces a lot of testing report data which runs the process OOM.
    *
    * @param  word  to search for.
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"jdbcdicttest"}, dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
-    throws Exception
   {
     AssertJUnit.assertTrue(caseSensitive.search(word));
     AssertJUnit.assertTrue(caseInsensitive.search(word));
@@ -103,10 +99,11 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  /** @throws  Exception  On test failure. */
+  /**
+   * Test size.
+   */
   @Test(groups = {"jdbcdicttest"})
   public void size()
-    throws Exception
   {
     AssertJUnit.assertEquals(dictionarySize, caseSensitive.size());
     AssertJUnit.assertEquals(dictionarySize, caseInsensitive.size());

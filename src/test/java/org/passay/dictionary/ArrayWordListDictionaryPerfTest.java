@@ -30,8 +30,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
    */
   @Parameters({ "webFileSorted", "fbsdFileSorted" })
   @BeforeClass(groups = {"wlperftest"})
-  public void createDictionary(final String dict1, final String dict2)
-    throws Exception
+  public void createDictionary(final String dict1, final String dict2) throws Exception
   {
     super.initialize(dict1, dict2);
 
@@ -42,11 +41,11 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
       wld.getClass().getSimpleName() + " (" + ArrayWordList.class.getSimpleName() + ") time to construct: " + t + "ms");
   }
 
-
-  /** @throws  Exception  On test failure. */
+  /**
+   * Close test resources.
+   */
   @AfterClass(groups = {"wlperftest"})
   public void closeDictionary()
-    throws Exception
   {
     System.out.println(
       wld.getClass().getSimpleName() + " (" + ArrayWordList.class.getSimpleName() + ") total search time: " +
@@ -60,12 +59,9 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
 
   /**
    * @param  word  to search for
-   *
-   * @throws  Exception  On test failure.
    */
   @Test(groups = {"wlperftest"}, dataProvider = "search-words-web-large")
   public void wordListSearch(final String word)
-    throws Exception
   {
     wldSearchTime += doSearch(wld, word);
   }

@@ -52,9 +52,8 @@ public final class ShannonEntropyFactory
    */
   public static ShannonEntropy createEntropy(final List<? extends Rule> passwordRules, final PasswordData passwordData)
   {
-    final boolean dictionaryCheck = passwordRules.stream().filter(
-      rule -> AbstractDictionaryRule.class.isAssignableFrom(
-        rule.getClass()) && ((AbstractDictionaryRule) rule).getDictionary().size() > 0).count() > 0;
+    final boolean dictionaryCheck = passwordRules.stream().anyMatch(
+      rule -> rule instanceof AbstractDictionaryRule && ((AbstractDictionaryRule) rule).getDictionary().size() > 0);
     return createEntropy(dictionaryCheck, passwordData);
   }
 

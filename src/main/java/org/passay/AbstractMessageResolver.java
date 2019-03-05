@@ -30,12 +30,10 @@ public abstract class AbstractMessageResolver implements MessageResolver
     final String format;
     if (message != null) {
       format = String.format(message, detail.getValues());
+    } else if (!detail.getParameters().isEmpty()) {
+      format = String.format("%s:%s", key, detail.getParameters());
     } else {
-      if (!detail.getParameters().isEmpty()) {
-        format = String.format("%s:%s", key, detail.getParameters());
-      } else {
-        format = String.format("%s", key);
-      }
+      format = String.format("%s", key);
     }
     return format;
   }

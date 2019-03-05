@@ -122,12 +122,11 @@ public class NumberRangeRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     final String text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {
       if (matchBehavior.match(text, Integer.toString(i))) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(i)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(i));
         if (!reportAllFailures) {
           break;
         }

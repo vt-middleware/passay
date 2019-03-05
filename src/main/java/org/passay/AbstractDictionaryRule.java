@@ -71,21 +71,17 @@ public abstract class AbstractDictionaryRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     String text = passwordData.getPassword();
     String matchingWord = doWordSearch(text);
     if (matchingWord != null) {
-      result.setValid(false);
-      result.getDetails().add(
-        new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord)));
+      result.addError(getErrorCode(false), createRuleResultDetailParameters(matchingWord));
     }
     if (matchBackwards && text.length() > 1) {
       text = new StringBuilder(passwordData.getPassword()).reverse().toString();
       matchingWord = doWordSearch(text);
       if (matchingWord != null) {
-        result.setValid(false);
-        result.getDetails().add(
-          new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord)));
+        result.addError(getErrorCode(true), createRuleResultDetailParameters(matchingWord));
       }
     }
     return result;

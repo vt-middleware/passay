@@ -107,15 +107,10 @@ public class LengthRule implements Rule
   {
     final RuleResult result = new RuleResult();
     final int length = passwordData.getPassword().length();
-    if (length >= minimumLength && length <= maximumLength) {
-      result.setValid(true);
-    } else {
-      result.setValid(false);
-      if (length < minimumLength) {
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE_MIN, createRuleResultDetailParameters()));
-      } else {
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE_MAX, createRuleResultDetailParameters()));
-      }
+    if (length < minimumLength) {
+      result.addError(ERROR_CODE_MIN, createRuleResultDetailParameters());
+    } else if (length > maximumLength) {
+      result.addError(ERROR_CODE_MAX, createRuleResultDetailParameters());
     }
     result.setMetadata(createRuleResultMetadata(passwordData));
     return result;

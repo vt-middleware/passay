@@ -121,23 +121,22 @@ public class UsernameRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult(true);
+    final RuleResult result = new RuleResult();
     String user = passwordData.getUsername();
-    if (user != null && !"".equals(user)) {
+    if (user != null && !user.isEmpty()) {
       String text = passwordData.getPassword();
-      String reverseUser = new StringBuilder(user).reverse().toString();
       if (ignoreCase) {
         text = text.toLowerCase();
         user = user.toLowerCase();
-        reverseUser = reverseUser.toLowerCase();
       }
       if (matchBehavior.match(text, user)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(user)));
+        result.addError(ERROR_CODE, createRuleResultDetailParameters(user));
       }
-      if (matchBackwards && matchBehavior.match(text, reverseUser)) {
-        result.setValid(false);
-        result.getDetails().add(new RuleResultDetail(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user)));
+      if (matchBackwards) {
+        final String reverseUser = new StringBuilder(user).reverse().toString();
+        if (matchBehavior.match(text, reverseUser)) {
+          result.addError(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user));
+        }
       }
     }
     return result;

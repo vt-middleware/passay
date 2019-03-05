@@ -40,8 +40,7 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
    */
   @Parameters("dictionaryFile")
   @BeforeClass(groups = {"passtest"})
-  public void createRules(final String dictFile)
-    throws Exception
+  public void createRules(final String dictFile) throws Exception
   {
     final ArrayWordList caseSensitiveWordList = WordLists.createFromReader(
       new FileReader[] {new FileReader(dictFile)},
@@ -69,12 +68,9 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -163,12 +159,9 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {

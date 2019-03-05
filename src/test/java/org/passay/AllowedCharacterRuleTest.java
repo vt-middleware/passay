@@ -14,19 +14,16 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
 {
 
   /** Allowed characters for testing. */
-  private static final char[] ALLOWED_CHARS = new char[]{
+  private static final char[] ALLOWED_CHARS = {
     'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
     'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', };
 
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()
-    throws Exception
   {
     return
       new Object[][] {
@@ -84,12 +81,9 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "messages")
   public Object[][] messages()
-    throws Exception
   {
     return
       new Object[][] {
@@ -130,13 +124,11 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
       };
   }
 
-
   /**
-   * @throws  Exception  On test failure.
+   * Test Metadata.
    */
   @Test(groups = {"passtest"})
   public void checkMetadata()
-    throws Exception
   {
     final AllowedCharacterRule rule = new AllowedCharacterRule(ALLOWED_CHARS);
     RuleResult result = rule.validate(new PasswordData("metadata"));
