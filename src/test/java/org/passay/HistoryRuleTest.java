@@ -3,6 +3,7 @@ package org.passay;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.passay.PasswordData.HistoricalReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -31,10 +32,10 @@ public class HistoryRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    history.add(new PasswordData.HistoricalReference("history", "t3stUs3r01"));
-    history.add(new PasswordData.HistoricalReference("history", "t3stUs3r02"));
-    history.add(new PasswordData.HistoricalReference("history", "t3stUs3r03"));
-    history.add(new PasswordData.HistoricalReference("history", "t3stUs3r02"));
+    history.add(new HistoricalReference("history", "t3stUs3r01"));
+    history.add(new HistoricalReference("history", "t3stUs3r02"));
+    history.add(new HistoricalReference("history", "t3stUs3r03"));
+    history.add(new HistoricalReference("history", "t3stUs3r02"));
   }
 
 

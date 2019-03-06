@@ -3,6 +3,7 @@ package org.passay;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.passay.PasswordData.SourceReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -31,9 +32,9 @@ public class SourceRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    sources.add(new PasswordData.SourceReference("System A", "t3stUs3r04"));
-    sources.add(new PasswordData.SourceReference("System A", "t3stUs3r05"));
-    sources.add(new PasswordData.SourceReference("System A", "t3stUs3r05"));
+    sources.add(new SourceReference("System A", "t3stUs3r04"));
+    sources.add(new SourceReference("System A", "t3stUs3r05"));
+    sources.add(new SourceReference("System A", "t3stUs3r05"));
   }
 
 

@@ -7,6 +7,8 @@ import org.cryptacular.bean.BCryptHashBean;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
+import org.passay.PasswordData.HistoricalReference;
+import org.passay.PasswordData.Reference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -19,13 +21,13 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final List<PasswordData.Reference> digestRefs = new ArrayList<>();
+  private final List<Reference> digestRefs = new ArrayList<>();
 
   /** For testing. */
-  private final List<PasswordData.Reference> saltedDigestRefs = new ArrayList<>();
+  private final List<Reference> saltedDigestRefs = new ArrayList<>();
 
   /** For testing. */
-  private final List<PasswordData.Reference> bcryptDigestRefs = new ArrayList<>();
+  private final List<Reference> bcryptDigestRefs = new ArrayList<>();
 
   /** For testing. */
   private final DigestHistoryRule digestRule = new DigestHistoryRule(
@@ -47,16 +49,16 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    digestRefs.add(new PasswordData.HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
-    digestRefs.add(new PasswordData.HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
-    digestRefs.add(new PasswordData.HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
+    digestRefs.add(new HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
+    digestRefs.add(new HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
+    digestRefs.add(new HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
 
-    saltedDigestRefs.add(new PasswordData.HistoricalReference("salted-history", "2DSZvOzGiMnm/Mbxt1M3zNAh7P1GebLG"));
-    saltedDigestRefs.add(new PasswordData.HistoricalReference("salted-history", "rv1mF2DuarrF//LPP9+AFJal8bMc9G5z"));
-    saltedDigestRefs.add(new PasswordData.HistoricalReference("salted-history", "3lABdWxtWhfGKtXBx4MfiWZ1737KnFuG"));
+    saltedDigestRefs.add(new HistoricalReference("salted-history", "2DSZvOzGiMnm/Mbxt1M3zNAh7P1GebLG"));
+    saltedDigestRefs.add(new HistoricalReference("salted-history", "rv1mF2DuarrF//LPP9+AFJal8bMc9G5z"));
+    saltedDigestRefs.add(new HistoricalReference("salted-history", "3lABdWxtWhfGKtXBx4MfiWZ1737KnFuG"));
 
     bcryptDigestRefs.add(
-      new PasswordData.HistoricalReference(
+      new HistoricalReference(
         "bcrypt-history",
         "$2a$5$bvIG6Nmid91Mu9RcmmWZfO5HJIMCT8riNW0hEp8f6/FuA2/mHZFpe"));
   }

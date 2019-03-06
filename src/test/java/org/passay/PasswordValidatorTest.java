@@ -7,6 +7,8 @@ import java.util.List;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
+import org.passay.PasswordData.HistoricalReference;
+import org.passay.PasswordData.SourceReference;
 import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.WordListDictionary;
@@ -101,12 +103,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
     sha1Bean.setCodecSpec(new CodecSpec("Base64"));
 
     final DigestHistoryRule historyRule = new DigestHistoryRule(sha1Bean);
-    references.add(new PasswordData.HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
-    references.add(new PasswordData.HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
-    references.add(new PasswordData.HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
+    references.add(new HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
+    references.add(new HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
+    references.add(new HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
 
     final DigestSourceRule sourceRule = new DigestSourceRule(sha1Bean);
-    references.add(new PasswordData.SourceReference("source", "CJGTDMQRP+rmHApkcijC80aDV0o="));
+    references.add(new SourceReference("source", "CJGTDMQRP+rmHApkcijC80aDV0o="));
 
     rules.add(charRule);
     rules.add(whitespaceRule);
