@@ -2,6 +2,7 @@
 package org.passay.dictionary.sort;
 
 import java.util.Comparator;
+import org.passay.dictionary.WordLists;
 
 /**
  * Interface for array sort implementations.
@@ -11,13 +12,15 @@ import java.util.Comparator;
 public interface ArraySorter
 {
 
-
   /**
    * This will sort the supplied string array.
    *
    * @param  array  To sort
    */
-  void sort(String[] array);
+  default void sort(final String[] array)
+  {
+    sort(array, WordLists.CASE_SENSITIVE_COMPARATOR);
+  }
 
 
   /**

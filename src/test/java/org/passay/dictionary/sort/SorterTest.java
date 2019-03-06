@@ -55,7 +55,7 @@ public class SorterTest
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
     doSort(new BubbleSort(), array);
-    AssertJUnit.assertTrue(Arrays.equals(sortedArray, array));
+    AssertJUnit.assertArrayEquals(array, sortedArray);
   }
 
 
@@ -71,7 +71,7 @@ public class SorterTest
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
     doSort(new ArraysSort(), array);
-    AssertJUnit.assertTrue(Arrays.equals(sortedArray, array));
+    AssertJUnit.assertArrayEquals(array, sortedArray);
   }
 
 
@@ -87,7 +87,7 @@ public class SorterTest
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
     doSort(new InsertionSort(), array);
-    AssertJUnit.assertTrue(Arrays.equals(sortedArray, array));
+    AssertJUnit.assertArrayEquals(array, sortedArray);
   }
 
 
@@ -103,7 +103,7 @@ public class SorterTest
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
     doSort(new QuickSort(), array);
-    AssertJUnit.assertTrue(Arrays.equals(sortedArray, array));
+    AssertJUnit.assertArrayEquals(array, sortedArray);
   }
 
 
@@ -119,7 +119,7 @@ public class SorterTest
     final String[] array = TestUtil.fileToArray(dict);
     AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
     doSort(new SelectionSort(), array);
-    AssertJUnit.assertTrue(Arrays.equals(sortedArray, array));
+    AssertJUnit.assertArrayEquals(array, sortedArray);
   }
 
 
