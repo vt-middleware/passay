@@ -95,6 +95,21 @@ public class PasswordData
 
 
   /**
+   * Creates a new password data.
+   *
+   * @param  u  username
+   * @param  p  password
+   * @param  r  references
+   */
+  public PasswordData(final String u, final String p, final List<Reference> r)
+  {
+    setUsername(u);
+    setPassword(p);
+    setPasswordReferences(r);
+  }
+
+
+  /**
    * Sets the password.
    *
    * @param  p  password

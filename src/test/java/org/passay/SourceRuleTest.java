@@ -46,33 +46,33 @@ public class SourceRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {rule, TestUtils.newPasswordData("t3stUs3r01", "testuser", null, sources), null, },
+        {rule, new PasswordData("testuser", "t3stUs3r01", sources), null, },
         {
           rule,
-          TestUtils.newPasswordData("t3stUs3r04", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r04", sources),
           codes(SourceRule.ERROR_CODE),
         },
         {
           rule,
-          TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r05", sources),
           codes(SourceRule.ERROR_CODE, SourceRule.ERROR_CODE),
         },
 
-        {ruleReportFirst, TestUtils.newPasswordData("t3stUs3r01", "testuser", null, sources), null, },
+        {ruleReportFirst, new PasswordData("testuser", "t3stUs3r01", sources), null, },
         {
           ruleReportFirst,
-          TestUtils.newPasswordData("t3stUs3r04", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r04", sources),
           codes(SourceRule.ERROR_CODE),
         },
         {
           ruleReportFirst,
-          TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r05", sources),
           codes(SourceRule.ERROR_CODE),
         },
 
-        {emptyRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
-        {emptyRule, TestUtils.newPasswordData("t3stUs3r04", "testuser"), null, },
-        {emptyRule, TestUtils.newPasswordData("t3stUs3r05", "testuser"), null, },
+        {emptyRule, new PasswordData("testuser", "t3stUs3r01"), null, },
+        {emptyRule, new PasswordData("testuser", "t3stUs3r04"), null, },
+        {emptyRule, new PasswordData("testuser", "t3stUs3r05"), null, },
       };
   }
 
@@ -87,12 +87,12 @@ public class SourceRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           rule,
-          TestUtils.newPasswordData("t3stUs3r04", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r04", sources),
           new String[] {String.format("Password cannot be the same as your %s password.", "System A"), },
         },
         {
           rule,
-          TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r05", sources),
           new String[] {
             String.format("Password cannot be the same as your %s password.", "System A"),
             String.format("Password cannot be the same as your %s password.", "System A"),
@@ -100,7 +100,7 @@ public class SourceRuleTest extends AbstractRuleTest
         },
         {
           ruleReportFirst,
-          TestUtils.newPasswordData("t3stUs3r05", "testuser", null, sources),
+          new PasswordData("testuser", "t3stUs3r05", sources),
           new String[] {String.format("Password cannot be the same as your %s password.", "System A"), },
         },
       };

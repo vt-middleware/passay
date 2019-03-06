@@ -71,49 +71,49 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {digestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, digestRefs), null, },
+        {digestRule, new PasswordData("testuser", "t3stUs3r00", digestRefs), null, },
         {
           digestRule,
-          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, digestRefs),
-          codes(HistoryRule.ERROR_CODE),
-        },
-        {
-          digestRule,
-          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, digestRefs),
+          new PasswordData("testuser", "t3stUs3r01", digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           digestRule,
-          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, digestRefs),
-          codes(HistoryRule.ERROR_CODE),
-        },
-
-        {saltedDigestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, saltedDigestRefs), null, },
-        {
-          saltedDigestRule,
-          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, saltedDigestRefs),
+          new PasswordData("testuser", "t3stUs3r02", digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r03", digestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+
+        {saltedDigestRule, new PasswordData("testuser", "t3stUs3r00", saltedDigestRefs), null, },
+        {
           saltedDigestRule,
-          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, saltedDigestRefs),
+          new PasswordData("testuser", "t3stUs3r01", saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           saltedDigestRule,
-          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, saltedDigestRefs),
+          new PasswordData("testuser", "t3stUs3r02", saltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          saltedDigestRule,
+          new PasswordData("testuser", "t3stUs3r03", saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser"), null, },
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r02", "testuser"), null, },
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r03", "testuser"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r00"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r01"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r02"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r03"), null, },
 
-        {bcryptDigestRule, TestUtils.newPasswordData("p@$$w0rd", "testuser"), null, },
+        {bcryptDigestRule, new PasswordData("testuser", "p@$$w0rd"), null, },
         {
           bcryptDigestRule,
-          TestUtils.newPasswordData("password", "testuser", null, bcryptDigestRefs),
+          new PasswordData("testuser", "password", bcryptDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
       };
@@ -130,7 +130,7 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           digestRule,
-          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, digestRefs),
+          new PasswordData("testuser", "t3stUs3r01", digestRefs),
           new String[] {String.format("Password matches one of %s previous passwords.", digestRefs.size()), },
         },
       };
