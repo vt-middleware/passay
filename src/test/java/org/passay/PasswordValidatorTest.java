@@ -7,6 +7,8 @@ import java.util.List;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
+import org.passay.PasswordData.HistoricalReference;
+import org.passay.PasswordData.SourceReference;
 import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.WordListDictionary;
@@ -101,12 +103,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
     sha1Bean.setCodecSpec(new CodecSpec("Base64"));
 
     final DigestHistoryRule historyRule = new DigestHistoryRule(sha1Bean);
-    references.add(new PasswordData.HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
-    references.add(new PasswordData.HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
-    references.add(new PasswordData.HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
+    references.add(new HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
+    references.add(new HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
+    references.add(new HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
 
     final DigestSourceRule sourceRule = new DigestSourceRule(sha1Bean);
-    references.add(new PasswordData.SourceReference("source", "CJGTDMQRP+rmHApkcijC80aDV0o="));
+    references.add(new SourceReference("source", "CJGTDMQRP+rmHApkcijC80aDV0o="));
 
     rules.add(charRule);
     rules.add(whitespaceRule);
@@ -298,7 +300,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** all digits */
         {
           validator,
-          TestUtils.newPasswordData("4326789032", USER, null, references),
+          new PasswordData(USER, "4326789032", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.UpperCase.getErrorCode(),
@@ -310,7 +312,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** all non-alphanumeric */
         {
           validator,
-          TestUtils.newPasswordData("$&!$#@*{{>", USER, null, references),
+          new PasswordData(USER, "$&!$#@*{{>", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -321,7 +323,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** all lowercase */
         {
           validator,
-          TestUtils.newPasswordData("aycdopezss", USER, null, references),
+          new PasswordData(USER, "aycdopezss", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -333,7 +335,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** all uppercase */
         {
           validator,
-          TestUtils.newPasswordData("AYCDOPEZSS", USER, null, references),
+          new PasswordData(USER, "AYCDOPEZSS", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -345,7 +347,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** digits and non-alphanumeric */
         {
           validator,
-          TestUtils.newPasswordData("@&3*(%5{}^", USER, null, references),
+          new PasswordData(USER, "@&3*(%5{}^", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.UpperCase.getErrorCode(),
@@ -355,7 +357,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** digits and lowercase */
         {
           validator,
-          TestUtils.newPasswordData("ay3dop5zss", USER, null, references),
+          new PasswordData(USER, "ay3dop5zss", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.UpperCase.getErrorCode(),
@@ -365,7 +367,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** digits and uppercase */
         {
           validator,
-          TestUtils.newPasswordData("AY3DOP5ZSS", USER, null, references),
+          new PasswordData(USER, "AY3DOP5ZSS", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.LowerCase.getErrorCode(),
@@ -375,7 +377,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** non-alphanumeric and lowercase */
         {
           validator,
-          TestUtils.newPasswordData("a&c*o%ea}s", USER, null, references),
+          new PasswordData(USER, "a&c*o%ea}s", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -385,7 +387,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** non-alphanumeric and uppercase */
         {
           validator,
-          TestUtils.newPasswordData("A&C*O%EA}S", USER, null, references),
+          new PasswordData(USER, "A&C*O%EA}S", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -395,7 +397,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** uppercase and lowercase */
         {
           validator,
-          TestUtils.newPasswordData("AycDOPdsyz", USER, null, references),
+          new PasswordData(USER, "AycDOPdsyz", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -407,7 +409,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** contains a space */
         {
           validator,
-          TestUtils.newPasswordData("AycD Pdsyz", USER, null, references),
+          new PasswordData(USER, "AycD Pdsyz", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -418,7 +420,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** contains a tab */
         {
           validator,
-          TestUtils.newPasswordData("AycD    Psyz", USER, null, references),
+          new PasswordData(USER, "AycD    Psyz", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Digit.getErrorCode(),
@@ -431,14 +433,14 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** too short */
         {
           validator,
-          TestUtils.newPasswordData("p4T3t#", USER, null, references),
+          new PasswordData(USER, "p4T3t#", references),
           codes(LengthRule.ERROR_CODE_MIN),
         },
 
         /** too long */
         {
           validator,
-          TestUtils.newPasswordData("p4t3t#n6574632vbad#@!8", USER, null, references),
+          new PasswordData(USER, "p4t3t#n6574632vbad#@!8", references),
           codes(LengthRule.ERROR_CODE_MAX),
         },
 
@@ -447,14 +449,14 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** matches dictionary word 'none' */
         {
           validator,
-          TestUtils.newPasswordData("p4t3t#none", USER, null, references),
+          new PasswordData(USER, "p4t3t#none", references),
           codes(DictionaryRule.ERROR_CODE),
         },
 
         /** matches dictionary word 'none' backwards */
         {
           validator,
-          TestUtils.newPasswordData("p4t3t#enon", USER, null, references),
+          new PasswordData(USER, "p4t3t#enon", references),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
         },
 
@@ -463,7 +465,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** matches sequence 'zxcvb' */
         {
           validator,
-          TestUtils.newPasswordData("p4zxcvb#n65", USER, null, references),
+          new PasswordData(USER, "p4zxcvb#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
@@ -473,14 +475,14 @@ public class PasswordValidatorTest extends AbstractRuleTest
          */
         {
           validator,
-          TestUtils.newPasswordData("p4ytrew#n65", USER, null, references),
+          new PasswordData(USER, "p4ytrew#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
         },
 
         /** matches sequence 'iop[]' ignore case */
         {
           validator,
-          TestUtils.newPasswordData("p4iOP[]#n65", USER, null, references),
+          new PasswordData(USER, "p4iOP[]#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
@@ -492,7 +494,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
          */
         {
           validator,
-          TestUtils.newPasswordData("p4testuser#n65", USER, null, references),
+          new PasswordData(USER, "p4testuser#n65", references),
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
         },
 
@@ -502,7 +504,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
          */
         {
           validator,
-          TestUtils.newPasswordData("p4resutset#n65", USER, null, references),
+          new PasswordData(USER, "p4resutset#n65", references),
           codes(UsernameRule.ERROR_CODE_REVERSED, DictionaryRule.ERROR_CODE_REVERSED),
         },
 
@@ -512,7 +514,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
          */
         {
           validator,
-          TestUtils.newPasswordData("p4TeStusEr#n65", USER, null, references),
+          new PasswordData(USER, "p4TeStusEr#n65", references),
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
         },
 
@@ -521,21 +523,21 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** contains history password */
         {
           validator,
-          TestUtils.newPasswordData("t3stUs3r02", USER, null, references),
+          new PasswordData(USER, "t3stUs3r02", references),
           codes(HistoryRule.ERROR_CODE),
         },
 
         /** contains history password */
         {
           validator,
-          TestUtils.newPasswordData("t3stUs3r03", USER, null, references),
+          new PasswordData(USER, "t3stUs3r03", references),
           codes(HistoryRule.ERROR_CODE),
         },
 
         /** contains source password */
         {
           validator,
-          TestUtils.newPasswordData("t3stUs3r04", USER, null, references),
+          new PasswordData(USER, "t3stUs3r04", references),
           codes(SourceRule.ERROR_CODE),
         },
 
@@ -544,42 +546,42 @@ public class PasswordValidatorTest extends AbstractRuleTest
         /** digits, non-alphanumeric, lowercase, uppercase */
         {
           validator,
-          TestUtils.newPasswordData("p4T3t#N65", USER, null, references),
+          new PasswordData(USER, "p4T3t#N65", references),
           null,
         },
 
         /** digits, non-alphanumeric, lowercase */
         {
           validator,
-          TestUtils.newPasswordData("p4t3t#n65", USER, null, references),
+          new PasswordData(USER, "p4t3t#n65", references),
           null,
         },
 
         /** digits, non-alphanumeric, uppercase */
         {
           validator,
-          TestUtils.newPasswordData("P4T3T#N65", USER, null, references),
+          new PasswordData(USER, "P4T3T#N65", references),
           null,
         },
 
         /** digits, uppercase, lowercase */
         {
           validator,
-          TestUtils.newPasswordData("p4t3tCn65", USER, null, references),
+          new PasswordData(USER, "p4t3tCn65", references),
           null,
         },
 
         /** non-alphanumeric, lowercase, uppercase */
         {
           validator,
-          TestUtils.newPasswordData("pxT%t#Nwq", USER, null, references),
+          new PasswordData(USER, "pxT%t#Nwq", references),
           null,
         },
 
         // Issue 135
         {
           validator,
-          TestUtils.newPasswordData("1234567", USER, null, references),
+          new PasswordData(USER, "1234567", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
             EnglishCharacterData.Special.getErrorCode(),
@@ -604,7 +606,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
       new Object[][] {
         {
           validator,
-          TestUtils.newPasswordData("ay3dop5zss", USER, null, references),
+          new PasswordData(USER, "ay3dop5zss", references),
           new String[] {
             String.format("Password must contain %s or more special characters.", 1),
             String.format("Password must contain %s or more uppercase characters.", 1),

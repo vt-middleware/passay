@@ -7,6 +7,8 @@ import org.cryptacular.bean.BCryptHashBean;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
+import org.passay.PasswordData.HistoricalReference;
+import org.passay.PasswordData.Reference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -19,13 +21,19 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final List<PasswordData.Reference> digestRefs = new ArrayList<>();
+  private final List<Reference> digestRefs = new ArrayList<>();
 
   /** For testing. */
-  private final List<PasswordData.Reference> saltedDigestRefs = new ArrayList<>();
+  private final List<Reference> saltedDigestRefs = new ArrayList<>();
 
   /** For testing. */
-  private final List<PasswordData.Reference> bcryptDigestRefs = new ArrayList<>();
+  private final List<Reference> prefixSaltedDigestRefs = new ArrayList<>();
+
+  /** For testing. */
+  private final List<Reference> suffixSaltedDigestRefs = new ArrayList<>();
+
+  /** For testing. */
+  private final List<Reference> bcryptDigestRefs = new ArrayList<>();
 
   /** For testing. */
   private final DigestHistoryRule digestRule = new DigestHistoryRule(
@@ -47,16 +55,26 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
   @BeforeClass(groups = {"passtest"})
   public void createRules()
   {
-    digestRefs.add(new PasswordData.HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
-    digestRefs.add(new PasswordData.HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
-    digestRefs.add(new PasswordData.HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
+    digestRefs.add(new HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
+    digestRefs.add(new HistoricalReference("history", "zurb9DyQ5nooY1la8h86Bh0n1iw="));
+    digestRefs.add(new HistoricalReference("history", "bhqabXwE3S8E6xNJfX/d76MFOCs="));
 
-    saltedDigestRefs.add(new PasswordData.HistoricalReference("salted-history", "2DSZvOzGiMnm/Mbxt1M3zNAh7P1GebLG"));
-    saltedDigestRefs.add(new PasswordData.HistoricalReference("salted-history", "rv1mF2DuarrF//LPP9+AFJal8bMc9G5z"));
-    saltedDigestRefs.add(new PasswordData.HistoricalReference("salted-history", "3lABdWxtWhfGKtXBx4MfiWZ1737KnFuG"));
+    saltedDigestRefs.add(new HistoricalReference("salted-history", "2DSZvOzGiMnm/Mbxt1M3zNAh7P1GebLG"));
+    saltedDigestRefs.add(new HistoricalReference("salted-history", "rv1mF2DuarrF//LPP9+AFJal8bMc9G5z"));
+    saltedDigestRefs.add(new HistoricalReference("salted-history", "3lABdWxtWhfGKtXBx4MfiWZ1737KnFuG"));
+
+    final PasswordData.PrefixSalt prefixSalt = new PasswordData.PrefixSalt("xyz");
+    prefixSaltedDigestRefs.add(new HistoricalReference("pre-salt-history", "lHGQFf9tTVUOCG3CoNqdKaiCThA=", prefixSalt));
+    prefixSaltedDigestRefs.add(new HistoricalReference("pre-salt-history", "GtEfsfrBomR/3aD5RfBGWPOKlYc=", prefixSalt));
+    prefixSaltedDigestRefs.add(new HistoricalReference("pre-salt-history", "XZ2CO63FrS5N7wvCmyzkiBAYNoY=", prefixSalt));
+
+    final PasswordData.SuffixSalt suffixSalt = new PasswordData.SuffixSalt("xyz");
+    suffixSaltedDigestRefs.add(new HistoricalReference("suf-salt-history", "HnBhNzaSRdKqmIZbau97E++rysM=", suffixSalt));
+    suffixSaltedDigestRefs.add(new HistoricalReference("suf-salt-history", "ScDf3gIY16LF6UAeWVr7nZHSvbE=", suffixSalt));
+    suffixSaltedDigestRefs.add(new HistoricalReference("suf-salt-history", "apjCHJyez2IvOlBM5mqD2DvSk6o=", suffixSalt));
 
     bcryptDigestRefs.add(
-      new PasswordData.HistoricalReference(
+      new HistoricalReference(
         "bcrypt-history",
         "$2a$5$bvIG6Nmid91Mu9RcmmWZfO5HJIMCT8riNW0hEp8f6/FuA2/mHZFpe"));
   }
@@ -71,49 +89,99 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        {digestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, digestRefs), null, },
         {
           digestRule,
-          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, digestRefs),
-          codes(HistoryRule.ERROR_CODE),
-        },
-        {
-          digestRule,
-          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, digestRefs),
-          codes(HistoryRule.ERROR_CODE),
+          new PasswordData("testuser", "t3stUs3r00", digestRefs),
+          null,
         },
         {
           digestRule,
-          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, digestRefs),
-          codes(HistoryRule.ERROR_CODE),
-        },
-
-        {saltedDigestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser", null, saltedDigestRefs), null, },
-        {
-          saltedDigestRule,
-          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, saltedDigestRefs),
+          new PasswordData("testuser", "t3stUs3r01", digestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r02", digestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r03", digestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+
+        {
           saltedDigestRule,
-          TestUtils.newPasswordData("t3stUs3r02", "testuser", null, saltedDigestRefs),
+          new PasswordData("testuser", "t3stUs3r00", saltedDigestRefs),
+          null,
+        },
+        {
+          saltedDigestRule,
+          new PasswordData("testuser", "t3stUs3r01", saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
         {
           saltedDigestRule,
-          TestUtils.newPasswordData("t3stUs3r03", "testuser", null, saltedDigestRefs),
+          new PasswordData("testuser", "t3stUs3r02", saltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          saltedDigestRule,
+          new PasswordData("testuser", "t3stUs3r03", saltedDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r00", "testuser"), null, },
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r01", "testuser"), null, },
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r02", "testuser"), null, },
-        {emptyDigestRule, TestUtils.newPasswordData("t3stUs3r03", "testuser"), null, },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r00", prefixSaltedDigestRefs),
+          null,
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r01", prefixSaltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r02", prefixSaltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r03", prefixSaltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
 
-        {bcryptDigestRule, TestUtils.newPasswordData("p@$$w0rd", "testuser"), null, },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r00", suffixSaltedDigestRefs),
+          null,
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r01", suffixSaltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r02", suffixSaltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+        {
+          digestRule,
+          new PasswordData("testuser", "t3stUs3r03", suffixSaltedDigestRefs),
+          codes(HistoryRule.ERROR_CODE),
+        },
+
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r00"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r01"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r02"), null, },
+        {emptyDigestRule, new PasswordData("testuser", "t3stUs3r03"), null, },
+
+        {bcryptDigestRule, new PasswordData("testuser", "p@$$w0rd"), null, },
         {
           bcryptDigestRule,
-          TestUtils.newPasswordData("password", "testuser", null, bcryptDigestRefs),
+          new PasswordData("testuser", "password", bcryptDigestRefs),
           codes(HistoryRule.ERROR_CODE),
         },
       };
@@ -130,7 +198,7 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
       new Object[][] {
         {
           digestRule,
-          TestUtils.newPasswordData("t3stUs3r01", "testuser", null, digestRefs),
+          new PasswordData("testuser", "t3stUs3r01", digestRefs),
           new String[] {String.format("Password matches one of %s previous passwords.", digestRefs.size()), },
         },
       };

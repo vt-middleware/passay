@@ -8,7 +8,7 @@ import org.cryptacular.bean.HashBean;
 /**
  * Rule for determining if a password matches a digested password from a different source. Useful for when separate
  * systems cannot have matching passwords. If no password reference has been set that matches the label on the rule,
- * then passwords will meet this rule. See {@link PasswordData#setPasswordReferences(List)}
+ * then passwords will meet this rule. See {@link PasswordData#setPasswordReferences}
  *
  * @author  Middleware Services
  */
@@ -50,14 +50,16 @@ public class DigestSourceRule extends SourceRule
   /**
    * Determines whether a digested password matches a reference value.
    *
-   * @param  undigested  candidate clear text password.
+   * @param  password  candidate clear text password.
    * @param  reference  reference digested password.
    *
    * @return  true if passwords match, false otherwise.
    */
   @Override
-  protected boolean matches(final String undigested, final PasswordData.Reference reference)
+  protected boolean matches(final String password, final PasswordData.Reference reference)
   {
+    final PasswordData.Salt salt = reference.getSalt();
+    final String undigested = salt == null ? password : salt.applyTo(password);
     return hashBean.compare(reference.getPassword(), undigested.getBytes(charset));
   }
 }

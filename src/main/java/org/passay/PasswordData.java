@@ -95,6 +95,21 @@ public class PasswordData
 
 
   /**
+   * Creates a new password data.
+   *
+   * @param  u  username
+   * @param  p  password
+   * @param  r  references
+   */
+  public PasswordData(final String u, final String p, final List<Reference> r)
+  {
+    setUsername(u);
+    setPassword(p);
+    setPasswordReferences(r);
+  }
+
+
+  /**
    * Sets the password.
    *
    * @param  p  password
@@ -255,10 +270,80 @@ public class PasswordData
   }
 
 
+  /**
+   * Combines salt (additional external data) with a password
+   * before applying a digest algorithm to them.
+   */
+  public interface Salt
+  {
+
+    /**
+     * Applies the salt to the password, returning the combined string to be digested.
+     *
+     * @param password the cleartext password to apply the salt to
+     * @return the salted password
+     */
+    String applyTo(String password);
+  }
+
+
+  /**
+   * A salt that is concatenated as a prefix to the password data.
+   */
+  public static class PrefixSalt implements Salt
+  {
+
+    /** The salt data. */
+    private final String salt;
+
+    /**
+     * Creates a new salt with the given salt data.
+     *
+     * @param slt the salt data
+     */
+    public PrefixSalt(final String slt)
+    {
+      salt = slt;
+    }
+
+    @Override
+    public String applyTo(final String password)
+    {
+      return salt + password;
+    }
+  }
+
+
+  /**
+   * A salt that is concatenated as a suffix to the password data.
+   */
+  public static class SuffixSalt implements Salt
+  {
+
+    /** The salt data. */
+    private final String salt;
+
+    /**
+     * Creates a new salt with the given salt data.
+     *
+     * @param slt the salt data
+     */
+    public SuffixSalt(final String slt)
+    {
+      salt = slt;
+    }
+
+    @Override
+    public String applyTo(final String password)
+    {
+      return password + salt;
+    }
+  }
+
+
   /** Reference to another password. */
   public interface Reference
   {
-
 
     /**
      * Returns the password associated with this reference.
@@ -266,6 +351,17 @@ public class PasswordData
      * @return  password string
      */
     String getPassword();
+
+    /**
+     * Returns the salt that was applied to the reference password before digesting it.
+     *
+     * @return  salt  the salt that was applied to the password,
+     *          or null if no salt was applied
+     */
+    default Salt getSalt()
+    {
+      return null;
+    }
   }
 
 
@@ -294,6 +390,19 @@ public class PasswordData
     public HistoricalReference(final String lbl, final String pass)
     {
       super(lbl, pass);
+    }
+
+
+    /**
+     * Creates a new historical reference.
+     *
+     * @param  lbl  label for this password
+     * @param  pass  password string
+     * @param  slt  salt that was applied to password
+     */
+    public HistoricalReference(final String lbl, final String pass, final Salt slt)
+    {
+      super(lbl, pass, slt);
     }
   }
 
@@ -324,6 +433,19 @@ public class PasswordData
     {
       super(lbl, pass);
     }
+
+
+    /**
+     * Creates a new source reference.
+     *
+     * @param  lbl  label for this password
+     * @param  pass  password string
+     * @param  slt  salt that was applied to password
+     */
+    public SourceReference(final String lbl, final String pass, final Salt slt)
+    {
+      super(lbl, pass, slt);
+    }
   }
 
 
@@ -337,6 +459,24 @@ public class PasswordData
     /** Reference password. */
     private final String password;
 
+    /** Salt that was applied to reference password before digesting it. */
+    private final Salt salt;
+
+
+    /**
+     * Creates a new abstract reference.
+     *
+     * @param  lbl  label for this password
+     * @param  pass  password string
+     * @param  slt  salt that was applied to password
+     */
+    public AbstractReference(final String lbl, final String pass, final Salt slt)
+    {
+      label = lbl;
+      password = pass;
+      salt = slt;
+    }
+
 
     /**
      * Creates a new abstract reference.
@@ -346,8 +486,7 @@ public class PasswordData
      */
     public AbstractReference(final String lbl, final String pass)
     {
-      label = lbl;
-      password = pass;
+      this(lbl, pass, null);
     }
 
 
@@ -366,6 +505,13 @@ public class PasswordData
     public String getPassword()
     {
       return password;
+    }
+
+
+    @Override
+    public Salt getSalt()
+    {
+      return salt;
     }
 
 
