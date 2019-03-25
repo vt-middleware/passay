@@ -4,6 +4,7 @@ package org.passay;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.HashBean;
+import org.passay.dictionary.Dictionary;
 
 /**
  * Rule for determining if a password matches a digested password that is stored in a dictionary.
@@ -24,6 +25,20 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
 
   /** Character set to use for undigested passwords. */
   private Charset charset = StandardCharsets.UTF_8;
+
+
+  /**
+   * Creates new digest history rule which operates on password references that were digested with the supplied hash.
+   * The dictionary should be ready to use when passed to this constructor.
+   *
+   * @param  dict  to use for searching
+   * @param  bean  encoding hash bean
+   */
+  public DigestDictionaryRule(final HashBean<String> bean, final Dictionary dict)
+  {
+    this(bean);
+    setDictionary(dict);
+  }
 
 
   /**
