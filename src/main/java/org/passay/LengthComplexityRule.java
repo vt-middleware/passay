@@ -213,7 +213,7 @@ public class LengthComplexityRule implements Rule
   /**
    * Class that represents an interval of numbers and parses interval notation.
    */
-  private static class Interval
+  public static class Interval
   {
 
     /** Pattern for matching intervals. */
