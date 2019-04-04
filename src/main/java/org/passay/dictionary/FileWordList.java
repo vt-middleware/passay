@@ -3,6 +3,7 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.StandardCharsets;
@@ -22,8 +23,9 @@ public class FileWordList extends AbstractFileWordList
   /** Read buffer. */
   private final byte[] bytes = new byte[READ_BUFSIZE];
 
+  // we declare Buffer rather than ByteBuffer to prevent NoSuchMethodError when compiled on JDK9+ and run on JDK8
   /** Wrapper around read buffer. */
-  private final ByteBuffer buffer = ByteBuffer.wrap(bytes);
+  private final Buffer buffer = ByteBuffer.wrap(bytes);
 
 
   /**
@@ -140,7 +142,7 @@ public class FileWordList extends AbstractFileWordList
   @Override
   protected ByteBuffer buffer()
   {
-    return buffer;
+    return (ByteBuffer) buffer;
   }
 
 

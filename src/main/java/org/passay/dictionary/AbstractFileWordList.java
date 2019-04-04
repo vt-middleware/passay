@@ -3,6 +3,7 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.LongBuffer;
@@ -189,7 +190,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
    */
   private FileWord readNextWord() throws IOException
   {
-    wordBuf.clear();
+    // casts to Buffer below prevent NoSuchMethodError when compiled on JDK9+ and run on JDK8
+    ((Buffer) wordBuf).clear();
     long start = position;
     while (hasRemaining()) {
       final byte b = buffer().get();
@@ -208,13 +210,14 @@ public abstract class AbstractFileWordList extends AbstractWordList
       return null;
     }
 
-    charBuf.clear();
-    wordBuf.flip();
+    ((Buffer) charBuf).clear();
+    ((Buffer) wordBuf).flip();
     final CoderResult result = charsetDecoder.decode(wordBuf, charBuf, true);
     if (result.isError()) {
       result.throwException();
     }
-    return new FileWord(charBuf.flip().toString(), start);
+    ((Buffer) charBuf).flip();
+    return new FileWord(charBuf.toString(), start);
   }
 
 
@@ -408,7 +411,8 @@ public abstract class AbstractFileWordList extends AbstractWordList
       final LongBuffer temp = allocateDirect ?
         ByteBuffer.allocateDirect((int) size).asLongBuffer() : ByteBuffer.allocate((int) size).asLongBuffer();
       if (map != null) {
-        map.rewind();
+        // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
+        ((Buffer) map).rewind();
         temp.put(map);
       }
       map = temp;
