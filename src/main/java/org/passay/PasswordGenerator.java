@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
 import java.util.Arrays;
@@ -78,7 +79,8 @@ public class PasswordGenerator
       }
     }
     fillRandomCharacters(allChars, length - buffer.position(), buffer);
-    buffer.flip();
+    // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
+    ((Buffer) buffer).flip();
     randomize(buffer);
     return buffer.toString();
   }

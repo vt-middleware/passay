@@ -3,6 +3,7 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -20,8 +21,9 @@ import java.nio.charset.StandardCharsets;
 public class MemoryMappedFileWordList extends AbstractFileWordList
 {
 
+  // we declare Buffer rather than MappedByteBuffer to prevent NoSuchMethodError when compiled on JDK9+ and run on JDK8
   /** Memory-mapped buffer around file. */
-  private final MappedByteBuffer buffer;
+  private final Buffer buffer;
 
 
   /**
@@ -138,7 +140,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
   @Override
   protected ByteBuffer buffer()
   {
-    return buffer;
+    return (ByteBuffer) buffer;
   }
 
 
