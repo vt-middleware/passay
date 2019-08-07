@@ -2,7 +2,13 @@
 package org.passay.dictionary;
 
 import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 import org.passay.dictionary.sort.ArraysSort;
 import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
@@ -128,5 +134,62 @@ public class WordListsTest
     for (int i = 0; i < list.size(); i++) {
       AssertJUnit.assertEquals(words[i], list.get(i));
     }
+  }
+
+  /**
+   * Test for {@link WordLists#readWords(Reader, List<String>)}.
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"wltest"})
+  public void testReadWordsFromReader() throws Exception
+  {
+    final List<String> words = new ArrayList<>();
+    try (InputStream in = getClass().getResourceAsStream("/eign");
+         Reader reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
+      WordLists.readWords(reader, words);
+    }
+    AssertJUnit.assertTrue(words.contains("good"));
+  }
+
+
+  /**
+   * Test for {@link WordLists#readWords(InputStream, String, List)}.
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"wltest"})
+  public void testReadWordsFromStream() throws Exception
+  {
+    final List<String> words = new ArrayList<>();
+    try (InputStream in = getClass().getResourceAsStream("/eign")) {
+      WordLists.readWords(in, "UTF-8", words);
+    }
+    AssertJUnit.assertTrue(words.contains("good"));
+  }
+
+  /**
+   * Test for {@link WordLists#readZippedWords(InputStream, String, String, List)}.
+   *
+   * @throws  Exception  On test failure.
+   */
+  @Test(groups = {"wltest"})
+  public void testReadWordsFromZippedStream() throws Exception
+  {
+    final List<String> words = new ArrayList<>();
+    try (InputStream in = getClass().getResourceAsStream("/eign.zip")) {
+      WordLists.readZippedWords(in, "UTF-8", null, words);
+    }
+    // check that words are read from all files
+    AssertJUnit.assertTrue(words.contains("good"));
+    AssertJUnit.assertTrue(words.contains("newbies"));
+
+    words.clear();
+    try (InputStream in = getClass().getResourceAsStream("/eign.zip")) {
+      WordLists.readZippedWords(in, "UTF-8", "ei.*", words);
+    }
+    // check that words are read only from matches files
+    AssertJUnit.assertTrue(words.contains("good"));
+    AssertJUnit.assertFalse(words.contains("newbies"));
   }
 }

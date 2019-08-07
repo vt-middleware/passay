@@ -3,10 +3,15 @@ package org.passay.dictionary;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import org.passay.dictionary.sort.ArraySorter;
 
 /**
@@ -138,28 +143,84 @@ public final class WordLists
 
   /**
    * Reads words, one per line, from a reader into the given word list.
+   * <p>
+   * This method does <em>not</em> close the reader.
+   *
+   * @param reader the reader to read words from
+   * @param words the list to which the words are added
+   * @throws IOException if an error occurs
+   */
+  public static void readWords(final Reader reader, final List<String> words) throws IOException
+  {
+    final BufferedReader bufferedReader = reader instanceof BufferedReader
+            ? (BufferedReader) reader
+            : new BufferedReader(reader);
+    String word;
+    while ((word = bufferedReader.readLine()) != null) {
+      if (!word.isEmpty()) {
+        words.add(word);
+      }
+    }
+  }
+
+
+  /**
+   * Reads words, one per line, from an input stream into the given word list.
+   * <p>
+   * This method does <em>not</em> close the input stream.
+   *
+   * @param in the input stream to read words from
+   * @param charset the charset used to decode text from the stream
+   * @param words the list to which the words are added
+   * @throws IOException if an error occurs
+   */
+  public static void readWords(final InputStream in, final String charset, final List<String> words) throws IOException
+  {
+    readWords(new InputStreamReader(in, charset), words);
+  }
+
+
+  /**
+   * Reads words, one per line, from an input stream into the given word list.
+   * The input stream is assumed to contain compressed data in the ZIP format.
+   * <p>
+   * This method does <em>not</em> close the input stream.
+   *
+   * @param in the input stream containing compressed data to read words from
+   * @param charset the charset used to decode text from the stream
+   * @param regex a regular expression that is used to match the ZIP entry names to
+   *        determine which of the entries should be read, or null if all entries should be read
+   * @param words the list to which the words are added
+   * @throws IOException if an error occurs
+   */
+  public static void readZippedWords(final InputStream in, final String charset,
+                                      final String regex, final List<String> words) throws IOException
+  {
+    final Pattern pattern = regex == null ? null : Pattern.compile(regex);
+    final ZipInputStream zin = new ZipInputStream(in);
+    ZipEntry entry;
+    while ((entry = zin.getNextEntry()) != null) {
+      if (!entry.isDirectory() && (pattern == null || pattern.matcher(entry.getName()).matches())) {
+        // don't close the reader, since that will close the entire zip input stream
+        readWords(zin, charset, words);
+      }
+      zin.closeEntry();
+    }
+  }
+
+
+  /**
+   * Reads words, one per line, from a reader into the given word list.
    *
    * @param  reader  Reader containing words, one per line. The reader is closed on completion.
-   * @param  wordList  Destination word list.
+   * @param  words  Destination word list.
    *
    * @throws  IOException  on IO errors reading from reader.
    */
-  public static void readWordList(final Reader reader, final List<String> wordList) throws IOException
+  public static void readWordList(final Reader reader, final List<String> words) throws IOException
   {
     try {
-      final BufferedReader bufferedReader;
-      if (reader instanceof BufferedReader) {
-        bufferedReader = (BufferedReader) reader;
-      } else {
-        bufferedReader = new BufferedReader(reader);
-      }
-
-      String word;
-      while ((word = bufferedReader.readLine()) != null) {
-        if (!word.isEmpty()) {
-          wordList.add(word);
-        }
-      }
+      readWords(reader, words);
     } finally {
       reader.close();
     }
