@@ -12,7 +12,7 @@ public enum PolishSequenceData implements SequenceData {
     Alphabetical(
             "ILLEGAL_ALPHABETICAL_SEQUENCE",
             new CharacterSequence[] {new CharacterSequence("abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"),
-                    new CharacterSequence("aąbcćdeęfghijklmnoópqrstuvwxyzźż", "AĄBCĆDEĘFGHIJKLMNOÓPQRSTUVWXYZŹŻ"), }),
+                    new CharacterSequence("aąbcćdeęfghijklmnoópqrsśtuwxyzźż", "AĄBCĆDEĘFGHIJKLMNOÓPQRSŚTUWXYZŹŻ"), }),
 
     /** Numerical sequence. */
     Numerical(
