@@ -9,10 +9,10 @@ package org.passay;
 public enum  PolishCharacterData implements CharacterData {
 
     /** Lower case characters. */
-    LowerCase("INSUFFICIENT_LOWERCASE", "aąbcćdeęfghijklmnoópqrstuvwxyzźż"),
+    LowerCase("INSUFFICIENT_LOWERCASE", "aąbcćdeęfghijklmnoópqrsśtuvwxyzźż"),
 
     /** Upper case characters. */
-    UpperCase("INSUFFICIENT_UPPERCASE", "AĄBCĆDEĘFGHIJKLMNOÓPQRSTUVWXYZŹŻ"),
+    UpperCase("INSUFFICIENT_UPPERCASE", "AĄBCĆDEĘFGHIJKLMNOÓPQRSŚTUVWXYZŹŻ"),
 
     /** Digit characters. */
     Digit("INSUFFICIENT_DIGIT", "0123456789"),
