@@ -27,7 +27,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFileSorted")
-  @BeforeClass(groups = {"sorttest"})
+  @BeforeClass(groups = "sorttest")
   public void create(final String dict) throws Exception
   {
     sortedArray = TestUtil.fileToArray(dict);
@@ -36,7 +36,7 @@ public class SorterTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = {"sorttest"})
+  @AfterClass(groups = "sorttest")
   public void destroy()
   {
     sortedArray = null;
@@ -49,7 +49,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = {"sorttest"})
+  @Test(groups = "sorttest")
   public void bubbleSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -65,7 +65,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = {"sorttest"})
+  @Test(groups = "sorttest")
   public void collectionsSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -81,7 +81,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = {"sorttest"})
+  @Test(groups = "sorttest")
   public void insertionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -97,7 +97,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = {"sorttest"})
+  @Test(groups = "sorttest")
   public void quickSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -113,7 +113,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = {"sorttest"})
+  @Test(groups = "sorttest")
   public void selectionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);

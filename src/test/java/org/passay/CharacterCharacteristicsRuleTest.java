@@ -22,7 +22,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = {"passtest"})
+  @BeforeClass(groups = "passtest")
   public void createRules()
   {
     rule1.getRules().add(new CharacterRule(EnglishCharacterData.Alphabetical, 4));
@@ -103,7 +103,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   /**
    * Test consistency.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void checkConsistency()
   {
     final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule();
@@ -155,7 +155,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   /**
    * Test custom resolver.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void customResolver()
   {
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule();
@@ -187,7 +187,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void checkMetadata()
   {
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(

@@ -24,7 +24,7 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
 
 
   /** @throws  Exception  On test failure. */
-  @BeforeClass(groups = {"wldicttest"})
+  @BeforeClass(groups = "wldicttest")
   public void createDictionary() throws Exception
   {
     final ArrayWordList awl1 = WordLists.createFromReader(
@@ -43,7 +43,7 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = {"wldicttest"})
+  @AfterClass(groups = "wldicttest")
   public void closeDictionary()
   {
     caseSensitive = null;
@@ -54,7 +54,7 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
   /**
    * Test search.
    */
-  @Test(groups = {"wldicttest"})
+  @Test(groups = "wldicttest")
   public void search()
   {
     AssertJUnit.assertTrue(caseSensitive.search("TrustedBSD"));
@@ -67,7 +67,7 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
   /**
    * @param  word  to search for.
    */
-  @Test(groups = {"wldicttest"}, dataProvider = "all-fbsd-words")
+  @Test(groups = "wldicttest", dataProvider = "all-fbsd-words")
   public void searchAll(final String word)
   {
     AssertJUnit.assertTrue(caseSensitive.search(word));

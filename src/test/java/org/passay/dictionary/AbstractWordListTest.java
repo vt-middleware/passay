@@ -149,7 +149,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    * @param  expectedSize  Expected size of the word list.
    * @param  expectedWords  Test list of words to get and compare to expected result.
    */
-  @Test(groups = {"wltest"}, dataProvider = "wordListsWithExpectedWords")
+  @Test(groups = "wltest", dataProvider = "wordListsWithExpectedWords")
   public void get(final T list, final int expectedSize, final ExpectedWord ... expectedWords)
   {
     AssertJUnit.assertEquals(expectedSize, list.size());
@@ -183,7 +183,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    *
    * @param  list  Word list to test.
    */
-  @Test(groups = {"wltest"}, dataProvider = "shortWordLists")
+  @Test(groups = "wltest", dataProvider = "shortWordLists")
   public void iterator(final T list)
   {
     final Iterator<String> i = list.iterator();
@@ -201,7 +201,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    *
    * @param  list  Word list to test.
    */
-  @Test(groups = {"wltest"}, dataProvider = "shortWordLists")
+  @Test(groups = "wltest", dataProvider = "shortWordLists")
   public void medianIterator(final T list)
   {
     final Iterator<String> iterator = list.medianIterator();
@@ -243,7 +243,7 @@ public abstract class AbstractWordListTest<T extends WordList>
   /**
    * Test for {@link WordList#medianIterator()} of various edge-cases and sizes.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void medianIterator()
   {
     // ensure median order in edge cases of 0-4 elements.
@@ -299,7 +299,7 @@ public abstract class AbstractWordListTest<T extends WordList>
    *
    * @throws  Exception  On test failure.
    */
-  @AfterClass(groups = {"wltest"})
+  @AfterClass(groups = "wltest")
   public void cleanUp() throws Exception
   {
     for (T list : wordLists) {

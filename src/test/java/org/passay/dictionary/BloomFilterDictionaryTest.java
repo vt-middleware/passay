@@ -36,7 +36,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
    * @throws  Exception  On test failure.
    */
   @Parameters("bloomFile")
-  @BeforeClass(groups = {"bloomdicttest"})
+  @BeforeClass(groups = "bloomdicttest")
   public void createDictionary(final String dict) throws Exception
   {
     final BloomFilter<String> filter1 = BloomFilter.readFrom(
@@ -58,7 +58,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = {"bloomdicttest"})
+  @AfterClass(groups = "bloomdicttest")
   public void closeDictionary()
   {
     filterFromSerialized = null;
@@ -68,7 +68,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   /**
    * Test search.
    */
-  @Test(groups = {"bloomdicttest"})
+  @Test(groups = "bloomdicttest")
   public void search()
   {
     AssertJUnit.assertTrue(filterFromTxt.search("manipular"));
@@ -78,7 +78,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
 
 
   /** @throws  Exception  On test failure. */
-  @Test(groups = {"bloomdicttest"})
+  @Test(groups = "bloomdicttest")
   public void searchSerialized() throws Exception
   {
     AssertJUnit.assertFalse(filterFromSerialized.search(hashPassword(FALSE_SEARCH)));

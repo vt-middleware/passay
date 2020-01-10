@@ -28,7 +28,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   private long dictionarySize;
 
   /** @throws  Exception  On test failure. */
-  @BeforeClass(groups = {"jdbcdicttest"})
+  @BeforeClass(groups = "jdbcdicttest")
   public void createDictionary() throws Exception
   {
     Class.forName("org.hsqldb.jdbcDriver");
@@ -61,7 +61,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = {"jdbcdicttest"})
+  @AfterClass(groups = "jdbcdicttest")
   public void closeDictionary()
   {
     caseSensitive = null;
@@ -71,7 +71,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   /**
    * Test search.
    */
-  @Test(groups = {"jdbcdicttest"})
+  @Test(groups = "jdbcdicttest")
   public void search()
   {
     AssertJUnit.assertTrue(caseSensitive.search("manipular"));
@@ -89,7 +89,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
    *
    * @param  word  to search for.
    */
-  @Test(groups = {"jdbcdicttest"}, dataProvider = "all-web-words", enabled = false)
+  @Test(groups = "jdbcdicttest", dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
   {
     AssertJUnit.assertTrue(caseSensitive.search(word));
@@ -102,7 +102,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   /**
    * Test size.
    */
-  @Test(groups = {"jdbcdicttest"})
+  @Test(groups = "jdbcdicttest")
   public void size()
   {
     AssertJUnit.assertEquals(dictionarySize, caseSensitive.size());

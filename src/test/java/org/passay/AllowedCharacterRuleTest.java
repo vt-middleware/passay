@@ -127,7 +127,7 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void checkMetadata()
   {
     final AllowedCharacterRule rule = new AllowedCharacterRule(ALLOWED_CHARS);

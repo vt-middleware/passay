@@ -29,7 +29,7 @@ public class SourceRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = {"passtest"})
+  @BeforeClass(groups = "passtest")
   public void createRules()
   {
     sources.add(new SourceReference("System A", "t3stUs3r04"));

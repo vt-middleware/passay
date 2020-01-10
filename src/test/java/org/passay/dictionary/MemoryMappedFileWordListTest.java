@@ -36,7 +36,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
    * @throws  Exception  On test failure.
    */
   @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void construct(final String file1, final String file2) throws Exception
   {
     try {

@@ -123,7 +123,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void checkMetadata()
   {
     final IllegalCharacterRule rule = new IllegalCharacterRule(new char[] {'@', '$'});

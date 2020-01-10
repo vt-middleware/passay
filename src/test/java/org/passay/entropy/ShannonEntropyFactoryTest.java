@@ -19,7 +19,7 @@ public class ShannonEntropyFactoryTest extends AbstractEntropyFactoryTest
    * @param  rules  to create entropy with
    * @param  data  to create entropy with
    */
-  @Test(groups = {"entrpytest"}, dataProvider = "userGeneratedData")
+  @Test(groups = "entrpytest", dataProvider = "userGeneratedData")
   public void createEntropy(final List<Rule> rules, final PasswordData data)
   {
     ShannonEntropyFactory.createEntropy(rules, data);
@@ -31,7 +31,7 @@ public class ShannonEntropyFactoryTest extends AbstractEntropyFactoryTest
    * @param  data  to create entropy with
    */
   @Test(
-    groups = {"entrpytest"},
+    groups = "entrpytest",
     dataProvider = "randomGeneratedData",
     expectedExceptions = IllegalArgumentException.class)
   public void invalidPasswordData(final List<Rule> rules, final PasswordData data)

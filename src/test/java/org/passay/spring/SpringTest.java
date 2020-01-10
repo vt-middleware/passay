@@ -22,7 +22,7 @@ public class SpringTest
   /**
    * Attempts to load all Spring application context XML files to verify proper wiring.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void testSpringWiring()
   {
     final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(

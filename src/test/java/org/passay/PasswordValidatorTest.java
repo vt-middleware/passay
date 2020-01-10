@@ -57,7 +57,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
    * @throws  Exception  On test failure.
    */
   @Parameters("dictionaryFile")
-  @BeforeClass(groups = {"passtest"})
+  @BeforeClass(groups = "passtest")
   public void createDictionary(final String dictFile) throws Exception
   {
     final ArrayWordList awl = WordLists.createFromReader(
@@ -71,7 +71,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   /**
    * Setup test resources.
    */
-  @BeforeClass(groups = {"passtest"}, dependsOnMethods = {"createDictionary"})
+  @BeforeClass(groups = "passtest", dependsOnMethods = "createDictionary")
   public void createChecker()
   {
     final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
@@ -126,7 +126,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   /**
    * Test estimate entropy.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void estimateEntropy()
   {
     /**
@@ -241,7 +241,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   /**
    * Test validation.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void validate()
   {
     final List<Rule> l = new ArrayList<>();
@@ -619,7 +619,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   /**
    * Test producer extends.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void producerExtends()
   {
     // test that password validator will accept any list of rules that extends Rule

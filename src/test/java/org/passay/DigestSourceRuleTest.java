@@ -30,7 +30,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = {"passtest"})
+  @BeforeClass(groups = "passtest")
   public void createRules()
   {
     sourceRefs.add(new PasswordData.SourceReference("System B", "CJGTDMQRP+rmHApkcijC80aDV0o="));

@@ -34,7 +34,7 @@ public class DictionaryRuleTest extends AbstractRuleTest
    * @param  dictFile  dictionary file to read
    */
   @Parameters("dictionaryFile")
-  @BeforeClass(groups = {"passtest"})
+  @BeforeClass(groups = "passtest")
   public void createRules(final String dictFile)
   {
     final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();

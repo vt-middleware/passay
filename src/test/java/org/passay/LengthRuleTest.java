@@ -108,7 +108,7 @@ public class LengthRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void checkMetadata()
   {
     final LengthRule rule = new LengthRule(4, 10);

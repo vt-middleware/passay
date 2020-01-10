@@ -39,7 +39,7 @@ public class WordListsTest
    * @throws  Exception  On word list creation.
    */
   @Parameters({ "fbsdFile", "webFile" })
-  @BeforeClass(groups = {"wltest"})
+  @BeforeClass(groups = "wltest")
   public void createWordLists(final String file1, final String file2) throws Exception
   {
     caseSensitiveWordList = WordLists.createFromReader(
@@ -56,7 +56,7 @@ public class WordListsTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = {"wltest"})
+  @AfterClass(groups = "wltest")
   public void closeWordLists()
   {
     caseSensitiveWordList = null;
@@ -99,7 +99,7 @@ public class WordListsTest
    * @param  word  Word to search for.
    * @param  expectedResult  Expected result of test.
    */
-  @Test(groups = {"wltest"}, dataProvider = "searchData")
+  @Test(groups = "wltest", dataProvider = "searchData")
   public void binarySearch(final WordList wl, final String word, final int expectedResult)
   {
     AssertJUnit.assertEquals(expectedResult, WordLists.binarySearch(wl, word));
@@ -111,7 +111,7 @@ public class WordListsTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void createFromReader() throws Exception
   {
     // sorted list of words
@@ -137,11 +137,11 @@ public class WordListsTest
   }
 
   /**
-   * Test for {@link WordLists#readWords(Reader, List<String>)}.
+   * Test for {@link WordLists#readWords(Reader, List)}.
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void testReadWordsFromReader() throws Exception
   {
     final List<String> words = new ArrayList<>();
@@ -158,7 +158,7 @@ public class WordListsTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void testReadWordsFromStream() throws Exception
   {
     final List<String> words = new ArrayList<>();
@@ -173,7 +173,7 @@ public class WordListsTest
    *
    * @throws  Exception  On test failure.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void testReadWordsFromZippedStream() throws Exception
   {
     final List<String> words = new ArrayList<>();

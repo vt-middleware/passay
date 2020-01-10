@@ -35,7 +35,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
    * @throws  Exception  On test failure.
    */
   @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void construct(final String file1, final String file2) throws Exception
   {
     try {
@@ -70,7 +70,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
    * @throws  Exception  On test failure.
    */
   @Parameters("eignFileSorted")
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void smallFileCache(final String file) throws Exception
   {
     new FileWordList(new RandomAccessFile(file, "r"), true, 1);

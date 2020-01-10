@@ -22,6 +22,12 @@
   <module name="NewlineAtEndOfFile">
     <property name="fileExtensions" value="java"/>
   </module>
+
+  <module name="LineLength">
+    <property name="ignorePattern" value="(^.*\$.*\$.*$)|(^import .*)"/>
+    <property name="max" value="120"/>
+  </module>
+
   <module name="TreeWalker">
     <property name="tabWidth" value="2"/>
 
@@ -41,10 +47,7 @@
     <module name="JavadocType">
       <property name="authorFormat" value="\S+"/>
     </module>
-    <module name="JavadocMethod">
-      <property name="allowThrowsTagsForSubclasses" value="true"/>
-      <property name="allowUndeclaredRTE" value="true"/>
-    </module>
+    <module name="JavadocMethod" />
     <module name="JavadocVariable"/>
     <module name="JavadocStyle">
       <property name="checkFirstSentence" value="false"/>
@@ -79,10 +82,6 @@
     </module>
 
     <!-- sizes -->
-    <module name="LineLength">
-      <property name="ignorePattern" value="(^.*\$.*\$.*$)|(^import .*)"/>
-      <property name="max" value="120"/>
-    </module>
     <module name="MethodLength">
       <property name="max" value="300"/>
     </module>

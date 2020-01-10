@@ -23,7 +23,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = {"passtest"})
+  @BeforeClass(groups = "passtest")
   public void createRules()
   {
     rule1.addRules(
@@ -248,7 +248,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
    * @param  interval  to check
    * @param  valid  whether the supplied interval is valid
    */
-  @Test(groups = {"passtest"}, dataProvider = "intervals")
+  @Test(groups = "passtest", dataProvider = "intervals")
   public void checkInterval(final String interval, final boolean valid)
   {
     final LengthComplexityRule lcr = new LengthComplexityRule();
@@ -269,7 +269,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   /**
    * Test consistency.
    */
-  @Test(groups = {"passtest"})
+  @Test(groups = "passtest")
   public void checkConsistency()
   {
     // no rules configured

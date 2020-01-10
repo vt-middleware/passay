@@ -38,7 +38,7 @@ public class PasswordGeneratorTest
   /**
    * Setup test resources.
    */
-  @BeforeClass(groups = {"passgentest"})
+  @BeforeClass(groups = "passgentest")
   public void initializeRules()
   {
     rules.add(new CharacterRule(EnglishCharacterData.Digit, 2));
@@ -83,7 +83,7 @@ public class PasswordGeneratorTest
   /**
    * @param  pass  to verify
    */
-  @Test(groups = {"passgentest"}, dataProvider = "randomPasswords")
+  @Test(groups = "passgentest", dataProvider = "randomPasswords")
   public void testGenerator(final String pass)
   {
     AssertJUnit.assertFalse(failCharRule.validate(new PasswordData(pass)).isValid());

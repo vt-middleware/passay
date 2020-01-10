@@ -30,7 +30,7 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
    * @throws  Exception  On test failure.
    */
   @Parameters({ "webFileSorted", "fbsdFileSorted" })
-  @BeforeClass(groups = {"ttperftest"})
+  @BeforeClass(groups = "ttperftest")
   public void createDictionary(final String dict1, final String dict2) throws Exception
   {
     super.initialize(dict1, dict2);
@@ -46,7 +46,7 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = {"ttperftest"})
+  @AfterClass(groups = "ttperftest")
   public void closeDictionary()
   {
     System.out.println(ttd.getClass().getSimpleName() + " search time: " + (ttdSearchTime / 1000 / 1000) + "ms");
@@ -58,7 +58,7 @@ public class TernaryTreeDictionaryPerfTest extends AbstractDictionaryPerfTest
   /**
    * @param  word  to search for
    */
-  @Test(groups = {"ttperftest"}, dataProvider = "search-words-web-large")
+  @Test(groups = "ttperftest", dataProvider = "search-words-web-large")
   public void ternaryTreeSearch(final String word)
   {
     ttdSearchTime += doSearch(ttd, word);

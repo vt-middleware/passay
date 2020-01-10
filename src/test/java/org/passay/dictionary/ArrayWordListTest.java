@@ -25,7 +25,7 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
   /**
    * Test construct.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void construct()
   {
     try {
@@ -51,7 +51,7 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
   /**
    * Test words with space.
    */
-  @Test(groups = {"wltest"})
+  @Test(groups = "wltest")
   public void wordsWithSpace()
   {
     final String[] arrayWithSpaces = {
