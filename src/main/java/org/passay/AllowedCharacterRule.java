@@ -28,6 +28,9 @@ public class AllowedCharacterRule implements Rule
   /** Where to match whitespace. */
   private final MatchBehavior matchBehavior;
 
+  /** Whether this rule should report an error code specific to the matched character. */
+  private final boolean enhancedErrorMessages;
+
 
   /**
    * Create a new allowed character rule.
@@ -73,6 +76,24 @@ public class AllowedCharacterRule implements Rule
    */
   public AllowedCharacterRule(final char[] c, final MatchBehavior behavior, final boolean reportAll)
   {
+    this(c, behavior, reportAll, false);
+  }
+
+
+  /**
+   * Create a new allowed character rule.
+   *
+   * @param  c  allowed characters
+   * @param  behavior  how to match allowed characters
+   * @param  reportAll  whether to report all matches or just the first
+   * @param  enhancedMessages  whether to report an error code that includes the matched character
+   */
+  public AllowedCharacterRule(
+    final char[] c,
+    final MatchBehavior behavior,
+    final boolean reportAll,
+    final boolean enhancedMessages)
+  {
     if (c.length > 0) {
       allowedCharacters = c;
     } else {
@@ -81,6 +102,7 @@ public class AllowedCharacterRule implements Rule
     Arrays.sort(allowedCharacters);
     matchBehavior = behavior;
     reportAllFailures = reportAll;
+    enhancedErrorMessages = enhancedMessages;
   }
 
 
@@ -106,6 +128,17 @@ public class AllowedCharacterRule implements Rule
   }
 
 
+  /**
+   * Whether this rule is reporting error codes that are specific to the matched character.
+   *
+   * @return   whether this rule is using enhanced error messages
+   */
+  public boolean isEnhancedErrorMessages()
+  {
+    return enhancedErrorMessages;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
@@ -115,7 +148,11 @@ public class AllowedCharacterRule implements Rule
     for (char c : text.toCharArray()) {
       if (Arrays.binarySearch(allowedCharacters, c) < 0 && !matches.contains(c)) {
         if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, c)) {
-          result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
+          if (enhancedErrorMessages) {
+            result.addError(ERROR_CODE + "." + (int) c, createRuleResultDetailParameters(c));
+          } else {
+            result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
+          }
           if (!reportAllFailures) {
             break;
           }
@@ -163,11 +200,12 @@ public class AllowedCharacterRule implements Rule
   public String toString()
   {
     return
-      String.format("%s@%h::reportAllFailures=%s,matchBehavior=%s,allowedCharacters=%s",
+      String.format("%s@%h::reportAllFailures=%s,matchBehavior=%s,enhancedErrorMessages=%s,allowedCharacters=%s",
         getClass().getName(),
         hashCode(),
         reportAllFailures,
         matchBehavior,
+        enhancedErrorMessages,
         Arrays.toString(allowedCharacters));
   }
 }

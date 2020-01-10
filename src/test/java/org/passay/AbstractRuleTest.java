@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
@@ -13,11 +15,33 @@ import org.testng.annotations.Test;
 public abstract class AbstractRuleTest
 {
 
-  /** default message resolver. */
-  protected static final PropertiesMessageResolver DEFAULT_RESOLVER = new PropertiesMessageResolver();
+  /** test message resolver. */
+  protected static final PropertiesMessageResolver TEST_RESOLVER;
 
   /** empty message resolver. */
   protected static final PropertiesMessageResolver EMPTY_RESOLVER = new PropertiesMessageResolver(new Properties());
+
+
+  // load the properties for the test resolver
+  static {
+    InputStream in = null;
+    try {
+      in = AbstractRuleTest.class.getResourceAsStream("/messages-test.properties");
+      final Properties props = new Properties();
+      props.load(in);
+      TEST_RESOLVER = new PropertiesMessageResolver(props);
+    } catch (Exception e) {
+      throw new IllegalStateException("Error loading test message properties.", e);
+    } finally {
+      try {
+        if (in != null) {
+          in.close();
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
 
 
   /**
@@ -55,7 +79,7 @@ public abstract class AbstractRuleTest
     AssertJUnit.assertEquals(messages.length, result.getDetails().size());
     for (int i = 0; i < result.getDetails().size(); i++) {
       final RuleResultDetail detail = result.getDetails().get(i);
-      AssertJUnit.assertEquals(messages[i], DEFAULT_RESOLVER.resolve(detail));
+      AssertJUnit.assertEquals(messages[i], TEST_RESOLVER.resolve(detail));
       AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
     }
   }
