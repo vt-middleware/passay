@@ -40,10 +40,10 @@ public class RuleResultDetail
   /**
    * Creates a new rule result detail.
    *
-   * @param  params  error details.
    * @param  codes  One or more error codes. Codes MUST be provided in order of decreasing specificity.
+   * @param  params  error details.
    */
-  public RuleResultDetail(final Map<String, Object> params, final String... codes)
+  public RuleResultDetail(final String[] codes, final Map<String, Object> params)
   {
     if (codes == null || codes.length == 0) {
       throw new IllegalArgumentException("Must specify at least one error code.");
@@ -105,6 +105,6 @@ public class RuleResultDetail
   @Override
   public String toString()
   {
-    return String.format("%s:%s", Arrays.asList(errorCodes), parameters);
+    return String.format("%s:%s", Arrays.toString(errorCodes), parameters);
   }
 }

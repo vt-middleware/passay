@@ -135,13 +135,13 @@ public class RuleResult
   /**
    * Adds a new rule result detail under multiple error codes.
    *
-   * @param  params  error details
    * @param  codes  error codes in order of most specific to least specific
+   * @param  params  error details
    */
-  public void addError(final Map<String, Object> params, final String... codes)
+  public void addError(final String[] codes, final Map<String, Object> params)
   {
     setValid(false);
-    details.add(new RuleResultDetail(params, codes));
+    details.add(new RuleResultDetail(codes, params));
   }
 
 
