@@ -28,9 +28,6 @@ public class IllegalCharacterRule implements Rule
   /** Where to match whitespace. */
   private final MatchBehavior matchBehavior;
 
-  /** Whether this rule should report an error code specific to the matched character. */
-  private final boolean enhancedErrorMessages;
-
 
   /**
    * Create a new illegal character rule.
@@ -76,24 +73,6 @@ public class IllegalCharacterRule implements Rule
    */
   public IllegalCharacterRule(final char[] c, final MatchBehavior behavior, final boolean reportAll)
   {
-    this(c, behavior, reportAll, false);
-  }
-
-
-  /**
-   * Create a new illegal character rule.
-   *
-   * @param  c  illegal characters
-   * @param  behavior  how to match illegal characters
-   * @param  reportAll  whether to report all matches or just the first
-   * @param  enhancedMessages  whether to report an error code that includes the matched character
-   */
-  public IllegalCharacterRule(
-    final char[] c,
-    final MatchBehavior behavior,
-    final boolean reportAll,
-    final boolean enhancedMessages)
-  {
     if (c.length > 0) {
       illegalCharacters = c;
     } else {
@@ -101,7 +80,6 @@ public class IllegalCharacterRule implements Rule
     }
     matchBehavior = behavior;
     reportAllFailures = reportAll;
-    enhancedErrorMessages = enhancedMessages;
   }
 
 
@@ -127,17 +105,6 @@ public class IllegalCharacterRule implements Rule
   }
 
 
-  /**
-   * Whether this rule is reporting error codes that are specific to the matched character.
-   *
-   * @return   whether this rule is using enhanced error messages
-   */
-  public boolean isEnhancedErrorMessages()
-  {
-    return enhancedErrorMessages;
-  }
-
-
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
@@ -146,11 +113,7 @@ public class IllegalCharacterRule implements Rule
     final String text = passwordData.getPassword();
     for (char c : illegalCharacters) {
       if (matchBehavior.match(text, c) && !matches.contains(c)) {
-        if (enhancedErrorMessages) {
-          result.addError(ERROR_CODE + "." + (int) c, createRuleResultDetailParameters(c));
-        } else {
-          result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
-        }
+        result.addError(createRuleResultDetailParameters(c), ERROR_CODE + "." + (int) c, ERROR_CODE);
         if (!reportAllFailures) {
           break;
         }
@@ -198,12 +161,11 @@ public class IllegalCharacterRule implements Rule
   {
     return
       String.format(
-        "%s@%h::reportAllFailures=%s,matchBehavior=%s,enhancedErrorMessages=%s,illegalCharacters=%s",
+        "%s@%h::reportAllFailures=%s,matchBehavior=%s,illegalCharacters=%s",
         getClass().getName(),
         hashCode(),
         reportAllFailures,
         matchBehavior,
-        enhancedErrorMessages,
         Arrays.toString(illegalCharacters));
   }
 }

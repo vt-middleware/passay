@@ -45,15 +45,7 @@ public class PropertiesMessageResolver extends AbstractMessageResolver
   @Override
   protected String getMessage(final String key)
   {
-    String msg = messageProperties.getProperty(key);
-    if (msg == null && key.contains(".")) {
-      String newKey = key;
-      while (msg == null && newKey.contains(".")) {
-        newKey = newKey.substring(0, newKey.lastIndexOf("."));
-        msg = messageProperties.getProperty(newKey);
-      }
-    }
-    return msg;
+    return messageProperties.getProperty(key);
   }
 
 

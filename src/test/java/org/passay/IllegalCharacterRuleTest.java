@@ -107,7 +107,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
             String.format("Password contains the illegal character '%s'.", "$"), },
         },
         {
-          new IllegalCharacterRule(new char[] {'@', '$', ' '}, MatchBehavior.Contains, true, true),
+          new IllegalCharacterRule(new char[] {'@', '$', ' '}, MatchBehavior.Contains, true),
           new PasswordData("AycD Pdsyz"),
           new String[] {String.format("Whitespace is not allowed."), },
         },
