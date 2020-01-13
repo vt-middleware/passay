@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -12,8 +13,8 @@ import java.util.Map;
 public class RuleResultDetail
 {
 
-  /** Detail error code. */
-  protected final String errorCode;
+  /** Detail error codes. */
+  protected final String[] errorCodes;
 
   /** Additional parameters that provide information about validation failure. */
   protected final Map<String, Object> parameters;
@@ -30,19 +31,52 @@ public class RuleResultDetail
     if (code == null || code.length() == 0) {
       throw new IllegalArgumentException("Code cannot be null or empty.");
     }
-    errorCode = code;
+    errorCodes = new String[] {code};
+    parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
+  }
+
+
+
+  /**
+   * Creates a new rule result detail.
+   *
+   * @param  codes  One or more error codes. Codes MUST be provided in order of decreasing specificity.
+   * @param  params  error details.
+   */
+  public RuleResultDetail(final String[] codes, final Map<String, Object> params)
+  {
+    if (codes == null || codes.length == 0) {
+      throw new IllegalArgumentException("Must specify at least one error code.");
+    }
+    for (String code : codes) {
+      if (code == null || code.length() == 0) {
+        throw new IllegalArgumentException("Code cannot be null or empty.");
+      }
+    }
+    errorCodes = codes;
     parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
   }
 
 
   /**
-   * Returns the error code.
+   * Returns the least-specific error code.
    *
    * @return  error code.
    */
   public String getErrorCode()
   {
-    return errorCode;
+    return errorCodes[errorCodes.length - 1];
+  }
+
+
+  /**
+   * Returns an array of error codes as provided at creation time.
+   *
+   * @return  Array of error codes that the caller may assume are organized in order of decreasing specificity.
+   */
+  public String[] getErrorCodes()
+  {
+    return errorCodes;
   }
 
 
@@ -71,6 +105,6 @@ public class RuleResultDetail
   @Override
   public String toString()
   {
-    return String.format("%s:%s", errorCode, parameters);
+    return String.format("%s:%s", Arrays.toString(errorCodes), parameters);
   }
 }

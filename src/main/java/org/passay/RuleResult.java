@@ -133,6 +133,19 @@ public class RuleResult
 
 
   /**
+   * Adds a new rule result detail under multiple error codes.
+   *
+   * @param  codes  error codes in order of most specific to least specific
+   * @param  params  error details
+   */
+  public void addError(final String[] codes, final Map<String, Object> params)
+  {
+    setValid(false);
+    details.add(new RuleResultDetail(codes, params));
+  }
+
+
+  /**
    * Sets any details associated with the rule verification.
    *
    * @param  rrd  rule result details

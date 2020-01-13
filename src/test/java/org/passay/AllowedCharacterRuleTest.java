@@ -112,6 +112,11 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
             String.format("Password contains the illegal character '%s'.", "5"), },
         },
         {
+          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.Contains, true),
+          new PasswordData("gbwer scokkk"),
+          new String[] {String.format("Whitespace not allowed."), },
+        },
+        {
           new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
           new PasswordData("4bwersco4kk"),
           new String[] {String.format("Password starts with the illegal character '%s'.", "4"), },

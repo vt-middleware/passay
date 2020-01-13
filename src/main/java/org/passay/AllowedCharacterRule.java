@@ -115,7 +115,8 @@ public class AllowedCharacterRule implements Rule
     for (char c : text.toCharArray()) {
       if (Arrays.binarySearch(allowedCharacters, c) < 0 && !matches.contains(c)) {
         if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, c)) {
-          result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
+          final String[] codes = {ERROR_CODE + "." + (int) c, ERROR_CODE};
+          result.addError(codes, createRuleResultDetailParameters(c));
           if (!reportAllFailures) {
             break;
           }

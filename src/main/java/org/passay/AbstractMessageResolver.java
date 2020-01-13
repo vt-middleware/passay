@@ -25,15 +25,18 @@ public abstract class AbstractMessageResolver implements MessageResolver
   @Override
   public String resolve(final RuleResultDetail detail)
   {
-    final String key = detail.getErrorCode();
-    final String message = getMessage(key);
+    String message;
+    for (String key : detail.getErrorCodes()) {
+      message = getMessage(key);
+      if (message != null) {
+        return String.format(message, detail.getValues());
+      }
+    }
     final String format;
-    if (message != null) {
-      format = String.format(message, detail.getValues());
-    } else if (!detail.getParameters().isEmpty()) {
-      format = String.format("%s:%s", key, detail.getParameters());
+    if (!detail.getParameters().isEmpty()) {
+      format = String.format("%s:%s", detail.getErrorCode(), detail.getParameters());
     } else {
-      format = String.format("%s", key);
+      format = detail.getErrorCode();
     }
     return format;
   }

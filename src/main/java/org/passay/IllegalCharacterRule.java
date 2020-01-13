@@ -113,7 +113,8 @@ public class IllegalCharacterRule implements Rule
     final String text = passwordData.getPassword();
     for (char c : illegalCharacters) {
       if (matchBehavior.match(text, c) && !matches.contains(c)) {
-        result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
+        final String[] codes = {ERROR_CODE + "." + (int) c, ERROR_CODE};
+        result.addError(codes, createRuleResultDetailParameters(c));
         if (!reportAllFailures) {
           break;
         }
