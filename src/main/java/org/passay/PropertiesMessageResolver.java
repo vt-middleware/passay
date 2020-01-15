@@ -15,13 +15,13 @@ public class PropertiesMessageResolver extends AbstractMessageResolver
 {
 
   /** Classpath location of default message map. */
-  public static final String DEFAULT_MESSAGE_PATH = "/messages.properties";
+  public static final String DEFAULT_MESSAGE_PATH = "/passay.properties";
 
   /** Maps message keys to message strings. */
   private final Properties messageProperties;
 
 
-  /** Creates a new message resolver with the default message map. */
+  /** Creates a new message resolver with the default message properties. See {@link #getDefaultProperties()}. */
   public PropertiesMessageResolver()
   {
     this(getDefaultProperties());
@@ -29,7 +29,7 @@ public class PropertiesMessageResolver extends AbstractMessageResolver
 
 
   /**
-   * Creates a new message resolver with the supplied message map.
+   * Creates a new message resolver with the supplied message properties.
    *
    * @param  properties  map of keys to messages.
    */

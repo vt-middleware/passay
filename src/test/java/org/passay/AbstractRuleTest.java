@@ -1,9 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
+import java.util.ResourceBundle;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 
@@ -16,32 +15,11 @@ public abstract class AbstractRuleTest
 {
 
   /** test message resolver. */
-  protected static final PropertiesMessageResolver TEST_RESOLVER;
+  protected static final MessageResolver TEST_RESOLVER = new ResourceBundleMessageResolver(
+    ResourceBundle.getBundle("passay-test"));
 
   /** empty message resolver. */
-  protected static final PropertiesMessageResolver EMPTY_RESOLVER = new PropertiesMessageResolver(new Properties());
-
-
-  // load the properties for the test resolver
-  static {
-    InputStream in = null;
-    try {
-      in = AbstractRuleTest.class.getResourceAsStream("/messages-test.properties");
-      final Properties props = new Properties();
-      props.load(in);
-      TEST_RESOLVER = new PropertiesMessageResolver(props);
-    } catch (Exception e) {
-      throw new IllegalStateException("Error loading test message properties.", e);
-    } finally {
-      try {
-        if (in != null) {
-          in.close();
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-    }
-  }
+  protected static final MessageResolver EMPTY_RESOLVER = new PropertiesMessageResolver(new Properties());
 
 
   /**
