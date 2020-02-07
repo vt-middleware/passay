@@ -21,6 +21,17 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.5.0 - 12Apr2019
+
+Issue | Description
+:---- | :----------
+[passay-98]({{ site.issueURL }}98) | NoSuchMethodErrors using Buffer when compiling on JDK9+
+[passay-94]({{ site.issueURL }}94) | Salted references
+[passay-92]({{ site.issueURL }}92) | Add RepeatCharactersRule
+[passay-91]({{ site.issueURL }}91) | Add CharacterOccurrencesRule
+[passay-89]({{ site.issueURL }}89) | Simplify and optimize IllegalSequenceRule
+[passay-84]({{ site.issueURL }}84),  [passay-85]({{ site.issueURL }}85), [passay-88]({{ site.issueURL }}88) | Ternary Tree improvements
+
 ### Version 1.4.0 - 09Jan2019
 
 Issue | Description
