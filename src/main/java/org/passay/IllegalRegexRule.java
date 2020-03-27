@@ -42,11 +42,37 @@ public class IllegalRegexRule implements Rule
    * Creates a new illegal regex rule.
    *
    * @param  regex  regular expression
+   * @param  regexFlags  regular expression flags
+   */
+  public IllegalRegexRule(final String regex, final int regexFlags)
+  {
+    this(regex, regexFlags, true);
+  }
+
+
+  /**
+   * Creates a new illegal regex rule.
+   *
+   * @param  regex  regular expression
    * @param  reportAll  whether to report all matches or just the first
    */
   public IllegalRegexRule(final String regex, final boolean reportAll)
   {
     pattern = Pattern.compile(regex);
+    reportAllFailures = reportAll;
+  }
+
+
+  /**
+   * Creates a new illegal regex rule.
+   *
+   * @param  regex  regular expression
+   * @param  regexFlags  regular expression flags
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public IllegalRegexRule(final String regex, final int regexFlags, final boolean reportAll)
+  {
+    pattern = Pattern.compile(regex, regexFlags);
     reportAllFailures = reportAll;
   }
 
