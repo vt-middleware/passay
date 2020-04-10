@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.regex.Pattern;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -37,6 +38,30 @@ public class AllowedRegexRuleTest extends AbstractRuleTest
           new PasswordData("pwUi0248xwK"),
           null,
         },
+        // test case insensitive
+        {
+          new AllowedRegexRule("abcd", Pattern.CASE_INSENSITIVE),
+          new PasswordData("pwUAbbCd0248xwK"),
+          codes(AllowedRegexRule.ERROR_CODE),
+        },
+        // test case insensitive
+        {
+          new AllowedRegexRule("(?i)abcd"),
+          new PasswordData("pwUAbbCd0248xwK"),
+          codes(AllowedRegexRule.ERROR_CODE),
+        },
+        // test case insensitive
+        {
+          new AllowedRegexRule("abcd", Pattern.CASE_INSENSITIVE),
+          new PasswordData("pwUAbCd0248xwK"),
+          null,
+        },
+        // test case insensitive
+        {
+          new AllowedRegexRule("(?i)abcd"),
+          new PasswordData("pwUAbCd0248xwK"),
+          null,
+        },
       };
   }
 
@@ -53,6 +78,16 @@ public class AllowedRegexRuleTest extends AbstractRuleTest
           new AllowedRegexRule("\\d\\d\\d\\d"),
           new PasswordData("p4zRcv8#n65"),
           new String[] {String.format("Password must match pattern '%s'.", "\\d\\d\\d\\d"), },
+        },
+        {
+          new AllowedRegexRule("abcd", Pattern.CASE_INSENSITIVE),
+          new PasswordData("p4zRabCCdv8#n65"),
+          new String[] {String.format("Password must match pattern '%s'.", "abcd"), },
+        },
+        {
+          new AllowedRegexRule("(?i)abcd"),
+          new PasswordData("p4zRabCCdv8#n65"),
+          new String[] {String.format("Password must match pattern '%s'.", "(?i)abcd"), },
         },
       };
   }

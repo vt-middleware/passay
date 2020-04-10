@@ -34,6 +34,18 @@ public class AllowedRegexRule implements Rule
 
 
   /**
+   * Creates a new allowed regex rule.
+   *
+   * @param  regex  regular expression
+   * @param  regexFlags  regular expression flags
+   */
+  public AllowedRegexRule(final String regex, final int regexFlags)
+  {
+    pattern = Pattern.compile(regex, regexFlags);
+  }
+
+
+  /**
    * Returns the pattern for this rule.
    *
    * @return  pattern

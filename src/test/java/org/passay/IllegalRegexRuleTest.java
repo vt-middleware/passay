@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.regex.Pattern;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -56,6 +57,30 @@ public class IllegalRegexRuleTest extends AbstractRuleTest
           new PasswordData("pwUi0248xwK9753uu0248"),
           codes(IllegalRegexRule.ERROR_CODE, IllegalRegexRule.ERROR_CODE),
         },
+        // test case insensitive
+        {
+          new IllegalRegexRule("abcd", Pattern.CASE_INSENSITIVE),
+          new PasswordData("p4zRaBcDv8#n65"),
+          codes(IllegalRegexRule.ERROR_CODE),
+        },
+        // test case insensitive
+        {
+          new IllegalRegexRule("abcd", Pattern.CASE_INSENSITIVE),
+          new PasswordData("p4zRaBBcDv8#n65"),
+          null,
+        },
+        // test case insensitive
+        {
+          new IllegalRegexRule("(?i)abcd"),
+          new PasswordData("p4zRaBcDv8#n65"),
+          codes(IllegalRegexRule.ERROR_CODE),
+        },
+        // test case insensitive
+        {
+          new IllegalRegexRule("(?i)abcd"),
+          new PasswordData("p4zRaBBcDv8#n65"),
+          null,
+        },
       };
   }
 
@@ -91,6 +116,16 @@ public class IllegalRegexRuleTest extends AbstractRuleTest
           new String[] {
             String.format("Password matches the illegal pattern '%s'.", "0248"),
             String.format("Password matches the illegal pattern '%s'.", "9753"), },
+        },
+        {
+          new IllegalRegexRule("abcd", Pattern.CASE_INSENSITIVE),
+          new PasswordData("pwABCD0248"),
+          new String[] {String.format("Password matches the illegal pattern '%s'.", "ABCD"), },
+        },
+        {
+          new IllegalRegexRule("(?i)abcd"),
+          new PasswordData("pwABCD0248"),
+          new String[] {String.format("Password matches the illegal pattern '%s'.", "ABCD"), },
         },
       };
   }
