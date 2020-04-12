@@ -21,6 +21,19 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.6.0 - 12Apr2020
+
+Note that the default message property file name has changed from message.properties to passay.properties.
+
+Issue | Description
+:---- | :----------
+[passay-117]({{ site.issueURL }}117) | Add support for pattern flags in regular expression rules
+[passay-112]({{ site.issueURL }}112) | Add support for messaging via resource bundles
+[passay-109]({{ site.issueURL }}109) | Support multiple messages for single character based rules
+[passay-108]({{ site.issueURL }}108) | Add german CharacterData/SequenceData
+[passay-105]({{ site.issueURL }}105) | Add PolishCharacterData and PolishSequenceData
+[passay-103]({{ site.issueURL }}103) | Support plain and zipped streams in WordLists utility
+
 ### Version 1.5.0 - 12Apr2019
 
 Issue | Description

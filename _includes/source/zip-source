@@ -1,0 +1,3 @@
+#!/bin/bash
+
+rm source.zip && zip -r source.zip * -x zip-source

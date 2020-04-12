@@ -23,11 +23,9 @@ requires passwords to contain _all_ of a set of characters
 2. [`AllowedRegexRule`](../javadocs/org/passay/AllowedRegexRule.html) -
 requires passwords to conform to a regular expression
 3. [`CharacterCharacteristicsRule`](../javadocs/org/passay/CharacterCharacteristicsRule.html) -
-requires passwords to contain M of N classes of characters; for example, 3 of 4 of the following: digit, upper-case
-letters, lower-case letters, symbols
+requires passwords to contain M of N classes of characters; for example, 3 of 4 of the following: digit, upper-case letters, lower-case letters, symbols
 4. [`CharacterRule`](../javadocs/org/passay/CharacterRule.html) -
-requires passwords to contain at least N characters from a given character set (e.g. digits, upper-case letters,
-lowercase-letters, symbols)
+requires passwords to contain at least N characters from a given character set (e.g. digits, upper-case letters, lowercase-letters, symbols)
 5. [`LengthRule`](../javadocs/org/passay/LengthRule.html) - requires passwords to meet a minimum required length
 6. [`LengthComplexityRule`](../javadocs/org/passay/LengthComplexityRule.html) -
 requires passwords to meet a specific set of rules based on the length of the password. For example, passwords between 8-12 characters long must contain both a number and symbol. Passwords 13 characters and longer must only contain alphabetical characters
@@ -38,30 +36,35 @@ requires passwords to meet a specific set of rules based on the length of the pa
    rejects passwords that _match_ an entry in a dictionary (exact match semantics)
    2. [`DictionarySubstringRule`](../javadocs/org/passay/DictionarySubstringRule.html) -
    rejects passwords that _contain_ an entry in a dictionary (substring match semantics)
+   3. [`DigestDictionaryRule`](../javadocs/org/passay/DigestDictionaryRule.html) -
+   rejects passwords that _match_ a digested entry in a dictionary (hash/digest comparison)
 2. History rules
    1. [`HistoryRule`](../javadocs/org/passay/HistoryRule.html) -
    rejects passwords that match previous passwords (cleartext comparison)
    2. [`DigestHistoryRule`](../javadocs/org/passay/DigestHistoryRule.html) -
    rejects passwords that match previous password digests (hash/digest comparison)
-3. [`IllegalCharacterRule`](../javadocs/org/passay/IllegalCharacterRule.html) -
+3. [`CharacterOccurrencesRule`](../javadocs/org/passay/CharacterOccurrencesRule.html) -
+rejects passwords that contain too many occurances of the same character
+4. [`IllegalCharacterRule`](../javadocs/org/passay/IllegalCharacterRule.html) -
 rejects passwords that contain _any_ of a set of characters
-4. [`IllegalRegexRule`](../javadocs/org/passay/IllegalRegexRule.html) -
+5. [`IllegalRegexRule`](../javadocs/org/passay/IllegalRegexRule.html) -
 rejects passwords that conform to a regular expression
-5. [`IllegalSequenceRule`](../javadocs/org/passay/IllegalSequenceRule.html) -
+6. [`IllegalSequenceRule`](../javadocs/org/passay/IllegalSequenceRule.html) -
 rejects passwords that contain a sequence of N characters (e.g. _12345_)
-6. [`NumberRangeRule`](../javadocs/org/passay/NumberRangeRule.html) -
+7. [`NumberRangeRule`](../javadocs/org/passay/NumberRangeRule.html) -
 rejects passwords that contain any number within a defined range (e.g. _1000-9999_)
-rejects passwords that contain a sequence of N characters (e.g. _12345_)
-7. Source rules
+8. Source rules
    1. [`SourceRule`](../javadocs/org/passay/SourceRule.html) -
    rejects passwords that match those from another source (cleartext comparison)
    2. [`DigestSourceRule`](../javadocs/org/passay/DigestSourceRule.html) -
    rejects passwords that match the digest of those from another source (hash/digest comparison)
-8. [`RepeatCharacterRegexRule`](../javadocs/org/passay/RepeatCharacterRegexRule.html) -
+9. [`RepeatCharacterRegexRule`](../javadocs/org/passay/RepeatCharacterRegexRule.html) -
 rejects passwords that contain a repeated ASCII character
-9. [`UsernameRule`](../javadocs/org/passay/UsernameRule.html) -
+10. [`RepeatCharactersRule`](../javadocs/org/passay/RepeatCharactersRule.html) -
+rejects passwords that contain multiple sequences of repeating characters
+11. [`UsernameRule`](../javadocs/org/passay/UsernameRule.html) -
 rejects passwords that contain the username of the user providing the password
-10. [`WhitespaceRule`](../javadocs/org/passay/WhitespaceRule.html) -
+12. [`WhitespaceRule`](../javadocs/org/passay/WhitespaceRule.html) -
 rejects passwords that contain whitespace characters
 
 # Password validation
@@ -86,23 +89,32 @@ uses a message bundle to define validation messages whose default values are sho
     HISTORY_VIOLATION=Password matches one of %1$s previous passwords.
     ILLEGAL_WORD=Password contains the dictionary word '%1$s'.
     ILLEGAL_WORD_REVERSED=Password contains the reversed dictionary word '%1$s'.
+    ILLEGAL_DIGEST_WORD=Password contains a dictionary word.
+    ILLEGAL_DIGEST_WORD_REVERSED=Password contains a reversed dictionary word.
     ILLEGAL_MATCH=Password matches the illegal pattern '%1$s'.
     ALLOWED_MATCH=Password must match pattern '%1$s'.
-    ILLEGAL_CHAR=Password contains the illegal character '%1$s'.
-    ALLOWED_CHAR=Password contains the illegal character '%1$s'.
-    ILLEGAL_SEQUENCE=Password contains the illegal sequence '%1$s'.
-    ILLEGAL_USERNAME=Password contains the user id '%1$s'.
-    ILLEGAL_USERNAME_REVERSED=Password contains the user id '%1$s' in reverse.
-    ILLEGAL_WHITESPACE=Password cannot contain whitespace characters.
-    INSUFFICIENT_UPPERCASE=Password must contain at least %1$s uppercase characters.
-    INSUFFICIENT_LOWERCASE=Password must contain at least %1$s lowercase characters.
-    INSUFFICIENT_ALPHABETICAL=Password must contain at least %1$s alphabetical characters.
-    INSUFFICIENT_DIGIT=Password must contain at least %1$s digit characters.
-    INSUFFICIENT_SPECIAL=Password must contain at least %1$s special characters.
+    ILLEGAL_CHAR=Password %2$s the illegal character '%1$s'.
+    ALLOWED_CHAR=Password %2$s the illegal character '%1$s'.
+    ILLEGAL_QWERTY_SEQUENCE=Password contains the illegal QWERTY sequence '%1$s'.
+    ILLEGAL_ALPHABETICAL_SEQUENCE=Password contains the illegal alphabetical sequence '%1$s'.
+    ILLEGAL_NUMERICAL_SEQUENCE=Password contains the illegal numerical sequence '%1$s'.
+    ILLEGAL_USERNAME=Password %2$s the user id '%1$s'.
+    ILLEGAL_USERNAME_REVERSED=Password %2$s the user id '%1$s' in reverse.
+    ILLEGAL_WHITESPACE=Password %2$s a whitespace character.
+    ILLEGAL_NUMBER_RANGE=Password %2$s the number '%1$s'.
+    ILLEGAL_REPEATED_CHARS=Password contains %3$s sequences of %1$s or more repeated characters, but only %2$s allowed: %4$s.
+    INSUFFICIENT_UPPERCASE=Password must contain %1$s or more uppercase characters.
+    INSUFFICIENT_LOWERCASE=Password must contain %1$s or more lowercase characters.
+    INSUFFICIENT_ALPHABETICAL=Password must contain %1$s or more alphabetical characters.
+    INSUFFICIENT_DIGIT=Password must contain %1$s or more digit characters.
+    INSUFFICIENT_SPECIAL=Password must contain %1$s or more special characters.
     INSUFFICIENT_CHARACTERISTICS=Password matches %1$s of %3$s character rules, but %2$s are required.
+    INSUFFICIENT_COMPLEXITY=Password meets %2$s complexity rules, but %3$s are required.
+    INSUFFICIENT_COMPLEXITY_RULES=No rules have been configured for a password of length %1$s.
     SOURCE_VIOLATION=Password cannot be the same as your %1$s password.
     TOO_LONG=Password must be no more than %2$s characters in length.
-    TOO_SHORT=Password must be at least %1$s characters in length.
+    TOO_SHORT=Password must be %1$s or more characters in length.
+    TOO_MANY_OCCURRENCES=Password contains %2$s occurrences of the character '%1$s', but at most %3$s are allowed.
 
 The following example demonstrates how to replace the default message bundle with a custom/localized properties file.
 
