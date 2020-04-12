@@ -17,9 +17,9 @@ PasswordValidator validator = new PasswordValidator(
   // define some illegal sequences that will fail when >= 5 chars long
   // alphabetical is of the form 'abcde', numerical is '34567', qwery is 'asdfg'
   // the false parameter indicates that wrapped sequences are allowed; e.g. 'xyzabc'
-  new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false)
-  new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, false)
-  new IllegalSequenceRule(EnglishSequenceData.USQwerty, 5, false)
+  new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false),
+  new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, false),
+  new IllegalSequenceRule(EnglishSequenceData.USQwerty, 5, false),
 
   // no whitespace
   new WhitespaceRule());
