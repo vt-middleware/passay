@@ -15,15 +15,6 @@
     <system>GitHub</system>
     <url>https://github.com/vt-middleware/passay/issues</url>
   </issueManagement>
-  <mailingLists>
-    <mailingList>
-      <name>passay</name>
-      <subscribe>passay+subscribe@googlegroups.com</subscribe>
-      <unsubscribe>passay+unsubscribe@googlegroups.com</unsubscribe>
-      <post>passay@googlegroups.com</post>
-      <archive>http://groups.google.com/group/passay</archive>
-    </mailingList>
-  </mailingLists>
   <licenses>
     <license>
       <name>Apache 2</name>
