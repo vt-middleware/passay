@@ -11,4 +11,8 @@
   <!-- tests need lots of parameters -->
   <suppress checks="ParameterNumber"
             files=".*Test\.java" />
+
+  <!-- tests can be longer than 300 lines -->
+  <suppress checks="MethodLength"
+            files=".*Test\.java" />
 </suppressions>
