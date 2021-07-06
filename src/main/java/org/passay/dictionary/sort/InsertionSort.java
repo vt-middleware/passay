@@ -20,7 +20,7 @@ public class InsertionSort implements ArraySorter
       final String a = array[i];
       String b;
       // CheckStyle:InnerAssignment OFF
-      while (j >= 0 && (c.compare(a, b = array[j]) < 0)) {
+      while (j >= 0 && c.compare(a, b = array[j]) < 0) {
         array[j + 1] = b;
         j--;
       }
