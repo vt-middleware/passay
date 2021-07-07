@@ -9,7 +9,7 @@ function user_continue() {
 }
 
 if [ "$#" -ne 3 ]; then
-  echo "USAGE: `basename $0` <branch> <release-version> <next-version>"
+  echo "USAGE: `basename $0` <branch> <release-version> <next-version> <sonatype-user> <sonatype-passwd>"
   exit
 fi
 
@@ -17,6 +17,8 @@ PROJECT="passay"
 BRANCH="${1}"
 RELEASE_VERSION="${2}"
 NEXT_VERSION="${3}"
+SONATYPE_USER="${4}"
+SONATYPE_PASSWORD="${5}"
 echo "================================================================="
 echo "BEGIN RELEASE"
 echo "PROJECT:         ${PROJECT}"
@@ -89,6 +91,14 @@ echo "Committed new release binaries"
 
 # push changes to the server
 git push origin gh-pages
+
+# upload bundle jar to sonatype
+echo "Uploading bundle jar to sonatype"
+user_continue
+
+curl -i -u ${SONATYPE_USER}:${SONATYPE_PASSWORD} \
+  -F "file=@target/passay-"${RELEASE_VERSION}"-bundle.jar" \
+  "https://oss.sonatype.org/service/local/staging/bundle_upload"
 
 echo "Finished release ${RELEASE_VERSION} for ${PROJECT}"
 
