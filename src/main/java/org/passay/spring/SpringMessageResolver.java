@@ -30,7 +30,7 @@ public class SpringMessageResolver implements MessageResolver
    */
   public SpringMessageResolver(final MessageSource messageSource)
   {
-    this.messageSourceAccessor = new MessageSourceAccessor(messageSource);
+    messageSourceAccessor = new MessageSourceAccessor(messageSource);
   }
 
   /**
@@ -40,7 +40,7 @@ public class SpringMessageResolver implements MessageResolver
    */
   public SpringMessageResolver(final MessageSource messageSource, final Locale locale)
   {
-    this.messageSourceAccessor = new MessageSourceAccessor(messageSource, locale);
+    messageSourceAccessor = new MessageSourceAccessor(messageSource, locale);
   }
 
   /**
@@ -53,9 +53,9 @@ public class SpringMessageResolver implements MessageResolver
   public String resolve(final RuleResultDetail detail)
   {
     try {
-      return this.messageSourceAccessor.getMessage(detail.getErrorCode(), detail.getValues());
+      return messageSourceAccessor.getMessage(detail.getErrorCode(), detail.getValues());
     } catch (NoSuchMessageException e) {
-      return this.fallbackMessageResolver.resolve(detail);
+      return fallbackMessageResolver.resolve(detail);
     }
   }
 

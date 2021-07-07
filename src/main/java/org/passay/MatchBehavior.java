@@ -34,8 +34,8 @@ public enum MatchBehavior
    */
   MatchBehavior(final String desc, final BiFunction<String, String, Boolean> matcherFunction)
   {
-    this.description = desc;
-    this.matcher = matcherFunction;
+    description = desc;
+    matcher = matcherFunction;
   }
 
 

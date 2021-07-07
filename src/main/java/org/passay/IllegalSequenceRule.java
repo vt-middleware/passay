@@ -116,7 +116,7 @@ public class IllegalSequenceRule implements Rule
           diff -= Integer.signum(diff) * csLength;
         }
         // if we have a sequence and reached its end, add it to result
-        if (diff != direction && match.length() >= this.sequenceLength) {
+        if (diff != direction && match.length() >= sequenceLength) {
           addError(result, match.toString());
         }
         // update the current potential sequence
