@@ -7,14 +7,15 @@ package org.passay;
  * @author Middleware Services
  */
 public enum CyrillicSequenceData implements SequenceData {
+
   /**
    * Alphabetical sequence.
    */
   Alphabetical(
-          "ILLEGAL_ALPHABETICAL_SEQUENCE",
-          new CharacterSequence[] {
-                  new CharacterSequence("абвгдеёжзийклмнопрстуфхцчшщъыьэюяіѣѳѵ", "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯІѢѲѴ"),
-          });
+    "ILLEGAL_ALPHABETICAL_SEQUENCE",
+    new CharacterSequence[] {
+      new CharacterSequence("абвгдеёжзийклмнопрстуфхцчшщъыьэюяіѣѳѵ", "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯІѢѲѴ"),
+    });
 
   /**
    * Error code.
