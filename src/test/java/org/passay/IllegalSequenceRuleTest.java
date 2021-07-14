@@ -319,6 +319,14 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("ABCx12y34zcčdĎeě"),
           codes(CzechSequenceData.Alphabetical.getErrorCode()),
         },
+        // cyrillic and english
+        {
+          new PasswordValidator(
+            new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
+            new IllegalSequenceRule(CyrillicSequenceData.Alphabetical, 5, true, false)),
+          new PasswordData("ABCx12y34zcабвгд"),
+          codes(CyrillicSequenceData.Alphabetical.getErrorCode()),
+        },
       };
   }
 
