@@ -12,10 +12,10 @@ public enum CzechSequenceData implements SequenceData {
    * Alphabetical sequence.
    */
   Alphabetical(
-  "ILLEGAL_ALPHABETICAL_SEQUENCE",
-      new CharacterSequence[] {
-        new CharacterSequence("aábcčdďeěéfghiíjklmnňoópqrřsštťuúůvwxyýzž", "AÁBCČDĎEĚÉFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽ"),
-      });
+    "ILLEGAL_ALPHABETICAL_SEQUENCE",
+    new CharacterSequence[] {
+      new CharacterSequence("aábcčdďeěéfghiíjklmnňoópqrřsštťuúůvwxyýzž", "AÁBCČDĎEĚÉFGHIÍJKLMNŇOÓPQRŘSŠTŤUÚŮVWXYÝZŽ"),
+    });
 
   /**
    * Error code.

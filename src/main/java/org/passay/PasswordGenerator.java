@@ -74,7 +74,10 @@ public class PasswordGenerator
     final CharBuffer buffer = CharBuffer.allocate(length);
     if (rules != null) {
       for (CharacterRule rule : rules) {
-        fillRandomCharacters(rule.getValidCharacters(), rule.getNumberOfCharacters(), buffer);
+        fillRandomCharacters(
+          rule.getValidCharacters(),
+          length <= rule.getNumberOfCharacters() ? length : rule.getNumberOfCharacters(),
+          buffer);
         allChars.append(rule.getValidCharacters());
       }
     }

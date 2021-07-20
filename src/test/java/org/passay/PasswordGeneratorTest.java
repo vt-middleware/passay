@@ -89,4 +89,15 @@ public class PasswordGeneratorTest
     AssertJUnit.assertFalse(failCharRule.validate(new PasswordData(pass)).isValid());
     AssertJUnit.assertTrue(verifyCharRule.validate(new PasswordData(pass)).isValid());
   }
+
+
+  /**
+   */
+  @Test(groups = "passgentest")
+  public void testBufferOverflow()
+  {
+    new PasswordGenerator().generatePassword(5, new CharacterRule(EnglishCharacterData.LowerCase, 10));
+    new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 5));
+    new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 10));
+  }
 }
