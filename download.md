@@ -21,6 +21,14 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.6.1 - 21Jul2021
+
+Issue | Description
+:---- | :----------
+[passay-129]({{ site.issueURL }}129) | Fix buffer overflow in PasswordGenerator
+[passay-128]({{ site.issueURL }}128) | Add CyrillicCharacterData and CyrillicSequenceData
+[passay-125]({{ site.issueURL }}125) | Add CzechCharacterData and CzechSequenceData
+
 ### Version 1.6.0 - 12Apr2020
 
 Note that the default message property file name has changed from message.properties to passay.properties.
