@@ -8,7 +8,7 @@ function user_continue() {
   fi
 }
 
-if [ "$#" -ne 3 ]; then
+if [ "$#" -ne 5 ]; then
   echo "USAGE: `basename $0` <branch> <release-version> <next-version> <sonatype-user> <sonatype-passwd>"
   exit
 fi
