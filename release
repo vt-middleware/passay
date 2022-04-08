@@ -16,9 +16,28 @@ fi
 PROJECT="passay"
 BRANCH="${1}"
 RELEASE_VERSION="${2}"
+if [[ ! "${RELEASE_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+  echo "<release-version> must be of the form 'MAJOR.MINOR.REVISION'"
+  exit
+fi
 NEXT_VERSION="${3}"
+if [[ ! "${NEXT_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+-SNAPSHOT$ ]]; then
+  echo "<next-version> must be of the form 'MAJOR.MINOR.REVISION-SNAPSHOT'"
+  exit
+fi
 SONATYPE_USER="${4}"
 SONATYPE_PASSWORD="${5}"
+
+if [ -z $(git config --get user.signingkey) ]; then
+  echo "Git signing must be enabled. Add user.signingkey to ~/.gitconfig"
+  exit
+fi
+
+if [ $(git tag -l | grep "$RELEASE_VERSION") ]; then
+  echo "Tag ${RELEASE_VERSION} already exists"
+  exit
+fi
+
 echo "================================================================="
 echo "BEGIN RELEASE"
 echo "PROJECT:         ${PROJECT}"
@@ -38,7 +57,7 @@ user_continue
 git commit pom.xml -m "Update version for ${RELEASE_VERSION} release."
 
 # tag the release version
-git tag -a v${RELEASE_VERSION} -m "Tagging ${RELEASE_VERSION} release."
+git tag -s v${RELEASE_VERSION} -m "Tagging ${RELEASE_VERSION} release."
 echo "Tagged release ${RELEASE_VERSION}"
 
 # update pom to the next version
@@ -97,7 +116,7 @@ echo "Uploading bundle jar to sonatype"
 user_continue
 
 curl -i -u ${SONATYPE_USER}:${SONATYPE_PASSWORD} \
-  -F "file=@target/passay-"${RELEASE_VERSION}"-bundle.jar" \
+  -F "file=@target/${PROJECT}-"${RELEASE_VERSION}"-bundle.jar" \
   "https://oss.sonatype.org/service/local/staging/bundle_upload"
 
 echo "Finished release ${RELEASE_VERSION} for ${PROJECT}"
