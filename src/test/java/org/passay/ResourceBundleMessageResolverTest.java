@@ -3,6 +3,8 @@ package org.passay;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import org.passay.resolver.ResourceBundleMessageResolver;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 

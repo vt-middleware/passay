@@ -2,6 +2,9 @@
 package org.passay;
 
 import java.util.Arrays;
+
+import org.passay.logic.PasswordData;
+import org.passay.rule.RepeatCharactersRule;
 import org.testng.annotations.DataProvider;
 
 /**

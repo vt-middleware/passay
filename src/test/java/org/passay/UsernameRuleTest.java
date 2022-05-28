@@ -1,6 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import org.passay.logic.MatchBehavior;
+import org.passay.logic.PasswordData;
+import org.passay.rule.UsernameRule;
 import org.testng.annotations.DataProvider;
 
 /**

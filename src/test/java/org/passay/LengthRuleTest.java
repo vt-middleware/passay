@@ -1,6 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import org.passay.logic.PasswordData;
+import org.passay.rule.LengthRule;
+import org.passay.rule.result.RuleResult;
+import org.passay.rule.result.RuleResultMetadata;
 import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;

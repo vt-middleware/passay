@@ -1,8 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import org.passay.logic.PasswordData;
 import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.DictionaryBuilder;
+import org.passay.rule.DictionaryRule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;

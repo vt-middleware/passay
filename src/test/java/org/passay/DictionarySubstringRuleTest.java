@@ -2,10 +2,13 @@
 package org.passay;
 
 import java.io.FileReader;
+
+import org.passay.logic.PasswordData;
 import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
+import org.passay.rule.DictionarySubstringRule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;

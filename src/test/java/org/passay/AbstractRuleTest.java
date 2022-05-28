@@ -3,6 +3,15 @@ package org.passay;
 
 import java.util.Properties;
 import java.util.ResourceBundle;
+
+import org.passay.logic.PasswordData;
+import org.passay.resolver.AbstractMessageResolver;
+import org.passay.resolver.MessageResolver;
+import org.passay.resolver.PropertiesMessageResolver;
+import org.passay.resolver.ResourceBundleMessageResolver;
+import org.passay.rule.Rule;
+import org.passay.rule.result.RuleResult;
+import org.passay.rule.result.RuleResultDetail;
 import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
 

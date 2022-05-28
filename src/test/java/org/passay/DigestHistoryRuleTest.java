@@ -7,8 +7,11 @@ import org.cryptacular.bean.BCryptHashBean;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
-import org.passay.PasswordData.HistoricalReference;
-import org.passay.PasswordData.Reference;
+import org.passay.logic.PasswordData;
+import org.passay.logic.PasswordData.HistoricalReference;
+import org.passay.logic.PasswordData.Reference;
+import org.passay.rule.DigestHistoryRule;
+import org.passay.rule.HistoryRule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 

@@ -6,6 +6,9 @@ import java.util.List;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
+import org.passay.logic.PasswordData;
+import org.passay.rule.DigestSourceRule;
+import org.passay.rule.SourceRule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 

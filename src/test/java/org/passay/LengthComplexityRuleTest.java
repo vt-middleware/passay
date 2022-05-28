@@ -2,6 +2,19 @@
 package org.passay;
 
 import java.util.ArrayList;
+
+import org.passay.logic.PasswordData;
+import org.passay.data.character.EnglishCharacterData;
+import org.passay.data.sequence.EnglishSequenceData;
+import org.passay.rule.CharacterCharacteristicsRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.IllegalSequenceRule;
+import org.passay.rule.LengthComplexityRule;
+import org.passay.rule.LengthRule;
+import org.passay.rule.RepeatCharacterRegexRule;
+import org.passay.rule.Rule;
+import org.passay.rule.UsernameRule;
+import org.passay.rule.WhitespaceRule;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;

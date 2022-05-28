@@ -2,6 +2,9 @@
 package org.passay;
 
 import java.util.regex.Pattern;
+
+import org.passay.logic.PasswordData;
+import org.passay.rule.IllegalRegexRule;
 import org.testng.annotations.DataProvider;
 
 /**
