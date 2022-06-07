@@ -1,13 +1,12 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.passay.logic.CharacterSequence;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 
 /**
- * Unit test for {@link CharacterSequence}.
+ * Unit test for {@link org.passay.CharacterSequence}.
  *
  * @author  Middleware Services
  */
@@ -31,7 +30,7 @@ public class CharacterSequenceTest
 
 
   /**
-   * Tests the {@link CharacterSequence#matches(int, char)} method.
+   * Tests the {@link org.passay.CharacterSequence#matches(int, char)} method.
    */
   @Test
   public void testMatches()

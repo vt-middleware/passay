@@ -3,12 +3,6 @@ package org.passay;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.passay.logic.PasswordData;
-import org.passay.data.character.EnglishCharacterData;
-import org.passay.generator.PasswordGenerator;
-import org.passay.rule.CharacterCharacteristicsRule;
-import org.passay.rule.CharacterRule;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;

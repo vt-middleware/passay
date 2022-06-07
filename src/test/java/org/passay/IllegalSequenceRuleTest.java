@@ -1,14 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import org.passay.logic.PasswordData;
-import org.passay.data.sequence.CyrillicSequenceData;
-import org.passay.data.sequence.CzechSequenceData;
-import org.passay.data.sequence.EnglishSequenceData;
-import org.passay.data.sequence.GermanSequenceData;
-import org.passay.data.sequence.PolishSequenceData;
-import org.passay.rule.IllegalSequenceRule;
-import org.passay.rule.validator.PasswordValidator;
 import org.testng.annotations.DataProvider;
 
 /**
@@ -333,14 +325,6 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
             new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
             new IllegalSequenceRule(CyrillicSequenceData.Alphabetical, 5, true, false)),
           new PasswordData("ABCx12y34zcабвгд"),
-          codes(CyrillicSequenceData.Alphabetical.getErrorCode()),
-        },
-        // archaic cyrillic and english
-        {
-          new PasswordValidator(
-                  new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
-                  new IllegalSequenceRule(CyrillicSequenceData.Alphabetical, 5, true, false)),
-          new PasswordData("ABCx12y34zcабвгдіѣѲѴ"),
           codes(CyrillicSequenceData.Alphabetical.getErrorCode()),
         },
       };

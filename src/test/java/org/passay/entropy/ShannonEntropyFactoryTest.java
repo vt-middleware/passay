@@ -2,8 +2,8 @@
 package org.passay.entropy;
 
 import java.util.List;
-import org.passay.logic.PasswordData;
-import org.passay.rule.Rule;
+import org.passay.PasswordData;
+import org.passay.Rule;
 import org.testng.annotations.Test;
 
 /**

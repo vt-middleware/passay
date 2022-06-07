@@ -3,10 +3,7 @@ package org.passay;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.passay.logic.PasswordData;
-import org.passay.logic.PasswordData.HistoricalReference;
-import org.passay.rule.HistoryRule;
+import org.passay.PasswordData.HistoricalReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 

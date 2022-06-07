@@ -2,13 +2,13 @@
 package org.passay.entropy;
 
 import java.util.List;
-import org.passay.rule.AbstractDictionaryRule;
-import org.passay.rule.CharacterCharacteristicsRule;
-import org.passay.rule.CharacterRule;
-import org.passay.data.character.EnglishCharacterData;
-import org.passay.logic.PasswordData;
-import org.passay.rule.validator.PasswordValidator;
-import org.passay.rule.Rule;
+import org.passay.AbstractDictionaryRule;
+import org.passay.CharacterCharacteristicsRule;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordData;
+import org.passay.PasswordValidator;
+import org.passay.Rule;
 
 /**
  * Factory for creating {@link ShannonEntropy} from password rules and password data.

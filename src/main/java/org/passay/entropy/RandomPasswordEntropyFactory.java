@@ -4,11 +4,11 @@ package org.passay.entropy;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.passay.rule.AllowedCharacterRule;
-import org.passay.rule.CharacterCharacteristicsRule;
-import org.passay.rule.CharacterRule;
-import org.passay.logic.PasswordData;
-import org.passay.rule.Rule;
+import org.passay.AllowedCharacterRule;
+import org.passay.CharacterCharacteristicsRule;
+import org.passay.CharacterRule;
+import org.passay.PasswordData;
+import org.passay.Rule;
 
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.

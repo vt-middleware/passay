@@ -3,10 +3,7 @@ package org.passay;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.passay.logic.PasswordData;
-import org.passay.logic.PasswordData.SourceReference;
-import org.passay.rule.SourceRule;
+import org.passay.PasswordData.SourceReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
