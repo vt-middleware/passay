@@ -66,7 +66,7 @@
     <dependency>
       <groupId>org.cryptacular</groupId>
       <artifactId>cryptacular</artifactId>
-      <version>1.2.4</version>
+      <version>1.2.5</version>
       <optional>true</optional>
     </dependency>
     <dependency>
@@ -79,10 +79,11 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>5.3.19</version>
+      <version>5.3.21</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>
+    <!-- Remain on version 7.5 until source moves to JDK 11 -->
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
@@ -109,7 +110,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.0.0</version>
+        <version>3.1.0</version>
         <executions>
           <execution>
             <id>enforce-maven</id>
@@ -334,7 +335,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.3.2</version>
+        <version>3.4.0</version>
         <configuration>
           <source>8</source>
           <links>
@@ -388,7 +389,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>5.1.4</version>
+        <version>5.1.6</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
