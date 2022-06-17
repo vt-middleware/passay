@@ -6,7 +6,7 @@ package org.passay;
  *
  * @author Middleware Services
  */
-public enum NewCyrillicSequenceData implements SequenceData {
+public enum CyrillicModernSequenceData implements SequenceData {
 
   /**
    * Alphabetical sequence.
@@ -33,7 +33,7 @@ public enum NewCyrillicSequenceData implements SequenceData {
    * @param code Error code used for message resolution.
    * @param seqs One or more character sequences.
    */
-  NewCyrillicSequenceData(final String code, final CharacterSequence[] seqs)
+  CyrillicModernSequenceData(final String code, final CharacterSequence[] seqs)
   {
     errorCode = code;
     sequences = seqs;

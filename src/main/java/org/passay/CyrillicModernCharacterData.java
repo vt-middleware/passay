@@ -6,7 +6,7 @@ package org.passay;
  *
  * @author  Middleware Services
  */
-public enum NewCyrillicCharacterData implements CharacterData {
+public enum CyrillicModernCharacterData implements CharacterData {
 
   /**
    * Lower case characters.
@@ -34,7 +34,7 @@ public enum NewCyrillicCharacterData implements CharacterData {
    * @param code          Error code
    * @param charString    Characters as string
    */
-  NewCyrillicCharacterData(final String code, final String charString)
+  CyrillicModernCharacterData(final String code, final String charString)
   {
     errorCode = code;
     characters = charString;
