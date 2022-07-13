@@ -21,7 +21,7 @@ public enum GermanSequenceData implements SequenceData
   /**
    * German QWERTZ keyboard sequence.
    */
-  GermanQwertz(
+  DEQwertz(
     "ILLEGAL_QWERTY_SEQUENCE",
     // rows are no-modifier, shift, alt-gr
     // dead keys are denoted with the null character /u0000

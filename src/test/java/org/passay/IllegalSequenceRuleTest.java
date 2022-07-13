@@ -147,27 +147,27 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         /* German QWERTZ SEQUENCE */
         // Test valid password
         {
-          new IllegalSequenceRule(GermanSequenceData.GermanQwertz),
+          new IllegalSequenceRule(GermanSequenceData.DEQwertz),
           new PasswordData("p4zRcv8#n65"),
           null,
         },
         // Has one 6 character qwertz sequence
         {
-          new IllegalSequenceRule(GermanSequenceData.GermanQwertz, 6, false),
+          new IllegalSequenceRule(GermanSequenceData.DEQwertz, 6, false),
           new PasswordData("pqwertz#n65"),
-          codes(GermanSequenceData.GermanQwertz.getErrorCode()),
+          codes(GermanSequenceData.DEQwertz.getErrorCode()),
         },
         // Has two 5 character qwertz sequences
         {
-          new IllegalSequenceRule(GermanSequenceData.GermanQwertz, 5, false),
+          new IllegalSequenceRule(GermanSequenceData.DEQwertz, 5, false),
           new PasswordData("wertz#~yxcvb"),
-          codes(GermanSequenceData.GermanQwertz.getErrorCode(), GermanSequenceData.GermanQwertz.getErrorCode()),
+          codes(GermanSequenceData.DEQwertz.getErrorCode(), GermanSequenceData.DEQwertz.getErrorCode()),
         },
         // Has one 4 character backward qwertz sequence
         {
-          new IllegalSequenceRule(GermanSequenceData.GermanQwertz, 4, false),
+          new IllegalSequenceRule(GermanSequenceData.DEQwertz, 4, false),
           new PasswordData("1xäölk2y"),
-          codes(GermanSequenceData.GermanQwertz.getErrorCode()),
+          codes(GermanSequenceData.DEQwertz.getErrorCode()),
         },
 
         /* ALPHABETICAL SEQUENCE */
