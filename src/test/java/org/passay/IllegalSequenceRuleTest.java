@@ -143,6 +143,33 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
           new PasswordData("pqwertyui#n65"),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
+
+        /* German QWERTZ SEQUENCE */
+        // Test valid password
+        {
+          new IllegalSequenceRule(GermanSequenceData.GermanQwertz),
+          new PasswordData("p4zRcv8#n65"),
+          null,
+        },
+        // Has one 6 character qwertz sequence
+        {
+          new IllegalSequenceRule(GermanSequenceData.GermanQwertz, 6, false),
+          new PasswordData("pqwertz#n65"),
+          codes(GermanSequenceData.GermanQwertz.getErrorCode()),
+        },
+        // Has two 5 character qwertz sequences
+        {
+          new IllegalSequenceRule(GermanSequenceData.GermanQwertz, 5, false),
+          new PasswordData("wertz#~yxcvb"),
+          codes(GermanSequenceData.GermanQwertz.getErrorCode(), GermanSequenceData.GermanQwertz.getErrorCode()),
+        },
+        // Has one 4 character backward qwertz sequence
+        {
+          new IllegalSequenceRule(GermanSequenceData.GermanQwertz, 4, false),
+          new PasswordData("1xäölk2y"),
+          codes(GermanSequenceData.GermanQwertz.getErrorCode()),
+        },
+
         /* ALPHABETICAL SEQUENCE */
         // Test valid password
         {
