@@ -21,6 +21,13 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.6.2 - 02Aug2022
+
+Issue | Description
+:---- | :----------
+[passay-133]({{ site.issueURL }}133) | Add keyboard sequence for german QWERTZ layout
+[passay-132]({{ site.issueURL }}132) | Add CyrillicModernCharacterData
+
 ### Version 1.6.1 - 21Jul2021
 
 Issue | Description
