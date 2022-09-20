@@ -1,7 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.Locale;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Test;
 
 /**
  * Unit test for {@link RepeatCharacterRegexRule}.
@@ -112,5 +114,29 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
             String.format("Password matches the illegal pattern '%s'.", "FFFFF"), },
         },
       };
+  }
+
+
+  /**
+   * Test with an arabic default locale.
+   */
+  @Test(groups = "passtest")
+  public void arabicLocale()
+  {
+    // Get the current default Locale
+    final Locale defaultLocale = Locale.getDefault();
+    try {
+      // Set the default Locale to ar-US
+      final Locale arUS = new Locale.Builder()
+        .setLanguage("ar")
+        .setRegion("US")
+        .build();
+      Locale.setDefault(arUS);
+
+      // In this Locale, the generated regular expression includes a repetition count that is non-ASCII
+      new RepeatCharacterRegexRule();
+    } finally {
+      Locale.setDefault(defaultLocale);
+    }
   }
 }

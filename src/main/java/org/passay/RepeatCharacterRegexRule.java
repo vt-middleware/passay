@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.Locale;
+
 /**
  * Rule for determining if a password contains a duplicate ASCII keyboard sequence. See {@link java.util.regex.Pattern}
  * /p{ASCII}. The default sequence length is 5 characters.
@@ -53,7 +55,7 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
    */
   public RepeatCharacterRegexRule(final int sl, final boolean reportAll)
   {
-    super(String.format(REPEAT_CHAR_REGEX, sl - 1), reportAll);
+    super(String.format(Locale.ENGLISH, REPEAT_CHAR_REGEX, sl - 1), reportAll);
     if (sl < MINIMUM_SEQUENCE_LENGTH) {
       throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
     }
