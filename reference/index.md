@@ -157,6 +157,17 @@ preventing common, and therefore insecure, passwords.
 {% include source/reference/4.java %}
 {% endhighlight %}
 
+### Provided dictionaries
+1. [`JDBCDictionary`](../javadocs/org/passay/dictionary/JDBCDictionary.html) - searches for words in a database
+2. [`WordListDictionary`](../javadocs/org/passay/dictionary/WordListDictionary.html) - searches for words in a list of Strings
+   1. [`ArrayWordList`](../javadocs/org/passay/dictionary/ArrayWordList.html) - an in-memory list of words
+   2. [`FileWordList`](../javadocs/org/passay/dictionary/FileWordList.html) - a file backed list of words (best for smaller file sizes)
+   3. [`MemoryMappedFileWordList`](../javadocs/org/passay/dictionary/MemoryMappedFileWordList.html) - a file backed list of words that leverages a `MappedByteBuffer` (best for larger file sizes)
+3. [`BloomFilterDictionary`](../javadocs/org/passay/dictionary/BloomFilterDictionary.html) - searches for words in a [Bloom Filter](https://en.wikipedia.org/wiki/Bloom_filter)
+   1. Uses the `BloomFilter` implementation provided in the [Google Guava](https://github.com/google/guava) library. Note that bloom filters by nature report false positives, be sure to construct a filter with a thoughtful false positive probability.
+
+4. [`TernaryTreeDictionary`](../javadocs/org/passay/dictionary/TernaryTreeDictionary.html) - searches for words in an in-memory tree structure
+
 ## Advanced validation: password history
 The following rules support enforcement of unique passwords in the context of password history:
 
