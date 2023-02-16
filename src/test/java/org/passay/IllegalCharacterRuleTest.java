@@ -114,7 +114,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
         {
           new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.StartsWith),
           new PasswordData("@ycDAPdsyz"),
-          new String[] {String.format("Password starts with the illegal character '%s'.", "@"), },
+          new String[] {String.format("Password begins with the illegal character '%s'.", "@"), },
         },
         {
           new IllegalCharacterRule(new char[] {'@', '$'}, MatchBehavior.EndsWith),
