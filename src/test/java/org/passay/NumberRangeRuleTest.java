@@ -65,7 +65,7 @@ public class NumberRangeRuleTest extends AbstractRuleTest
         {
           new NumberRangeRule(101, 199, MatchBehavior.StartsWith),
           new PasswordData("133Rcv8#n65"),
-          new String[] {"Password begins with the number '133'.", },
+          new String[] {"Password starts with the number '133'.", },
         },
         {
           new NumberRangeRule(101, 199, MatchBehavior.Contains),

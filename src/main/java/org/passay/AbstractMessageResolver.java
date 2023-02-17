@@ -58,9 +58,9 @@ public abstract class AbstractMessageResolver implements MessageResolver
       if (message != null) {
         final String format;
         if (locale != null) {
-          format = String.format(locale, message, resolveMatchBehavior(detail.getValues()));
+          format = String.format(locale, message, detail.getValues());
         } else {
-          format = String.format(message, resolveMatchBehavior(detail.getValues()));
+          format = String.format(message, detail.getValues());
         }
         return format;
       }
@@ -76,29 +76,5 @@ public abstract class AbstractMessageResolver implements MessageResolver
       format = detail.getErrorCode();
     }
     return format;
-  }
-
-
-  /**
-   * Resolves any custom messaging for {@link MatchBehavior}. The supplied array may be modified by this method.
-   *
-   * @param  args  containing any MatchBehavior enums
-   *
-   * @return  resolved args if custom match behavior messaging was found
-   */
-  protected Object[] resolveMatchBehavior(final Object[] args)
-  {
-    if (args != null && args.length > 0) {
-      for (int i = 0; i < args.length; i++) {
-        final Object arg = args[i];
-        if (arg instanceof MatchBehavior) {
-          final String msg = getMessage(((MatchBehavior) arg).upperSnakeName());
-          if (msg != null) {
-            args[i] = msg;
-          }
-        }
-      }
-    }
-    return args;
   }
 }

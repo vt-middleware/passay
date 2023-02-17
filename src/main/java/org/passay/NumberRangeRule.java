@@ -126,7 +126,11 @@ public class NumberRangeRule implements Rule
     final String text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {
       if (matchBehavior.match(text, Integer.toString(i))) {
-        result.addError(ERROR_CODE, createRuleResultDetailParameters(i));
+        final String[] codes = {
+          ERROR_CODE + "." + matchBehavior.upperSnakeName(),
+          ERROR_CODE,
+        };
+        result.addError(codes, createRuleResultDetailParameters(i));
         if (!reportAllFailures) {
           break;
         }

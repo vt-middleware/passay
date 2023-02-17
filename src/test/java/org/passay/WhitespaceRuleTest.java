@@ -98,7 +98,7 @@ public class WhitespaceRuleTest extends AbstractRuleTest
         {
           new WhitespaceRule(MatchBehavior.StartsWith),
           new PasswordData("\tAycDPdsyz"),
-          new String[] {"Password begins with a whitespace character.", },
+          new String[] {"Password starts with a whitespace character.", },
         },
         {
           new WhitespaceRule(),

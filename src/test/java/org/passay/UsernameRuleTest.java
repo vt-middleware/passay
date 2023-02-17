@@ -207,12 +207,12 @@ public class UsernameRuleTest extends AbstractRuleTest
         {
           new UsernameRule(MatchBehavior.StartsWith),
           new PasswordData("testuser", "testuser#n65"),
-          new String[] {String.format("Password begins with the user id '%s'.", "testuser"), },
+          new String[] {String.format("Password starts with the user id '%s'.", "testuser"), },
         },
         {
           new UsernameRule(MatchBehavior.EndsWith),
           new PasswordData("testuser", "p4#n65testuser"),
-          new String[] {String.format("Password ends with the user id '%s'.", "testuser"), },
+          new String[] {String.format("Password finishes with the user id '%s'.", "testuser"), },
         },
       };
   }

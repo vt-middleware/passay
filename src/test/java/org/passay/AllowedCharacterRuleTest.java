@@ -119,7 +119,7 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
         {
           new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
           new PasswordData("4bwersco4kk"),
-          new String[] {String.format("Password begins with the illegal character '%s'.", "4"), },
+          new String[] {String.format("Password starts with the illegal character '%s'.", "4"), },
         },
         {
           new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),

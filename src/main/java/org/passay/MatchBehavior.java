@@ -47,7 +47,7 @@ public enum MatchBehavior
   public String upperSnakeName()
   {
     final String name = name();
-    final StringBuilder sb = new StringBuilder("MATCH_BEHAVIOR_");
+    final StringBuilder sb = new StringBuilder();
     sb.append(name.charAt(0));
     for (int i = 1; i < name.length(); i++) {
       final char ch = name.charAt(i);
