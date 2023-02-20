@@ -146,7 +146,11 @@ public class WhitespaceRule implements Rule
     final String text = passwordData.getPassword();
     for (char c : whitespaceCharacters) {
       if (matchBehavior.match(text, c)) {
-        result.addError(ERROR_CODE, createRuleResultDetailParameters(c));
+        final String[] codes = {
+          ERROR_CODE + "." + matchBehavior.upperSnakeName(),
+          ERROR_CODE,
+        };
+        result.addError(codes, createRuleResultDetailParameters(c));
         if (!reportAllFailures) {
           break;
         }

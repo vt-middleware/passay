@@ -40,6 +40,28 @@ public enum MatchBehavior
 
 
   /**
+   * Returns the name of this match behavior in upper case snake casing.
+   *
+   * @return  upper case snake name
+   */
+  public String upperSnakeName()
+  {
+    final String name = name();
+    final StringBuilder sb = new StringBuilder();
+    sb.append(name.charAt(0));
+    for (int i = 1; i < name.length(); i++) {
+      final char ch = name.charAt(i);
+      if (Character.isUpperCase(ch)) {
+        sb.append("_").append(ch);
+      } else {
+        sb.append(Character.toUpperCase(ch));
+      }
+    }
+    return sb.toString();
+  }
+
+
+  /**
    * Returns whether text matches the supplied string for this match type.
    *
    * @param  text  to search

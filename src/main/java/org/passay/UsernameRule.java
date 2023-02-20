@@ -130,12 +130,20 @@ public class UsernameRule implements Rule
         user = user.toLowerCase();
       }
       if (matchBehavior.match(text, user)) {
-        result.addError(ERROR_CODE, createRuleResultDetailParameters(user));
+        final String[] codes = {
+          ERROR_CODE + "." + matchBehavior.upperSnakeName(),
+          ERROR_CODE,
+        };
+        result.addError(codes, createRuleResultDetailParameters(user));
       }
       if (matchBackwards) {
         final String reverseUser = new StringBuilder(user).reverse().toString();
         if (matchBehavior.match(text, reverseUser)) {
-          result.addError(ERROR_CODE_REVERSED, createRuleResultDetailParameters(user));
+          final String[] codes = {
+            ERROR_CODE_REVERSED + "." + matchBehavior.upperSnakeName(),
+            ERROR_CODE_REVERSED,
+          };
+          result.addError(codes, createRuleResultDetailParameters(user));
         }
       }
     }
