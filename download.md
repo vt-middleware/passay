@@ -21,6 +21,13 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.6.3 - 19Mar2023
+
+Issue | Description
+:---- | :----------
+[passay-139]({{ site.issueURL }}139) | Missing possibility to translate "contains", "starts with" and "ends with"
+[passay-134]({{ site.issueURL }}134) | RepeatCharacterRegexRule generates an exception in certain Locales
+
 ### Version 1.6.2 - 02Aug2022
 
 Issue | Description
