@@ -251,7 +251,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0</version>
         <configuration>
-          <argLine>-Xms128m -Xmx1g</argLine>
+          <argLine>-Xms128m -Xmx1g -Duser.language=en</argLine>
           <suiteXmlFiles>
             <suiteXmlFile>${testng.dir}/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
