@@ -41,7 +41,7 @@ public class RuleResultMetadata
     Illegal,
 
     /** Already leaked password. */
-    Pwnd;
+    Pwned;
 
 
     /**
