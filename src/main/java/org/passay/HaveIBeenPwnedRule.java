@@ -18,7 +18,7 @@ import org.cryptacular.util.CodecUtil;
 import org.cryptacular.util.HashUtil;
 
 /**
- * Validates if the password against the online database of <code>haveibeenpwned.com</code>
+ * Validates the password against the online database of <code>haveibeenpwned.com</code>
  * optionally allowing the usage of found passwords, but returns the number of found matches in
  * the metadata.
  *
