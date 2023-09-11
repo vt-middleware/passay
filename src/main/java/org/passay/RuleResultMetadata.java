@@ -38,7 +38,10 @@ public class RuleResultMetadata
     Allowed,
 
     /** illegal characters. */
-    Illegal;
+    Illegal,
+
+    /** Already leaked password. */
+    Pwned;
 
 
     /**
