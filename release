@@ -48,9 +48,18 @@ echo "================================================================="
 user_continue
 
 # update pom to release version
-mvn clean
+if ! mvn clean; then
+  echo "maven clean command failed, check your environment"
+  exit
+fi
 mvn versions:set -DnewVersion=${RELEASE_VERSION} -DgenerateBackupPoms=false
 echo "Updated pom to release version ${RELEASE_VERSION}"
+
+POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)
+if [ "${POM_VERSION}" != "${RELEASE_VERSION}" ]; then
+  echo "POM version ${POM_VERSION} does not equal ${RELEASE_VERSION}"
+  exit
+fi
 user_continue
 
 # commit pom changes

@@ -21,7 +21,11 @@ echo "================================================================="
 user_continue
 
 # update pom to release version
-mvn clean && mvn package -Dmaven.javadoc.skip=true -B -V
+if ! mvn clean; then
+  echo "maven clean command failed, check your environment"
+  exit
+fi
+mvn package -Dmaven.javadoc.skip=true -B -V
 
 # Clone the maven repo
 pushd ${REPO_PATH}
@@ -29,7 +33,7 @@ git pull
 popd
 
 # Deploy the artifact to the maven repo
-mvn deploy -DskipTests -DaltDeploymentRepository=snapshot::default::file://${REPO_PATH}
+mvn deploy -DskipTests -DaltDeploymentRepository=snapshot::file://${REPO_PATH}
 
 # Push changes to the maven repo
 pushd ${REPO_PATH}
