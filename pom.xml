@@ -10,7 +10,7 @@
   <version>1.6.5-SNAPSHOT</version>
   <name>Passay Library</name>
   <description>Library for checking that a password complies with a custom set of rules</description>
-  <url>http://www.passay.org</url>
+  <url>https://www.passay.org</url>
   <issueManagement>
     <system>GitHub</system>
     <url>https://github.com/vt-middleware/passay/issues</url>
@@ -18,11 +18,11 @@
   <licenses>
     <license>
       <name>Apache 2</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
     </license>
     <license>
       <name>GNU Lesser General Public License</name>
-      <url>http://www.gnu.org/licenses/lgpl-3.0.txt</url>
+      <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
     </license>
   </licenses>
   <scm>
@@ -35,7 +35,7 @@
       <name>Daniel Fisher</name>
       <email>dfisher@vt.edu</email>
       <organization>Virginia Tech</organization>
-      <organizationUrl>http://www.vt.edu</organizationUrl>
+      <organizationUrl>https://www.vt.edu</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
@@ -45,7 +45,7 @@
       <name>Marvin S. Addison</name>
       <email>serac@vt.edu</email>
       <organization>Virginia Tech</organization>
-      <organizationUrl>http://www.vt.edu</organizationUrl>
+      <organizationUrl>https://www.vt.edu</organizationUrl>
       <roles>
         <role>developer</role>
       </roles>
