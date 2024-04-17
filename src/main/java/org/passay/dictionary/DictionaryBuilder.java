@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -41,7 +40,7 @@ public class DictionaryBuilder
   public DictionaryBuilder addFile(final String path)
   {
     try {
-      return addReader(new FileReader(new File(path)));
+      return addReader(new FileReader(path));
     } catch (FileNotFoundException e) {
       throw new IllegalArgumentException(path + " does not exist", e);
     }

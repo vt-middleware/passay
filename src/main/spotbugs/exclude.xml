@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter
+    xmlns="https://github.com/spotbugs/filter/4.8.4"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="https://github.com/spotbugs/filter/4.8.4
+                        https://raw.githubusercontent.com/spotbugs/spotbugs/4.8.4/spotbugs/etc/findbugsfilter.xsd">
+
+  <!-- See https://spotbugs.readthedocs.io/en/latest/bugDescriptions.html -->
+
+  <!-- Allow constructors to throw exceptions -->
+  <Match>
+    <Bug pattern="CT_CONSTRUCTOR_THROW" />
+  </Match>
+
+  <!-- Internal representation is exposed throughout the API -->
+  <Match>
+    <Or>
+      <Bug pattern="EI_EXPOSE_REP" />
+      <Bug pattern="EI_EXPOSE_REP2" />
+    </Or>
+  </Match>
+
+  <!-- Allow platform specific encoding when reading dictionary files -->
+  <Match>
+    <Or>
+      <Class name="org.passay.dictionary.DictionaryBuilder" />
+      <Class name="org.passay.dictionary.WordListDictionary" />
+      <Class name="org.passay.dictionary.TernaryTreeDictionary" />
+    </Or>
+    <Bug pattern="DM_DEFAULT_ENCODING" />
+  </Match>
+
+  <!-- API breaking change to make field package protected -->
+  <Match>
+    <Or>
+      <Class name="org.passay.WhitespaceRule" />
+      <Class name="org.passay.entropy.ShannonEntropy" />
+    </Or>
+    <Bug pattern="MS_PKGPROTECT" />
+  </Match>
+
+  <!-- Readers are closed in WordLists#readWordList -->
+  <Match>
+    <Class name="org.passay.dictionary.DictionaryBuilder" />
+    <Method name="addFile" />
+    <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
+  </Match>
+
+</FindBugsFilter>
