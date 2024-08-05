@@ -17,9 +17,14 @@ import java.util.Random;
  */
 public class PasswordGenerator
 {
+  /** Retry password generation at most this many times. */
+  private static final int RETRY_LIMIT = 2;
 
   /** Source of random data. */
   private final Random random;
+
+  /** Tracks the total number of retries. */
+  private int retryCount;
 
 
   /** Default constructor. Instantiates a secure random for password generation. */
@@ -37,6 +42,18 @@ public class PasswordGenerator
   public PasswordGenerator(final Random r)
   {
     random = r;
+  }
+
+
+  /**
+   * Tracks the number retries. A password generator with a high percentage of retries may be indicative of a password
+   * ruleset that needs adjustment.
+   *
+   * @return Total number of retry attempts.
+   */
+  public int getRetryCount()
+  {
+    return retryCount;
   }
 
 
@@ -63,29 +80,43 @@ public class PasswordGenerator
    *
    * @return  generated password
    */
-  public String generatePassword(final int length, final List<CharacterRule> rules)
+  public String generatePassword(final int length, final List<Rule> rules)
   {
     if (length <= 0) {
       throw new IllegalArgumentException("length must be greater than 0");
     }
 
     final StringBuilder allChars = new StringBuilder();
-
     final CharBuffer buffer = CharBuffer.allocate(length);
+    final PasswordValidator validator = new PasswordValidator(rules);
     if (rules != null) {
-      for (CharacterRule rule : rules) {
-        fillRandomCharacters(
-          rule.getValidCharacters(),
-          length <= rule.getNumberOfCharacters() ? length : rule.getNumberOfCharacters(),
-          buffer);
-        allChars.append(rule.getValidCharacters());
+      for (Rule rule : rules) {
+        if (rule instanceof CharacterRule) {
+          final CharacterRule characterRule = (CharacterRule) rule;
+          fillRandomCharacters(
+                  characterRule.getValidCharacters(),
+                  Math.min(length, characterRule.getNumberOfCharacters()),
+                  buffer);
+          allChars.append(characterRule.getValidCharacters());
+        }
       }
     }
-    fillRandomCharacters(allChars, length - buffer.position(), buffer);
-    // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
-    ((Buffer) buffer).flip();
-    randomize(buffer);
-    return buffer.toString();
+    String generated;
+    int count = 0;
+    do {
+      fillRandomCharacters(allChars, length - buffer.position(), buffer);
+      // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
+      ((Buffer) buffer).flip();
+      randomize(buffer);
+      generated = buffer.toString();
+      if (count > 0) {
+        retryCount++;
+      }
+    } while (count++ <= RETRY_LIMIT && !validator.validate(new PasswordData(generated)).isValid());
+    if (count > RETRY_LIMIT) {
+      throw new IllegalStateException("Exceeded maximum number of password generation retries");
+    }
+    return generated;
   }
 
 
@@ -123,5 +154,11 @@ public class PasswordGenerator
       buffer.put(n, buffer.get(i));
       buffer.put(i, c);
     }
+  }
+
+
+  private void validate(final String password, final List<Rule> rules)
+  {
+
   }
 }
