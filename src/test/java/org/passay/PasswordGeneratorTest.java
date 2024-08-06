@@ -2,6 +2,7 @@
 package org.passay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
@@ -20,9 +21,6 @@ public class PasswordGeneratorTest
   /** To generate passwords with. */
   private final PasswordGenerator generator = new PasswordGenerator();
 
-  /** Rule to generate passwords with. */
-  private final CharacterCharacteristicsRule genCharRule = new CharacterCharacteristicsRule();
-
   /** Rule to verify passwords with. */
   private final CharacterCharacteristicsRule verifyCharRule = new CharacterCharacteristicsRule();
 
@@ -30,7 +28,7 @@ public class PasswordGeneratorTest
   private final CharacterCharacteristicsRule failCharRule = new CharacterCharacteristicsRule();
 
   /** Rules to test. */
-  private final List<CharacterRule> rules = new ArrayList<>();
+  private final List<Rule> rules = new ArrayList<>();
 
   /** Rules to test. */
   private final List<CharacterRule> failRules = new ArrayList<>();
@@ -41,21 +39,24 @@ public class PasswordGeneratorTest
   @BeforeClass(groups = "passgentest")
   public void initializeRules()
   {
-    rules.add(new CharacterRule(EnglishCharacterData.Digit, 2));
-    rules.add(new CharacterRule(EnglishCharacterData.Special, 2));
-    rules.add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    rules.add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
+    final CharacterRule[] characterRules = new CharacterRule[] {
+      new CharacterRule(EnglishCharacterData.UpperCase, 1),
+      new CharacterRule(EnglishCharacterData.LowerCase, 20),
+      new CharacterRule(EnglishCharacterData.Digit, 1),
+    };
 
-    genCharRule.getRules().addAll(rules);
-    genCharRule.setNumberOfCharacteristics(3);
+    rules.addAll(Arrays.asList(characterRules));
+    rules.add(new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
 
-    verifyCharRule.getRules().addAll(rules);
+    verifyCharRule.getRules().addAll(Arrays.asList(characterRules));
     verifyCharRule.setNumberOfCharacteristics(3);
 
-    failRules.add(new CharacterRule(EnglishCharacterData.Digit, 3));
-    failRules.add(new CharacterRule(EnglishCharacterData.Special, 3));
-    failRules.add(new CharacterRule(EnglishCharacterData.UpperCase, 3));
-    failRules.add(new CharacterRule(EnglishCharacterData.LowerCase, 3));
+    for (CharacterRule cr : characterRules) {
+      failRules.add(new CharacterRule(cr.getCharacterData(), cr.getNumberOfCharacters() + 1));
+    }
+    failRules.addAll(Arrays.asList(characterRules));
+    // Add a constraint not met by generated passwords
+    failRules.add(new CharacterRule(EnglishCharacterData.Special, 1));
 
     failCharRule.getRules().addAll(failRules);
     failCharRule.setNumberOfCharacteristics(4);
@@ -69,8 +70,8 @@ public class PasswordGeneratorTest
   public Object[][] randomPasswords()
   {
     final Object[][] passwords = new Object[100][1];
-    final int length = 10;
-    for (int i = 0; i < 100; i++) {
+    final int length = 22;
+    for (int i = 0; i < passwords.length; i++) {
       final String password = generator.generatePassword(length, rules);
       AssertJUnit.assertNotNull(password);
       AssertJUnit.assertTrue(password.length() >= length);
@@ -90,13 +91,39 @@ public class PasswordGeneratorTest
     AssertJUnit.assertTrue(verifyCharRule.validate(new PasswordData(pass)).isValid());
   }
 
+  /**
+   * Performs an iterative test of the generator with enough rounds to likely generate an illegal sequence,
+   * which should trigger the retry mechanism.
+   */
+  @Test(groups = "passgentest")
+  public void testGeneratorWithRetry()
+  {
+    for (int i = 0; i < 100000; i++) {
+      try {
+        generator.generatePassword(22, rules);
+      } catch (IllegalStateException e) {
+        if (!e.getMessage().equals("Exceeded maximum number of password generation retries")) {
+          throw e;
+        }
+      }
+    }
+    AssertJUnit.assertTrue(generator.getRetryCount() > 0);
+  }
+
 
   /**
    */
   @Test(groups = "passgentest")
   public void testBufferOverflow()
   {
-    new PasswordGenerator().generatePassword(5, new CharacterRule(EnglishCharacterData.LowerCase, 10));
+    try {
+      new PasswordGenerator().generatePassword(5, new CharacterRule(EnglishCharacterData.LowerCase, 10));
+      AssertJUnit.fail("Should have thrown IllegalStateException");
+    } catch (IllegalStateException e) {
+      if (!e.getMessage().equals("Exceeded maximum number of password generation retries")) {
+        AssertJUnit.fail("Unexpected error message:" + e.getMessage());
+      }
+    }
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 5));
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 10));
   }
