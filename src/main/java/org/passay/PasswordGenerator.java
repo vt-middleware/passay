@@ -64,8 +64,26 @@ public class PasswordGenerator
    * @param  rules  to generate compliant password from
    *
    * @return  generated password
+   *
+   * @deprecated use {@link #generatePassword(int, Rule[])}
    */
+  @Deprecated
   public String generatePassword(final int length, final CharacterRule... rules)
+  {
+    return generatePassword(length, Arrays.asList(rules));
+  }
+
+
+  /**
+   * See {@link #generatePassword(int, List)}.
+   *
+   * @param  <T>  type of rule
+   * @param  length  of password to generate
+   * @param  rules  to generate compliant password from
+   *
+   * @return  generated password
+   */
+  public <T extends Rule> String generatePassword(final int length, final T... rules)
   {
     return generatePassword(length, Arrays.asList(rules));
   }
@@ -80,7 +98,7 @@ public class PasswordGenerator
    *
    * @return  generated password
    */
-  public String generatePassword(final int length, final List<Rule> rules)
+  public String generatePassword(final int length, final List<? extends Rule> rules)
   {
     if (length <= 0) {
       throw new IllegalArgumentException("length must be greater than 0");
