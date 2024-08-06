@@ -155,10 +155,4 @@ public class PasswordGenerator
       buffer.put(i, c);
     }
   }
-
-
-  private void validate(final String password, final List<Rule> rules)
-  {
-
-  }
 }
