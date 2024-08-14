@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 function user_continue() {
   read -p "Do you want to continue? [y/n]" -n 1 -r
   echo
@@ -15,6 +17,10 @@ fi
 
 PROJECT="passay"
 BRANCH="${1}"
+if [ ! $(git rev-parse --abbrev-ref HEAD) = "${BRANCH}" ]; then
+  echo "The current branch must be ${BRANCH}"
+  exit
+fi
 RELEASE_VERSION="${2}"
 if [[ ! "${RELEASE_VERSION}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
   echo "<release-version> must be of the form 'MAJOR.MINOR.REVISION'"
