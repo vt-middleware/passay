@@ -21,12 +21,19 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.6.5 - 24Aug2024
+
+Issue | Description
+:---- | :----------
+[passay-153]({{ site.issueURL }}153) | add missing 'ß' to GermanSequenceData
+[passay-152]({{ site.issueURL }}152) | Password generator does not always generate valid password
+
 ### Version 1.6.4 - 23Sep2023
 
 Issue | Description
 :---- | :----------
-[passay-139]({{ site.issueURL }}146) | Add password rule for haveibeenpwned.com
-[passay-134]({{ site.issueURL }}142) | Add missing Polish characters
+[passay-146]({{ site.issueURL }}146) | Add password rule for haveibeenpwned.com
+[passay-142]({{ site.issueURL }}142) | Add missing Polish characters
 
 ### Version 1.6.3 - 19Mar2023
 
