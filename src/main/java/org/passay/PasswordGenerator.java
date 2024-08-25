@@ -83,6 +83,7 @@ public class PasswordGenerator
    *
    * @return  generated password
    */
+  @SuppressWarnings("unchecked")
   public <T extends Rule> String generatePassword(final int length, final T... rules)
   {
     return generatePassword(length, Arrays.asList(rules));
