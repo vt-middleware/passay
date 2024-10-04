@@ -27,7 +27,7 @@ public enum GermanSequenceData implements SequenceData
     // dead keys are denoted with the null character /u0000
     new CharacterSequence[]{
       new CharacterSequence(
-        "^1234567890ß\\´",
+        "^1234567890ß´",
         "°!\"§$%&/()=?`",
         "\u0000\u0000²³\u0000\u0000\u0000{[]}\\\u0000"),
       new CharacterSequence(

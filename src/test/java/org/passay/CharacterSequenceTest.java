@@ -41,4 +41,16 @@ public class CharacterSequenceTest
     Assert.assertTrue(sequence.matches(0, 'a'));
     Assert.assertFalse(sequence.matches(4, 'z'));
   }
+
+
+  @Test
+  public void testValidSequences()
+  {
+    Assert.assertNotNull(PolishSequenceData.values());
+    Assert.assertNotNull(CyrillicSequenceData.values());
+    Assert.assertNotNull(CzechSequenceData.values());
+    Assert.assertNotNull(GermanSequenceData.values());
+    Assert.assertNotNull(CyrillicModernSequenceData.values());
+    Assert.assertNotNull(EnglishSequenceData.values());
+  }
 }
