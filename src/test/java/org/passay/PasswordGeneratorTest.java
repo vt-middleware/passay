@@ -4,8 +4,8 @@ package org.passay;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.testng.AssertJUnit;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -17,90 +17,54 @@ import org.testng.annotations.Test;
  */
 public class PasswordGeneratorTest
 {
-
-  /** To generate passwords with. */
-  private final PasswordGenerator generator = new PasswordGenerator();
-
-  /** Rule to verify passwords with. */
-  private final CharacterCharacteristicsRule verifyCharRule = new CharacterCharacteristicsRule();
-
-  /** Rule to verify passwords with that should fail. */
-  private final CharacterCharacteristicsRule failCharRule = new CharacterCharacteristicsRule();
-
-  /** Rules to test. */
-  private final List<Rule> rules = new ArrayList<>();
-
-  /** Rules to test. */
-  private final List<CharacterRule> failRules = new ArrayList<>();
-
   /**
-   * Setup test resources.
+   * @return Test parameters consisting of an array of rules.
    */
-  @BeforeClass(groups = "passgentest")
-  public void initializeRules()
+  @DataProvider(name = "ruleSets")
+  public Object[][] ruleSets()
   {
-    final CharacterRule[] characterRules = new CharacterRule[] {
-      new CharacterRule(EnglishCharacterData.UpperCase, 1),
-      new CharacterRule(EnglishCharacterData.LowerCase, 20),
-      new CharacterRule(EnglishCharacterData.Digit, 1),
+    return new Object[][] {
+      new Object[] {
+        new CharacterRule(EnglishCharacterData.Digit, 1),
+        new CharacterRule(EnglishCharacterData.UpperCase, 1),
+        new CharacterRule(EnglishCharacterData.LowerCase, 20),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+      },
+      // Test case for https://github.com/vt-middleware/passay/issues/158
+      new Object[] {
+        new CharacterRule(EnglishCharacterData.Digit, 3),
+        new CharacterRule(EnglishCharacterData.UpperCase, 3),
+        new CharacterRule(EnglishCharacterData.LowerCase, 3),
+        new RepeatCharactersRule(3, 1),
+      },
     };
-
-    rules.addAll(Arrays.asList(characterRules));
-    rules.add(new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
-
-    verifyCharRule.getRules().addAll(Arrays.asList(characterRules));
-    verifyCharRule.setNumberOfCharacteristics(3);
-
-    for (CharacterRule cr : characterRules) {
-      failRules.add(new CharacterRule(cr.getCharacterData(), cr.getNumberOfCharacters() + 1));
-    }
-    failRules.addAll(Arrays.asList(characterRules));
-    // Add a constraint not met by generated passwords
-    failRules.add(new CharacterRule(EnglishCharacterData.Special, 1));
-
-    failCharRule.getRules().addAll(failRules);
-    failCharRule.setNumberOfCharacteristics(4);
-  }
-
-
-  /**
-   * @return  Test data.
-   */
-  @DataProvider(name = "randomPasswords")
-  public Object[][] randomPasswords()
-  {
-    final Object[][] passwords = new Object[100][1];
-    final int length = 22;
-    for (int i = 0; i < passwords.length; i++) {
-      final String password = generator.generatePassword(length, rules);
-      AssertJUnit.assertNotNull(password);
-      AssertJUnit.assertTrue(password.length() >= length);
-      passwords[i] = new Object[] {password};
-    }
-    return passwords;
-  }
-
-
-  /**
-   * @param  pass  to verify
-   */
-  @Test(groups = "passgentest", dataProvider = "randomPasswords")
-  public void testGenerator(final String pass)
-  {
-    AssertJUnit.assertFalse(failCharRule.validate(new PasswordData(pass)).isValid());
-    AssertJUnit.assertTrue(verifyCharRule.validate(new PasswordData(pass)).isValid());
   }
 
   /**
    * Performs an iterative test of the generator with enough rounds to likely generate an illegal sequence,
    * which should trigger the retry mechanism.
+   *
+   * @param rules Password validation rules. Should NOT include characteristics as these are managed by the test.
    */
-  @Test(groups = "passgentest")
-  public void testGeneratorWithRetry()
+  @Test(dataProvider = "ruleSets")
+  public void testGenerateWithRetry(final Rule ... rules)
   {
+    final List<Rule> ruleSet = Arrays.asList(rules);
+    final List<Rule> passRules = addCharacteristics(ruleSet);
+    final PasswordValidator passValidator = new PasswordValidator(passRules);
+    // Add a constraint not met by generated passwords
+    final List<Rule> extendedSet = new ArrayList<>(ruleSet);
+    extendedSet.add(new CharacterRule(EnglishCharacterData.SpecialUnicode, 1));
+    final List<Rule> failRules = addCharacteristics(extendedSet);
+    final PasswordValidator failValidator = new PasswordValidator(failRules);
+    final PasswordGenerator generator = new PasswordGenerator();
+    // Perform a number of rounds likely to produce illegal sequences by random chance
     for (int i = 0; i < 100000; i++) {
       try {
-        generator.generatePassword(22, rules);
+        final String password = generator.generatePassword(22, ruleSet);
+        final PasswordData pd = new PasswordData(password);
+        AssertJUnit.assertTrue(passValidator.validate(pd).isValid());
+        AssertJUnit.assertFalse(failValidator.validate(pd).isValid());
       } catch (IllegalStateException e) {
         if (!e.getMessage().equals("Exceeded maximum number of password generation retries")) {
           throw e;
@@ -110,10 +74,7 @@ public class PasswordGeneratorTest
     AssertJUnit.assertTrue(generator.getRetryCount() > 0);
   }
 
-
-  /**
-   */
-  @Test(groups = "passgentest")
+  @Test
   public void testBufferOverflow()
   {
     try {
@@ -126,5 +87,19 @@ public class PasswordGeneratorTest
     }
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 5));
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 10));
+  }
+
+  private List<Rule> addCharacteristics(final List<Rule> rules)
+  {
+    final List<Rule> compositeRules = new ArrayList<>(rules);
+    final List<CharacterRule> characterRules = rules.stream()
+            .filter(r -> r instanceof CharacterRule)
+            .map(r -> (CharacterRule) r)
+            .collect(Collectors.toList());
+    final CharacterCharacteristicsRule characteristics = new CharacterCharacteristicsRule();
+    characteristics.getRules().addAll(characterRules);
+    characteristics.setNumberOfCharacteristics(characterRules.size());
+    compositeRules.add(characteristics);
+    return compositeRules;
   }
 }
