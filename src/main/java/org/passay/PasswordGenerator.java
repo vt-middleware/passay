@@ -131,7 +131,7 @@ public class PasswordGenerator
       if (count > 0) {
         retryCount++;
       }
-    } while (count++ <= RETRY_LIMIT && !validator.validate(new PasswordData(generated)).isValid());
+    } while (++count <= RETRY_LIMIT && !validator.validate(new PasswordData(generated)).isValid());
     if (count > RETRY_LIMIT) {
       throw new IllegalStateException("Exceeded maximum number of password generation retries");
     }
