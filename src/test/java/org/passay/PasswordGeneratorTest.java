@@ -46,7 +46,7 @@ public class PasswordGeneratorTest
    *
    * @param rules Password validation rules. Should NOT include characteristics as these are managed by the test.
    */
-  @Test(dataProvider = "ruleSets")
+  @Test(groups = "passgentest", dataProvider = "ruleSets")
   public void testGenerateWithRetry(final Rule ... rules)
   {
     final List<Rule> ruleSet = Arrays.asList(rules);
@@ -66,15 +66,13 @@ public class PasswordGeneratorTest
         AssertJUnit.assertTrue(passValidator.validate(pd).isValid());
         AssertJUnit.assertFalse(failValidator.validate(pd).isValid());
       } catch (IllegalStateException e) {
-        if (!e.getMessage().equals("Exceeded maximum number of password generation retries")) {
-          throw e;
-        }
+        AssertJUnit.fail("Should not have thrown IllegalStateException");
       }
     }
     AssertJUnit.assertTrue(generator.getRetryCount() > 0);
   }
 
-  @Test
+  @Test(groups = "passgentest")
   public void testBufferOverflow()
   {
     try {

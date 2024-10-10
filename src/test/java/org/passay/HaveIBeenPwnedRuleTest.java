@@ -184,7 +184,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   }
 
 
-  @Test
+  @Test(groups = "passtest")
   public void testInvalidPwdAllowExposed()
   {
     final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl);
@@ -197,7 +197,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   }
 
 
-  @Test
+  @Test(groups = "passtest")
   public void testInvalidPwdAllowException()
   {
     final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl);

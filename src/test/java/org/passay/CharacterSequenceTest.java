@@ -14,7 +14,7 @@ public class CharacterSequenceTest
 {
 
   /** Tests no arg constructor. */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = "passtest", expectedExceptions = IllegalArgumentException.class)
   public void testNoSequencesFailure()
   {
     new CharacterSequence();
@@ -22,7 +22,7 @@ public class CharacterSequenceTest
 
 
   /** Tests failure condition where constructor arguments are not same length. */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test(groups = "passtest", expectedExceptions = IllegalArgumentException.class)
   public void testUnequalSequenceFailure()
   {
     new CharacterSequence("12345", "!@#$");
@@ -32,7 +32,7 @@ public class CharacterSequenceTest
   /**
    * Tests the {@link org.passay.CharacterSequence#matches(int, char)} method.
    */
-  @Test
+  @Test(groups = "passtest")
   public void testMatches()
   {
     final CharacterSequence sequence = new CharacterSequence("12345", "ABCDE", "abcde");
@@ -43,7 +43,7 @@ public class CharacterSequenceTest
   }
 
 
-  @Test
+  @Test(groups = "passtest")
   public void testValidSequences()
   {
     Assert.assertNotNull(PolishSequenceData.values());
