@@ -59,14 +59,18 @@ public class PasswordGeneratorTest
     final PasswordValidator failValidator = new PasswordValidator(failRules);
     final PasswordGenerator generator = new PasswordGenerator();
     // Perform a number of rounds likely to produce illegal sequences by random chance
-    for (int i = 0; i < 100000; i++) {
-      try {
+    try {
+      for (int i = 0; i < 100000; i++) {
         final String password = generator.generatePassword(22, ruleSet);
         final PasswordData pd = new PasswordData(password);
         AssertJUnit.assertTrue(passValidator.validate(pd).isValid());
         AssertJUnit.assertFalse(failValidator.validate(pd).isValid());
-      } catch (IllegalStateException e) {
-        AssertJUnit.fail("Should not have thrown IllegalStateException");
+      }
+    } catch (IllegalStateException e) {
+      if (e.getMessage().equals("Exceeded maximum number of password generation retries")) {
+        AssertJUnit.fail(e.getMessage());
+      } else {
+        throw e;
       }
     }
     AssertJUnit.assertTrue(generator.getRetryCount() > 0);
