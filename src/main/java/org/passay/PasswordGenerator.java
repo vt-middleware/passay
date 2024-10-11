@@ -108,21 +108,22 @@ public class PasswordGenerator
     final StringBuilder allChars = new StringBuilder();
     final CharBuffer buffer = CharBuffer.allocate(length);
     final PasswordValidator validator = new PasswordValidator(rules);
-    if (rules != null) {
-      for (Rule rule : rules) {
-        if (rule instanceof CharacterRule) {
-          final CharacterRule characterRule = (CharacterRule) rule;
-          fillRandomCharacters(
-                  characterRule.getValidCharacters(),
-                  Math.min(length, characterRule.getNumberOfCharacters()),
-                  buffer);
-          allChars.append(characterRule.getValidCharacters());
-        }
-      }
-    }
     String generated;
     int count = 0;
+
     do {
+      if (rules != null) {
+        for (Rule rule : rules) {
+          if (rule instanceof CharacterRule) {
+            final CharacterRule characterRule = (CharacterRule) rule;
+            fillRandomCharacters(
+                    characterRule.getValidCharacters(),
+                    Math.min(length, characterRule.getNumberOfCharacters()),
+                    buffer);
+            allChars.append(characterRule.getValidCharacters());
+          }
+        }
+      }
       fillRandomCharacters(allChars, length - buffer.position(), buffer);
       // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
       ((Buffer) buffer).flip();
