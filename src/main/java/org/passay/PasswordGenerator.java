@@ -120,7 +120,9 @@ public class PasswordGenerator
                     characterRule.getValidCharacters(),
                     Math.min(length, characterRule.getNumberOfCharacters()),
                     buffer);
-            allChars.append(characterRule.getValidCharacters());
+            if (count == 0) {
+              allChars.append(characterRule.getValidCharacters());
+            }
           }
         }
       }
