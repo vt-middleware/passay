@@ -21,10 +21,19 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 1.6.6 - 14Oct2024
+
+Issue | Description
+:---- | :----------
+[passay-162]({{ site.issueURL }}162) | Fix broken GermanSequenceData; See #153
+[passay-160]({{ site.issueURL }}160) | Separate EnglishCharacterData special symbols
+[passay-158]({{ site.issueURL }}158) | Invalid generation password rules for retry
+
 ### Version 1.6.5 - 24Aug2024
 
 Issue | Description
 :---- | :----------
+[passay-154]({{ site.issueURL }}154) | Add retry to PasswordGenerator
 [passay-153]({{ site.issueURL }}153) | add missing 'ß' to GermanSequenceData
 [passay-152]({{ site.issueURL }}152) | Password generator does not always generate valid password
 
