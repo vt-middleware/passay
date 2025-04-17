@@ -31,6 +31,15 @@ public class RuleResultMetadata
     /** special characters. */
     Special,
 
+    /** special ascii characters. */
+    SpecialAscii,
+
+    /** special unicode characters. */
+    SpecialUnicode,
+
+    /** special latin characters. */
+    SpecialLatin,
+
     /** whitespace characters. */
     Whitespace,
 
