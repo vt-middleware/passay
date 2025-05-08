@@ -119,7 +119,7 @@ public class CharacterRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
-    m.put("matchingCharacterCount", matchingChars.length());
+    m.put("matchingCharacterCount", PasswordUtils.charCount(matchingChars));
     m.put("validCharacters", String.valueOf(characterData.getCharacters()));
     m.put("matchingCharacters", matchingChars);
     return m;

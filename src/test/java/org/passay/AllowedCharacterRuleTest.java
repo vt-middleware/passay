@@ -75,6 +75,33 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
           new PasswordData("gbwersco4kk"),
           null,
         },
+        // test unicode
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwersčokk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwers\u16C8okk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwers\uD808\uDF34okk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gb\uD808\uDF34ers\uD808\uDF34okk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        // single unicode character but represented by 2 code points
+        {
+          new AllowedCharacterRule(ALLOWED_CHARS),
+          new PasswordData("gbwers\uD83C\uDDEE\uD83C\uDDF8okk"),
+          codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
+        },
       };
   }
 

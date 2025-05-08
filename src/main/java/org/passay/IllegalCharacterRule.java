@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -22,8 +23,8 @@ public class IllegalCharacterRule implements Rule
   /** Whether to report all sequence matches or just the first. */
   protected boolean reportAllFailures;
 
-  /** Stores the characters that are not allowed. */
-  private final char[] illegalCharacters;
+  /** Stores the character code points that are not allowed. */
+  private final int[] illegalCharacters;
 
   /** Where to match whitespace. */
   private final MatchBehavior matchBehavior;
@@ -43,12 +44,35 @@ public class IllegalCharacterRule implements Rule
   /**
    * Create a new illegal character rule.
    *
+   * @param  cp  illegal character code points
+   */
+  public IllegalCharacterRule(final int[] cp)
+  {
+    this(cp, MatchBehavior.Contains, true);
+  }
+
+
+  /**
+   * Create a new illegal character rule.
+   *
    * @param  c  illegal characters
    * @param  behavior  how to match illegal characters
    */
   public IllegalCharacterRule(final char[] c, final MatchBehavior behavior)
   {
     this(c, behavior, true);
+  }
+
+
+  /**
+   * Create a new illegal character rule.
+   *
+   * @param  cp  illegal character code points
+   * @param  behavior  how to match illegal characters
+   */
+  public IllegalCharacterRule(final int[] cp, final MatchBehavior behavior)
+  {
+    this(cp, behavior, true);
   }
 
 
@@ -67,14 +91,39 @@ public class IllegalCharacterRule implements Rule
   /**
    * Create a new illegal character rule.
    *
+   * @param  cp  illegal character code points
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public IllegalCharacterRule(final int[] cp, final boolean reportAll)
+  {
+    this(cp, MatchBehavior.Contains, reportAll);
+  }
+
+
+  /**
+   * Create a new illegal character rule.
+   *
    * @param  c  illegal characters
    * @param  behavior  how to match illegal characters
    * @param  reportAll  whether to report all matches or just the first
    */
   public IllegalCharacterRule(final char[] c, final MatchBehavior behavior, final boolean reportAll)
   {
-    if (c.length > 0) {
-      illegalCharacters = c;
+    this(CharBuffer.wrap(c).chars().toArray(), behavior, reportAll);
+  }
+
+
+  /**
+   * Create a new illegal character rule.
+   *
+   * @param  cp  illegal character code points
+   * @param  behavior  how to match illegal characters
+   * @param  reportAll  whether to report all matches or just the first
+   */
+  public IllegalCharacterRule(final int[] cp, final MatchBehavior behavior, final boolean reportAll)
+  {
+    if (cp.length > 0) {
+      illegalCharacters = cp;
     } else {
       throw new IllegalArgumentException("illegal characters length must be greater than zero");
     }
@@ -84,11 +133,11 @@ public class IllegalCharacterRule implements Rule
 
 
   /**
-   * Returns the illegal characters for this rule.
+   * Returns the illegal character code points for this rule.
    *
-   * @return  illegal characters
+   * @return  illegal character code points
    */
-  public char[] getIllegalCharacters()
+  public int[] getIllegalCharacters()
   {
     return illegalCharacters;
   }
@@ -109,20 +158,20 @@ public class IllegalCharacterRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult();
-    final Set<Character> matches = new HashSet<>();
+    final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
-    for (char c : illegalCharacters) {
-      if (matchBehavior.match(text, c) && !matches.contains(c)) {
+    for (int cp : illegalCharacters) {
+      if (matchBehavior.match(text, cp) && !matches.contains(PasswordUtils.toString(cp))) {
         final String[] codes = {
-          ERROR_CODE + "." + (int) c,
+          ERROR_CODE + "." + cp,
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
           ERROR_CODE,
         };
-        result.addError(codes, createRuleResultDetailParameters(c));
+        result.addError(codes, createRuleResultDetailParameters(cp));
         if (!reportAllFailures) {
           break;
         }
-        matches.add(c);
+        matches.add(PasswordUtils.toString(cp));
       }
     }
     result.setMetadata(createRuleResultMetadata(passwordData));
@@ -133,14 +182,14 @@ public class IllegalCharacterRule implements Rule
   /**
    * Creates the parameter data for the rule result detail.
    *
-   * @param  c  illegal character
+   * @param  cp  illegal character code point
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final char c)
+  protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", c);
+    m.put("illegalCharacter", PasswordUtils.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -157,7 +206,7 @@ public class IllegalCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Illegal,
-      PasswordUtils.countMatchingCharacters(String.valueOf(illegalCharacters), password.getPassword()));
+      PasswordUtils.countMatchingCharacters(illegalCharacters, password.getPassword()));
   }
 
 

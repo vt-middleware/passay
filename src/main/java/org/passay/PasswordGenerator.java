@@ -126,7 +126,7 @@ public class PasswordGenerator
           }
         }
       }
-      fillRandomCharacters(allChars, length - buffer.position(), buffer);
+      fillRandomCharacters(allChars.toString(), length - buffer.position(), buffer);
       // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
       ((Buffer) buffer).flip();
       randomize(buffer);
@@ -152,11 +152,12 @@ public class PasswordGenerator
    * @param  count  number of random characters.
    * @param  target  character sequence that will hold characters.
    */
-  protected void fillRandomCharacters(final CharSequence source, final int count, final Appendable target)
+  protected void fillRandomCharacters(final String source, final int count, final Appendable target)
   {
+    final int[] indexes = PasswordUtils.codePointIndexes(source);
     for (int i = 0; i < count; i++) {
       try {
-        target.append(source.charAt(random.nextInt(source.length())));
+        target.append(PasswordUtils.toString(source.codePointAt(indexes[random.nextInt(indexes.length)])));
       } catch (IOException e) {
         throw new RuntimeException("Error appending characters.", e);
       }
