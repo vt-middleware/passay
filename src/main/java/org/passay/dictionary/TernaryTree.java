@@ -9,6 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.UnicodeString;
 
 /**
  * Implementation of a ternary tree. Methods are provided for inserting strings and searching for strings. The
@@ -22,14 +23,13 @@ public class TernaryTree
 {
 
   /** Case sensitive comparator. */
-  protected static final Comparator<Character> CASE_SENSITIVE_COMPARATOR =
-    (a, b) -> a - b;
+  protected static final Comparator<String> CASE_SENSITIVE_COMPARATOR = String::compareTo;
+
   /** Case insensitive comparator. */
-  protected static final Comparator<Character> CASE_INSENSITIVE_COMPARATOR =
-    (a, b) -> Character.toLowerCase(a) - Character.toLowerCase(b);
+  protected static final Comparator<String> CASE_INSENSITIVE_COMPARATOR = String::compareToIgnoreCase;
 
   /** File system line separator. */
-  private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+  private static final String LINE_SEPARATOR = System.lineSeparator();
 
   /**
    * An empty results array.
@@ -37,7 +37,7 @@ public class TernaryTree
   private static final String[] EMPTY_ARRAY = new String[0];
 
   /** Character comparator. */
-  protected final Comparator<Character> comparator;
+  protected final Comparator<String> comparator;
 
   /** root node of the ternary tree. */
   private TernaryNode root;
@@ -215,15 +215,15 @@ public class TernaryTree
   // CheckStyle:FinalParametersCheck ON
   {
     if (index < word.length()) {
-      final char c = word.charAt(index);
+      final int cp = word.codePointAt(index);
       if (node == null) {
         // CheckStyle:ParameterAssignmentCheck OFF
-        node = new TernaryNode(c);
+        node = new TernaryNode(cp);
         // CheckStyle:ParameterAssignmentCheck ON
       }
 
-      final char split = node.getSplitChar();
-      final int cmp = comparator.compare(c, split);
+      final String split = UnicodeString.toString(node.getSplitChar());
+      final int cmp = comparator.compare(UnicodeString.toString(cp), split);
       if (cmp < 0) {
         node.setLokid(insertNode(node.getLokid(), word, index));
       } else if (cmp > 0) {
@@ -231,7 +231,7 @@ public class TernaryTree
       } else if (index == word.length() - 1) {
         node.setEndOfWord(true);
       } else {
-        node.setEqkid(insertNode(node.getEqkid(), word, index + 1));
+        node.setEqkid(insertNode(node.getEqkid(), word, index + Character.charCount(cp)));
       }
     }
     return node;
@@ -251,9 +251,9 @@ public class TernaryTree
   private boolean searchNode(final TernaryNode node, final String word, final int index)
   {
     if (node != null && index < word.length()) {
-      final char c = word.charAt(index);
-      final char split = node.getSplitChar();
-      final int cmp = comparator.compare(c, split);
+      final int cp = word.codePointAt(index);
+      final String split = UnicodeString.toString(node.getSplitChar());
+      final int cmp = comparator.compare(UnicodeString.toString(cp), split);
       if (cmp < 0) {
         return searchNode(node.getLokid(), word, index);
       } else if (cmp > 0) {
@@ -261,7 +261,7 @@ public class TernaryTree
       } else if (index == word.length() - 1) {
         return node.isEndOfWord();
       } else {
-        return searchNode(node.getEqkid(), word, index + 1);
+        return searchNode(node.getEqkid(), word, index + Character.charCount(cp));
       }
     }
     return false;
@@ -286,15 +286,15 @@ public class TernaryTree
   // CheckStyle:FinalParametersCheck ON
   {
     if (node != null && index < word.length()) {
-      final char c = word.charAt(index);
-      final char split = node.getSplitChar();
-      final int cmp = comparator.compare(c, split);
-      if (c == '.' || cmp < 0) {
+      final int cp = word.codePointAt(index);
+      final String split = UnicodeString.toString(node.getSplitChar());
+      final int cmp = comparator.compare(UnicodeString.toString(cp), split);
+      if (cp == '.' || cmp < 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
         matches = partialSearchNode(node.getLokid(), matches, match, word, index);
         // CheckStyle:ParameterAssignmentCheck ON
       }
-      if (c == '.' || cmp == 0) {
+      if (cp == '.' || cmp == 0) {
         if (index == word.length() - 1) {
           if (node.isEndOfWord()) {
             if (matches == null) {
@@ -306,11 +306,11 @@ public class TernaryTree
           }
         } else {
           // CheckStyle:ParameterAssignmentCheck OFF
-          matches = partialSearchNode(node.getEqkid(), matches, match + split, word, index + 1);
+          matches = partialSearchNode(node.getEqkid(), matches, match + split, word, index + Character.charCount(cp));
           // CheckStyle:ParameterAssignmentCheck ON
         }
       }
-      if (c == '.' || cmp > 0) {
+      if (cp == '.' || cmp > 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
         matches = partialSearchNode(node.getHikid(), matches, match, word, index);
         // CheckStyle:ParameterAssignmentCheck ON
@@ -339,9 +339,9 @@ public class TernaryTree
   {
     if (node != null && distance >= 0) {
 
-      final char c = index < word.length() ? word.charAt(index) : Character.MAX_VALUE;
-      final char split = node.getSplitChar();
-      final int cmp = comparator.compare(c, split);
+      final int cp = index < word.length() ? word.codePointAt(index) : Character.MAX_VALUE;
+      final String split = UnicodeString.toString(node.getSplitChar());
+      final int cmp = comparator.compare(UnicodeString.toString(cp), split);
 
       if (distance > 0 || cmp < 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
@@ -361,7 +361,7 @@ public class TernaryTree
         }
 
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = nearSearchNode(node.getEqkid(), distance, matches, newMatch, word, index + 1);
+        matches = nearSearchNode(node.getEqkid(), distance, matches, newMatch, word, index + Character.charCount(cp));
         // CheckStyle:ParameterAssignmentCheck ON
       } else {
         if (node.isEndOfWord() && distance - 1 >= 0 && newMatch.length() + distance - 1 >= word.length()) {
@@ -374,7 +374,8 @@ public class TernaryTree
         }
 
         // CheckStyle:ParameterAssignmentCheck OFF
-        matches = nearSearchNode(node.getEqkid(), distance - 1, matches, newMatch, word, index + 1);
+        matches = nearSearchNode(
+          node.getEqkid(), distance - 1, matches, newMatch, word, index + Character.charCount(cp));
         // CheckStyle:ParameterAssignmentCheck ON
       }
 
@@ -396,7 +397,7 @@ public class TernaryTree
    * @param  s  string of words found at the supplied node
    * @param  words  which will be returned (recursive function)
    *
-   * @return  string containing all words from the supplied node
+   * @return  list of strings containing all words from the supplied node
    */
   // CheckStyle:FinalParametersCheck OFF
   private List<String> traverseNode(final TernaryNode node, final String s, List<String> words)
@@ -408,15 +409,15 @@ public class TernaryTree
       words = traverseNode(node.getLokid(), s, words);
       // CheckStyle:ParameterAssignmentCheck ON
 
-      final char c = node.getSplitChar();
+      final String split = UnicodeString.toString(node.getSplitChar());
       if (node.getEqkid() != null) {
         // CheckStyle:ParameterAssignmentCheck OFF
-        words = traverseNode(node.getEqkid(), s + c, words);
+        words = traverseNode(node.getEqkid(), s + split, words);
         // CheckStyle:ParameterAssignmentCheck ON
       }
 
       if (node.isEndOfWord()) {
-        words.add(s + c);
+        words.add(s + split);
       }
 
       // CheckStyle:ParameterAssignmentCheck OFF
@@ -444,14 +445,14 @@ public class TernaryTree
     if (node != null) {
       printNode(node.getLokid(), s + "  /", depth + 1, fullPath, buffer);
 
-      final char c = node.getSplitChar();
+      final int cp = node.getSplitChar();
       if (node.getEqkid() != null) {
         final String suffix = node.isEndOfWord() ? "=" : "-";
-        printNode(node.getEqkid(), s + '-' + c + suffix, depth + 1, fullPath, buffer);
+        printNode(node.getEqkid(), s + '-' + UnicodeString.toString(cp) + suffix, depth + 1, fullPath, buffer);
       } else {
         final int i = fullPath ? -1 : Math.max(s.lastIndexOf("  /"), s.lastIndexOf("  \\"));
         final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
-        buffer.append(line).append('-').append(c).append(TernaryTree.LINE_SEPARATOR);
+        buffer.append(line).append('-').append(UnicodeString.toString(cp)).append(TernaryTree.LINE_SEPARATOR);
       }
 
       printNode(node.getHikid(), s + "  \\", depth + 1, fullPath, buffer);

@@ -107,9 +107,10 @@ public class IllegalSequenceRule implements Rule
       final int csLength = cs.length();
       int direction = 0;
       int prevPosition = -1;
-      for (int i = 0; i < password.length(); i++) {
-        final char c = password.charAt(i);
-        final int position = indexOf(cs, c);
+      int i = 0;
+      while (i < password.length()) {
+        final int cp = password.codePointAt(i);
+        final int position = indexOf(cs, cp);
         // set diff to +1 for increase in sequence, -1 for decrease, anything else for neither
         int diff = (position | prevPosition) < 0 ? 0 : position - prevPosition;
         if (wrapSequence && (diff == csLength - 1 || diff == 1 - csLength)) {
@@ -129,8 +130,9 @@ public class IllegalSequenceRule implements Rule
           match.setLength(0);
           direction = 0;
         }
-        match.append(c);
+        match.append(UnicodeString.toString(cp));
         prevPosition = position;
+        i += Character.charCount(cp);
       }
     }
     return result;
@@ -156,14 +158,14 @@ public class IllegalSequenceRule implements Rule
    * or -1 if it is not found.
    *
    * @param  sequence  a sequence of characters
-   * @param  c  the character to find in the character sequence
+   * @param  cp  the code point to find in the character sequence
    *
    * @return  the index of the character within the sequence, or -1
    */
-  private int indexOf(final CharacterSequence sequence, final char c)
+  private int indexOf(final CharacterSequence sequence, final int cp)
   {
     for (int i = 0; i < sequence.length(); i++) {
-      if (sequence.matches(i, c)) {
+      if (sequence.matches(i, cp)) {
         return i;
       }
     }

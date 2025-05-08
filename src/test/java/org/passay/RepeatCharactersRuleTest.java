@@ -90,6 +90,27 @@ public class RepeatCharactersRuleTest extends AbstractRuleTest
           new PasswordData("p4&&&&&#n65FFFFF"),
           null,
         },
+        // test repeating unicode characters
+        {
+          new RepeatCharactersRule(4, 3),
+          new PasswordData("p4\u16C8\u16C8\u16C8\u16C8#n65FFFF"),
+          null,
+        },
+        {
+          new RepeatCharactersRule(4, 2),
+          new PasswordData("p4\u16C8\u16C8\u16C8\u16C8\u16C8#n65FFFF"),
+          codes(RepeatCharactersRule.ERROR_CODE),
+        },
+        {
+          new RepeatCharactersRule(4, 3),
+          new PasswordData("p4FFFF#n65\uD83D\uDE08\uD83D\uDE08\uD83D\uDE08\uD83D\uDE08"),
+          null,
+        },
+        {
+          new RepeatCharactersRule(4, 2),
+          new PasswordData("p4\uD83D\uDE08\uD83D\uDE08\uD83D\uDE08\uD83D\uDE08\uD83D\uDE08#n65FFFF"),
+          codes(RepeatCharactersRule.ERROR_CODE),
+        },
       };
   }
 
@@ -110,6 +131,16 @@ public class RepeatCharactersRuleTest extends AbstractRuleTest
           new RepeatCharactersRule(2, 2),
           new PasswordData("paaxvbbdkccx"),
           new String[] {String.format(message, 3, 2, 2, Arrays.asList("aa", "bb", "cc"))},
+        },
+        {
+          new RepeatCharactersRule(2, 2),
+          new PasswordData("p\uD83D\uDE08\uD83D\uDE08xvbbdkccx"),
+          new String[] {String.format(message, 3, 2, 2, Arrays.asList("\uD83D\uDE08\uD83D\uDE08", "bb", "cc"))},
+        },
+        {
+          new RepeatCharactersRule(2, 2),
+          new PasswordData("paaxvbbdk\uD83D\uDE08\uD83D\uDE08"),
+          new String[] {String.format(message, 3, 2, 2, Arrays.asList("aa", "bb", "\uD83D\uDE08\uD83D\uDE08"))},
         },
       };
   }

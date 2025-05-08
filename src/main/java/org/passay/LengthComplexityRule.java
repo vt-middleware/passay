@@ -129,7 +129,7 @@ public class LengthComplexityRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final int passwordLength = passwordData.getPassword().length();
+    final int passwordLength = passwordData.getCharacterCount();
     final List<Rule> rulesByLength = getRulesByLength(passwordLength);
     if (rulesByLength == null) {
       return new RuleResult(

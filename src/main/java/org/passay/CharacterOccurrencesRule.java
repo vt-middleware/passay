@@ -4,6 +4,7 @@ package org.passay;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 /**
  * Validates that a password does not contain too many occurrences of the same character.
@@ -33,16 +34,17 @@ public class CharacterOccurrencesRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult();
-    final String password = passwordData.getPassword() + '\uffff';
-    final char[] chars = password.toCharArray();
-    Arrays.sort(chars);
+    final String password = passwordData.getPassword();
+    final int[] codePoints = IntStream.concat(password.codePoints(), IntStream.of(Integer.MAX_VALUE)).toArray();
+    Arrays.sort(codePoints);
     int repeat = 1;
-    for (int i = 1; i < chars.length; i++) {
-      if (chars[i] == chars[i - 1]) {
+    for (int i = 1; i < codePoints.length; i++) {
+      if (codePoints[i] == codePoints[i - 1]) {
         repeat++;
       } else {
         if (repeat > maxOccurrences) {
-          result.addError(ERROR_CODE, createRuleResultDetailParameters(chars[i - 1], repeat));
+          result.addError(
+            ERROR_CODE, createRuleResultDetailParameters(UnicodeString.toString(codePoints[i - 1]), repeat));
         }
         repeat = 1;
       }
@@ -58,7 +60,7 @@ public class CharacterOccurrencesRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final char c, final int occurrences)
+  protected Map<String, Object> createRuleResultDetailParameters(final String c, final int occurrences)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("matchingCharacter", c);

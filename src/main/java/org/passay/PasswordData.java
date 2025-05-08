@@ -135,6 +135,17 @@ public class PasswordData
 
 
   /**
+   * Returns the number of code points in the password.
+   *
+   * @return  code points in the password
+   */
+  public int getCharacterCount()
+  {
+    return UnicodeString.charCount(password);
+  }
+
+
+  /**
    * Sets the origin.
    *
    * @param  o  origin

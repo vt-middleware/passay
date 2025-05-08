@@ -29,51 +29,93 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
       new Object[][] {
 
         // test valid password
-        {new AllowedCharacterRule(ALLOWED_CHARS), new PasswordData("boepselwezz"), null, },
+        {new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)), new PasswordData("boepselwezz"), null, },
         // test invalid password
         {
-          new AllowedCharacterRule(ALLOWED_CHARS),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
           new PasswordData("gbwersco4kk"),
           codes(AllowedCharacterRule.ERROR_CODE),
         },
         // test multiple matches
         {
-          new AllowedCharacterRule(ALLOWED_CHARS),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
           new PasswordData("gbwersco4kk5kk"),
           codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
         },
         // test single match
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, false),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), false),
           new PasswordData("gbwersco4kk5kk"),
           codes(AllowedCharacterRule.ERROR_CODE),
         },
         // test duplicate matches
         {
-          new AllowedCharacterRule(ALLOWED_CHARS),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
           new PasswordData("gbwersco4kk5kk4"),
           codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
         },
         // test match behavior
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.StartsWith),
           new PasswordData("4gbwersco4kk5kk"),
           codes(AllowedCharacterRule.ERROR_CODE),
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.StartsWith),
           new PasswordData("gbwersco4kk"),
           null,
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.EndsWith),
           new PasswordData("gbwersco4kk5kk4"),
           codes(AllowedCharacterRule.ERROR_CODE),
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.EndsWith),
           new PasswordData("gbwersco4kk"),
           null,
+        },
+        // test unicode
+        {
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
+          new PasswordData("gbwersčokk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(new UnicodeString('g', 'b', 'w', 'e', 'r', 's', 'č', 'o', 'k')),
+          new PasswordData("gbwersčokk"),
+          null,
+        },
+        {
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
+          new PasswordData("gbwers\u16C8okk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(new UnicodeString('g', 'b', 'w', 'e', 'r', 's', '\u16C8', 'o', 'k')),
+          new PasswordData("gbwers\u16C8okk"),
+          null,
+        },
+        {
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
+          new PasswordData("gbwers\uD808\uDF34okk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        {
+          new AllowedCharacterRule(new UnicodeString("gbwers\uD808\uDF34ok")),
+          new PasswordData("gbwers\uD808\uDF34okk"),
+          null,
+        },
+        {
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
+          new PasswordData("gb\uD808\uDF34ers\uD808\uDF34okk"),
+          codes(AllowedCharacterRule.ERROR_CODE),
+        },
+        // single unicode character but represented by 2 code points
+        {
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
+          new PasswordData("gbwers\uD83C\uDDEE\uD83C\uDDF8okk"),
+          codes(AllowedCharacterRule.ERROR_CODE, AllowedCharacterRule.ERROR_CODE),
         },
       };
   }
@@ -88,41 +130,41 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
     return
       new Object[][] {
         {
-          new AllowedCharacterRule(ALLOWED_CHARS),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
           new PasswordData("gbwersco4kk"),
           new String[] {String.format("Password contains the illegal character '%s'.", "4"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
           new PasswordData("gbwersco4kk5kk"),
           new String[] {
             String.format("Password contains the illegal character '%s'.", "4"),
             String.format("Password contains the illegal character '%s'.", "5"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, false),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), false),
           new PasswordData("gbwersco4kk5kk"),
           new String[] {String.format("Password contains the illegal character '%s'.", "4"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS)),
           new PasswordData("gbwersco4kk5kk4"),
           new String[] {
             String.format("Password contains the illegal character '%s'.", "4"),
             String.format("Password contains the illegal character '%s'.", "5"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.Contains, true),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.Contains, true),
           new PasswordData("gbwer scokkk"),
           new String[] {String.format("Whitespace not allowed."), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.StartsWith),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.StartsWith),
           new PasswordData("4bwersco4kk"),
           new String[] {String.format("Password starts with the illegal character '%s'.", "4"), },
         },
         {
-          new AllowedCharacterRule(ALLOWED_CHARS, MatchBehavior.EndsWith),
+          new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.EndsWith),
           new PasswordData("gbwersco4kk4"),
           new String[] {String.format("Password ends with the illegal character '%s'.", "4"), },
         },
@@ -135,7 +177,7 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void checkMetadata()
   {
-    final AllowedCharacterRule rule = new AllowedCharacterRule(ALLOWED_CHARS);
+    final AllowedCharacterRule rule = new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS));
     RuleResult result = rule.validate(new PasswordData("metadata"));
     AssertJUnit.assertTrue(result.isValid());
     AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed));

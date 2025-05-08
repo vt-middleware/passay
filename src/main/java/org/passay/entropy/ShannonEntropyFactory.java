@@ -72,7 +72,7 @@ public final class ShannonEntropyFactory
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.User);
     }
     final boolean compositionCheck = hasComposition(passwordData);
-    return new ShannonEntropy(dictionaryCheck, compositionCheck, passwordData.getPassword().length());
+    return new ShannonEntropy(dictionaryCheck, compositionCheck, passwordData.getCharacterCount());
   }
 
 

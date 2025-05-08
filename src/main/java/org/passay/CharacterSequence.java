@@ -4,7 +4,7 @@ package org.passay;
 /**
  * Models a sequence of characters in one or more forms as strings of equal length where each string represents one form
  * of characters in the sequence. For example, <code>new CharacterSequence("ABCDEF", "abcdef")</code> would represent a
- * sequence of the first six case-insensitive alphabetical characters. A matching function, {@link #matches(int, char)},
+ * sequence of the first six case-insensitive alphabetical characters. A matching function, {@link #matches(int, int)},
  * determines whether a candidate character matches any of the defined forms.
  *
  * @author  Middleware Services
@@ -53,14 +53,14 @@ public class CharacterSequence
    * variant forms are considered.
    *
    * @param  index  Character sequence index.
-   * @param  c  Character to check for.
+   * @param  cp  Character code point to check for.
    *
    * @return  True if sequence contains given character, false otherwise.
    */
-  public boolean matches(final int index, final char c)
+  public boolean matches(final int index, final int cp)
   {
     for (String s : forms) {
-      if (s.charAt(index) == c) {
+      if (s.codePointAt(index) == cp) {
         return true;
       }
     }
@@ -71,6 +71,6 @@ public class CharacterSequence
   /** @return  Length of character sequence. */
   public int length()
   {
-    return forms[0].length();
+    return UnicodeString.charCount(forms[0]);
   }
 }

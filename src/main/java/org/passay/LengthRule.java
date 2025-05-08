@@ -106,7 +106,7 @@ public class LengthRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     final RuleResult result = new RuleResult();
-    final int length = passwordData.getPassword().length();
+    final int length = passwordData.getCharacterCount();
     if (length < minimumLength) {
       result.addError(ERROR_CODE_MIN, createRuleResultDetailParameters());
     } else if (length > maximumLength) {
@@ -140,7 +140,7 @@ public class LengthRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    return new RuleResultMetadata(RuleResultMetadata.CountCategory.Length, password.getPassword().length());
+    return new RuleResultMetadata(RuleResultMetadata.CountCategory.Length, password.getCharacterCount());
   }
 
 
