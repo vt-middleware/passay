@@ -39,13 +39,17 @@ public class DictionarySubstringRule extends AbstractDictionaryRule
   @Override
   protected String doWordSearch(final String text)
   {
-    for (int i = 1; i <= text.length(); i++) {
-      for (int j = 0; j + i <= text.length(); j++) {
+    int i = Character.charCount(text.codePointAt(0));
+    while (i < text.length()) {
+      int j = 0;
+      while (j + i <= text.length()) {
         final String s = text.substring(j, j + i);
         if (getDictionary().search(s)) {
           return s;
         }
+        j += Character.charCount(text.codePointAt(j));
       }
+      i += Character.charCount(text.codePointAt(i));
     }
     return null;
   }

@@ -70,6 +70,53 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
           new PasswordData("AycD@Pdsyz"),
           null,
         },
+        // test unicode
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pdsčz"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$', 'č'}),
+          new PasswordData("AycD@Pdsčz"),
+          codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pds\u16C8z"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$', '\u16C8'}),
+          new PasswordData("AycD@Pds\u16C8z"),
+          codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pds\uD808\uDF34z"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new int[] {'@', '$', Character.toCodePoint('\uD808', '\uDF34')}),
+          new PasswordData("AycD@Pds\uD808\uDF34z"),
+          codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("A\uD808\uDF34cD@Pds\uD808\uDF34z"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
+        {
+          new IllegalCharacterRule(new int[] {'@', '$', Character.toCodePoint('\uD808', '\uDF34')}),
+          new PasswordData("A\uD808\uDF34cD@Pds\uD808\uDF34z"),
+          codes(IllegalCharacterRule.ERROR_CODE, IllegalCharacterRule.ERROR_CODE),
+        },
+        // single unicode character but represented by 2 code points
+        {
+          new IllegalCharacterRule(new char[] {'@', '$'}),
+          new PasswordData("AycD@Pds\uD83C\uDDEE\uD83C\uDDF8z"),
+          codes(IllegalCharacterRule.ERROR_CODE),
+        },
       };
   }
 

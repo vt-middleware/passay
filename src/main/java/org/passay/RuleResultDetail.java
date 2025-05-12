@@ -28,7 +28,7 @@ public class RuleResultDetail
    */
   public RuleResultDetail(final String code, final Map<String, Object> params)
   {
-    if (code == null || code.length() == 0) {
+    if (code == null || code.isEmpty()) {
       throw new IllegalArgumentException("Code cannot be null or empty.");
     }
     errorCodes = new String[] {code};
@@ -49,7 +49,7 @@ public class RuleResultDetail
       throw new IllegalArgumentException("Must specify at least one error code.");
     }
     for (String code : codes) {
-      if (code == null || code.length() == 0) {
+      if (code == null || code.isEmpty()) {
         throw new IllegalArgumentException("Code cannot be null or empty.");
       }
     }

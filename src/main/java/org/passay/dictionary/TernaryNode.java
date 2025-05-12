@@ -10,8 +10,8 @@ package org.passay.dictionary;
 public class TernaryNode
 {
 
-  /** character of this node. */
-  private char splitchar;
+  /** code point of this node. */
+  private int splitchar;
 
   /** whether this character is the end of a word. */
   private boolean endOfWord;
@@ -27,22 +27,22 @@ public class TernaryNode
 
 
   /**
-   * Create a new ternary node with the supplied character.
+   * Create a new ternary node with the supplied code point.
    *
-   * @param  c  character
+   * @param  cp  code point
    */
-  public TernaryNode(final char c)
+  public TernaryNode(final int cp)
   {
-    splitchar = c;
+    splitchar = cp;
   }
 
 
   /**
    * Returns the split character.
    *
-   * @return  character
+   * @return  code point
    */
-  public char getSplitChar()
+  public int getSplitChar()
   {
     return splitchar;
   }
@@ -51,11 +51,11 @@ public class TernaryNode
   /**
    * Sets the split character.
    *
-   * @param  c  character
+   * @param  cp  code point
    */
-  public void setSplitChar(final char c)
+  public void setSplitChar(final int cp)
   {
-    splitchar = c;
+    splitchar = cp;
   }
 
 

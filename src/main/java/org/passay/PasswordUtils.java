@@ -1,7 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * Provides utility methods for this package.
@@ -42,17 +45,33 @@ public final class PasswordUtils
   public static String getMatchingCharacters(final String characters, final String input, final int maximumLength)
   {
     final StringBuilder sb = new StringBuilder(input.length());
-    for (int i = 0; i < input.length(); i++) {
-      final char c = input.charAt(i);
-      if (characters.indexOf(c) != -1) {
+    int i = 0;
+    while (i < input.length()) {
+      final int cp = input.codePointAt(i);
+      if (characters.indexOf(cp) != -1) {
         if (sb.length() < maximumLength) {
-          sb.append(c);
+          sb.append(toString(cp));
         } else {
           break;
         }
       }
+      i += Character.charCount(cp);
     }
     return sb.toString();
+  }
+
+
+  /**
+   * Returns the number of characters in the supplied input that existing from the supplied characters string.
+   *
+   * @param  codePoints  code points of characters to match
+   * @param  input  to search for matches
+   *
+   * @return  character count
+   */
+  public static int countMatchingCharacters(final int[] codePoints, final String input)
+  {
+    return (int) input.codePoints().filter(x -> IntStream.of(codePoints).anyMatch(y -> y == x)).count();
   }
 
 
@@ -66,7 +85,68 @@ public final class PasswordUtils
    */
   public static int countMatchingCharacters(final String characters, final String input)
   {
-    return (int) input.chars().filter(x -> characters.indexOf(x) != -1).count();
+    return (int) input.codePoints().filter(x -> characters.indexOf(x) != -1).count();
+  }
+
+
+  /**
+   * Returns the number of code points in the supplied string.
+   *
+   * @param  s  to count characters
+   *
+   * @return  number of code points
+   */
+  public static int charCount(final String s)
+  {
+    return s != null ? s.codePointCount(0, s.length()) : 0;
+  }
+
+
+  /**
+   * Creates a new string from the supplied code point.
+   *
+   * @param  codePoint  to create string with
+   *
+   * @return  new string
+   */
+  public static String toString(final int codePoint)
+  {
+    return toString(new int[] {codePoint});
+  }
+
+
+  /**
+   * Creates a new string from the supplied code points.
+   *
+   * @param  codePoints  to create string with
+   *
+   * @return  new string
+   */
+  public static String toString(final int[] codePoints)
+  {
+    return new String(codePoints, 0, codePoints.length);
+  }
+
+
+  /**
+   * Returns the indexes for every code point in the supplied string.
+   *
+   * @param  s  to find code point indexes
+   *
+   * @return  array of code point indexes
+   */
+  public static int[] codePointIndexes(final String s)
+  {
+    if (s == null || s.isEmpty()) {
+      return new int[0];
+    }
+    final List<Integer> indexes = new ArrayList<>(PasswordUtils.charCount(s));
+    int i = 0;
+    while (i < s.length()) {
+      indexes.add(i);
+      i += Character.charCount(s.codePointAt(i));
+    }
+    return indexes.stream().mapToInt(Integer::intValue).toArray();
   }
 
 
