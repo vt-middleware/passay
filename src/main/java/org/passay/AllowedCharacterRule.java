@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -33,100 +32,48 @@ public class AllowedCharacterRule implements Rule
   /**
    * Create a new allowed character rule.
    *
-   * @param  c  allowed characters
+   * @param  codePoints  allowed characters
    */
-  public AllowedCharacterRule(final char[] c)
+  public AllowedCharacterRule(final CodePoints codePoints)
   {
-    this(c, MatchBehavior.Contains, true);
+    this(codePoints, MatchBehavior.Contains, true);
   }
 
 
   /**
    * Create a new allowed character rule.
    *
-   * @param  cp  allowed character code points
-   */
-  public AllowedCharacterRule(final int[] cp)
-  {
-    this(cp, MatchBehavior.Contains, true);
-  }
-
-
-  /**
-   * Create a new allowed character rule.
-   *
-   * @param  c  allowed characters
+   * @param  codePoints  allowed characters
    * @param  behavior  how to match allowed characters
    */
-  public AllowedCharacterRule(final char[] c, final MatchBehavior behavior)
+  public AllowedCharacterRule(final CodePoints codePoints, final MatchBehavior behavior)
   {
-    this(c, behavior, true);
+    this(codePoints, behavior, true);
   }
 
 
   /**
    * Create a new allowed character rule.
    *
-   * @param  cp  allowed character code points
-   * @param  behavior  how to match allowed characters
-   */
-  public AllowedCharacterRule(final int[] cp, final MatchBehavior behavior)
-  {
-    this(cp, behavior, true);
-  }
-
-
-  /**
-   * Create a new allowed character rule.
-   *
-   * @param  c  allowed characters
+   * @param  codePoints  allowed characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public AllowedCharacterRule(final char[] c, final boolean reportAll)
+  public AllowedCharacterRule(final CodePoints codePoints, final boolean reportAll)
   {
-    this(c, MatchBehavior.Contains, reportAll);
+    this(codePoints, MatchBehavior.Contains, reportAll);
   }
 
 
   /**
    * Create a new allowed character rule.
    *
-   * @param  cp  allowed character code points
-   * @param  reportAll  whether to report all matches or just the first
-   */
-  public AllowedCharacterRule(final int[] cp, final boolean reportAll)
-  {
-    this(cp, MatchBehavior.Contains, reportAll);
-  }
-
-
-  /**
-   * Create a new allowed character rule.
-   *
-   * @param  c  allowed characters
+   * @param  codePoints  allowed characters
    * @param  behavior  how to match allowed characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public AllowedCharacterRule(final char[] c, final MatchBehavior behavior, final boolean reportAll)
+  public AllowedCharacterRule(final CodePoints codePoints, final MatchBehavior behavior, final boolean reportAll)
   {
-    this(CharBuffer.wrap(c).chars().toArray(), behavior, reportAll);
-  }
-
-
-  /**
-   * Create a new allowed character rule.
-   *
-   * @param  cp  allowed character code points
-   * @param  behavior  how to match allowed characters
-   * @param  reportAll  whether to report all matches or just the first
-   */
-  public AllowedCharacterRule(final int[] cp, final MatchBehavior behavior, final boolean reportAll)
-  {
-    if (cp.length > 0) {
-      allowedCharacters = cp;
-    } else {
-      throw new IllegalArgumentException("allowed characters length must be greater than zero");
-    }
+    allowedCharacters = codePoints.getCodePoints();
     Arrays.sort(allowedCharacters);
     matchBehavior = behavior;
     reportAllFailures = reportAll;
@@ -138,9 +85,9 @@ public class AllowedCharacterRule implements Rule
    *
    * @return  allowed character code points
    */
-  public int[] getAllowedCharacters()
+  public CodePoints getAllowedCharacters()
   {
-    return allowedCharacters;
+    return new CodePoints(allowedCharacters);
   }
 
 
@@ -162,7 +109,7 @@ public class AllowedCharacterRule implements Rule
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (int cp : text.codePoints().toArray()) {
-      if (Arrays.binarySearch(allowedCharacters, cp) < 0 && !matches.contains(PasswordUtils.toString(cp))) {
+      if (Arrays.binarySearch(allowedCharacters, cp) < 0 && !matches.contains(CodePoints.toString(cp))) {
         if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, cp)) {
           final String[] codes = {
             ERROR_CODE + "." + cp,
@@ -173,7 +120,7 @@ public class AllowedCharacterRule implements Rule
           if (!reportAllFailures) {
             break;
           }
-          matches.add(PasswordUtils.toString(cp));
+          matches.add(CodePoints.toString(cp));
         }
       }
     }
@@ -192,7 +139,7 @@ public class AllowedCharacterRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", PasswordUtils.toString(cp));
+    m.put("illegalCharacter", CodePoints.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -209,7 +156,7 @@ public class AllowedCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Allowed,
-      PasswordUtils.countMatchingCharacters(allowedCharacters, password.getPassword()));
+      CodePoints.countMatchingCharacters(allowedCharacters, password.getPassword()));
   }
 
 

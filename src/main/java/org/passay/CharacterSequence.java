@@ -71,6 +71,6 @@ public class CharacterSequence
   /** @return  Length of character sequence. */
   public int length()
   {
-    return PasswordUtils.charCount(forms[0]);
+    return CodePoints.charCount(forms[0]);
   }
 }

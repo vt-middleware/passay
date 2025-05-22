@@ -94,7 +94,7 @@ public class CharacterRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final String matchingChars = PasswordUtils.getMatchingCharacters(
+    final String matchingChars = getMatchingCharacters(
       String.valueOf(characterData.getCharacters()),
       passwordData.getPassword(),
       numCharacters);
@@ -119,7 +119,7 @@ public class CharacterRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
-    m.put("matchingCharacterCount", PasswordUtils.charCount(matchingChars));
+    m.put("matchingCharacterCount", CodePoints.charCount(matchingChars));
     m.put("validCharacters", String.valueOf(characterData.getCharacters()));
     m.put("matchingCharacters", matchingChars);
     return m;
@@ -138,10 +138,38 @@ public class CharacterRule implements Rule
     try {
       return new RuleResultMetadata(
         RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
-        PasswordUtils.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+        CodePoints.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
     } catch (IllegalArgumentException iae) {
       return new RuleResultMetadata();
     }
+  }
+
+
+  /**
+   * Returns all the characters in the input string that are also in the characters string.
+   *
+   * @param  characters  that contains characters to match
+   * @param  input  to search for matches
+   * @param  maximumLength maximum length of matching characters
+   *
+   * @return  matching characters or empty string
+   */
+  private static String getMatchingCharacters(final String characters, final String input, final int maximumLength)
+  {
+    final StringBuilder sb = new StringBuilder(input.length());
+    int i = 0;
+    while (i < input.length()) {
+      final int cp = input.codePointAt(i);
+      if (characters.indexOf(cp) != -1) {
+        if (sb.length() < maximumLength) {
+          sb.append(CodePoints.toString(cp));
+        } else {
+          break;
+        }
+      }
+      i += Character.charCount(cp);
+    }
+    return sb.toString();
   }
 
 

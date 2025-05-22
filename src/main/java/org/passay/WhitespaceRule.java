@@ -1,7 +1,6 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -19,7 +18,8 @@ public class WhitespaceRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */
-  protected static final int[] CHARS = {(byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20};
+  protected static final CodePoints CHARS = new CodePoints(
+    (byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20);
 
   /** Whether to report all whitespace matches or just the first. */
   protected boolean reportAllFailures;
@@ -54,22 +54,11 @@ public class WhitespaceRule implements Rule
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  characters that are whitespace
+   * @param  codePoints  character code points that are whitespace
    */
-  public WhitespaceRule(final char[] chars)
+  public WhitespaceRule(final CodePoints codePoints)
   {
-    this(chars, MatchBehavior.Contains, true);
-  }
-
-
-  /**
-   * Creates a new whitespace rule.
-   *
-   * @param  chars  character code points that are whitespace
-   */
-  public WhitespaceRule(final int[] chars)
-  {
-    this(chars, MatchBehavior.Contains, true);
+    this(codePoints, MatchBehavior.Contains, true);
   }
 
 
@@ -88,79 +77,43 @@ public class WhitespaceRule implements Rule
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  whitespace characters
+   * @param  codePoints  whitespace character code points
    * @param  behavior  how to match whitespace
    */
-  public WhitespaceRule(final char[] chars, final MatchBehavior behavior)
+  public WhitespaceRule(final CodePoints codePoints, final MatchBehavior behavior)
   {
-    this(chars, behavior, true);
+    this(codePoints, behavior, true);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  whitespace character code points
-   * @param  behavior  how to match whitespace
-   */
-  public WhitespaceRule(final int[] chars, final MatchBehavior behavior)
-  {
-    this(chars, behavior, true);
-  }
-
-
-  /**
-   * Creates a new whitespace rule.
-   *
-   * @param  chars  whitespace characters
+   * @param  codePoints  whitespace character code points
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final char[] chars, final boolean reportAll)
+  public WhitespaceRule(final CodePoints codePoints, final boolean reportAll)
   {
-    this(chars, MatchBehavior.Contains, reportAll);
+    this(codePoints, MatchBehavior.Contains, reportAll);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  cp  whitespace character code points
-   * @param  reportAll  whether to report all matches or just the first
-   */
-  public WhitespaceRule(final int[] cp, final boolean reportAll)
-  {
-    this(cp, MatchBehavior.Contains, reportAll);
-  }
-
-
-  /**
-   * Creates a new whitespace rule.
-   *
-   * @param  chars  whitespace characters
+   * @param  codePoints  whitespace characters
    * @param  behavior  how to match whitespace
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final char[] chars, final MatchBehavior behavior, final boolean reportAll)
+  public WhitespaceRule(final CodePoints codePoints, final MatchBehavior behavior, final boolean reportAll)
   {
-    this(CharBuffer.wrap(chars).chars().toArray(), behavior, reportAll);
-  }
-
-
-  /**
-   * Creates a new whitespace rule.
-   *
-   * @param  chars  whitespace characters
-   * @param  behavior  how to match whitespace
-   * @param  reportAll  whether to report all matches or just the first
-   */
-  public WhitespaceRule(final int[] chars, final MatchBehavior behavior, final boolean reportAll)
-  {
-    for (int cp : chars) {
-      if (!Character.isWhitespace(cp)) {
-        throw new IllegalArgumentException("Character '" + cp + "' is not whitespace");
+    final int[] cp = codePoints.getCodePoints();
+    for (int c : cp) {
+      if (!Character.isWhitespace(c)) {
+        throw new IllegalArgumentException("Character '" + c + "' is not whitespace");
       }
     }
-    whitespaceCharacters = chars;
+    whitespaceCharacters = cp;
     matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
@@ -171,9 +124,9 @@ public class WhitespaceRule implements Rule
    *
    * @return  whitespace characters
    */
-  public int[] getWhitespaceCharacters()
+  public CodePoints getWhitespaceCharacters()
   {
-    return whitespaceCharacters;
+    return new CodePoints(whitespaceCharacters);
   }
 
 
@@ -220,7 +173,7 @@ public class WhitespaceRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("whitespaceCharacter", PasswordUtils.toString(cp));
+    m.put("whitespaceCharacter", CodePoints.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -237,7 +190,7 @@ public class WhitespaceRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Whitespace,
-      PasswordUtils.countMatchingCharacters(whitespaceCharacters, password.getPassword()));
+      CodePoints.countMatchingCharacters(whitespaceCharacters, password.getPassword()));
   }
 
 

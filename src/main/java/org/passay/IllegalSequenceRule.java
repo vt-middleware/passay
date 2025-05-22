@@ -130,7 +130,7 @@ public class IllegalSequenceRule implements Rule
           match.setLength(0);
           direction = 0;
         }
-        match.append(PasswordUtils.toString(cp));
+        match.append(CodePoints.toString(cp));
         prevPosition = position;
         i += Character.charCount(cp);
       }
