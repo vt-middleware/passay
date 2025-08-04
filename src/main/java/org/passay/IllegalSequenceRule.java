@@ -130,7 +130,7 @@ public class IllegalSequenceRule implements Rule
           match.setLength(0);
           direction = 0;
         }
-        match.append(CodePoints.toString(cp));
+        match.append(Utf8String.toString(cp));
         prevPosition = position;
         i += Character.charCount(cp);
       }

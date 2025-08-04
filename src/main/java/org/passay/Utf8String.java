@@ -5,11 +5,12 @@ import java.util.Arrays;
 import java.util.stream.IntStream;
 
 /**
- * Contains a list of character code points.
+ * Describes a UTF-8 string of characters. This class provides first-class UTF-8 support for internationalized
+ * character rules.
  *
  * @author  Middleware Services
  */
-public final class CodePoints
+public final class Utf8String
 {
 
   /** Stores the character code points. */
@@ -17,22 +18,22 @@ public final class CodePoints
 
 
   /**
-   * Creates a new code points.
+   * Creates a new UTF-8 string from a character array.
    *
    * @param  c  characters
    */
-  public CodePoints(final char... c)
+  public Utf8String(final char... c)
   {
     this(new String(c));
   }
 
 
   /**
-   * Creates a new code points.
+   * Creates a new UTF-8 string from a JDK String whose native encoding is UTF-8.
    *
    * @param  s  characters
    */
-  public CodePoints(final String s)
+  public Utf8String(final String s)
   {
     if (s == null || s.isEmpty()) {
       throw new IllegalArgumentException("String cannot be null or have a length of zero");
@@ -42,11 +43,11 @@ public final class CodePoints
 
 
   /**
-   * Creates a new code points.
+   * Creates a new UTF-8 string from an array of code points.
    *
    * @param  cp  character code points
    */
-  public CodePoints(final int... cp)
+  public Utf8String(final int... cp)
   {
     if (cp == null || cp.length == 0) {
       throw new IllegalArgumentException("Code points cannot be null or have a length of zero");
@@ -84,7 +85,7 @@ public final class CodePoints
    *
    * @return  number of code points
    */
-  public static int charCount(final String s)
+  public static int countCodePoints(final String s)
   {
     return s != null ? s.codePointCount(0, s.length()) : 0;
   }

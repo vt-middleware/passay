@@ -158,7 +158,7 @@ public class PasswordGenerator
     final int[] indexes = codePointIndexes(source);
     for (int i = 0; i < count; i++) {
       try {
-        target.append(CodePoints.toString(source.codePointAt(indexes[random.nextInt(indexes.length)])));
+        target.append(Utf8String.toString(source.codePointAt(indexes[random.nextInt(indexes.length)])));
       } catch (IOException e) {
         throw new RuntimeException("Error appending characters.", e);
       }
@@ -196,7 +196,7 @@ public class PasswordGenerator
     if (s == null || s.isEmpty()) {
       return new int[0];
     }
-    final List<Integer> indexes = new ArrayList<>(CodePoints.charCount(s));
+    final List<Integer> indexes = new ArrayList<>(Utf8String.countCodePoints(s));
     int i = 0;
     while (i < s.length()) {
       indexes.add(i);

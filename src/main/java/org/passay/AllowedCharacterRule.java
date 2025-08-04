@@ -32,48 +32,48 @@ public class AllowedCharacterRule implements Rule
   /**
    * Create a new allowed character rule.
    *
-   * @param  codePoints  allowed characters
+   * @param  utf8String  allowed characters
    */
-  public AllowedCharacterRule(final CodePoints codePoints)
+  public AllowedCharacterRule(final Utf8String utf8String)
   {
-    this(codePoints, MatchBehavior.Contains, true);
+    this(utf8String, MatchBehavior.Contains, true);
   }
 
 
   /**
    * Create a new allowed character rule.
    *
-   * @param  codePoints  allowed characters
+   * @param  utf8String  allowed characters
    * @param  behavior  how to match allowed characters
    */
-  public AllowedCharacterRule(final CodePoints codePoints, final MatchBehavior behavior)
+  public AllowedCharacterRule(final Utf8String utf8String, final MatchBehavior behavior)
   {
-    this(codePoints, behavior, true);
+    this(utf8String, behavior, true);
   }
 
 
   /**
    * Create a new allowed character rule.
    *
-   * @param  codePoints  allowed characters
+   * @param  utf8String  allowed characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public AllowedCharacterRule(final CodePoints codePoints, final boolean reportAll)
+  public AllowedCharacterRule(final Utf8String utf8String, final boolean reportAll)
   {
-    this(codePoints, MatchBehavior.Contains, reportAll);
+    this(utf8String, MatchBehavior.Contains, reportAll);
   }
 
 
   /**
    * Create a new allowed character rule.
    *
-   * @param  codePoints  allowed characters
+   * @param  utf8String  allowed characters
    * @param  behavior  how to match allowed characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public AllowedCharacterRule(final CodePoints codePoints, final MatchBehavior behavior, final boolean reportAll)
+  public AllowedCharacterRule(final Utf8String utf8String, final MatchBehavior behavior, final boolean reportAll)
   {
-    allowedCharacters = codePoints.getCodePoints();
+    allowedCharacters = utf8String.getCodePoints();
     Arrays.sort(allowedCharacters);
     matchBehavior = behavior;
     reportAllFailures = reportAll;
@@ -85,9 +85,9 @@ public class AllowedCharacterRule implements Rule
    *
    * @return  allowed character code points
    */
-  public CodePoints getAllowedCharacters()
+  public Utf8String getAllowedCharacters()
   {
-    return new CodePoints(allowedCharacters);
+    return new Utf8String(allowedCharacters);
   }
 
 
@@ -109,7 +109,7 @@ public class AllowedCharacterRule implements Rule
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (int cp : text.codePoints().toArray()) {
-      if (Arrays.binarySearch(allowedCharacters, cp) < 0 && !matches.contains(CodePoints.toString(cp))) {
+      if (Arrays.binarySearch(allowedCharacters, cp) < 0 && !matches.contains(Utf8String.toString(cp))) {
         if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, cp)) {
           final String[] codes = {
             ERROR_CODE + "." + cp,
@@ -120,7 +120,7 @@ public class AllowedCharacterRule implements Rule
           if (!reportAllFailures) {
             break;
           }
-          matches.add(CodePoints.toString(cp));
+          matches.add(Utf8String.toString(cp));
         }
       }
     }
@@ -139,7 +139,7 @@ public class AllowedCharacterRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", CodePoints.toString(cp));
+    m.put("illegalCharacter", Utf8String.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -156,7 +156,7 @@ public class AllowedCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Allowed,
-      CodePoints.countMatchingCharacters(allowedCharacters, password.getPassword()));
+      Utf8String.countMatchingCharacters(allowedCharacters, password.getPassword()));
   }
 
 

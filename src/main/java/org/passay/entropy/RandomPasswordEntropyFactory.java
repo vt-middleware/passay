@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 import org.passay.AllowedCharacterRule;
 import org.passay.CharacterCharacteristicsRule;
 import org.passay.CharacterRule;
-import org.passay.CodePoints;
 import org.passay.PasswordData;
 import org.passay.Rule;
+import org.passay.Utf8String;
 
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.
@@ -55,7 +55,7 @@ public final class RandomPasswordEntropyFactory
       } else if (rule instanceof AllowedCharacterRule) {
         final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
         uniqueCharacters.addAll(
-          getUniqueCharacters(CodePoints.toString(allowedCharacterRule.getAllowedCharacters().getCodePoints())));
+          getUniqueCharacters(Utf8String.toString(allowedCharacterRule.getAllowedCharacters().getCodePoints())));
       }
     });
     if (uniqueCharacters.isEmpty()) {
@@ -76,7 +76,7 @@ public final class RandomPasswordEntropyFactory
   private static Set<String> getUniqueCharacters(final String characters)
   {
     if (characters != null) {
-      return characters.codePoints().mapToObj(CodePoints::toString).collect(Collectors.toSet());
+      return characters.codePoints().mapToObj(Utf8String::toString).collect(Collectors.toSet());
     }
     return Collections.emptySet();
   }

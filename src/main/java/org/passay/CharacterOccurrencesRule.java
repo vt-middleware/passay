@@ -44,7 +44,7 @@ public class CharacterOccurrencesRule implements Rule
       } else {
         if (repeat > maxOccurrences) {
           result.addError(
-            ERROR_CODE, createRuleResultDetailParameters(CodePoints.toString(codePoints[i - 1]), repeat));
+            ERROR_CODE, createRuleResultDetailParameters(Utf8String.toString(codePoints[i - 1]), repeat));
         }
         repeat = 1;
       }

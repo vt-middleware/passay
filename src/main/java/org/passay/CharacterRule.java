@@ -119,7 +119,7 @@ public class CharacterRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
-    m.put("matchingCharacterCount", CodePoints.charCount(matchingChars));
+    m.put("matchingCharacterCount", Utf8String.countCodePoints(matchingChars));
     m.put("validCharacters", String.valueOf(characterData.getCharacters()));
     m.put("matchingCharacters", matchingChars);
     return m;
@@ -138,7 +138,7 @@ public class CharacterRule implements Rule
     try {
       return new RuleResultMetadata(
         RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
-        CodePoints.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+        Utf8String.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
     } catch (IllegalArgumentException iae) {
       return new RuleResultMetadata();
     }
@@ -162,7 +162,7 @@ public class CharacterRule implements Rule
       final int cp = input.codePointAt(i);
       if (characters.indexOf(cp) != -1) {
         if (sb.length() < maximumLength) {
-          sb.append(CodePoints.toString(cp));
+          sb.append(Utf8String.toString(cp));
         } else {
           break;
         }

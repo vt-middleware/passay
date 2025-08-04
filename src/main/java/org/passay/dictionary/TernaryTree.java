@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.CodePoints;
+import org.passay.Utf8String;
 
 /**
  * Implementation of a ternary tree. Methods are provided for inserting strings and searching for strings. The
@@ -222,8 +222,8 @@ public class TernaryTree
         // CheckStyle:ParameterAssignmentCheck ON
       }
 
-      final String split = CodePoints.toString(node.getSplitChar());
-      final int cmp = comparator.compare(CodePoints.toString(cp), split);
+      final String split = Utf8String.toString(node.getSplitChar());
+      final int cmp = comparator.compare(Utf8String.toString(cp), split);
       if (cmp < 0) {
         node.setLokid(insertNode(node.getLokid(), word, index));
       } else if (cmp > 0) {
@@ -252,8 +252,8 @@ public class TernaryTree
   {
     if (node != null && index < word.length()) {
       final int cp = word.codePointAt(index);
-      final String split = CodePoints.toString(node.getSplitChar());
-      final int cmp = comparator.compare(CodePoints.toString(cp), split);
+      final String split = Utf8String.toString(node.getSplitChar());
+      final int cmp = comparator.compare(Utf8String.toString(cp), split);
       if (cmp < 0) {
         return searchNode(node.getLokid(), word, index);
       } else if (cmp > 0) {
@@ -287,8 +287,8 @@ public class TernaryTree
   {
     if (node != null && index < word.length()) {
       final int cp = word.codePointAt(index);
-      final String split = CodePoints.toString(node.getSplitChar());
-      final int cmp = comparator.compare(CodePoints.toString(cp), split);
+      final String split = Utf8String.toString(node.getSplitChar());
+      final int cmp = comparator.compare(Utf8String.toString(cp), split);
       if (cp == '.' || cmp < 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
         matches = partialSearchNode(node.getLokid(), matches, match, word, index);
@@ -340,8 +340,8 @@ public class TernaryTree
     if (node != null && distance >= 0) {
 
       final int cp = index < word.length() ? word.codePointAt(index) : Character.MAX_VALUE;
-      final String split = CodePoints.toString(node.getSplitChar());
-      final int cmp = comparator.compare(CodePoints.toString(cp), split);
+      final String split = Utf8String.toString(node.getSplitChar());
+      final int cmp = comparator.compare(Utf8String.toString(cp), split);
 
       if (distance > 0 || cmp < 0) {
         // CheckStyle:ParameterAssignmentCheck OFF
@@ -409,7 +409,7 @@ public class TernaryTree
       words = traverseNode(node.getLokid(), s, words);
       // CheckStyle:ParameterAssignmentCheck ON
 
-      final String split = CodePoints.toString(node.getSplitChar());
+      final String split = Utf8String.toString(node.getSplitChar());
       if (node.getEqkid() != null) {
         // CheckStyle:ParameterAssignmentCheck OFF
         words = traverseNode(node.getEqkid(), s + split, words);
@@ -448,11 +448,11 @@ public class TernaryTree
       final int cp = node.getSplitChar();
       if (node.getEqkid() != null) {
         final String suffix = node.isEndOfWord() ? "=" : "-";
-        printNode(node.getEqkid(), s + '-' + CodePoints.toString(cp) + suffix, depth + 1, fullPath, buffer);
+        printNode(node.getEqkid(), s + '-' + Utf8String.toString(cp) + suffix, depth + 1, fullPath, buffer);
       } else {
         final int i = fullPath ? -1 : Math.max(s.lastIndexOf("  /"), s.lastIndexOf("  \\"));
         final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
-        buffer.append(line).append('-').append(CodePoints.toString(cp)).append(TernaryTree.LINE_SEPARATOR);
+        buffer.append(line).append('-').append(Utf8String.toString(cp)).append(TernaryTree.LINE_SEPARATOR);
       }
 
       printNode(node.getHikid(), s + "  \\", depth + 1, fullPath, buffer);

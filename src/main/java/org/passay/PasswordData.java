@@ -141,7 +141,7 @@ public class PasswordData
    */
   public int getCharacterCount()
   {
-    return CodePoints.charCount(password);
+    return Utf8String.countCodePoints(password);
   }
 
 

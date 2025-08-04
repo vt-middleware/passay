@@ -228,7 +228,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     //Random generated password test with AllowedCharacterRule
     final List<Rule> al = new ArrayList<>();
     final PasswordValidator pvAl = new PasswordValidator(al);
-    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new CodePoints(
+    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new Utf8String(
       new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!', }));
     al.add(allowedRule);

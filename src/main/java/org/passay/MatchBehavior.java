@@ -48,14 +48,14 @@ public enum MatchBehavior
   {
     final String name = name();
     final StringBuilder sb = new StringBuilder();
-    sb.append(CodePoints.toString(name.codePointAt(0)));
+    sb.append(Utf8String.toString(name.codePointAt(0)));
     int i = Character.charCount(name.codePointAt(0));
     while (i < name.length()) {
       final int cp = name.codePointAt(i);
       if (Character.isUpperCase(cp)) {
-        sb.append("_").append(CodePoints.toString(cp));
+        sb.append("_").append(Utf8String.toString(cp));
       } else {
-        sb.append(CodePoints.toString(Character.toUpperCase(cp)));
+        sb.append(Utf8String.toString(Character.toUpperCase(cp)));
       }
       i += Character.charCount(cp);
     }
@@ -73,7 +73,7 @@ public enum MatchBehavior
    */
   public boolean match(final String text, final int cp)
   {
-    return match(text, CodePoints.toString(cp));
+    return match(text, Utf8String.toString(cp));
   }
 
 

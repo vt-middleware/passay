@@ -146,6 +146,6 @@ public class WhitespaceRuleTest extends AbstractRuleTest
   @Test(groups = "passtest", expectedExceptions = IllegalArgumentException.class)
   public void checkValidCharacters()
   {
-    new WhitespaceRule(new CodePoints(' ', 'a'));
+    new WhitespaceRule(new Utf8String(' ', 'a'));
   }
 }

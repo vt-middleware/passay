@@ -32,48 +32,48 @@ public class IllegalCharacterRule implements Rule
   /**
    * Create a new illegal character rule.
    *
-   * @param  codePoints  illegal character code points
+   * @param  utf8String  illegal characters
    */
-  public IllegalCharacterRule(final CodePoints codePoints)
+  public IllegalCharacterRule(final Utf8String utf8String)
   {
-    this(codePoints, MatchBehavior.Contains, true);
+    this(utf8String, MatchBehavior.Contains, true);
   }
 
 
   /**
    * Create a new illegal character rule.
    *
-   * @param  codePoints  illegal character code points
+   * @param  utf8String  illegal characters
    * @param  behavior  how to match illegal characters
    */
-  public IllegalCharacterRule(final CodePoints codePoints, final MatchBehavior behavior)
+  public IllegalCharacterRule(final Utf8String utf8String, final MatchBehavior behavior)
   {
-    this(codePoints, behavior, true);
+    this(utf8String, behavior, true);
   }
 
 
   /**
    * Create a new illegal character rule.
    *
-   * @param  codePoints  illegal character code points
+   * @param  utf8String  illegal characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public IllegalCharacterRule(final CodePoints codePoints, final boolean reportAll)
+  public IllegalCharacterRule(final Utf8String utf8String, final boolean reportAll)
   {
-    this(codePoints, MatchBehavior.Contains, reportAll);
+    this(utf8String, MatchBehavior.Contains, reportAll);
   }
 
 
   /**
    * Create a new illegal character rule.
    *
-   * @param  codePoints  illegal character code points
+   * @param  utf8String  illegal character code points
    * @param  behavior  how to match illegal characters
    * @param  reportAll  whether to report all matches or just the first
    */
-  public IllegalCharacterRule(final CodePoints codePoints, final MatchBehavior behavior, final boolean reportAll)
+  public IllegalCharacterRule(final Utf8String utf8String, final MatchBehavior behavior, final boolean reportAll)
   {
-    illegalCharacters = codePoints.getCodePoints();
+    illegalCharacters = utf8String.getCodePoints();
     matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
@@ -84,9 +84,9 @@ public class IllegalCharacterRule implements Rule
    *
    * @return  illegal character code points
    */
-  public CodePoints getIllegalCharacters()
+  public Utf8String getIllegalCharacters()
   {
-    return new CodePoints(illegalCharacters);
+    return new Utf8String(illegalCharacters);
   }
 
 
@@ -108,7 +108,7 @@ public class IllegalCharacterRule implements Rule
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (int cp : illegalCharacters) {
-      if (matchBehavior.match(text, cp) && !matches.contains(CodePoints.toString(cp))) {
+      if (matchBehavior.match(text, cp) && !matches.contains(Utf8String.toString(cp))) {
         final String[] codes = {
           ERROR_CODE + "." + cp,
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
@@ -118,7 +118,7 @@ public class IllegalCharacterRule implements Rule
         if (!reportAllFailures) {
           break;
         }
-        matches.add(CodePoints.toString(cp));
+        matches.add(Utf8String.toString(cp));
       }
     }
     result.setMetadata(createRuleResultMetadata(passwordData));
@@ -136,7 +136,7 @@ public class IllegalCharacterRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", CodePoints.toString(cp));
+    m.put("illegalCharacter", Utf8String.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -153,7 +153,7 @@ public class IllegalCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Illegal,
-      CodePoints.countMatchingCharacters(illegalCharacters, password.getPassword()));
+      Utf8String.countMatchingCharacters(illegalCharacters, password.getPassword()));
   }
 
 

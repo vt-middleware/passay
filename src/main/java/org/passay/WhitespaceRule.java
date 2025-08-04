@@ -18,7 +18,7 @@ public class WhitespaceRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */
-  protected static final CodePoints CHARS = new CodePoints(
+  protected static final Utf8String CHARS = new Utf8String(
     (byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20);
 
   /** Whether to report all whitespace matches or just the first. */
@@ -54,11 +54,11 @@ public class WhitespaceRule implements Rule
   /**
    * Creates a new whitespace rule.
    *
-   * @param  codePoints  character code points that are whitespace
+   * @param  utf8String  character code points that are whitespace
    */
-  public WhitespaceRule(final CodePoints codePoints)
+  public WhitespaceRule(final Utf8String utf8String)
   {
-    this(codePoints, MatchBehavior.Contains, true);
+    this(utf8String, MatchBehavior.Contains, true);
   }
 
 
@@ -77,37 +77,37 @@ public class WhitespaceRule implements Rule
   /**
    * Creates a new whitespace rule.
    *
-   * @param  codePoints  whitespace character code points
+   * @param  utf8String  whitespace character code points
    * @param  behavior  how to match whitespace
    */
-  public WhitespaceRule(final CodePoints codePoints, final MatchBehavior behavior)
+  public WhitespaceRule(final Utf8String utf8String, final MatchBehavior behavior)
   {
-    this(codePoints, behavior, true);
+    this(utf8String, behavior, true);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  codePoints  whitespace character code points
+   * @param  utf8String  whitespace character code points
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final CodePoints codePoints, final boolean reportAll)
+  public WhitespaceRule(final Utf8String utf8String, final boolean reportAll)
   {
-    this(codePoints, MatchBehavior.Contains, reportAll);
+    this(utf8String, MatchBehavior.Contains, reportAll);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  codePoints  whitespace characters
+   * @param  utf8String  whitespace characters
    * @param  behavior  how to match whitespace
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final CodePoints codePoints, final MatchBehavior behavior, final boolean reportAll)
+  public WhitespaceRule(final Utf8String utf8String, final MatchBehavior behavior, final boolean reportAll)
   {
-    final int[] cp = codePoints.getCodePoints();
+    final int[] cp = utf8String.getCodePoints();
     for (int c : cp) {
       if (!Character.isWhitespace(c)) {
         throw new IllegalArgumentException("Character '" + c + "' is not whitespace");
@@ -124,9 +124,9 @@ public class WhitespaceRule implements Rule
    *
    * @return  whitespace characters
    */
-  public CodePoints getWhitespaceCharacters()
+  public Utf8String getWhitespaceCharacters()
   {
-    return new CodePoints(whitespaceCharacters);
+    return new Utf8String(whitespaceCharacters);
   }
 
 
@@ -173,7 +173,7 @@ public class WhitespaceRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("whitespaceCharacter", CodePoints.toString(cp));
+    m.put("whitespaceCharacter", Utf8String.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -190,7 +190,7 @@ public class WhitespaceRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Whitespace,
-      CodePoints.countMatchingCharacters(whitespaceCharacters, password.getPassword()));
+      Utf8String.countMatchingCharacters(whitespaceCharacters, password.getPassword()));
   }
 
 
