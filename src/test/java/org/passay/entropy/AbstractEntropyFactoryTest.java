@@ -9,6 +9,7 @@ import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordData;
 import org.passay.Rule;
+import org.passay.UnicodeString;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -29,9 +30,9 @@ public abstract class AbstractEntropyFactoryTest
   @BeforeClass(groups = "entrpytest")
   public void createRules()
   {
-    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(
+    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new UnicodeString(
       new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', });
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', }));
 
     final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
       3,

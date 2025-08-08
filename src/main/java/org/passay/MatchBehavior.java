@@ -48,14 +48,16 @@ public enum MatchBehavior
   {
     final String name = name();
     final StringBuilder sb = new StringBuilder();
-    sb.append(name.charAt(0));
-    for (int i = 1; i < name.length(); i++) {
-      final char ch = name.charAt(i);
-      if (Character.isUpperCase(ch)) {
-        sb.append("_").append(ch);
+    sb.append(UnicodeString.toString(name.codePointAt(0)));
+    int i = Character.charCount(name.codePointAt(0));
+    while (i < name.length()) {
+      final int cp = name.codePointAt(i);
+      if (Character.isUpperCase(cp)) {
+        sb.append("_").append(UnicodeString.toString(cp));
       } else {
-        sb.append(Character.toUpperCase(ch));
+        sb.append(UnicodeString.toString(Character.toUpperCase(cp)));
       }
+      i += Character.charCount(cp);
     }
     return sb.toString();
   }
@@ -65,13 +67,13 @@ public enum MatchBehavior
    * Returns whether text matches the supplied string for this match type.
    *
    * @param  text  to search
-   * @param  c  to find in text
+   * @param  cp  code point to find in text
    *
    * @return  whether text matches the supplied string for this match type
    */
-  public boolean match(final String text, final char c)
+  public boolean match(final String text, final int cp)
   {
-    return match(text, String.valueOf(c));
+    return match(text, UnicodeString.toString(cp));
   }
 
 

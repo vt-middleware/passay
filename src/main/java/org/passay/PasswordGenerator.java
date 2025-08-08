@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -126,7 +127,7 @@ public class PasswordGenerator
           }
         }
       }
-      fillRandomCharacters(allChars, length - buffer.position(), buffer);
+      fillRandomCharacters(allChars.toString(), length - buffer.position(), buffer);
       // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
       ((Buffer) buffer).flip();
       randomize(buffer);
@@ -152,11 +153,12 @@ public class PasswordGenerator
    * @param  count  number of random characters.
    * @param  target  character sequence that will hold characters.
    */
-  protected void fillRandomCharacters(final CharSequence source, final int count, final Appendable target)
+  protected void fillRandomCharacters(final String source, final int count, final Appendable target)
   {
+    final int[] indexes = codePointIndexes(source);
     for (int i = 0; i < count; i++) {
       try {
-        target.append(source.charAt(random.nextInt(source.length())));
+        target.append(UnicodeString.toString(source.codePointAt(indexes[random.nextInt(indexes.length)])));
       } catch (IOException e) {
         throw new RuntimeException("Error appending characters.", e);
       }
@@ -179,5 +181,27 @@ public class PasswordGenerator
       buffer.put(n, buffer.get(i));
       buffer.put(i, c);
     }
+  }
+
+
+  /**
+   * Returns the indexes for every code point in the supplied string.
+   *
+   * @param  s  to find code point indexes
+   *
+   * @return  array of code point indexes
+   */
+  private static int[] codePointIndexes(final String s)
+  {
+    if (s == null || s.isEmpty()) {
+      return new int[0];
+    }
+    final List<Integer> indexes = new ArrayList<>(UnicodeString.charCount(s));
+    int i = 0;
+    while (i < s.length()) {
+      indexes.add(i);
+      i += Character.charCount(s.codePointAt(i));
+    }
+    return indexes.stream().mapToInt(Integer::intValue).toArray();
   }
 }

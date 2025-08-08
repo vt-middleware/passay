@@ -78,6 +78,19 @@ public class LengthRuleTest extends AbstractRuleTest
           codes(LengthRule.ERROR_CODE_MIN),
         },
         {new LengthRule(8, Integer.MAX_VALUE), new PasswordData("p4T3j76rE@#"), null, },
+        {new LengthRule(8, 10), new PasswordData("p4T3#6čT"), null, },
+        // 2 byte character ᛈ
+        {new LengthRule(8, 8), new PasswordData("p4T3#6\u16C8T"), null, },
+        // 4 byte character 𒌴
+        {new LengthRule(8, 8), new PasswordData("p4T3#6\uD808\uDF34T"), null, },
+        // 8 byte character 🇮🇸, passes but the character is represented as 2 code points
+        {new LengthRule(8, 9), new PasswordData("p4T3#6\uD83C\uDDEE\uD83C\uDDF8T"), null, },
+        // 8 byte character 🇮🇸, fails with max length of 8
+        {
+          new LengthRule(8, 8),
+          new PasswordData("p4T3#6\uD83C\uDDEE\uD83C\uDDF8T"),
+          codes(LengthRule.ERROR_CODE_MAX),
+        },
       };
   }
 

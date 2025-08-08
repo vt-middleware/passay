@@ -18,13 +18,14 @@ public class WhitespaceRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_WHITESPACE";
 
   /** Characters: TAB,LF,VT,FF,CR,Space. */
-  protected static final char[] CHARS = {(byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20};
+  protected static final UnicodeString CHARS = new UnicodeString(
+    (byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20);
 
   /** Whether to report all whitespace matches or just the first. */
   protected boolean reportAllFailures;
 
   /** Stores the whitespace characters that are allowed. */
-  private final char[] whitespaceCharacters;
+  private final int[] whitespaceCharacters;
 
   /** Where to match whitespace. */
   private final MatchBehavior matchBehavior;
@@ -53,11 +54,11 @@ public class WhitespaceRule implements Rule
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  characters that are whitespace
+   * @param  unicodeString  character code points that are whitespace
    */
-  public WhitespaceRule(final char[] chars)
+  public WhitespaceRule(final UnicodeString unicodeString)
   {
-    this(chars, MatchBehavior.Contains, true);
+    this(unicodeString, MatchBehavior.Contains, true);
   }
 
 
@@ -76,42 +77,43 @@ public class WhitespaceRule implements Rule
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  whitespace characters
+   * @param  unicodeString  whitespace character code points
    * @param  behavior  how to match whitespace
    */
-  public WhitespaceRule(final char[] chars, final MatchBehavior behavior)
+  public WhitespaceRule(final UnicodeString unicodeString, final MatchBehavior behavior)
   {
-    this(chars, behavior, true);
+    this(unicodeString, behavior, true);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  whitespace characters
+   * @param  unicodeString  whitespace character code points
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final char[] chars, final boolean reportAll)
+  public WhitespaceRule(final UnicodeString unicodeString, final boolean reportAll)
   {
-    this(chars, MatchBehavior.Contains, reportAll);
+    this(unicodeString, MatchBehavior.Contains, reportAll);
   }
 
 
   /**
    * Creates a new whitespace rule.
    *
-   * @param  chars  whitespace characters
+   * @param  unicodeString  whitespace characters
    * @param  behavior  how to match whitespace
    * @param  reportAll  whether to report all matches or just the first
    */
-  public WhitespaceRule(final char[] chars, final MatchBehavior behavior, final boolean reportAll)
+  public WhitespaceRule(final UnicodeString unicodeString, final MatchBehavior behavior, final boolean reportAll)
   {
-    for (char c : chars) {
+    final int[] cp = unicodeString.getCodePoints();
+    for (int c : cp) {
       if (!Character.isWhitespace(c)) {
         throw new IllegalArgumentException("Character '" + c + "' is not whitespace");
       }
     }
-    whitespaceCharacters = chars;
+    whitespaceCharacters = cp;
     matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
@@ -122,9 +124,9 @@ public class WhitespaceRule implements Rule
    *
    * @return  whitespace characters
    */
-  public char[] getWhitespaceCharacters()
+  public UnicodeString getWhitespaceCharacters()
   {
-    return whitespaceCharacters;
+    return new UnicodeString(whitespaceCharacters);
   }
 
 
@@ -144,13 +146,13 @@ public class WhitespaceRule implements Rule
   {
     final RuleResult result = new RuleResult();
     final String text = passwordData.getPassword();
-    for (char c : whitespaceCharacters) {
-      if (matchBehavior.match(text, c)) {
+    for (int cp : whitespaceCharacters) {
+      if (matchBehavior.match(text, cp)) {
         final String[] codes = {
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
           ERROR_CODE,
         };
-        result.addError(codes, createRuleResultDetailParameters(c));
+        result.addError(codes, createRuleResultDetailParameters(cp));
         if (!reportAllFailures) {
           break;
         }
@@ -164,14 +166,14 @@ public class WhitespaceRule implements Rule
   /**
    * Creates the parameter data for the rule result detail.
    *
-   * @param  c  whitespace character
+   * @param  cp  whitespace character code point
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final char c)
+  protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("whitespaceCharacter", c);
+    m.put("whitespaceCharacter", UnicodeString.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -188,7 +190,7 @@ public class WhitespaceRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Whitespace,
-      PasswordUtils.countMatchingCharacters(String.valueOf(whitespaceCharacters), password.getPassword()));
+      UnicodeString.countMatchingCharacters(whitespaceCharacters, password.getPassword()));
   }
 
 

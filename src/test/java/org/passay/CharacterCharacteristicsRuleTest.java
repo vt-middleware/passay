@@ -53,6 +53,12 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
         {rule1, new PasswordData("r%scvEW2e93)"), null, },
         // valid non-ascii password
         {rule1, new PasswordData("r¢sCvE±2e93"), null, },
+        // valid non-ascii password
+        {rule1, new PasswordData("r\u16C8sCvE±2e93"), null, },
+        // valid non-ascii password
+        {rule1, new PasswordData("r\uD808\uDF34sCvE±2e93"), null, },
+        // valid non-ascii password
+        {rule1, new PasswordData("r\uD83C\uDDEE\uD83C\uDDF8sCvE±2e93"), null, },
         // issue #32
         {rule1, new PasswordData("r~scvEW2e93b"), null, },
         // missing lowercase
@@ -86,6 +92,12 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
         {
           rule1,
           new PasswordData("r5scvEW2e9b"),
+          codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Special.getErrorCode()),
+        },
+        // missing 1 special with unicode
+        {
+          rule1,
+          new PasswordData("r\uD808\uDF345scvEW2e9b"),
           codes(CharacterCharacteristicsRule.ERROR_CODE, EnglishCharacterData.Special.getErrorCode()),
         },
         // previous passwords all valid under different rule set

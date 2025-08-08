@@ -1,14 +1,17 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.entropy;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.passay.AllowedCharacterRule;
 import org.passay.CharacterCharacteristicsRule;
 import org.passay.CharacterRule;
 import org.passay.PasswordData;
 import org.passay.Rule;
+import org.passay.UnicodeString;
 
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.
@@ -40,7 +43,7 @@ public final class RandomPasswordEntropyFactory
     if (!passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
       throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.Generated);
     }
-    final Set<Character> uniqueCharacters = new HashSet<>();
+    final Set<String> uniqueCharacters = new HashSet<>();
     passwordRules.forEach(rule -> {
       if (rule instanceof CharacterCharacteristicsRule) {
         final CharacterCharacteristicsRule characteristicRule = (CharacterCharacteristicsRule) rule;
@@ -51,14 +54,15 @@ public final class RandomPasswordEntropyFactory
         uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters()));
       } else if (rule instanceof AllowedCharacterRule) {
         final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
-        uniqueCharacters.addAll(getUniqueCharacters(String.valueOf(allowedCharacterRule.getAllowedCharacters())));
+        uniqueCharacters.addAll(
+          getUniqueCharacters(UnicodeString.toString(allowedCharacterRule.getAllowedCharacters().getCodePoints())));
       }
     });
     if (uniqueCharacters.isEmpty()) {
       throw new IllegalArgumentException(
         "Password rules must contain at least 1 unique character by CharacterRule definition");
     }
-    return new RandomPasswordEntropy(uniqueCharacters.size(), passwordData.getPassword().length());
+    return new RandomPasswordEntropy(uniqueCharacters.size(), passwordData.getCharacterCount());
   }
 
 
@@ -69,14 +73,11 @@ public final class RandomPasswordEntropyFactory
    *
    * @return  unique characters
    */
-  private static Set<Character> getUniqueCharacters(final String characters)
+  private static Set<String> getUniqueCharacters(final String characters)
   {
-    final Set<Character> uniqueCharacters = new HashSet<>();
     if (characters != null) {
-      for (char c : characters.toCharArray()) {
-        uniqueCharacters.add(c);
-      }
+      return characters.codePoints().mapToObj(UnicodeString::toString).collect(Collectors.toSet());
     }
-    return uniqueCharacters;
+    return Collections.emptySet();
   }
 }

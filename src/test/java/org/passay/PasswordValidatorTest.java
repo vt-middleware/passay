@@ -129,7 +129,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void estimateEntropy()
   {
-    /**
+    /*
      * NIST: Table A1 from http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf
      * ___________________________
      * Len: Plain  Dict  Dict+Comp
@@ -228,13 +228,13 @@ public class PasswordValidatorTest extends AbstractRuleTest
     //Random generated password test with AllowedCharacterRule
     final List<Rule> al = new ArrayList<>();
     final PasswordValidator pvAl = new PasswordValidator(al);
-    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(
+    final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new UnicodeString(
       new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!', });
+        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!', }));
     al.add(allowedRule);
     AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(allowedRule.getAllowedCharacters().length,
-              length5CompositionPassword.getPassword().length()).estimate(),
+      new RandomPasswordEntropy(
+        allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate(),
       pvAl.estimateEntropy(length5CompositionPassword));
   }
 

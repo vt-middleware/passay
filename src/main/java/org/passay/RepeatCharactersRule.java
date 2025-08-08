@@ -78,19 +78,21 @@ public class RepeatCharactersRule implements Rule
     int count = 0;
     int repeat = 1;
     int prev = -1;
-    for (int i = 0; i <= max; i++) {
-      final int c = password.charAt(i);
-      if (c == prev) {
+    int i = 0;
+    while (i <= max) {
+      final int curr = password.codePointAt(i);
+      if (curr == prev) {
         repeat++;
       } else {
         if (repeat >= sequenceLength) {
-          final String match = password.substring(i - repeat, i);
+          final String match = password.substring(i - Character.charCount(prev) * repeat, i);
           matches.add(match);
           count++;
         }
         repeat = 1;
       }
-      prev = c;
+      prev = curr;
+      i += Character.charCount(curr);
     }
     if (count >= sequenceCount) {
       result.addError(ERROR_CODE, createRuleResultDetailParameters(matches));
