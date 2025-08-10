@@ -4,8 +4,18 @@ package org.passay;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 import java.util.List;
+import org.passay.data.EnglishCharacterData;
+import org.passay.data.EnglishSequenceData;
 import org.passay.dictionary.FileWordList;
 import org.passay.dictionary.TernaryTreeDictionary;
+import org.passay.rule.CharacterCharacteristicsRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.DictionarySubstringRule;
+import org.passay.rule.IllegalSequenceRule;
+import org.passay.rule.LengthRule;
+import org.passay.rule.RepeatCharacterRegexRule;
+import org.passay.rule.Rule;
+import org.passay.rule.UsernameRule;
 
 /**
  * Provides a simple command line interface to password validation.

@@ -33,7 +33,7 @@
   <!-- API breaking change to make field package protected -->
   <Match>
     <Or>
-      <Class name="org.passay.WhitespaceRule" />
+      <Class name="org.passay.rule.WhitespaceRule" />
       <Class name="org.passay.entropy.ShannonEntropy" />
     </Or>
     <Bug pattern="MS_PKGPROTECT" />

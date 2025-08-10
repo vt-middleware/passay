@@ -290,6 +290,7 @@
         <version>3.4.1</version>
         <executions>
           <execution>
+            <!-- Use -Dexec.skip=true to skip plugin execution -->
             <phase>test</phase>
             <goals>
               <goal>java</goal>

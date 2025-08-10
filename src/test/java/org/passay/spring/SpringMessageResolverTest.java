@@ -2,10 +2,10 @@
 package org.passay.spring;
 
 import java.util.Locale;
-import org.passay.LengthRule;
 import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.RuleResult;
+import org.passay.rule.LengthRule;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.StaticMessageSource;
 import org.testng.AssertJUnit;

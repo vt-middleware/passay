@@ -2,9 +2,9 @@
 package org.passay.spring;
 
 import java.util.Locale;
-import org.passay.MessageResolver;
-import org.passay.PropertiesMessageResolver;
 import org.passay.RuleResultDetail;
+import org.passay.resolver.MessageResolver;
+import org.passay.resolver.PropertiesMessageResolver;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.MessageSourceAccessor;
