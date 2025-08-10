@@ -18,13 +18,13 @@
     </constructor-arg>
   </bean>
 
-  <bean id="alphaRule" class="org.passay.CharacterRule"
-    c:data="#{T(org.passay.EnglishCharacterData).Alphabetical}"
+  <bean id="alphaRule" class="org.passay.rule.CharacterRule"
+    c:data="#{T(org.passay.data.EnglishCharacterData).Alphabetical}"
     c:num="3" />
-  <bean id="digitRule" class="org.passay.CharacterRule"
-    c:data="#{T(org.passay.EnglishCharacterData).Digit}"
+  <bean id="digitRule" class="org.passay.rule.CharacterRule"
+    c:data="#{T(org.passay.data.EnglishCharacterData).Digit}"
     c:num="1" />
-  <bean id="charRule" class="org.passay.CharacterCharacteristicsRule"
+  <bean id="charRule" class="org.passay.rule.CharacterCharacteristicsRule"
     p:numberOfCharacteristics="2">
     <property name="rules">
       <list>
@@ -34,27 +34,27 @@
     </property>
   </bean>
 
-  <bean id="dictRule" class="org.passay.DictionarySubstringRule"
+  <bean id="dictRule" class="org.passay.rule.DictionarySubstringRule"
     p:dictionary-ref="dictionary" />
 
-  <bean id="lenRule" class="org.passay.LengthRule"
+  <bean id="lenRule" class="org.passay.rule.LengthRule"
     p:minimumLength="5"/>
 
-  <bean id="qwertySeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnglishSequenceData).USQwerty}" />
+  <bean id="qwertySeqRule" class="org.passay.rule.IllegalSequenceRule"
+    c:data="#{T(org.passay.data.EnglishSequenceData).USQwerty}" />
 
-  <bean id="alphaSeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnglishSequenceData).Alphabetical}" />
+  <bean id="alphaSeqRule" class="org.passay.rule.IllegalSequenceRule"
+    c:data="#{T(org.passay.data.EnglishSequenceData).Alphabetical}" />
 
-  <bean id="numSeqRule" class="org.passay.IllegalSequenceRule"
-    c:data="#{T(org.passay.EnglishSequenceData).Numerical}" />
+  <bean id="numSeqRule" class="org.passay.rule.IllegalSequenceRule"
+    c:data="#{T(org.passay.data.EnglishSequenceData).Numerical}" />
 
-  <bean id="repeatRegexRule" class="org.passay.RepeatCharacterRegexRule"/>
+  <bean id="repeatRegexRule" class="org.passay.rule.RepeatCharacterRegexRule"/>
 
-  <bean id="usernameRule" class="org.passay.UsernameRule"
+  <bean id="usernameRule" class="org.passay.rule.UsernameRule"
     p:ignoreCase="true"
     p:matchBackwards="true"/>
 
-  <bean id="wsRule" class="org.passay.WhitespaceRule"/>
+  <bean id="wsRule" class="org.passay.rule.WhitespaceRule"/>
  
 </beans>

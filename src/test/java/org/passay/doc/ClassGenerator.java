@@ -48,7 +48,10 @@ public class ClassGenerator
     "org.passay",
     "org.passay.dictionary",
     "org.passay.dictionary.sort",
+    "org.passay.data",
     "org.passay.entropy",
+    "org.passay.resolver",
+    "org.passay.rule",
   };
 
   /** String containing all import statements. */

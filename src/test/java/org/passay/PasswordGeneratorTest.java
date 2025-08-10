@@ -5,6 +5,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.passay.data.EnglishCharacterData;
+import org.passay.data.EnglishSequenceData;
+import org.passay.rule.CharacterCharacteristicsRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.IllegalSequenceRule;
+import org.passay.rule.RepeatCharactersRule;
+import org.passay.rule.Rule;
 import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -47,7 +54,7 @@ public class PasswordGeneratorTest
    * @param rules Password validation rules. Should NOT include characteristics as these are managed by the test.
    */
   @Test(groups = "passgentest", dataProvider = "ruleSets")
-  public void testGenerateWithRetry(final Rule ... rules)
+  public void testGenerateWithRetry(final Rule... rules)
   {
     final List<Rule> ruleSet = Arrays.asList(rules);
     final List<Rule> passRules = addCharacteristics(ruleSet);

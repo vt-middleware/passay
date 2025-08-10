@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.Rule;
 
 /**
  * Creates passwords that meet password character rule criteria.

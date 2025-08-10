@@ -8,6 +8,12 @@ import java.util.stream.Collectors;
 import org.passay.entropy.Entropy;
 import org.passay.entropy.RandomPasswordEntropyFactory;
 import org.passay.entropy.ShannonEntropyFactory;
+import org.passay.resolver.MessageResolver;
+import org.passay.resolver.PropertiesMessageResolver;
+import org.passay.rule.AllowedRegexRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.IllegalRegexRule;
+import org.passay.rule.Rule;
 
 /**
  * The central component for evaluating multiple password rules against a candidate password.

@@ -3,13 +3,13 @@ package org.passay.entropy;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.passay.AllowedCharacterRule;
-import org.passay.CharacterCharacteristicsRule;
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
 import org.passay.PasswordData;
-import org.passay.Rule;
 import org.passay.UnicodeString;
+import org.passay.data.EnglishCharacterData;
+import org.passay.rule.AllowedCharacterRule;
+import org.passay.rule.CharacterCharacteristicsRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.Rule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
