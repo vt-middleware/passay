@@ -5,9 +5,9 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
 import org.passay.UnicodeString;
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link IllegalCharacterRule}.
@@ -184,11 +184,11 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
   {
     final IllegalCharacterRule rule = new IllegalCharacterRule(new UnicodeString('@', '$'));
     RuleResult result = rule.validate(new PasswordData("metadata"));
-    AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(0, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Illegal));
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Illegal)).isEqualTo(0);
 
     result = rule.validate(new PasswordData("met@data$"));
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(2, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Illegal));
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Illegal)).isEqualTo(2);
   }
 }

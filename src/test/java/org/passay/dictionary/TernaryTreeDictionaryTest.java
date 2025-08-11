@@ -9,11 +9,11 @@ import org.passay.dictionary.sort.BubbleSort;
 import org.passay.dictionary.sort.InsertionSort;
 import org.passay.dictionary.sort.QuickSort;
 import org.passay.dictionary.sort.SelectionSort;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link TernaryTreeDictionary}.
@@ -65,13 +65,13 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "ttdicttest")
   public void search()
   {
-    AssertJUnit.assertTrue(caseSensitive.search("manipular"));
-    AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(caseSensitive.search("z"));
-    AssertJUnit.assertTrue(caseInsensitive.search("manipular"));
-    AssertJUnit.assertTrue(caseInsensitive.search("manipular".toUpperCase()));
-    AssertJUnit.assertFalse(caseInsensitive.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(caseInsensitive.search("z"));
+    assertThat(caseSensitive.search("manipular")).isTrue();
+    assertThat(caseSensitive.search(FALSE_SEARCH)).isFalse();
+    assertThat(caseSensitive.search("z")).isTrue();
+    assertThat(caseInsensitive.search("manipular")).isTrue();
+    assertThat(caseInsensitive.search("manipular".toUpperCase())).isTrue();
+    assertThat(caseInsensitive.search(FALSE_SEARCH)).isFalse();
+    assertThat(caseInsensitive.search("z")).isTrue();
   }
 
 
@@ -83,10 +83,10 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "ttdicttest", dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
   {
-    AssertJUnit.assertTrue(caseSensitive.search(word));
-    AssertJUnit.assertTrue(caseInsensitive.search(word));
-    AssertJUnit.assertTrue(caseInsensitive.search(word.toLowerCase()));
-    AssertJUnit.assertTrue(caseInsensitive.search(word.toUpperCase()));
+    assertThat(caseSensitive.search(word)).isTrue();
+    assertThat(caseInsensitive.search(word)).isTrue();
+    assertThat(caseInsensitive.search(word.toLowerCase())).isTrue();
+    assertThat(caseInsensitive.search(word.toUpperCase())).isTrue();
   }
 
 
@@ -98,16 +98,16 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "ttdicttest")
   public void partialSearch(final String word, final String results)
   {
-    AssertJUnit.assertArrayEquals(results.split("\\|"), caseSensitive.partialSearch(word));
-    AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(FALSE_SEARCH)));
+    assertThat(caseSensitive.partialSearch(word)).isEqualTo(results.split("\\|"));
+    assertThat(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(FALSE_SEARCH))).isFalse();
 
     try {
       caseInsensitive.partialSearch(word);
-      AssertJUnit.fail("Should have thrown UnsupportedOperationException");
+      fail("Should have thrown UnsupportedOperationException");
     } catch (UnsupportedOperationException e) {
-      AssertJUnit.assertEquals(e.getClass(), UnsupportedOperationException.class);
+      assertThat(e).isExactlyInstanceOf(UnsupportedOperationException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown UnsupportedOperationException, threw " + e.getMessage());
+      fail("Should have thrown UnsupportedOperationException, threw %s", e.getMessage());
     }
   }
 
@@ -121,16 +121,16 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "ttdicttest")
   public void nearSearch(final String word, final int distance, final String results)
   {
-    AssertJUnit.assertArrayEquals(results.split("\\|"), caseSensitive.nearSearch(word, distance));
-    AssertJUnit.assertFalse(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(FALSE_SEARCH, distance)));
+    assertThat(caseSensitive.nearSearch(word, distance)).isEqualTo(results.split("\\|"));
+    assertThat(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(FALSE_SEARCH, distance))).isFalse();
 
     try {
       caseInsensitive.nearSearch(word, distance);
-      AssertJUnit.fail("Should have thrown UnsupportedOperationException");
+      fail("Should have thrown UnsupportedOperationException");
     } catch (UnsupportedOperationException e) {
-      AssertJUnit.assertEquals(e.getClass(), UnsupportedOperationException.class);
+      assertThat(e).isExactlyInstanceOf(UnsupportedOperationException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown UnsupportedOperationException, threw " + e.getMessage());
+      fail("Should have thrown UnsupportedOperationException, threw %s", e.getMessage());
     }
   }
 
@@ -174,16 +174,15 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   {
     ArrayWordList awl = new ArrayWordList(getAnimals(), true, sorter);
     final TernaryTreeDictionary sortCS = new TernaryTreeDictionary(awl);
-    AssertJUnit.assertTrue(sortCS.search(ANIMAL_SEARCH_CS));
-    AssertJUnit.assertFalse(sortCS.search(ANIMAL_SEARCH_CI));
-    AssertJUnit.assertArrayEquals(ANIMAL_PARTIAL_SEARCH_RESULTS_CS, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH));
-    AssertJUnit.assertFalse(
-      Arrays.equals(ANIMAL_PARTIAL_SEARCH_RESULTS_CI, sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)));
+    assertThat(sortCS.search(ANIMAL_SEARCH_CS)).isTrue();
+    assertThat(sortCS.search(ANIMAL_SEARCH_CI)).isFalse();
+    assertThat(sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)).isEqualTo(ANIMAL_PARTIAL_SEARCH_RESULTS_CS);
+    assertThat(sortCS.partialSearch(ANIMAL_PARTIAL_SEARCH)).isNotEqualTo(ANIMAL_PARTIAL_SEARCH_RESULTS_CI);
 
     awl = new ArrayWordList(getAnimals(), false, sorter);
 
     final TernaryTreeDictionary sortCI = new TernaryTreeDictionary(awl);
-    AssertJUnit.assertTrue(sortCI.search(ANIMAL_SEARCH_CS));
-    AssertJUnit.assertTrue(sortCI.search(ANIMAL_SEARCH_CI));
+    assertThat(sortCI.search(ANIMAL_SEARCH_CS)).isTrue();
+    assertThat(sortCI.search(ANIMAL_SEARCH_CI)).isTrue();
   }
 }

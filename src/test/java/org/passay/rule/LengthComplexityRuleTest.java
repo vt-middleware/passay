@@ -5,10 +5,10 @@ import java.util.ArrayList;
 import org.passay.PasswordData;
 import org.passay.data.EnglishCharacterData;
 import org.passay.data.EnglishSequenceData;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link LengthComplexityRule}.
@@ -258,13 +258,13 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       lcr.addRules(interval, new RepeatCharacterRegexRule());
       if (!valid) {
-        AssertJUnit.fail("Should have thrown IllegalArgumentException");
+        fail("Should have thrown IllegalArgumentException");
       }
     } catch (Exception e) {
       if (valid) {
-        AssertJUnit.fail("Should not have thrown exception: " + e);
+        fail("Should not have thrown exception: %s", e.getMessage());
       }
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
   }
 
@@ -281,44 +281,44 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // intersecting rules
       lcr.addRules("(5,11)", new WhitespaceRule());
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // intersecting rules
       lcr.addRules("(5,15]", new WhitespaceRule());
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // intersecting rules
       lcr.addRules("[15,25)", new WhitespaceRule());
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // intersecting rules
       lcr.addRules("(19,25)", new WhitespaceRule());
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // null rules
       lcr.addRules("(0,1)", (Rule[]) null);
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // empty rules
       lcr.addRules("(0,1)", new ArrayList<>());
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
   }
 

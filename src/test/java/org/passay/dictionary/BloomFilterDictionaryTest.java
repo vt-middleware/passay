@@ -9,11 +9,11 @@ import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.google.common.io.BaseEncoding;
 import org.passay.dictionary.sort.ArraysSort;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link BloomFilterDictionary}.
@@ -71,9 +71,9 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "bloomdicttest")
   public void search()
   {
-    AssertJUnit.assertTrue(filterFromTxt.search("manipular"));
-    AssertJUnit.assertFalse(filterFromTxt.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(filterFromTxt.search("z"));
+    assertThat(filterFromTxt.search("manipular")).isTrue();
+    assertThat(filterFromTxt.search(FALSE_SEARCH)).isFalse();
+    assertThat(filterFromTxt.search("z")).isTrue();
   }
 
 
@@ -81,10 +81,10 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "bloomdicttest")
   public void searchSerialized() throws Exception
   {
-    AssertJUnit.assertFalse(filterFromSerialized.search(hashPassword(FALSE_SEARCH)));
-    AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("bbeegguumm...123")));
-    AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("JLR012686jlr")));
-    AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("Pixiedusts123")));
+    assertThat(filterFromSerialized.search(hashPassword(FALSE_SEARCH))).isFalse();
+    assertThat(filterFromSerialized.search(hashPassword("bbeegguumm...123"))).isTrue();
+    assertThat(filterFromSerialized.search(hashPassword("JLR012686jlr"))).isTrue();
+    assertThat(filterFromSerialized.search(hashPassword("Pixiedusts123"))).isTrue();
   }
 
 

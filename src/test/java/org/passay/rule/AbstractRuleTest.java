@@ -10,8 +10,8 @@ import org.passay.resolver.AbstractMessageResolver;
 import org.passay.resolver.MessageResolver;
 import org.passay.resolver.PropertiesMessageResolver;
 import org.passay.resolver.ResourceBundleMessageResolver;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Base class for all rule tests.
@@ -40,13 +40,13 @@ public abstract class AbstractRuleTest
   {
     final RuleResult result = rule.validate(passwordData);
     if (errorCodes != null) {
-      AssertJUnit.assertFalse(result.isValid());
-      AssertJUnit.assertEquals(errorCodes.length, result.getDetails().size());
+      assertThat(result.isValid()).isFalse();
+      assertThat(result.getDetails().size()).isEqualTo(errorCodes.length);
       for (String code : errorCodes) {
-        AssertJUnit.assertTrue(hasErrorCode(code, result));
+        assertThat(hasErrorCode(code, result)).isTrue();
       }
     } else {
-      AssertJUnit.assertTrue(result.isValid());
+      assertThat(result.isValid()).isTrue();
     }
   }
 
@@ -60,12 +60,12 @@ public abstract class AbstractRuleTest
   public void checkMessage(final Rule rule, final PasswordData passwordData, final String[] messages)
   {
     final RuleResult result = rule.validate(passwordData);
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(messages.length, result.getDetails().size());
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getDetails().size()).isEqualTo(messages.length);
     for (int i = 0; i < result.getDetails().size(); i++) {
       final RuleResultDetail detail = result.getDetails().get(i);
-      AssertJUnit.assertEquals(messages[i], TEST_RESOLVER.resolve(detail));
-      AssertJUnit.assertNotNull(EMPTY_RESOLVER.resolve(detail));
+      assertThat(TEST_RESOLVER.resolve(detail)).isEqualTo(messages[i]);
+      assertThat(EMPTY_RESOLVER.resolve(detail)).isNotNull();
     }
   }
 

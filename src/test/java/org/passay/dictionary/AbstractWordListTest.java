@@ -12,10 +12,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Common unit tests for {@link WordList} implementations.
@@ -152,28 +152,28 @@ public abstract class AbstractWordListTest<T extends WordList>
   @Test(groups = "wltest", dataProvider = "wordListsWithExpectedWords")
   public void get(final T list, final int expectedSize, final ExpectedWord ... expectedWords)
   {
-    AssertJUnit.assertEquals(expectedSize, list.size());
+    assertThat(list.size()).isEqualTo(expectedSize);
 
     try {
       list.get(-1);
-      AssertJUnit.fail("Should have thrown IndexOutOfBoundsException");
+      fail("Should have thrown IndexOutOfBoundsException");
     } catch (IndexOutOfBoundsException e) {
-      AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
+      assertThat(e).isExactlyInstanceOf(IndexOutOfBoundsException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
+      fail("Should have thrown IndexOutOfBoundsException, threw %s", e.getMessage());
     }
 
     for (ExpectedWord expectedWord : expectedWords) {
-      AssertJUnit.assertEquals(expectedWord.word, list.get(expectedWord.index));
+      assertThat(list.get(expectedWord.index)).isEqualTo(expectedWord.word);
     }
 
     try {
       list.get(expectedSize);
-      AssertJUnit.fail("Should have thrown IndexOutOfBoundsException");
+      fail("Should have thrown IndexOutOfBoundsException");
     } catch (IndexOutOfBoundsException e) {
-      AssertJUnit.assertEquals(e.getClass(), IndexOutOfBoundsException.class);
+      assertThat(e).isExactlyInstanceOf(IndexOutOfBoundsException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown IndexOutOfBoundsException, threw " + e.getMessage());
+      fail("Should have thrown IndexOutOfBoundsException, threw %s", e.getMessage());
     }
   }
 
@@ -190,7 +190,7 @@ public abstract class AbstractWordListTest<T extends WordList>
     int index = 0;
     while (i.hasNext()) {
       final String s = i.next();
-      AssertJUnit.assertEquals(list.get(index), s);
+      assertThat(list.get(index)).isEqualTo(s);
       index++;
     }
   }
@@ -210,14 +210,14 @@ public abstract class AbstractWordListTest<T extends WordList>
     final double[] fractions = {1 / 2d, 1 / 4d, 3 / 4d, 1 / 8d, 3 / 8d, 5 / 8d, 7 / 8d, 1 / 16d};
     for (int i = 0; i < fractions.length; i++) {
       final int index = (int) (size * fractions[i]);
-      AssertJUnit.assertTrue(iterator.hasNext());
-      AssertJUnit.assertEquals(list.get(index), iterator.next());
+      assertThat(iterator.hasNext()).isTrue();
+      assertThat(list.get(index)).isEqualTo(iterator.next());
       found.add(list.get(index));
     }
     while (iterator.hasNext()) {
       found.add(iterator.next());
     }
-    AssertJUnit.assertEquals(size, found.size());
+    assertThat(found.size()).isEqualTo(size);
   }
 
 
@@ -234,10 +234,12 @@ public abstract class AbstractWordListTest<T extends WordList>
     found.clear();
     while (iterator.hasNext()) {
       final String next = iterator.next();
-      AssertJUnit.assertFalse("got duplicate: " + next + " (size " + size + ")", found.containsKey(next));
+      assertThat(found.containsKey(next))
+        .withFailMessage("got duplicate: %s (size %s)", next, size)
+        .isFalse();
       found.put(next, 1);
     }
-    AssertJUnit.assertEquals("missing items (size " + size + ")", size, found.size());
+    assertThat(found.size()).withFailMessage("missing items (size %s)", size).isEqualTo(size);
   }
 
   /**
@@ -249,27 +251,27 @@ public abstract class AbstractWordListTest<T extends WordList>
     // ensure median order in edge cases of 0-4 elements.
     Iterator<String> iterator;
     iterator = new ArrayWordList(new String[] {}).medianIterator();
-    AssertJUnit.assertFalse(iterator.hasNext());
+    assertThat(iterator.hasNext()).isFalse();
     iterator = new ArrayWordList(new String[] {"0"}).medianIterator();
-    AssertJUnit.assertTrue(iterator.hasNext());
-    AssertJUnit.assertEquals("0", iterator.next());
-    AssertJUnit.assertFalse(iterator.hasNext());
+    assertThat(iterator.hasNext()).isTrue();
+    assertThat(iterator.next()).isEqualTo("0");
+    assertThat(iterator.hasNext()).isFalse();
     iterator = new ArrayWordList(new String[] {"0", "1"}).medianIterator();
-    AssertJUnit.assertTrue(iterator.hasNext());
-    AssertJUnit.assertEquals("1", iterator.next());
-    AssertJUnit.assertEquals("0", iterator.next());
-    AssertJUnit.assertFalse(iterator.hasNext());
+    assertThat(iterator.hasNext()).isTrue();
+    assertThat(iterator.next()).isEqualTo("1");
+    assertThat(iterator.next()).isEqualTo("0");
+    assertThat(iterator.hasNext()).isFalse();
     iterator = new ArrayWordList(new String[] {"0", "1", "2"}).medianIterator();
-    AssertJUnit.assertEquals("1", iterator.next());
-    AssertJUnit.assertEquals("0", iterator.next());
-    AssertJUnit.assertEquals("2", iterator.next());
-    AssertJUnit.assertFalse(iterator.hasNext());
+    assertThat(iterator.next()).isEqualTo("1");
+    assertThat(iterator.next()).isEqualTo("0");
+    assertThat(iterator.next()).isEqualTo("2");
+    assertThat(iterator.hasNext()).isFalse();
     iterator = new ArrayWordList(new String[] {"0", "1", "2", "3"}).medianIterator();
-    AssertJUnit.assertEquals("2", iterator.next());
-    AssertJUnit.assertEquals("1", iterator.next());
-    AssertJUnit.assertEquals("3", iterator.next());
-    AssertJUnit.assertEquals("0", iterator.next());
-    AssertJUnit.assertFalse(iterator.hasNext());
+    assertThat(iterator.next()).isEqualTo("2");
+    assertThat(iterator.next()).isEqualTo("1");
+    assertThat(iterator.next()).isEqualTo("3");
+    assertThat(iterator.next()).isEqualTo("0");
+    assertThat(iterator.hasNext()).isFalse();
 
     // ensure correctness (each item returned exactly once) for a range of sizes
     final String[] data = IntStream.range(0, 1000000).boxed().map(String::valueOf).sorted().toArray(String[]::new);

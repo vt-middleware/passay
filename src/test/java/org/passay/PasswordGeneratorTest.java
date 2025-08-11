@@ -12,9 +12,9 @@ import org.passay.rule.CharacterRule;
 import org.passay.rule.IllegalSequenceRule;
 import org.passay.rule.RepeatCharactersRule;
 import org.passay.rule.Rule;
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link PasswordGenerator}.
@@ -70,17 +70,17 @@ public class PasswordGeneratorTest
       for (int i = 0; i < 100000; i++) {
         final String password = generator.generatePassword(22, ruleSet);
         final PasswordData pd = new PasswordData(password);
-        AssertJUnit.assertTrue(passValidator.validate(pd).isValid());
-        AssertJUnit.assertFalse(failValidator.validate(pd).isValid());
+        assertThat(passValidator.validate(pd).isValid()).isTrue();
+        assertThat(failValidator.validate(pd).isValid()).isFalse();
       }
     } catch (IllegalStateException e) {
       if (e.getMessage().equals("Exceeded maximum number of password generation retries")) {
-        AssertJUnit.fail(e.getMessage());
+        fail(e.getMessage());
       } else {
         throw e;
       }
     }
-    AssertJUnit.assertTrue(generator.getRetryCount() > 0);
+    assertThat(generator.getRetryCount()).isGreaterThan(0);
   }
 
   @Test(groups = "passgentest")
@@ -88,10 +88,10 @@ public class PasswordGeneratorTest
   {
     try {
       new PasswordGenerator().generatePassword(5, new CharacterRule(EnglishCharacterData.LowerCase, 10));
-      AssertJUnit.fail("Should have thrown IllegalStateException");
+      fail("Should have thrown IllegalStateException");
     } catch (IllegalStateException e) {
       if (!e.getMessage().equals("Exceeded maximum number of password generation retries")) {
-        AssertJUnit.fail("Unexpected error message:" + e.getMessage());
+        fail("Unexpected error message: %s", e.getMessage());
       }
     }
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 5));

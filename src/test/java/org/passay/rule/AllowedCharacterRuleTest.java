@@ -5,9 +5,9 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
 import org.passay.UnicodeString;
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link AllowedCharacterRule}.
@@ -183,11 +183,11 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
   {
     final AllowedCharacterRule rule = new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS));
     RuleResult result = rule.validate(new PasswordData("metadata"));
-    AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed));
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed)).isEqualTo(8);
 
     result = rule.validate(new PasswordData("metaDATA"));
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(4, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed));
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Allowed)).isEqualTo(4);
   }
 }

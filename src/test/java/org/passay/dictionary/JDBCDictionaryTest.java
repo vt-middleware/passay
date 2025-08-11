@@ -5,10 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import org.hsqldb.jdbc.JDBCDataSource;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link JDBCDictionary}.
@@ -74,13 +74,13 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "jdbcdicttest")
   public void search()
   {
-    AssertJUnit.assertTrue(caseSensitive.search("manipular"));
-    AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(caseSensitive.search("z"));
-    AssertJUnit.assertTrue(caseInsensitive.search("manipular"));
-    AssertJUnit.assertTrue(caseInsensitive.search("manipular".toUpperCase()));
-    AssertJUnit.assertFalse(caseInsensitive.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(caseInsensitive.search("z"));
+    assertThat(caseSensitive.search("manipular")).isTrue();
+    assertThat(caseSensitive.search(FALSE_SEARCH)).isFalse();
+    assertThat(caseSensitive.search("z")).isTrue();
+    assertThat(caseInsensitive.search("manipular")).isTrue();
+    assertThat(caseInsensitive.search("manipular".toUpperCase())).isTrue();
+    assertThat(caseInsensitive.search(FALSE_SEARCH)).isFalse();
+    assertThat(caseInsensitive.search("z")).isTrue();
   }
 
 
@@ -92,10 +92,10 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "jdbcdicttest", dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
   {
-    AssertJUnit.assertTrue(caseSensitive.search(word));
-    AssertJUnit.assertTrue(caseInsensitive.search(word));
-    AssertJUnit.assertTrue(caseInsensitive.search(word.toLowerCase()));
-    AssertJUnit.assertTrue(caseInsensitive.search(word.toUpperCase()));
+    assertThat(caseSensitive.search(word)).isTrue();
+    assertThat(caseInsensitive.search(word)).isTrue();
+    assertThat(caseInsensitive.search(word.toLowerCase())).isTrue();
+    assertThat(caseInsensitive.search(word.toUpperCase())).isTrue();
   }
 
 
@@ -105,7 +105,7 @@ public class JDBCDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "jdbcdicttest")
   public void size()
   {
-    AssertJUnit.assertEquals(dictionarySize, caseSensitive.size());
-    AssertJUnit.assertEquals(dictionarySize, caseInsensitive.size());
+    assertThat(caseSensitive.size()).isEqualTo(dictionarySize);
+    assertThat(caseInsensitive.size()).isEqualTo(dictionarySize);
   }
 }

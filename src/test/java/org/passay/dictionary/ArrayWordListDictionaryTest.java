@@ -3,10 +3,10 @@ package org.passay.dictionary;
 
 import java.io.FileReader;
 import org.passay.dictionary.sort.ArraysSort;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link WordListDictionary} that uses a {@link ArrayWordList}.
@@ -57,10 +57,10 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "wldicttest")
   public void search()
   {
-    AssertJUnit.assertTrue(caseSensitive.search("TrustedBSD"));
-    AssertJUnit.assertFalse(caseSensitive.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(caseInsensitive.search("TrustedBSD"));
-    AssertJUnit.assertFalse(caseInsensitive.search(FALSE_SEARCH));
+    assertThat(caseSensitive.search("TrustedBSD")).isTrue();
+    assertThat(caseSensitive.search(FALSE_SEARCH)).isFalse();
+    assertThat(caseInsensitive.search("TrustedBSD")).isTrue();
+    assertThat(caseInsensitive.search(FALSE_SEARCH)).isFalse();
   }
 
 
@@ -70,9 +70,9 @@ public class ArrayWordListDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "wldicttest", dataProvider = "all-fbsd-words")
   public void searchAll(final String word)
   {
-    AssertJUnit.assertTrue(caseSensitive.search(word));
-    AssertJUnit.assertTrue(caseInsensitive.search(word));
-    AssertJUnit.assertTrue(caseInsensitive.search(word.toLowerCase()));
-    AssertJUnit.assertTrue(caseInsensitive.search(word.toUpperCase()));
+    assertThat(caseSensitive.search(word)).isTrue();
+    assertThat(caseInsensitive.search(word)).isTrue();
+    assertThat(caseInsensitive.search(word.toLowerCase())).isTrue();
+    assertThat(caseInsensitive.search(word.toUpperCase())).isTrue();
   }
 }
