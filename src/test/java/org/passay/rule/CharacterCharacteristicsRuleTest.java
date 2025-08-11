@@ -6,10 +6,10 @@ import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.RuleResultMetadata;
 import org.passay.data.EnglishCharacterData;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link CharacterCharacteristicsRule}.
@@ -126,9 +126,9 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
     final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule();
     try {
       ccr.validate(new PasswordData("r%scvEW2e93)"));
-      AssertJUnit.fail("Should have thrown IllegalStateException");
+      fail("Should have thrown IllegalStateException");
     } catch (Exception e) {
-      AssertJUnit.assertEquals(IllegalStateException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalStateException.class);
     }
   }
 
@@ -189,16 +189,16 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
       "three digits, two uppercase characters, two lowercase characters, " +
       "and one special character");
     final RuleResult result = rule.validate(new PasswordData("rscvE2e3"));
-    AssertJUnit.assertEquals(1, result.getDetails().size());
+    assertThat(result.getDetails().size()).isEqualTo(1);
 
     final RuleResultDetail detail = result.getDetails().get(0);
-    AssertJUnit.assertEquals(
-      String.format(
-        "Passwords must contain at least %s of the following: " +
-        "three digits, two uppercase characters, two lowercase characters, " +
-        "and one special character",
-        2),
-      resolver.resolve(detail));
+    assertThat(resolver.resolve(detail))
+      .isEqualTo(
+        String.format(
+          "Passwords must contain at least %s of the following: " +
+          "three digits, two uppercase characters, two lowercase characters, " +
+          "and one special character",
+          2));
   }
 
   /**
@@ -210,13 +210,13 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
       2, new CharacterRule(EnglishCharacterData.Digit, 1), new CharacterRule(EnglishCharacterData.LowerCase, 1));
     RuleResult result = rule.validate(new PasswordData("meTAdata01"));
-    AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(2, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Digit));
-    AssertJUnit.assertEquals(6, result.getMetadata().getCount(RuleResultMetadata.CountCategory.LowerCase));
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Digit)).isEqualTo(2);
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.LowerCase)).isEqualTo(6);
 
     result = rule.validate(new PasswordData("meTAdataOne"));
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(0, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Digit));
-    AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.LowerCase));
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Digit)).isEqualTo(0);
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.LowerCase)).isEqualTo(8);
   }
 }

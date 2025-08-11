@@ -5,9 +5,9 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
 import org.passay.UnicodeString;
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link WhitespaceRule}.
@@ -135,12 +135,12 @@ public class WhitespaceRuleTest extends AbstractRuleTest
   {
     final WhitespaceRule rule = new WhitespaceRule();
     RuleResult result = rule.validate(new PasswordData("metadata"));
-    AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(0, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Whitespace));
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Whitespace)).isEqualTo(0);
 
     result = rule.validate(new PasswordData("meta data"));
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(1, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Whitespace));
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Whitespace)).isEqualTo(1);
   }
 
 

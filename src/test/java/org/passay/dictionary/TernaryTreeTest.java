@@ -2,13 +2,12 @@
 package org.passay.dictionary;
 
 import java.util.Arrays;
-import org.testng.Assert;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link TernaryTree}.
@@ -122,7 +121,7 @@ public class TernaryTreeTest
   @Test(groups = "tttest", dataProvider = "searchData")
   public void search(final TernaryTree tt, final String word, final boolean expected)
   {
-    AssertJUnit.assertEquals(expected, tt.search(word));
+    assertThat(tt.search(word)).isEqualTo(expected);
   }
 
 
@@ -137,7 +136,7 @@ public class TernaryTreeTest
     final String[] actual = tt.partialSearch(searchTerm);
     System.out.println("Partial search results: " + Arrays.toString(actual));
     System.out.println("Partial search expected: " + Arrays.toString(expected));
-    Assert.assertEquals(actual, expected);
+    assertThat(actual).isEqualTo(expected);
   }
 
 
@@ -153,6 +152,6 @@ public class TernaryTreeTest
     final String[] actual = tt.nearSearch(word, distance);
     System.out.println("Near search results: " + Arrays.toString(actual));
     System.out.println("Near search expected: " + Arrays.toString(expected));
-    Assert.assertEquals(actual, expected);
+    assertThat(actual).isEqualTo(expected);
   }
 }

@@ -33,11 +33,11 @@ import org.passay.rule.Rule;
 import org.passay.rule.SourceRule;
 import org.passay.rule.UsernameRule;
 import org.passay.rule.WhitespaceRule;
-import org.testng.AssertJUnit;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link PasswordValidator}.
@@ -190,40 +190,40 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     try {
       pv.estimateEntropy(new PasswordData("heLlo", PasswordData.Origin.Generated));
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Throwable e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     //User Password Origin Tests:
 
     //Length 5
-    AssertJUnit.assertEquals(12.0, pv.estimateEntropy(length5AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length5AllLowercasePassword)).isEqualTo(12.0);
     //Length 5 + Composition
-    AssertJUnit.assertEquals(15.0, pv.estimateEntropy(length5CompositionPassword));
+    assertThat(pv.estimateEntropy(length5CompositionPassword)).isEqualTo(15.0);
     //Length 10
-    AssertJUnit.assertEquals(21.0, pv.estimateEntropy(length10AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length10AllLowercasePassword)).isEqualTo(21.0);
     //Length 10 + Composition
-    AssertJUnit.assertEquals(27.0, pv.estimateEntropy(length10CompositionPassword));
+    assertThat(pv.estimateEntropy(length10CompositionPassword)).isEqualTo(27.0);
     //Length 22
-    AssertJUnit.assertEquals(38.0, pv.estimateEntropy(length22AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length22AllLowercasePassword)).isEqualTo(38.0);
     //Length 22 + Composition
-    AssertJUnit.assertEquals(44.0, pv.estimateEntropy(length22CompositionPassword));
+    assertThat(pv.estimateEntropy(length22CompositionPassword)).isEqualTo(44.0);
 
     //Empty dictionary check
     l.add(new DictionarySubstringRule(new WordListDictionary(new ArrayWordList(new String[]{}))));
 
     //Test Length 10 + Composition + Empty Dictionary
-    AssertJUnit.assertEquals(27.0, pv.estimateEntropy(length10CompositionPassword));
+    assertThat(pv.estimateEntropy(length10CompositionPassword)).isEqualTo(27.0);
     //Test Length 10 + Empty Dictionary
-    AssertJUnit.assertEquals(21.0, pv.estimateEntropy(length10AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length10AllLowercasePassword)).isEqualTo(21.0);
 
     //Test Length 5 + Composition + Dictionary
-    AssertJUnit.assertEquals(20.0, validator.estimateEntropy(length5CompositionPassword));
+    assertThat(validator.estimateEntropy(length5CompositionPassword)).isEqualTo(20.0);
     //Test Length 10 + Composition + Dictionary
-    AssertJUnit.assertEquals(32.0, validator.estimateEntropy(length10CompositionPassword));
+    assertThat(validator.estimateEntropy(length10CompositionPassword)).isEqualTo(32.0);
     //Test Length 22 + Composition + Dictionary
-    AssertJUnit.assertEquals(44.0, validator.estimateEntropy(length22CompositionPassword));
+    assertThat(validator.estimateEntropy(length22CompositionPassword)).isEqualTo(44.0);
 
     //Generated Password Origin Tests:
 
@@ -233,15 +233,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
     length22CompositionPassword.setOrigin(PasswordData.Origin.Generated);
 
     //Random generated password test log2(b^l):
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(182, 5).estimate(),
-      validator.estimateEntropy(length5CompositionPassword));
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(182, 10).estimate(),
-      validator.estimateEntropy(length10CompositionPassword));
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(182, 22).estimate(),
-      validator.estimateEntropy(length22CompositionPassword));
+    assertThat(validator.estimateEntropy(length5CompositionPassword))
+      .isEqualTo(new RandomPasswordEntropy(182, 5).estimate());
+    assertThat(validator.estimateEntropy(length10CompositionPassword))
+      .isEqualTo(new RandomPasswordEntropy(182, 10).estimate());
+    assertThat(validator.estimateEntropy(length22CompositionPassword))
+      .isEqualTo(new RandomPasswordEntropy(182, 22).estimate());
 
     //Random generated password test with AllowedCharacterRule
     final List<Rule> al = new ArrayList<>();
@@ -250,10 +247,10 @@ public class PasswordValidatorTest extends AbstractRuleTest
       new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
         'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!', }));
     al.add(allowedRule);
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(
-        allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate(),
-      pvAl.estimateEntropy(length5CompositionPassword));
+    assertThat(pvAl.estimateEntropy(length5CompositionPassword))
+      .isEqualTo(
+        new RandomPasswordEntropy(
+          allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate());
   }
 
   /**
@@ -281,25 +278,25 @@ public class PasswordValidatorTest extends AbstractRuleTest
     l.add(new RepeatCharacterRegexRule());
 
     final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
-    AssertJUnit.assertTrue(resultPass.isValid());
-    AssertJUnit.assertTrue(pv.getMessages(resultPass).isEmpty());
+    assertThat(resultPass.isValid()).isTrue();
+    assertThat(pv.getMessages(resultPass).isEmpty()).isTrue();
 
     final RuleResult resultFail = pv.validate(new PasswordData(INVALID_PASS));
-    AssertJUnit.assertFalse(resultFail.isValid());
-    AssertJUnit.assertTrue(pv.getMessages(resultFail).size() > 0);
+    assertThat(resultFail.isValid()).isFalse();
+    assertThat(pv.getMessages(resultFail).size()).isGreaterThan(0);
 
     l.add(new UsernameRule(true, true));
 
-    AssertJUnit.assertTrue(pv.validate(new PasswordData(VALID_PASS)).isValid());
-    AssertJUnit.assertTrue(pv.validate(new PasswordData("", VALID_PASS)).isValid());
+    assertThat(pv.validate(new PasswordData(VALID_PASS)).isValid()).isTrue();
+    assertThat(pv.validate(new PasswordData("", VALID_PASS)).isValid()).isTrue();
 
     final PasswordData valid = new PasswordData(VALID_PASS);
     valid.setUsername(USER);
-    AssertJUnit.assertTrue(pv.validate(valid).isValid());
+    assertThat(pv.validate(valid).isValid()).isTrue();
 
     final PasswordData invalid = new PasswordData(INVALID_PASS);
     invalid.setUsername(USER);
-    AssertJUnit.assertFalse(pv.validate(invalid).isValid());
+    assertThat(pv.validate(invalid).isValid()).isFalse();
   }
 
 

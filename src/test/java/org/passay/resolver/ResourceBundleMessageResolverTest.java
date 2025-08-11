@@ -3,8 +3,8 @@ package org.passay.resolver;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ResourceBundleMessageResolver}.
@@ -21,14 +21,14 @@ public class ResourceBundleMessageResolverTest
   @Test(groups = "passtest")
   public void loadBundle()
   {
-    AssertJUnit.assertNotNull(
+    assertThat(
       new ResourceBundleMessageResolver(
-        ResourceBundle.getBundle("passay", Locale.GERMAN)).getMessage("LOCALE_PROPERTY"));
-    AssertJUnit.assertNull(
+        ResourceBundle.getBundle("passay", Locale.GERMAN)).getMessage("LOCALE_PROPERTY")).isNotNull();
+    assertThat(
       new ResourceBundleMessageResolver(
-        ResourceBundle.getBundle("passay", Locale.getDefault())).getMessage("LOCALE_PROPERTY"));
-    AssertJUnit.assertNotNull(
+        ResourceBundle.getBundle("passay", Locale.getDefault())).getMessage("LOCALE_PROPERTY")).isNull();
+    assertThat(
       new ResourceBundleMessageResolver(
-        ResourceBundle.getBundle("passay", Locale.getDefault())).getMessage("TOO_SHORT"));
+        ResourceBundle.getBundle("passay", Locale.getDefault())).getMessage("TOO_SHORT")).isNotNull();
   }
 }

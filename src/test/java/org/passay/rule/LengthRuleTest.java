@@ -4,9 +4,9 @@ package org.passay.rule;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
-import org.testng.AssertJUnit;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link LengthRule}.
@@ -129,11 +129,11 @@ public class LengthRuleTest extends AbstractRuleTest
   {
     final LengthRule rule = new LengthRule(4, 10);
     RuleResult result = rule.validate(new PasswordData("metadata"));
-    AssertJUnit.assertTrue(result.isValid());
-    AssertJUnit.assertEquals(8, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Length));
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Length)).isEqualTo(8);
 
     result = rule.validate(new PasswordData("md"));
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals(2, result.getMetadata().getCount(RuleResultMetadata.CountCategory.Length));
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Length)).isEqualTo(2);
   }
 }

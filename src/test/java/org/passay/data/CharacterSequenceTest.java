@@ -1,8 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.data;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 
 /**
@@ -36,21 +36,21 @@ public class CharacterSequenceTest
   public void testMatches()
   {
     final CharacterSequence sequence = new CharacterSequence("12345", "ABCDE", "abcde");
-    Assert.assertTrue(sequence.matches(0, '1'));
-    Assert.assertTrue(sequence.matches(0, 'A'));
-    Assert.assertTrue(sequence.matches(0, 'a'));
-    Assert.assertFalse(sequence.matches(4, 'z'));
+    assertThat(sequence.matches(0, '1')).isTrue();
+    assertThat(sequence.matches(0, 'A')).isTrue();
+    assertThat(sequence.matches(0, 'a')).isTrue();
+    assertThat(sequence.matches(4, 'z')).isFalse();
   }
 
 
   @Test(groups = "passtest")
   public void testValidSequences()
   {
-    Assert.assertNotNull(PolishSequenceData.values());
-    Assert.assertNotNull(CyrillicSequenceData.values());
-    Assert.assertNotNull(CzechSequenceData.values());
-    Assert.assertNotNull(GermanSequenceData.values());
-    Assert.assertNotNull(CyrillicModernSequenceData.values());
-    Assert.assertNotNull(EnglishSequenceData.values());
+    assertThat(PolishSequenceData.values()).isNotNull();
+    assertThat(CyrillicSequenceData.values()).isNotNull();
+    assertThat(CzechSequenceData.values()).isNotNull();
+    assertThat(GermanSequenceData.values()).isNotNull();
+    assertThat(CyrillicModernSequenceData.values()).isNotNull();
+    assertThat(EnglishSequenceData.values()).isNotNull();
   }
 }

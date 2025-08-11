@@ -8,8 +8,8 @@ import org.passay.RuleResult;
 import org.passay.rule.LengthRule;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.StaticMessageSource;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Test class for {@link SpringMessageResolver}.
@@ -38,8 +38,8 @@ public class SpringMessageResolverTest
 
       final RuleResult result = validator.validate(pd);
 
-      AssertJUnit.assertFalse(result.isValid());
-      AssertJUnit.assertEquals("to short 8-8 for fr", validator.getMessages(result).get(0));
+      assertThat(result.isValid()).isFalse();
+      assertThat(validator.getMessages(result).get(0)).isEqualTo("to short 8-8 for fr");
     } finally {
       LocaleContextHolder.resetLocaleContext();
     }
@@ -61,8 +61,8 @@ public class SpringMessageResolverTest
 
     final RuleResult result = validator.validate(pd);
 
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals("to short 8-8 for jp", validator.getMessages(result).get(0));
+    assertThat(result.isValid()).isFalse();
+    assertThat(validator.getMessages(result).get(0)).isEqualTo("to short 8-8 for jp");
   }
 
   /**
@@ -79,9 +79,7 @@ public class SpringMessageResolverTest
 
     final RuleResult result = validator.validate(pd);
 
-    AssertJUnit.assertFalse(result.isValid());
-    AssertJUnit.assertEquals("Password must be 8 or more characters in length.",
-      validator.getMessages(result).get(0));
+    assertThat(result.isValid()).isFalse();
+    assertThat(validator.getMessages(result).get(0)).isEqualTo("Password must be 8 or more characters in length.");
   }
-
 }

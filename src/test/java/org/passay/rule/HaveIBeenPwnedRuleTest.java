@@ -8,11 +8,11 @@ import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
-import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link HaveIBeenPwnedRule}.
@@ -195,9 +195,9 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
     rule.setAllowExposed(true);
     final PasswordValidator validator = new PasswordValidator(rule);
     final RuleResult result = validator.validate(new PasswordData(INVALID_PASSWORD));
-    Assert.assertTrue(result.isValid());
-    Assert.assertEquals(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Pwned), 351295);
-    Assert.assertEquals(validator.getMessages(result).size(), 0);
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Pwned)).isEqualTo(351295);
+    assertThat(validator.getMessages(result).size()).isEqualTo(0);
   }
 
 
@@ -208,8 +208,8 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
     rule.setAllowOnException(true);
     final PasswordValidator validator = new PasswordValidator(rule);
     final RuleResult result = validator.validate(new PasswordData(EXCEPTION_PASSWORD));
-    Assert.assertTrue(result.isValid());
-    Assert.assertEquals(result.getMetadata().getCounts().size(), 0);
-    Assert.assertEquals(validator.getMessages(result).size(), 0);
+    assertThat(result.isValid()).isTrue();
+    assertThat(result.getMetadata().getCounts().size()).isEqualTo(0);
+    assertThat(validator.getMessages(result).size()).isEqualTo(0);
   }
 }

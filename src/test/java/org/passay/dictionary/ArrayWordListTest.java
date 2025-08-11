@@ -4,8 +4,8 @@ package org.passay.dictionary;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ArrayWordList}.
@@ -30,21 +30,21 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
   {
     try {
       new ArrayWordList(null, true);
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
-      AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      fail("Should have thrown IllegalArgumentException, threw %s", e.getMessage());
     }
 
     final String[] arrayWithNull = {"a", "b", null, "c"};
     try {
       new ArrayWordList(arrayWithNull, true);
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
-      AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      fail("Should have thrown IllegalArgumentException, threw %s", e.getMessage());
     }
   }
 
@@ -65,8 +65,8 @@ public class ArrayWordListTest extends AbstractWordListTest<ArrayWordList>
     Arrays.sort(arrayWithSpaces);
 
     final ArrayWordList wl = new ArrayWordList(arrayWithSpaces, true);
-    AssertJUnit.assertEquals(arrayWithSpaces.length, wl.size());
-    AssertJUnit.assertEquals(arrayWithSpaces[0], wl.get(0));
-    AssertJUnit.assertEquals(arrayWithSpaces[arrayWithSpaces.length - 1], wl.get(wl.size() - 1));
+    assertThat(wl.size()).isEqualTo(arrayWithSpaces.length);
+    assertThat(wl.get(0)).isEqualTo(arrayWithSpaces[0]);
+    assertThat(wl.get(wl.size() - 1)).isEqualTo(arrayWithSpaces[arrayWithSpaces.length - 1]);
   }
 }
