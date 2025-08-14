@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import org.cryptacular.codec.HexEncoder;
 import org.cryptacular.util.CodecUtil;
 import org.cryptacular.util.HashUtil;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
@@ -53,19 +54,19 @@ public class HaveIBeenPwnedRule implements Rule
   private final String applicationName;
 
   /** URL of the API. */
-  private URL apiUrl;
+  private final URL apiUrl;
 
   /** Should password be allowed if it is found in the API results. */
-  private boolean allowExposed;
+  private final boolean allowExposed;
+
+  /** Should password be allowed if API calls throw exceptions. */
+  private final boolean allowOnException;
 
   /** Maximum waiting time for established connection. Default is 5 seconds. */
   private Duration connectTimeout = DEFAULT_CONNECT_TIMEOUT;
 
   /** Maximum waiting time for reading all data. Default is 30 seconds. */
   private Duration readTimeout = DEFAULT_READ_TIMEOUT;
-
-  /** Should password be allowed if API calls throw exceptions. */
-  private boolean allowOnException;
 
 
   /**
@@ -89,30 +90,35 @@ public class HaveIBeenPwnedRule implements Rule
    */
   public HaveIBeenPwnedRule(final String appName, final String address)
   {
-    if (appName == null) {
-      throw new IllegalArgumentException("appName cannot be null");
-    }
-    applicationName = appName;
+    this(appName, address, false, false);
+  }
+
+
+  /**
+   * Create the rule, appName is required by the
+   * <a href="https://haveibeenpwned.com/API/v3#UserAgent">API</a>.
+   *
+   * @param appName must not be null
+   * @param address the URL must end with a <code>/</code>.
+   * @param allowExposed false: the rule does not allow previously pwned passwords,
+   *                     true: pwned passwords are allowed, but the number of matches is returned in the result.
+   * @param allowOnException true: if the API is not accessible, any password is accepted.
+   *                         false: Default, API must answer in time to allow the password.
+   */
+  public HaveIBeenPwnedRule(
+    final String appName, final String address, final boolean allowExposed, final boolean allowOnException)
+  {
+    applicationName = PassayUtils.assertNotNullArg(appName, "App name cannot be null");
     if (!address.endsWith("/")) {
-      throw new IllegalArgumentException("address must end with '/'");
+      throw new IllegalArgumentException("Address must end with '/'");
     }
     try {
       apiUrl = new URL(address);
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException(e);
     }
-  }
-
-
-  /**
-   * Whether passwords found in the API should be considered valid.
-   *
-   * @param allow false: the rule does not allow previously pwned passwords,
-   *              true: pwned passwords are allowed, but the number of matches is returned in the result.
-   */
-  public void setAllowExposed(final boolean allow)
-  {
-    allowExposed = allow;
+    this.allowExposed = allowExposed;
+    this.allowOnException = allowOnException;
   }
 
 
@@ -138,21 +144,10 @@ public class HaveIBeenPwnedRule implements Rule
   }
 
 
-  /**
-   * If an exception occurs during accessing the api, the password will be allowed, if set to true.
-   *
-   * @param allow true: if the API is not accessible, any password is accepted.
-   *              false: Default, API must answer in time to allow the password.
-   */
-  public void setAllowOnException(final boolean allow)
-  {
-    allowOnException = allow;
-  }
-
-
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final String hexDigest = getHexDigest(passwordData);
     try (LineNumberReader lnr = openApiConnectionForRange(hexDigest.substring(0, PREFIX_LENGTH))) {
       return searchResponse(hexDigest, lnr);

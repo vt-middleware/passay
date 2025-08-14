@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -26,7 +28,7 @@ public class IllegalRegexRule implements Rule
   protected final Pattern pattern;
 
   /** Whether to report all sequence matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
 
   /**
@@ -60,7 +62,11 @@ public class IllegalRegexRule implements Rule
    */
   public IllegalRegexRule(final String regex, final boolean reportAll)
   {
-    pattern = Pattern.compile(regex);
+    try {
+      pattern = Pattern.compile(regex);
+    } catch (PatternSyntaxException e) {
+      throw new IllegalArgumentException(e);
+    }
     reportAllFailures = reportAll;
   }
 
@@ -74,7 +80,11 @@ public class IllegalRegexRule implements Rule
    */
   public IllegalRegexRule(final String regex, final int regexFlags, final boolean reportAll)
   {
-    pattern = Pattern.compile(regex, regexFlags);
+    try {
+      pattern = Pattern.compile(regex, regexFlags);
+    } catch (PatternSyntaxException e) {
+      throw new IllegalArgumentException(e);
+    }
     reportAllFailures = reportAll;
   }
 
@@ -93,6 +103,7 @@ public class IllegalRegexRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final Matcher m = pattern.matcher(passwordData.getPassword());
     final Set<String> matches = new HashSet<>();

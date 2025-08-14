@@ -9,6 +9,7 @@ import java.nio.CharBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
+import org.passay.PassayUtils;
 
 /**
  * Common implementation for file based word lists.
@@ -46,14 +47,14 @@ public abstract class AbstractFileWordList extends AbstractWordList
   /**
    * Creates a new abstract file word list from the supplied file.
    *
-   * @param  raf  File containing words, one per line.
+   * @param  file  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  decoder  Charset decoder for converting file bytes to characters
    */
-  public AbstractFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final CharsetDecoder decoder)
+  public AbstractFileWordList(final RandomAccessFile file, final boolean caseSensitive, final CharsetDecoder decoder)
   {
-    file = raf;
-    charsetDecoder = decoder;
+    this.file = PassayUtils.assertNotNullArg(file, "File cannot be null");
+    charsetDecoder = PassayUtils.assertNotNullArg(decoder, "Charset decoder cannot be null");
     comparator = caseSensitive ? WordLists.CASE_SENSITIVE_COMPARATOR : WordLists.CASE_INSENSITIVE_COMPARATOR;
   }
 
@@ -261,10 +262,10 @@ public abstract class AbstractFileWordList extends AbstractWordList
 
     // CheckStyle:VisibilityModifier OFF
     /** Word read from backing file. */
-    String word;
+    final String word;
 
     /** Byte offset into file where word begins. */
-    long offset;
+    final long offset;
     // CheckStyle:VisibilityModifier ON
 
 
@@ -290,10 +291,10 @@ public abstract class AbstractFileWordList extends AbstractWordList
     {
       // CheckStyle:VisibilityModifier OFF
       /** Cached word index. */
-      int index;
+      final int index;
 
       /** Byte offset where word starts in backing file. */
-      long position;
+      final long position;
       // CheckStyle:VisibilityModifier ON
 
 
@@ -310,14 +311,14 @@ public abstract class AbstractFileWordList extends AbstractWordList
       }
     }
 
+    /** Whether to allocate a direct buffer. */
+    private final boolean allocateDirect;
+
     /** Map of word indices to the byte offset in the file where the word starts. */
     private LongBuffer map;
 
     /** Modulus of indices to cache. */
     private int modulus;
-
-    /** Whether to allocate a direct buffer. */
-    private boolean allocateDirect;
 
     /** Whether this cache is ready for use. */
     private boolean initialized;
@@ -336,7 +337,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
     Cache(final long fileSize, final int cachePercent, final boolean direct)
     {
       if (cachePercent < 0 || cachePercent > 100) {
-        throw new IllegalArgumentException("cachePercent must be between 0 and 100 inclusive");
+        throw new IllegalArgumentException("Cache percent must be between 0 and 100 inclusive");
       }
       allocateDirect = direct;
       long cacheSize = fileSize * cachePercent / 100;

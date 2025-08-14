@@ -1,9 +1,11 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.passay.entropy.Entropy;
 import org.passay.entropy.RandomPasswordEntropyFactory;
@@ -20,12 +22,11 @@ import org.passay.rule.Rule;
  *
  * @author  Middleware Services
  */
-
 public class PasswordValidator implements Rule
 {
 
   /** Password rules. */
-  private final List<? extends Rule> passwordRules;
+  private final List<Rule> passwordRules = new ArrayList<>();
 
   /** Message resolver. */
   private final MessageResolver messageResolver;
@@ -73,8 +74,12 @@ public class PasswordValidator implements Rule
    */
   public PasswordValidator(final MessageResolver resolver, final List<? extends Rule> rules)
   {
-    messageResolver = resolver;
-    passwordRules = rules;
+    messageResolver = PassayUtils.assertNotNullArg(resolver, "Message resolver cannot be null");
+    passwordRules.addAll(
+      PassayUtils.assertNotNullArgOr(
+        rules,
+        v -> v.stream().anyMatch(Objects::isNull),
+        "Password rules cannot be null or contain null"));
   }
 
 
@@ -110,6 +115,7 @@ public class PasswordValidator implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     for (Rule rule : passwordRules) {
       final RuleResult rr = rule.validate(passwordData);
@@ -117,8 +123,9 @@ public class PasswordValidator implements Rule
         result.setValid(false);
         result.getDetails().addAll(rr.getDetails());
       }
-      result.getMetadata().merge(rr.getMetadata());
+      result.setMetadata(result.getMetadata().merge(rr.getMetadata()));
     }
+    result.freeze();
     return result;
   }
 
@@ -160,7 +167,8 @@ public class PasswordValidator implements Rule
    */
   public List<String> getMessages(final RuleResult result)
   {
-    return result.getDetails().stream().map(messageResolver::resolve).collect(Collectors.toList());
+    return Collections.unmodifiableList(
+      result.getDetails().stream().map(messageResolver::resolve).collect(Collectors.toList()));
   }
 
 

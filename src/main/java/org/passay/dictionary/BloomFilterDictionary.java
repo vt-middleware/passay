@@ -2,6 +2,7 @@
 package org.passay.dictionary;
 
 import com.google.common.hash.BloomFilter;
+import org.passay.PassayUtils;
 
 /**
  * Dictionary that is backed by a <a href="https://en.wikipedia.org/wiki/Bloom_filter">Bloom Filter</a>.
@@ -24,11 +25,11 @@ public class BloomFilterDictionary implements Dictionary
    * proper balance between acceptable user experience and storage costs is worth the time and effort required in
    * testing. The Guava default value of 3% is likely unsuitable for many if not most deployments.
    *
-   * @param  bf  bloom filter used to determine if a word exists.
+   * @param  filter  bloom filter used to determine if a word exists.
    */
-  public BloomFilterDictionary(final BloomFilter<String> bf)
+  public BloomFilterDictionary(final BloomFilter<String> filter)
   {
-    bloomFilter = bf;
+    bloomFilter = PassayUtils.assertNotNullArg(filter, "Bloom filter cannot be null");
   }
 
 

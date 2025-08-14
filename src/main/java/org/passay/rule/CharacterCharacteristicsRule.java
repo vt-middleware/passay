@@ -3,9 +3,11 @@ package org.passay.rule;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -22,71 +24,103 @@ public class CharacterCharacteristicsRule implements Rule
   public static final String ERROR_CODE = "INSUFFICIENT_CHARACTERISTICS";
 
   /** Rules to apply when checking a password. */
-  private List<CharacterRule> rules;
+  private final List<CharacterRule> rules = new ArrayList<>();
 
   /** Number of rules to enforce. Default value is 1. */
-  private int numCharacteristics = 1;
+  private final int numCharacteristics;
 
   /** Whether to report the details of this rule failure. */
-  private boolean reportFailure = true;
+  private final boolean reportFailure;
 
   /** Whether to report the details of each character rule failure. */
-  private boolean reportRuleFailures = true;
+  private final boolean reportRuleFailures;
 
 
   /**
-   * Default constructor.
+   * Creates a new character characteristics rule.
+   *
+   * @param  rules  character rules to set
    */
-  public CharacterCharacteristicsRule()
+  public CharacterCharacteristicsRule(final CharacterRule... rules)
   {
-    rules = new ArrayList<>();
+    this(1, rules);
   }
 
 
   /**
    * Creates a new character characteristics rule.
    *
-   * @param  r  character rules to set
+   * @param  rules  character rules to set
    */
-  public CharacterCharacteristicsRule(final CharacterRule... r)
+  public CharacterCharacteristicsRule(final List<CharacterRule> rules)
   {
-    this(1, r);
+    this(1, rules);
   }
 
 
   /**
    * Creates a new character characteristics rule.
    *
-   * @param  l  character rules to set
+   * @param  numCharacteristics  number of characteristics to enforce, where n &gt; 0
+   * @param  rules  character rules to set
    */
-  public CharacterCharacteristicsRule(final List<CharacterRule> l)
+  public CharacterCharacteristicsRule(final int numCharacteristics, final CharacterRule... rules)
   {
-    this(1, l);
+    this(true, true, numCharacteristics, Arrays.asList(rules));
   }
 
 
   /**
    * Creates a new character characteristics rule.
    *
-   * @param  n  number of characteristics to enforce, where n &gt; 0
-   * @param  r  character rules to set
+   * @param  numCharacteristics  number of characteristics to enforce, where n &gt; 0
+   * @param  rules  character rules to set
    */
-  public CharacterCharacteristicsRule(final int n, final CharacterRule... r)
+  public CharacterCharacteristicsRule(final int numCharacteristics, final List<CharacterRule> rules)
   {
-    this(n, Arrays.asList(r));
+    this(true, true, numCharacteristics, rules);
   }
 
 
   /**
    * Creates a new character characteristics rule.
    *
-   * @param  n  number of characteristics to enforce, where n &gt; 0
-   * @param  l  character rules to set
+   * @param  reportFailure  whether to report failures
+   * @param  reportRuleFailures  whether to report rule failures
+   * @param  numCharacteristics  number of characteristics to enforce, where n &gt; 0
+   * @param  rules  character rules to set
    */
-  public CharacterCharacteristicsRule(final int n, final List<CharacterRule> l)
+  public CharacterCharacteristicsRule(
+    final boolean reportFailure,
+    final boolean reportRuleFailures,
+    final int numCharacteristics,
+    final CharacterRule... rules)
   {
-    setNumberOfCharacteristics(n);
-    setRules(l);
+    this(reportFailure, reportRuleFailures, numCharacteristics, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new character characteristics rule.
+   *
+   * @param  reportFailure  whether to report failures
+   * @param  reportRuleFailes  whether to report rule failures
+   * @param  numCharacteristics  number of characteristics to enforce, where n &gt; 0
+   * @param  rules  character rules to set
+   */
+  public CharacterCharacteristicsRule(
+    final boolean reportFailure,
+    final boolean reportRuleFailes,
+    final int numCharacteristics,
+    final List<CharacterRule> rules)
+  {
+    if (numCharacteristics <= 0) {
+      throw new IllegalArgumentException("Number of characteristics must be greater than zero");
+    }
+    this.reportFailure = reportFailure;
+    reportRuleFailures = reportRuleFailes;
+    this.numCharacteristics = numCharacteristics;
+    this.rules.addAll(rules);
   }
 
 
@@ -97,45 +131,7 @@ public class CharacterCharacteristicsRule implements Rule
    */
   public List<CharacterRule> getRules()
   {
-    return rules;
-  }
-
-
-  /**
-   * Sets the character rules used by this rule.
-   *
-   * @param  l  list of rules
-   */
-  public void setRules(final List<CharacterRule> l)
-  {
-    rules = l;
-  }
-
-
-  /**
-   * Sets the character rules used by this rule.
-   *
-   * @param  r  character rules to set
-   */
-  public void setRules(final CharacterRule... r)
-  {
-    rules = Arrays.asList(r);
-  }
-
-
-  /**
-   * Sets the number of characteristics which must be satisfied in order for a password to meet the requirements of this
-   * rule. The default is one. i.e. you may wish to enforce any three of five supplied character rules.
-   *
-   * @param  n  number of characteristics to enforce, where n &gt; 0
-   */
-  public void setNumberOfCharacteristics(final int n)
-  {
-    if (n > 0) {
-      numCharacteristics = n;
-    } else {
-      throw new IllegalArgumentException("argument must be greater than zero");
-    }
+    return Collections.unmodifiableList(rules);
   }
 
 
@@ -147,17 +143,6 @@ public class CharacterCharacteristicsRule implements Rule
   public boolean getReportFailure()
   {
     return reportFailure;
-  }
-
-
-  /**
-   * Sets whether to add the rule result detail of this rule to the rule result.
-   *
-   * @param  b  whether to add rule result detail of this rule
-   */
-  public void setReportFailure(final boolean b)
-  {
-    reportFailure = b;
   }
 
 
@@ -184,20 +169,10 @@ public class CharacterCharacteristicsRule implements Rule
   }
 
 
-  /**
-   * Sets whether to add the rule result detail for each character rule that fails to validate to the rule result.
-   *
-   * @param  b  whether to add character rule result details
-   */
-  public void setReportRuleFailures(final boolean b)
-  {
-    reportRuleFailures = b;
-  }
-
-
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     if (numCharacteristics > rules.size()) {
       throw new IllegalStateException("Number of characteristics must be <= to the number of rules");
     }
@@ -213,7 +188,7 @@ public class CharacterCharacteristicsRule implements Rule
       } else {
         successCount++;
       }
-      result.getMetadata().merge(rr.getMetadata());
+      result.setMetadata(result.getMetadata().merge(rr.getMetadata()));
     }
     if (successCount < numCharacteristics) {
       result.setValid(false);

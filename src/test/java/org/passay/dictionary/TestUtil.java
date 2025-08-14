@@ -38,6 +38,6 @@ public final class TestUtil
         words.add(word);
       }
     }
-    return words.toArray(new String[words.size()]);
+    return words.toArray(new String[0]);
   }
 }

@@ -27,7 +27,7 @@ import static org.assertj.core.api.Assertions.*;
 public abstract class AbstractWordListTest<T extends WordList>
 {
   /** Tracks word lists that have been created to facilitate test cleanup. */
-  private List<T> wordLists = new ArrayList<>();
+  private final List<T> wordLists = new ArrayList<>();
 
 
   /**
@@ -208,8 +208,8 @@ public abstract class AbstractWordListTest<T extends WordList>
     final Set<String> found = new HashSet<>();
     final int size = list.size();
     final double[] fractions = {1 / 2d, 1 / 4d, 3 / 4d, 1 / 8d, 3 / 8d, 5 / 8d, 7 / 8d, 1 / 16d};
-    for (int i = 0; i < fractions.length; i++) {
-      final int index = (int) (size * fractions[i]);
+    for (double fraction : fractions) {
+      final int index = (int) (size * fraction);
       assertThat(iterator.hasNext()).isTrue();
       assertThat(list.get(index)).isEqualTo(iterator.next());
       found.add(list.get(index));
@@ -309,23 +309,21 @@ public abstract class AbstractWordListTest<T extends WordList>
         try {
           final Method closeMethod = list.getClass().getMethod("close");
           closeMethod.invoke(list);
-        } catch (NoSuchMethodException e) {
-          continue;
-        }
+        } catch (NoSuchMethodException ignored) {}
       }
     }
   }
 
 
   /** Expected result from {@link WordList#get(int)}. */
-  static class ExpectedWord
+  private static class ExpectedWord
   {
     // CheckStyle:VisibilityModifier OFF
     /** Expected word. */
-    String word;
+    final String word;
 
     /** Expected index. */
-    int index;
+    final int index;
     // CheckStyle:VisibilityModifier ON
 
 

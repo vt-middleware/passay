@@ -2,6 +2,7 @@
 package org.passay.spring;
 
 import java.util.Locale;
+import org.passay.PassayUtils;
 import org.passay.RuleResultDetail;
 import org.passay.resolver.MessageResolver;
 import org.passay.resolver.PropertiesMessageResolver;
@@ -31,7 +32,8 @@ public class SpringMessageResolver implements MessageResolver
    */
   public SpringMessageResolver(final MessageSource messageSource)
   {
-    messageSourceAccessor = new MessageSourceAccessor(messageSource);
+    messageSourceAccessor = new MessageSourceAccessor(
+      PassayUtils.assertNotNullArg(messageSource, "Message source cannot be null"));
   }
 
 
@@ -43,7 +45,9 @@ public class SpringMessageResolver implements MessageResolver
    */
   public SpringMessageResolver(final MessageSource messageSource, final Locale locale)
   {
-    messageSourceAccessor = new MessageSourceAccessor(messageSource, locale);
+    messageSourceAccessor = new MessageSourceAccessor(
+      PassayUtils.assertNotNullArg(messageSource, "Message source cannot be null"),
+      locale);
   }
 
 
@@ -58,6 +62,7 @@ public class SpringMessageResolver implements MessageResolver
   @Override
   public String resolve(final RuleResultDetail detail)
   {
+    PassayUtils.assertNotNullArg(detail, "Rule result detail cannot be null");
     try {
       return messageSourceAccessor.getMessage(detail.getErrorCode(), detail.getValues());
     } catch (NoSuchMessageException e) {

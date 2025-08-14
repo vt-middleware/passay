@@ -1,14 +1,19 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.AbstractMap;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
@@ -32,45 +37,56 @@ public class LengthComplexityRule implements Rule
   private final Map<Interval, List<Rule>> rules = new HashMap<>();
 
   /** Whether to report the details of this rule failure. */
-  private boolean reportFailure = true;
+  private final boolean reportFailure;
 
   /** Whether to report the details of each complexity rule failure. */
-  private boolean reportRuleFailures = true;
+  private final boolean reportRuleFailures;
 
 
-  /**
-   * Adds the rules to invoke for the supplied interval.
-   *
-   * @param  interval  of integers that the supplied rules apply to
-   * @param  l  list of rules
-   *
-   * @throws  IllegalArgumentException  if the supplied rules are empty or null or if interval is invalid or intersects
-   *                                    with an existing interval
-   */
-  public void addRules(final String interval, final List<Rule> l)
+  public LengthComplexityRule(final Entry... intervals)
   {
-    if (l == null || l.isEmpty()) {
-      throw new IllegalArgumentException("Rules cannot be empty or null");
-    }
-    final Interval i = new Interval(interval);
-    for (Interval existingInterval : rules.keySet()) {
-      if (existingInterval.intersects(i)) {
-        throw new IllegalArgumentException("Interval " + i + " intersects existing interval " + existingInterval);
-      }
-    }
-    rules.put(i, l);
+    this(true, true, intervals);
   }
 
 
-  /**
-   * Adds the rules to invoke for the supplied interval.
-   *
-   * @param  interval  of integers that the supplied rules apply to
-   * @param  r  list of rules
-   */
-  public void addRules(final String interval, final Rule... r)
+  public LengthComplexityRule(final Collection<Entry> intervals)
   {
-    addRules(interval, r != null ? Arrays.asList(r) : null);
+    this(true, true, intervals);
+  }
+
+
+  public LengthComplexityRule(
+    final boolean reportFailure, final boolean reportRuleFailures, final Entry... intervals)
+  {
+    this(
+      reportFailure,
+      reportRuleFailures,
+      Arrays.asList(
+        PassayUtils.assertNotNullArgOr(
+          intervals,
+          v -> v.length == 0 || Stream.of(v).anyMatch(Objects::isNull),
+          "Intervals cannot be empty, null or contain null")));
+  }
+
+
+  public LengthComplexityRule(
+    final boolean reportFailure, final boolean reportRuleFailures, final Collection<Entry> intervals)
+  {
+    PassayUtils.assertNotNullArgOr(
+      intervals,
+      v -> v.isEmpty() || v.stream().anyMatch(Objects::isNull),
+      "Intervals cannot be empty, null or contain null");
+    this.reportFailure = reportFailure;
+    this.reportRuleFailures = reportRuleFailures;
+    for (Entry entry : intervals) {
+      final Interval i = new Interval(entry.getKey());
+      for (Interval existingInterval : rules.keySet()) {
+        if (existingInterval.intersects(i)) {
+          throw new IllegalArgumentException("Interval " + i + " intersects existing interval " + existingInterval);
+        }
+      }
+      rules.put(i, entry.getValue());
+    }
   }
 
 
@@ -86,17 +102,6 @@ public class LengthComplexityRule implements Rule
 
 
   /**
-   * Sets whether to add the rule result detail of this rule to the rule result.
-   *
-   * @param  b  whether to add rule result detail of this rule
-   */
-  public void setReportFailure(final boolean b)
-  {
-    reportFailure = b;
-  }
-
-
-  /**
    * Returns whether to add the rule result detail for each rule that fails to validate to the rule result.
    *
    * @return  whether to add rule result details
@@ -104,17 +109,6 @@ public class LengthComplexityRule implements Rule
   public boolean getReportRuleFailures()
   {
     return reportRuleFailures;
-  }
-
-
-  /**
-   * Sets whether to add the rule result detail for each rule that fails to validate to the rule result.
-   *
-   * @param  b  whether to add rule result details
-   */
-  public void setReportRuleFailures(final boolean b)
-  {
-    reportRuleFailures = b;
   }
 
 
@@ -132,6 +126,7 @@ public class LengthComplexityRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final int passwordLength = passwordData.getCharacterCount();
     final List<Rule> rulesByLength = getRulesByLength(passwordLength);
     if (rulesByLength == null) {
@@ -150,14 +145,14 @@ public class LengthComplexityRule implements Rule
       } else {
         successCount++;
       }
-      result.getMetadata().merge(rr.getMetadata());
+      result.setMetadata(result.getMetadata().merge(rr.getMetadata()));
     }
     if (successCount < rulesByLength.size()) {
       result.setValid(false);
       if (reportFailure) {
         result.addError(
-            ERROR_CODE,
-            createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size()));
+          ERROR_CODE,
+          createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size()));
       }
     }
     return result;
@@ -210,6 +205,49 @@ public class LengthComplexityRule implements Rule
         hashCode(),
         rules,
         reportRuleFailures);
+  }
+
+
+  /**
+   * Class to contain a tuple of interval string to rules.
+   */
+  public static class Entry extends AbstractMap.SimpleImmutableEntry<String, List<Rule>>
+  {
+
+
+    /**
+     * Creates a new entry.
+     *
+     * @param  interval  interval string
+     * @param  rules  for the supplied interval
+     */
+    public Entry(final String interval, final Rule... rules)
+    {
+      super(
+        interval,
+        Arrays.asList(
+          PassayUtils.assertNotNullArgOr(
+            rules,
+            v -> v.length == 0 || Stream.of(v).anyMatch(Objects::isNull),
+            "Rules cannot be empty, null or contain null")));
+    }
+
+
+    /**
+     * Creates a new entry.
+     *
+     * @param  interval  interval string
+     * @param  rules  for the supplied interval
+     */
+    public Entry(final String interval, final List<Rule> rules)
+    {
+      super(
+        interval,
+        PassayUtils.assertNotNullArgOr(
+          rules,
+          v -> v.isEmpty() || v.stream().anyMatch(Objects::isNull),
+          "Rules cannot be empty, null or contain null"));
+    }
   }
 
 
@@ -290,6 +328,5 @@ public class LengthComplexityRule implements Rule
     {
       return boundsPattern;
     }
-
   }
 }

@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.dictionary.Dictionary;
@@ -16,23 +17,22 @@ public abstract class AbstractDictionaryRule implements Rule
 {
 
   /** Dictionary of words. */
-  private Dictionary dictionary;
+  private final Dictionary dictionary;
 
   /** Whether to search for dictionary words backwards. */
-  private boolean matchBackwards;
+  private final boolean matchBackwards;
 
 
   /**
-   * Sets the dictionary used to search for passwords.
+   * Creates a new abstract dictionary rule.
    *
    * @param  dict  to use for searching
+   * @param  matchBackwards  whether to match dictionary words backwards
    */
-  public void setDictionary(final Dictionary dict)
+  public AbstractDictionaryRule(final Dictionary dict, final boolean matchBackwards)
   {
-    if (dict == null) {
-      throw new NullPointerException("Dictionary cannot be null");
-    }
-    dictionary = dict;
+    dictionary = PassayUtils.assertNotNullArg(dict, "Dictionary cannot be null");
+    this.matchBackwards = matchBackwards;
   }
 
 
@@ -44,17 +44,6 @@ public abstract class AbstractDictionaryRule implements Rule
   public Dictionary getDictionary()
   {
     return dictionary;
-  }
-
-
-  /**
-   * This causes the verify method to search the password for dictionary words spelled backwards as well as forwards.
-   *
-   * @param  b  whether to match dictionary words backwards
-   */
-  public void setMatchBackwards(final boolean b)
-  {
-    matchBackwards = b;
   }
 
 
@@ -73,6 +62,7 @@ public abstract class AbstractDictionaryRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     String text = passwordData.getPassword();
     String matchingWord = doWordSearch(text);

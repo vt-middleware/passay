@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -31,7 +33,11 @@ public class AllowedRegexRule implements Rule
    */
   public AllowedRegexRule(final String regex)
   {
-    pattern = Pattern.compile(regex);
+    try {
+      pattern = Pattern.compile(regex);
+    } catch (PatternSyntaxException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
 
@@ -43,7 +49,11 @@ public class AllowedRegexRule implements Rule
    */
   public AllowedRegexRule(final String regex, final int regexFlags)
   {
-    pattern = Pattern.compile(regex, regexFlags);
+    try {
+      pattern = Pattern.compile(regex, regexFlags);
+    } catch (PatternSyntaxException e) {
+      throw new IllegalArgumentException(e);
+    }
   }
 
 
@@ -61,6 +71,7 @@ public class AllowedRegexRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final Matcher m = pattern.matcher(passwordData.getPassword());
     if (!m.find()) {

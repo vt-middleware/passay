@@ -31,9 +31,7 @@ public class SpringTest
 
     final PasswordValidator validator = new PasswordValidator(
       new ArrayList<>(context.getBeansOfType(Rule.class).values()));
-    final PasswordData pd = new PasswordData("springtest");
-    pd.setUsername("springuser");
-
+    final PasswordData pd = new PasswordData("springuser", "springtest");
     final RuleResult result = validator.validate(pd);
     assertThat(result).isNotNull();
   }

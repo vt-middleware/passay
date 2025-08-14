@@ -4,6 +4,7 @@ package org.passay.rule;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.HashBean;
+import org.passay.PassayUtils;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -24,7 +25,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
   private final HashBean<String> hashBean;
 
   /** Character set to use for undigested passwords. */
-  private Charset charset = StandardCharsets.UTF_8;
+  private final Charset charset;
 
 
   /**
@@ -36,33 +37,39 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
    */
   public DigestDictionaryRule(final HashBean<String> bean, final Dictionary dict)
   {
-    this(bean);
-    setDictionary(dict);
+    this(bean, dict, false);
   }
 
 
   /**
    * Creates new digest history rule which operates on password references that were digested with the supplied hash.
+   * The dictionary should be ready to use when passed to this constructor.
    *
+   * @param  dict  to use for searching
    * @param  bean  encoding hash bean
+   * @param  matchBackwards  whether to match dictionary words backwards
    */
-  public DigestDictionaryRule(final HashBean<String> bean)
+  public DigestDictionaryRule(final HashBean<String> bean, final Dictionary dict, final boolean matchBackwards)
   {
-    hashBean = bean;
+    this(bean, dict, matchBackwards, StandardCharsets.UTF_8);
   }
 
 
   /**
-   * Sets the character set to use when converting a candidate password to bytes prior to hashing.
+   * Creates new digest history rule which operates on password references that were digested with the supplied hash.
+   * The dictionary should be ready to use when passed to this constructor.
    *
+   * @param  dict  to use for searching
+   * @param  bean  encoding hash bean
+   * @param  matchBackwards  whether to match dictionary words backwards
    * @param  set  to use for undigested passwords
    */
-  public void setCharset(final Charset set)
+  public DigestDictionaryRule(
+    final HashBean<String> bean, final Dictionary dict, final boolean matchBackwards, final Charset set)
   {
-    if (set == null) {
-      throw new NullPointerException("Character set cannot be null");
-    }
-    charset = set;
+    super(dict, matchBackwards);
+    hashBean = PassayUtils.assertNotNullArg(bean, "Hash bean cannot be null");
+    charset = PassayUtils.assertNotNullArg(set, "Character set cannot be null");
   }
 
 

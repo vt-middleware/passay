@@ -1,9 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
@@ -40,7 +41,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   public void createDictionary(final String dict) throws Exception
   {
     final BloomFilter<String> filter1 = BloomFilter.readFrom(
-      new FileInputStream(dict), Funnels.stringFunnel(StandardCharsets.UTF_8));
+      Files.newInputStream(Paths.get(dict)), Funnels.stringFunnel(StandardCharsets.UTF_8));
     filterFromSerialized = new BloomFilterDictionary(filter1);
 
     final ArrayWordList awl = WordLists.createFromReader(

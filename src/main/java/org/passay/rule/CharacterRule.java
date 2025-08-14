@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
@@ -22,7 +23,7 @@ public class CharacterRule implements Rule
   protected final CharacterData characterData;
 
   /** Number of characters to require. Default value is 1. */
-  protected int numCharacters = 1;
+  protected final int numCharacters;
 
 
   /**
@@ -44,23 +45,11 @@ public class CharacterRule implements Rule
    */
   public CharacterRule(final CharacterData data, final int num)
   {
-    setNumberOfCharacters(num);
-    characterData = data;
-  }
-
-
-  /**
-   * Sets the number of characters to require in a password.
-   *
-   * @param  n  number of characters to require where n &gt; 0
-   */
-  public void setNumberOfCharacters(final int n)
-  {
-    if (n > 0) {
-      numCharacters = n;
-    } else {
-      throw new IllegalArgumentException("argument must be greater than zero");
+    if (num <= 0) {
+      throw new IllegalArgumentException("Number of characters must be greater than zero");
     }
+    numCharacters = num;
+    characterData = PassayUtils.assertNotNullArg(data, "Character data cannot be null");
   }
 
 
@@ -100,6 +89,7 @@ public class CharacterRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final String matchingChars = getMatchingCharacters(
       String.valueOf(characterData.getCharacters()),
       passwordData.getPassword(),
@@ -145,7 +135,7 @@ public class CharacterRule implements Rule
       return new RuleResultMetadata(
         RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
         UnicodeString.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
-    } catch (IllegalArgumentException iae) {
+    } catch (IllegalArgumentException e) {
       return new RuleResultMetadata();
     }
   }

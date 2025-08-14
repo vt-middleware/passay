@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import org.passay.PassayUtils;
 import org.passay.dictionary.sort.ArraysSort;
 
 /**
@@ -72,11 +73,11 @@ public class TernaryTreeDictionary implements Dictionary
   /**
    * Creates a dictionary that uses the supplied ternary tree for dictionary searches.
    *
-   * @param  tt  ternary tree used to back dictionary.
+   * @param  tree  ternary tree used to back dictionary.
    */
-  public TernaryTreeDictionary(final TernaryTree tt)
+  public TernaryTreeDictionary(final TernaryTree tree)
   {
-    tree = tt;
+    this.tree = PassayUtils.assertNotNullArg(tree, "Ternary tree cannot be null");
   }
 
 
@@ -193,7 +194,7 @@ public class TernaryTreeDictionary implements Dictionary
 
       // insert data
       final ArrayWordList awl = WordLists.createFromReader(
-        files.toArray(new FileReader[files.size()]),
+        files.toArray(new FileReader[0]),
         caseSensitive,
         new ArraysSort());
       final TernaryTreeDictionary dict = new TernaryTreeDictionary(awl, useMedian);
@@ -201,28 +202,26 @@ public class TernaryTreeDictionary implements Dictionary
       // perform operation
       if (search) {
         if (dict.search(word)) {
-          System.out.println(String.format("%s was found in this dictionary", word));
+          System.out.printf("%s was found in this dictionary%n", word);
         } else {
-          System.out.println(String.format("%s was not found in this dictionary", word));
+          System.out.printf("%s was not found in this dictionary%n", word);
         }
       } else if (partialSearch) {
         final String[] matches = dict.partialSearch(word);
-        System.out.println(
-          String.format(
-            "Found %s matches for %s in this dictionary : %s",
-            matches.length,
-            word,
-            Arrays.asList(matches)));
+        System.out.printf(
+          "Found %s matches for %s in this dictionary : %s%n",
+          matches.length,
+          word,
+          Arrays.asList(matches));
       } else if (nearSearch) {
         final String[] matches = dict.nearSearch(word, distance);
-        System.out.println(
-          String.format(
-            "Found %s matches for %s in this dictionary at a distance of %s " +
-            ": %s",
-            matches.length,
-            word,
-            distance,
-            Arrays.asList(matches)));
+        System.out.printf(
+          "Found %s matches for %s in this dictionary at a distance of %s " +
+            ": %s%n",
+          matches.length,
+          word,
+          distance,
+          Arrays.asList(matches));
       } else if (print || printPath) {
         dict.getTernaryTree().print(new PrintWriter(System.out, true), printPath);
       } else if (stats) {

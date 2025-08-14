@@ -24,7 +24,7 @@ public final class ShannonEntropyFactory
   /** Validator which decides whether a password has composition. */
   private static final PasswordValidator COMPOSITION_VALIDATOR;
 
-  /** Initialize the composition rule. */
+  /* Initialize the composition rule. */
   static {
     COMPOSITION_VALIDATOR = new PasswordValidator(
       new CharacterCharacteristicsRule(

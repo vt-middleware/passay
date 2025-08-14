@@ -54,19 +54,18 @@ public final class PasswordCli
           final LengthRule rule = new LengthRule(min, max);
           rules.add(rule);
         } else if ("-c".equals(args[i])) {
-          final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule();
-          rule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, Integer.parseInt(args[++i])));
-          rule.getRules().add(new CharacterRule(EnglishCharacterData.Alphabetical, Integer.parseInt(args[++i])));
-          rule.getRules().add(new CharacterRule(EnglishCharacterData.Special, Integer.parseInt(args[++i])));
-          rule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, Integer.parseInt(args[++i])));
-          rule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, Integer.parseInt(args[++i])));
-          rule.setNumberOfCharacteristics(Integer.parseInt(args[++i]));
+          final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
+            Integer.parseInt(args[++i]),
+            new CharacterRule(EnglishCharacterData.Digit, Integer.parseInt(args[++i])),
+            new CharacterRule(EnglishCharacterData.Alphabetical, Integer.parseInt(args[++i])),
+            new CharacterRule(EnglishCharacterData.Special, Integer.parseInt(args[++i])),
+            new CharacterRule(EnglishCharacterData.UpperCase, Integer.parseInt(args[++i])),
+            new CharacterRule(EnglishCharacterData.LowerCase, Integer.parseInt(args[++i])));
           rules.add(rule);
         } else if ("-d".equals(args[i])) {
           final TernaryTreeDictionary dict = new TernaryTreeDictionary(
             new FileWordList(new RandomAccessFile(args[++i], "r"), false));
-          final DictionarySubstringRule rule = new DictionarySubstringRule(dict);
-          rule.setMatchBackwards(true);
+          final DictionarySubstringRule rule = new DictionarySubstringRule(dict, true);
           rules.add(rule);
         } else if ("-u".equals(args[i])) {
           rules.add(new UsernameRule(true, true));
@@ -87,11 +86,8 @@ public final class PasswordCli
         throw new ArrayIndexOutOfBoundsException();
       } else {
         final RuleResult result;
-        final PasswordData pd = new PasswordData(password);
+        final PasswordData pd = new PasswordData(username, password);
         final PasswordValidator validator = new PasswordValidator(rules);
-        if (username != null) {
-          pd.setUsername(username);
-        }
         result = validator.validate(pd);
         if (result.isValid()) {
           System.out.println("Valid password");

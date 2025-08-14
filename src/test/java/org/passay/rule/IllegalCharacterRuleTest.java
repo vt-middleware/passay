@@ -160,7 +160,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
         {
           new IllegalCharacterRule(new UnicodeString('@', '$', ' '), MatchBehavior.Contains, true),
           new PasswordData("AycD Pdsyz"),
-          new String[] {String.format("Whitespace is not allowed."), },
+          new String[] {"Whitespace is not allowed.", },
         },
         {
           new IllegalCharacterRule(new UnicodeString('@', '$'), MatchBehavior.StartsWith),

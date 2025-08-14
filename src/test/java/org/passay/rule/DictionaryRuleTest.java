@@ -17,16 +17,16 @@ public class DictionaryRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final DictionaryRule rule = new DictionaryRule();
+  private DictionaryRule rule;
 
   /** For testing. */
-  private final DictionaryRule backwardsRule = new DictionaryRule();
+  private DictionaryRule backwardsRule;
 
   /** For testing. */
-  private final DictionaryRule ignoreCaseRule = new DictionaryRule();
+  private DictionaryRule ignoreCaseRule;
 
   /** For testing. */
-  private final DictionaryRule allRule = new DictionaryRule();
+  private DictionaryRule allRule;
 
 
   /**
@@ -40,16 +40,10 @@ public class DictionaryRuleTest extends AbstractRuleTest
   {
     final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
     final Dictionary caseInsensitiveDict = new DictionaryBuilder().addFile(dictFile).build();
-
-    rule.setDictionary(caseSensitiveDict);
-
-    backwardsRule.setDictionary(caseSensitiveDict);
-    backwardsRule.setMatchBackwards(true);
-
-    ignoreCaseRule.setDictionary(caseInsensitiveDict);
-
-    allRule.setDictionary(caseInsensitiveDict);
-    allRule.setMatchBackwards(true);
+    rule = new DictionaryRule(caseSensitiveDict);
+    backwardsRule = new DictionaryRule(caseSensitiveDict, true);
+    ignoreCaseRule = new DictionaryRule(caseInsensitiveDict);
+    allRule = new DictionaryRule(caseInsensitiveDict, true);
   }
 
 

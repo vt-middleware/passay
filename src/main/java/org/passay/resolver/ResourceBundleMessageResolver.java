@@ -1,8 +1,10 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.resolver;
 
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import org.passay.PassayUtils;
 
 /**
  * Resolves messages from rule result details from a resource bundle. Uses {@link ResourceBundle#getBundle(String)} to
@@ -31,10 +33,20 @@ public class ResourceBundleMessageResolver extends AbstractMessageResolver
    */
   public ResourceBundleMessageResolver(final ResourceBundle bundle)
   {
-    if (bundle == null) {
-      throw new IllegalArgumentException("Bundle cannot be null.");
-    }
-    resourceBundle = bundle;
+    this(bundle, null);
+  }
+
+
+  /**
+   * Creates a new message resolver with the supplied resource bundle.
+   *
+   * @param  bundle  locale specific map of keys to messages.
+   * @param  locale  for resource
+   */
+  public ResourceBundleMessageResolver(final ResourceBundle bundle, final Locale locale)
+  {
+    super(locale);
+    resourceBundle = PassayUtils.assertNotNullArg(bundle, "Bundle cannot be null");
   }
 
 
