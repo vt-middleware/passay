@@ -1,12 +1,17 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
 import org.passay.PasswordData;
 import org.passay.dictionary.Dictionary;
-import org.passay.dictionary.DictionaryBuilder;
+import org.passay.dictionary.WordListDictionary;
+import org.passay.dictionary.WordLists;
+import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
@@ -33,9 +38,10 @@ public class DigestDictionaryRuleTest extends AbstractRuleTest
    */
   @Parameters("digestDictionaryFile")
   @BeforeClass(groups = "passtest")
-  public void createRules(final String dictFile)
+  public void createRules(final String dictFile) throws IOException
   {
-    final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
+    final Dictionary caseSensitiveDict = new WordListDictionary(
+      WordLists.createFromReader(new Reader[] {new FileReader(dictFile)}, true, new ArraysSort()));
     rule = new DigestDictionaryRule(
       new EncodingHashBean(new CodecSpec("Hex-Upper"), new DigestSpec("SHA1")), caseSensitiveDict);
     backwardsRule = new DigestDictionaryRule(

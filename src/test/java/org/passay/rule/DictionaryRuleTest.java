@@ -1,9 +1,14 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import org.passay.PasswordData;
 import org.passay.dictionary.Dictionary;
-import org.passay.dictionary.DictionaryBuilder;
+import org.passay.dictionary.WordListDictionary;
+import org.passay.dictionary.WordLists;
+import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
@@ -36,10 +41,12 @@ public class DictionaryRuleTest extends AbstractRuleTest
    */
   @Parameters("dictionaryFile")
   @BeforeClass(groups = "passtest")
-  public void createRules(final String dictFile)
+  public void createRules(final String dictFile) throws IOException
   {
-    final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
-    final Dictionary caseInsensitiveDict = new DictionaryBuilder().addFile(dictFile).build();
+    final Dictionary caseSensitiveDict = new WordListDictionary(
+      WordLists.createFromReader(new Reader[] {new FileReader(dictFile)}, true, new ArraysSort()));
+    final Dictionary caseInsensitiveDict = new WordListDictionary(
+      WordLists.createFromReader(new Reader[] {new FileReader(dictFile)}, false, new ArraysSort()));
     rule = new DictionaryRule(caseSensitiveDict);
     backwardsRule = new DictionaryRule(caseSensitiveDict, true);
     ignoreCaseRule = new DictionaryRule(caseInsensitiveDict);
