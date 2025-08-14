@@ -2,6 +2,7 @@
 package org.passay.dictionary.sort;
 
 import java.util.Comparator;
+import org.passay.PassayUtils;
 
 /**
  * Provides an implementation of the selection sort algorithm.
@@ -12,14 +13,16 @@ public class SelectionSort implements ArraySorter
 {
 
   @Override
-  public void sort(final String[] array, final Comparator<String> c)
+  public void sort(final String[] array, final Comparator<String> comparator)
   {
+    PassayUtils.assertNotNullArg(array, "Array cannot be null");
+    PassayUtils.assertNotNullArg(comparator, "Comparator cannot be null");
     final int n = array.length;
     for (int i = 0; i < n - 1; i++) {
       int min = i;
       for (int j = i + 1; j < n; j++) {
         final String b = array[j];
-        if (c.compare(b, array[min]) < 0) {
+        if (comparator.compare(b, array[min]) < 0) {
           min = j;
         }
       }

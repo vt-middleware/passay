@@ -20,29 +20,32 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final CharacterCharacteristicsRule rule1 = new CharacterCharacteristicsRule();
+  private CharacterCharacteristicsRule rule1;
 
   /** For testing. */
-  private final CharacterCharacteristicsRule rule2 = new CharacterCharacteristicsRule();
+  private CharacterCharacteristicsRule rule2;
 
 
   /** Initialize rules for this test. */
   @BeforeClass(groups = "passtest")
   public void createRules()
   {
-    rule1.getRules().add(new CharacterRule(EnglishCharacterData.Alphabetical, 4));
-    rule1.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 3));
-    rule1.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 2));
-    rule1.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 2));
-    rule1.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    rule1.setNumberOfCharacteristics(5);
+    rule1 = new CharacterCharacteristicsRule(
+      5,
+      new CharacterRule(EnglishCharacterData.Alphabetical, 4),
+      new CharacterRule(EnglishCharacterData.Digit, 3),
+      new CharacterRule(EnglishCharacterData.UpperCase, 2),
+      new CharacterRule(EnglishCharacterData.LowerCase, 2),
+      new CharacterRule(EnglishCharacterData.Special, 1));
 
-    rule2.setReportFailure(false);
-    rule2.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 1));
-    rule2.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    rule2.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 1));
-    rule2.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 1));
-    rule2.setNumberOfCharacteristics(3);
+    rule2 = new CharacterCharacteristicsRule(
+      false,
+      true,
+      3,
+      new CharacterRule(EnglishCharacterData.Digit, 1),
+      new CharacterRule(EnglishCharacterData.Special, 1),
+      new CharacterRule(EnglishCharacterData.UpperCase, 1),
+      new CharacterRule(EnglishCharacterData.LowerCase, 1));
   }
 
 
@@ -175,13 +178,14 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void customResolver()
   {
-    final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule();
-    rule.getRules().add(new CharacterRule(EnglishCharacterData.Digit, 3));
-    rule.getRules().add(new CharacterRule(EnglishCharacterData.UpperCase, 2));
-    rule.getRules().add(new CharacterRule(EnglishCharacterData.LowerCase, 2));
-    rule.getRules().add(new CharacterRule(EnglishCharacterData.Special, 1));
-    rule.setNumberOfCharacteristics(2);
-    rule.setReportRuleFailures(false);
+    final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
+      true,
+      false,
+      2,
+      new CharacterRule(EnglishCharacterData.Digit, 3),
+      new CharacterRule(EnglishCharacterData.UpperCase, 2),
+      new CharacterRule(EnglishCharacterData.LowerCase, 2),
+      new CharacterRule(EnglishCharacterData.Special, 1));
 
     final TestMessageResolver resolver = new TestMessageResolver(
       "INSUFFICIENT_CHARACTERISTICS",

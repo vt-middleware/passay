@@ -2,6 +2,7 @@
 package org.passay.rule;
 
 import java.util.Locale;
+import org.passay.PassayUtils;
 
 /**
  * Rule for determining if a password contains a duplicate ASCII keyboard sequence. See {@link java.util.regex.Pattern}
@@ -39,27 +40,32 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
   /**
    * Creates a new repeat character regex rule.
    *
-   * @param  sl  sequence length
+   * @param  length  sequence length
    */
-  public RepeatCharacterRegexRule(final int sl)
+  public RepeatCharacterRegexRule(final int length)
   {
-    this(sl, true);
+    this(length, true);
   }
 
 
   /**
    * Creates a new repeat character regex rule.
    *
-   * @param  sl  sequence length
+   * @param  length  sequence length
    * @param  reportAll  whether to report all matches or just the first
    */
-  public RepeatCharacterRegexRule(final int sl, final boolean reportAll)
+  public RepeatCharacterRegexRule(final int length, final boolean reportAll)
   {
-    super(String.format(Locale.ENGLISH, REPEAT_CHAR_REGEX, sl - 1), reportAll);
-    if (sl < MINIMUM_SEQUENCE_LENGTH) {
-      throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
-    }
-    sequenceLength = sl;
+    super(
+      String.format(
+        Locale.ENGLISH,
+        REPEAT_CHAR_REGEX,
+        PassayUtils.assertNotNullArgOr(
+          length,
+          l -> l < MINIMUM_SEQUENCE_LENGTH,
+          String.format("Sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH)) - 1),
+      reportAll);
+    sequenceLength = length;
   }
 
 

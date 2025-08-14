@@ -20,16 +20,16 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final DictionarySubstringRule rule = new DictionarySubstringRule();
+  private DictionarySubstringRule rule;
 
   /** For testing. */
-  private final DictionarySubstringRule backwardsRule = new DictionarySubstringRule();
+  private DictionarySubstringRule backwardsRule;
 
   /** For testing. */
-  private final DictionarySubstringRule ignoreCaseRule = new DictionarySubstringRule();
+  private DictionarySubstringRule ignoreCaseRule;
 
   /** For testing. */
-  private final DictionarySubstringRule allRule = new DictionarySubstringRule();
+  private DictionarySubstringRule allRule;
 
 
   /**
@@ -55,15 +55,10 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
       new ArraysSort());
     final WordListDictionary caseInsensitiveDict = new WordListDictionary(caseInsensitiveWordList);
 
-    rule.setDictionary(caseSensitiveDict);
-
-    backwardsRule.setDictionary(caseSensitiveDict);
-    backwardsRule.setMatchBackwards(true);
-
-    ignoreCaseRule.setDictionary(caseInsensitiveDict);
-
-    allRule.setDictionary(caseInsensitiveDict);
-    allRule.setMatchBackwards(true);
+    rule = new DictionarySubstringRule(caseSensitiveDict);
+    backwardsRule = new DictionarySubstringRule(caseSensitiveDict, true);
+    ignoreCaseRule = new DictionarySubstringRule(caseInsensitiveDict);
+    allRule = new DictionarySubstringRule(caseInsensitiveDict, true);
   }
 
 

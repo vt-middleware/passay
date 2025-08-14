@@ -118,6 +118,7 @@ public abstract class AbstractRuleTest
      */
     public TestMessageResolver(final String key, final String value)
     {
+      super(null);
       props.setProperty(key, value);
     }
 

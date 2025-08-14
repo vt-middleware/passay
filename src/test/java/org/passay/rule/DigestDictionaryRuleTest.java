@@ -20,12 +20,10 @@ public class DigestDictionaryRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final DigestDictionaryRule rule = new DigestDictionaryRule(
-    new EncodingHashBean(new CodecSpec("Hex-Upper"), new DigestSpec("SHA1")));
+  private DigestDictionaryRule rule;
 
   /** For testing. */
-  private final DigestDictionaryRule backwardsRule = new DigestDictionaryRule(
-    new EncodingHashBean(new CodecSpec("Hex-Upper"), new DigestSpec("SHA1")));
+  private DigestDictionaryRule backwardsRule;
 
 
   /**
@@ -38,11 +36,10 @@ public class DigestDictionaryRuleTest extends AbstractRuleTest
   public void createRules(final String dictFile)
   {
     final Dictionary caseSensitiveDict = new DictionaryBuilder().addFile(dictFile).setCaseSensitive(true).build();
-
-    rule.setDictionary(caseSensitiveDict);
-
-    backwardsRule.setDictionary(caseSensitiveDict);
-    backwardsRule.setMatchBackwards(true);
+    rule = new DigestDictionaryRule(
+      new EncodingHashBean(new CodecSpec("Hex-Upper"), new DigestSpec("SHA1")), caseSensitiveDict);
+    backwardsRule = new DigestDictionaryRule(
+      new EncodingHashBean(new CodecSpec("Hex-Upper"), new DigestSpec("SHA1")), caseSensitiveDict, true);
   }
 
 

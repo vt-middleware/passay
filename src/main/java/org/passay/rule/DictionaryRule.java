@@ -20,20 +20,25 @@ public class DictionaryRule extends AbstractDictionaryRule
 
 
   /**
-   * Creates a new dictionary rule without supplying a dictionary. The dictionary should be set using {@link
-   * #setDictionary(Dictionary)}.
-   */
-  public DictionaryRule() {}
-
-
-  /**
    * Creates a new dictionary rule. The dictionary should be ready to use when passed to this constructor.
    *
    * @param  dict  to use for searching
    */
   public DictionaryRule(final Dictionary dict)
   {
-    setDictionary(dict);
+    this(dict, false);
+  }
+
+
+  /**
+   * Creates a new dictionary rule. The dictionary should be ready to use when passed to this constructor.
+   *
+   * @param  dict  to use for searching
+   * @param  matchBackwards  whether to match dictionary words backwards
+   */
+  public DictionaryRule(final Dictionary dict, final boolean matchBackwards)
+  {
+    super(dict, matchBackwards);
   }
 
 

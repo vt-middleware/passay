@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -124,6 +125,7 @@ public class NumberRangeRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final String text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {

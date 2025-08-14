@@ -61,7 +61,7 @@ public abstract class AbstractWordList implements WordList
   @Deprecated
   protected void checkIsString(final Object o)
   {
-    if (!String.class.isInstance(o)) {
+    if (!(o instanceof String)) {
       throw new ClassCastException("Parameter must be of type String");
     }
   }

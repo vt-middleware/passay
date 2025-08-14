@@ -1,14 +1,15 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
-import java.io.IOException;
 import java.nio.Buffer;
 import java.nio.CharBuffer;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
+import java.util.stream.Stream;
 import org.passay.rule.CharacterRule;
 import org.passay.rule.Rule;
 
@@ -20,6 +21,9 @@ import org.passay.rule.Rule;
  */
 public class PasswordGenerator
 {
+  /** Maximum supported length of password generation. */
+  private static final int MAX_PASSWORD_LENGTH = 1024;
+
   /** Retry password generation at most this many times. */
   private static final int RETRY_LIMIT = 2;
 
@@ -44,7 +48,7 @@ public class PasswordGenerator
    */
   public PasswordGenerator(final Random r)
   {
-    random = r;
+    random = PassayUtils.assertNotNullArg(r, "Random cannot be null");
   }
 
 
@@ -73,6 +77,10 @@ public class PasswordGenerator
   @Deprecated
   public String generatePassword(final int length, final CharacterRule... rules)
   {
+    PassayUtils.assertNotNullArgOr(
+      rules,
+      v -> Stream.of(rules).anyMatch(Objects::isNull),
+      "Rules cannot be null or contain null");
     return generatePassword(length, Arrays.asList(rules));
   }
 
@@ -89,6 +97,10 @@ public class PasswordGenerator
   @SuppressWarnings("unchecked")
   public <T extends Rule> String generatePassword(final int length, final T... rules)
   {
+    PassayUtils.assertNotNullArgOr(
+      rules,
+      v -> Stream.of(rules).anyMatch(Objects::isNull),
+      "Rules cannot be null or contain null");
     return generatePassword(length, Arrays.asList(rules));
   }
 
@@ -105,27 +117,31 @@ public class PasswordGenerator
   public String generatePassword(final int length, final List<? extends Rule> rules)
   {
     if (length <= 0) {
-      throw new IllegalArgumentException("length must be greater than 0");
+      throw new IllegalArgumentException("Length must be greater than 0");
     }
+    if (length > MAX_PASSWORD_LENGTH) {
+      throw new IllegalArgumentException("Length must be less than " + MAX_PASSWORD_LENGTH);
+    }
+    PassayUtils.assertNotNullArgOr(
+      rules,
+      v -> v.stream().anyMatch(Objects::isNull),
+      "Rules cannot be null or contain null");
 
     final StringBuilder allChars = new StringBuilder();
     final CharBuffer buffer = CharBuffer.allocate(length);
-    final PasswordValidator validator = new PasswordValidator(rules);
     String generated;
     int count = 0;
 
     do {
-      if (rules != null) {
-        for (Rule rule : rules) {
-          if (rule instanceof CharacterRule) {
-            final CharacterRule characterRule = (CharacterRule) rule;
-            fillRandomCharacters(
-                    characterRule.getValidCharacters(),
-                    Math.min(length, characterRule.getNumberOfCharacters()),
-                    buffer);
-            if (count == 0) {
-              allChars.append(characterRule.getValidCharacters());
-            }
+      for (Rule rule : rules) {
+        if (rule instanceof CharacterRule) {
+          final CharacterRule characterRule = (CharacterRule) rule;
+          fillRandomCharacters(
+            characterRule.getValidCharacters(),
+            Math.min(length, characterRule.getNumberOfCharacters()),
+            buffer);
+          if (count == 0) {
+            allChars.append(characterRule.getValidCharacters());
           }
         }
       }
@@ -137,6 +153,7 @@ public class PasswordGenerator
       if (count > 0) {
         retryCount++;
       }
+      final PasswordValidator validator = new PasswordValidator(rules);
       if (validator.validate(new PasswordData(generated)).isValid()) {
         break;
       }
@@ -155,14 +172,13 @@ public class PasswordGenerator
    * @param  count  number of random characters.
    * @param  target  character sequence that will hold characters.
    */
-  protected void fillRandomCharacters(final String source, final int count, final Appendable target)
+  protected void fillRandomCharacters(final String source, final int count, final CharBuffer target)
   {
     final int[] indexes = codePointIndexes(source);
     for (int i = 0; i < count; i++) {
-      try {
-        target.append(UnicodeString.toString(source.codePointAt(indexes[random.nextInt(indexes.length)])));
-      } catch (IOException e) {
-        throw new RuntimeException("Error appending characters.", e);
+      final String s = UnicodeString.toString(source.codePointAt(indexes[random.nextInt(indexes.length)]));
+      if (target.position() + s.length() <= target.limit()) {
+        target.append(s);
       }
     }
   }

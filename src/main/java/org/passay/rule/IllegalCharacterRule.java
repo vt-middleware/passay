@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
@@ -24,7 +25,7 @@ public class IllegalCharacterRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_CHAR";
 
   /** Whether to report all sequence matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
   /** Stores the character code points that are not allowed. */
   private final int[] illegalCharacters;
@@ -108,6 +109,7 @@ public class IllegalCharacterRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
@@ -133,14 +135,14 @@ public class IllegalCharacterRule implements Rule
   /**
    * Creates the parameter data for the rule result detail.
    *
-   * @param  cp  illegal character code point
+   * @param  codePoint  illegal character code point
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final int cp)
+  protected Map<String, Object> createRuleResultDetailParameters(final int codePoint)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", UnicodeString.toString(cp));
+    m.put("illegalCharacter", UnicodeString.toString(codePoint));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
