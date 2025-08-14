@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
@@ -24,7 +25,7 @@ public class AllowedCharacterRule implements Rule
   public static final String ERROR_CODE = "ALLOWED_CHAR";
 
   /** Whether to report all sequence matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
   /** Stores the character code points that are allowed. */
   private final int[] allowedCharacters;
@@ -109,6 +110,7 @@ public class AllowedCharacterRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();

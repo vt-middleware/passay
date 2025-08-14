@@ -22,7 +22,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
   protected FileWordList createWordList(final String filePath, final boolean caseSensitive) throws IOException
   {
     final FileWordList list = new FileWordList(
-        new RandomAccessFile(filePath, "r"), caseSensitive, cachePercent > 100 ? 100 : cachePercent);
+        new RandomAccessFile(filePath, "r"), caseSensitive, Math.min(cachePercent, 100));
     cachePercent *= 3 / 2;
     return list;
   }

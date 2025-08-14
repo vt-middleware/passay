@@ -83,7 +83,7 @@ public class DictionaryBuilder
   {
     try {
       return new WordListDictionary(
-        WordLists.createFromReader(sources.toArray(new Reader[sources.size()]), caseSensitive, SORTER));
+        WordLists.createFromReader(sources.toArray(new Reader[0]), caseSensitive, SORTER));
     } catch (IOException e) {
       throw new RuntimeException("IO error building dictionary", e);
     }

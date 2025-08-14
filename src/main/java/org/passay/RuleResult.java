@@ -2,7 +2,7 @@
 package org.passay;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -11,17 +11,20 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class RuleResult
+public final class RuleResult
 {
 
-  /** Whether password rule was successful. */
-  protected boolean valid;
-
   /** Details associated with a password rule result. */
-  protected List<RuleResultDetail> details = new ArrayList<>();
+  private final List<RuleResultDetail> details = new ArrayList<>();
+
+  /** Whether password rule was successful. */
+  private volatile boolean valid;
 
   /** Metadata produced by a password rule. */
-  protected RuleResultMetadata metadata = new RuleResultMetadata();
+  private RuleResultMetadata metadata = new RuleResultMetadata();
+
+  /** Whether this object has been marked immutable. */
+  private volatile boolean immutable;
 
 
   /**
@@ -36,52 +39,83 @@ public class RuleResult
   /**
    * Creates a new rule result.
    *
-   * @param  b  result validity
+   * @param  valid  result validity
    */
-  public RuleResult(final boolean b)
+  public RuleResult(final boolean valid)
   {
-    setValid(b);
+    setValid(valid);
   }
 
 
   /**
    * Creates a new rule result.
    *
-   * @param  b  result validity
-   * @param  rrd  details associated with this result
+   * @param  valid  result validity
+   * @param  detail  details associated with this result
    */
-  public RuleResult(final boolean b, final RuleResultDetail rrd)
+  public RuleResult(final boolean valid, final RuleResultDetail detail)
   {
-    setValid(b);
-    details.add(rrd);
+    setValid(valid);
+    details.add(detail);
   }
 
 
   /**
    * Creates a new rule result.
    *
-   * @param  b  result validity
-   * @param  rrm  metadata associated by the rule with the password
+   * @param  valid  result validity
+   * @param  metadata  metadata associated by the rule with the password
    */
-  public RuleResult(final boolean b, final RuleResultMetadata rrm)
+  public RuleResult(final boolean valid, final RuleResultMetadata metadata)
   {
-    setValid(b);
-    setMetadata(rrm);
+    setValid(valid);
+    setMetadata(metadata);
   }
 
 
   /**
    * Creates a new rule result.
    *
-   * @param  b  result validity
-   * @param  rrd  details associated with this result
-   * @param  rrm  metadata associated by the rule with the password
+   * @param  valid  result validity
+   * @param  detail  associated with this result
+   * @param  metadata  associated by the rule with the password
    */
-  public RuleResult(final boolean b, final RuleResultDetail rrd, final RuleResultMetadata rrm)
+  public RuleResult(final boolean valid, final RuleResultDetail detail, final RuleResultMetadata metadata)
   {
-    setValid(b);
-    details.add(rrd);
-    setMetadata(rrm);
+    setValid(valid);
+    details.add(detail);
+    setMetadata(metadata);
+  }
+
+
+  /** Freezes this object, making it immutable. */
+  public void freeze()
+  {
+    immutable = true;
+  }
+
+
+  /**
+   * Determines whether this object is frozen, i.e. immutable.
+   *
+   * @return  true if {@link #freeze()} has been invoked, false otherwise.
+   */
+  public boolean isFrozen()
+  {
+    return immutable;
+  }
+
+
+  /**
+   * Asserts that this object is in a state to permit mutations.
+   *
+   * @throws  IllegalStateException  if this object is frozen (i.e. immutable).
+   */
+  public void assertMutable()
+  {
+    if (immutable) {
+      throw new IllegalStateException("Cannot modify immutable object");
+    }
   }
 
 
@@ -99,11 +133,12 @@ public class RuleResult
   /**
    * Sets whether the result of the rule verification is a valid password.
    *
-   * @param  b  valid password for this rule
+   * @param  valid  whether the password is valid for this rule
    */
-  public void setValid(final boolean b)
+  public void setValid(final boolean valid)
   {
-    valid = b;
+    assertMutable();
+    this.valid = valid;
   }
 
 
@@ -114,7 +149,7 @@ public class RuleResult
    */
   public List<RuleResultDetail> getDetails()
   {
-    return details;
+    return immutable ? Collections.unmodifiableList(details) : details;
   }
 
 
@@ -127,6 +162,7 @@ public class RuleResult
    */
   public void addError(final String code, final Map<String, Object> params)
   {
+    assertMutable();
     setValid(false);
     details.add(new RuleResultDetail(code, params));
   }
@@ -140,30 +176,9 @@ public class RuleResult
    */
   public void addError(final String[] codes, final Map<String, Object> params)
   {
+    assertMutable();
     setValid(false);
     details.add(new RuleResultDetail(codes, params));
-  }
-
-
-  /**
-   * Sets any details associated with the rule verification.
-   *
-   * @param  rrd  rule result details
-   */
-  public void setDetails(final RuleResultDetail... rrd)
-  {
-    setDetails(Arrays.asList(rrd));
-  }
-
-
-  /**
-   * Sets any details associated with the rule verification.
-   *
-   * @param  rrd  rule result details
-   */
-  public void setDetails(final List<RuleResultDetail> rrd)
-  {
-    details = rrd;
   }
 
 
@@ -181,11 +196,12 @@ public class RuleResult
   /**
    * Sets metadata associated with the rule verification.
    *
-   * @param  rrm  rule result metadata
+   * @param  metadata  rule result metadata
    */
-  public void setMetadata(final RuleResultMetadata rrm)
+  public void setMetadata(final RuleResultMetadata metadata)
   {
-    metadata = rrm;
+    assertMutable();
+    this.metadata = metadata;
   }
 
 

@@ -2,7 +2,6 @@
 package org.passay.doc;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
@@ -66,7 +65,7 @@ public class ClassGenerator
   /** Sections to build beans for. */
   private final Map<String, List<String>> sections = new HashMap<>();
 
-  /** Initialize {@link #IMPORT_STATEMENTS}. */
+  /* Initialize {@link #IMPORT_STATEMENTS}. */
   static {
     final StringBuilder sb = new StringBuilder();
     for (String p : PACKAGES_TO_IMPORT) {
@@ -152,7 +151,7 @@ public class ClassGenerator
     }
     // buffer for read and write data to file
     final byte[] buffer = new byte[BUFFER_SIZE];
-    final ZipInputStream zipInput = new ZipInputStream(new FileInputStream(file));
+    final ZipInputStream zipInput = new ZipInputStream(Files.newInputStream(Paths.get(file)));
     ZipEntry entry = zipInput.getNextEntry();
     try {
       while (entry != null) {

@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -22,10 +23,10 @@ public class UsernameRule implements Rule
   public static final String ERROR_CODE_REVERSED = "ILLEGAL_USERNAME_REVERSED";
 
   /** Whether to search for username backwards. */
-  private boolean matchBackwards;
+  private final boolean matchBackwards;
 
   /** Whether to ignore case when checking for usernames. */
-  private boolean ignoreCase;
+  private final boolean ignoreCase;
 
   /** Where to match whitespace. */
   private final MatchBehavior matchBehavior;
@@ -52,38 +53,27 @@ public class UsernameRule implements Rule
   /**
    * Create a new username rule.
    *
-   * @param  mb  whether to match backwards
-   * @param  ic  whether to ignore case
+   * @param  matchBackwards  whether to match backwards
+   * @param  ignoreCase  whether to ignore case
    */
-  public UsernameRule(final boolean mb, final boolean ic)
+  public UsernameRule(final boolean matchBackwards, final boolean ignoreCase)
   {
-    this(mb, ic, MatchBehavior.Contains);
+    this(matchBackwards, ignoreCase, MatchBehavior.Contains);
   }
 
 
   /**
    * Create a new username rule.
    *
-   * @param  mb  whether to match backwards
-   * @param  ic  whether to ignore case
+   * @param  matchBackwards  whether to match backwards
+   * @param  ignoreCase  whether to ignore case
    * @param  behavior  how to match username
    */
-  public UsernameRule(final boolean mb, final boolean ic, final MatchBehavior behavior)
+  public UsernameRule(final boolean matchBackwards, final boolean ignoreCase, final MatchBehavior behavior)
   {
-    matchBackwards = mb;
-    ignoreCase = ic;
+    this.matchBackwards = matchBackwards;
+    this.ignoreCase = ignoreCase;
     matchBehavior = behavior;
-  }
-
-
-  /**
-   * Sets whether the verify method will search the password for the username spelled backwards as well as forwards.
-   *
-   * @param  b  whether to match username backwards
-   */
-  public void setMatchBackwards(final boolean b)
-  {
-    matchBackwards = b;
   }
 
 
@@ -95,17 +85,6 @@ public class UsernameRule implements Rule
   public boolean isMatchBackwards()
   {
     return matchBackwards;
-  }
-
-
-  /**
-   * Sets whether the verify method will ignore case when searching the for a username.
-   *
-   * @param  b  whether to ignore case
-   */
-  public void setIgnoreCase(final boolean b)
-  {
-    ignoreCase = b;
   }
 
 
@@ -123,6 +102,7 @@ public class UsernameRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     String user = passwordData.getUsername();
     if (user != null && !user.isEmpty()) {

@@ -4,12 +4,13 @@ package org.passay.rule;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
 /**
  * Rule for determining if a password matches one of any previous password a user has chosen. If no historical password
- * reference has been set, then passwords will meet this rule. See {@link PasswordData#setPasswordReferences(List)}.
+ * reference has been set, then passwords will meet this rule. See {@link PasswordData#getPasswordReferences()}.
  *
  * @author  Middleware Services
  */
@@ -20,7 +21,7 @@ public class HistoryRule implements Rule
   public static final String ERROR_CODE = "HISTORY_VIOLATION";
 
   /** Whether to report all history matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
 
   /**
@@ -46,6 +47,7 @@ public class HistoryRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final List<PasswordData.HistoricalReference> references = passwordData.getPasswordReferences(
       PasswordData.HistoricalReference.class);

@@ -4,13 +4,14 @@ package org.passay.rule;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
 /**
  * Rule for determining if a password matches a password from a different source. Useful for when separate systems
  * cannot have matching passwords. If no source password reference has been set, then passwords will meet this rule. See
- * {@link PasswordData#setPasswordReferences(List)}
+ * {@link PasswordData#getPasswordReferences()}.
  *
  * @author  Middleware Services
  */
@@ -21,7 +22,7 @@ public class SourceRule implements Rule
   public static final String ERROR_CODE = "SOURCE_VIOLATION";
 
   /** Whether to report all source matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
 
   /**
@@ -47,6 +48,7 @@ public class SourceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final List<PasswordData.SourceReference> references = passwordData.getPasswordReferences(
       PasswordData.SourceReference.class);

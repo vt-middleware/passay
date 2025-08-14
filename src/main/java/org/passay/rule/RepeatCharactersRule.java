@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -47,32 +48,36 @@ public class RepeatCharactersRule implements Rule
   /**
    * Creates a new repeat characters rule for a single sequence of the given length.
    *
-   * @param  sl  sequence length
+   * @param  length  sequence length
    */
-  public RepeatCharactersRule(final int sl)
+  public RepeatCharactersRule(final int length)
   {
-    this(sl, DEFAULT_SEQUENCE_COUNT);
+    this(length, DEFAULT_SEQUENCE_COUNT);
   }
 
   /**
    * Creates a new repeat characters rule for the given number of sequences of the given length.
    *
-   * @param  sl  sequence length
-   * @param  sc  sequence count
+   * @param  length  sequence length
+   * @param  count  sequence count
    */
-  public RepeatCharactersRule(final int sl, final int sc)
+  public RepeatCharactersRule(final int length, final int count)
   {
-    if (sl < 2 || sc < 1) {
-      throw new IllegalArgumentException("invalid sequence length or sequence count");
+    if (length < 2) {
+      throw new IllegalArgumentException("Sequence length must be greater than or equal to 2");
     }
-    sequenceLength = sl;
-    sequenceCount = sc;
+    if (count < 1) {
+      throw new IllegalArgumentException("Sequence count must be greater than or equal to 1");
+    }
+    sequenceLength = length;
+    sequenceCount = count;
   }
 
 
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final List<String> matches = new ArrayList<>();
     final String password = passwordData.getPassword() + '\uffff';

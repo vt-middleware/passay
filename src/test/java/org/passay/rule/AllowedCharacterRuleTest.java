@@ -160,7 +160,7 @@ public class AllowedCharacterRuleTest extends AbstractRuleTest
         {
           new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.Contains, true),
           new PasswordData("gbwer scokkk"),
-          new String[] {String.format("Whitespace not allowed."), },
+          new String[] {"Whitespace not allowed.", },
         },
         {
           new AllowedCharacterRule(new UnicodeString(ALLOWED_CHARS), MatchBehavior.StartsWith),
