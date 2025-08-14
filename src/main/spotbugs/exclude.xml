@@ -23,7 +23,6 @@
   <!-- Allow platform specific encoding when reading dictionary files -->
   <Match>
     <Or>
-      <Class name="org.passay.dictionary.DictionaryBuilder" />
       <Class name="org.passay.dictionary.WordListDictionary" />
       <Class name="org.passay.dictionary.TernaryTreeDictionary" />
     </Or>
@@ -41,7 +40,6 @@
 
   <!-- Readers are closed in WordLists#readWordList -->
   <Match>
-    <Class name="org.passay.dictionary.DictionaryBuilder" />
     <Method name="addFile" />
     <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
   </Match>
