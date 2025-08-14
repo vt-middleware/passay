@@ -67,27 +67,6 @@ public class PasswordGenerator
   /**
    * See {@link #generatePassword(int, List)}.
    *
-   * @param  length  of password to generate
-   * @param  rules  to generate compliant password from
-   *
-   * @return  generated password
-   *
-   * @deprecated use {@link #generatePassword(int, Rule[])}
-   */
-  @Deprecated
-  public String generatePassword(final int length, final CharacterRule... rules)
-  {
-    PassayUtils.assertNotNullArgOr(
-      rules,
-      v -> Stream.of(rules).anyMatch(Objects::isNull),
-      "Rules cannot be null or contain null");
-    return generatePassword(length, Arrays.asList(rules));
-  }
-
-
-  /**
-   * See {@link #generatePassword(int, List)}.
-   *
    * @param  <T>  type of rule
    * @param  length  of password to generate
    * @param  rules  to generate compliant password from
