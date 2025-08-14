@@ -96,7 +96,17 @@ public class PasswordGeneratorTest
     }
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 5));
     new PasswordGenerator().generatePassword(10, new CharacterRule(EnglishCharacterData.LowerCase, 10));
+    try {
+      // cannot generate password with odd number of characters using unicode input (every char has length of 2)
+      new PasswordGenerator().generatePassword(9, new CharacterRule(EnglishCharacterData.SpecialLatin, 10));
+      fail("Should have thrown IllegalStateException");
+    } catch (IllegalStateException e) {
+      if (!e.getMessage().equals("Exceeded maximum number of password generation retries")) {
+        fail("Unexpected error message: %s", e.getMessage());
+      }
+    }
   }
+
 
   private List<Rule> addCharacteristics(final List<Rule> rules)
   {
@@ -105,9 +115,9 @@ public class PasswordGeneratorTest
             .filter(r -> r instanceof CharacterRule)
             .map(r -> (CharacterRule) r)
             .collect(Collectors.toList());
-    final CharacterCharacteristicsRule characteristics = new CharacterCharacteristicsRule();
-    characteristics.getRules().addAll(characterRules);
-    characteristics.setNumberOfCharacteristics(characterRules.size());
+    final CharacterCharacteristicsRule characteristics = new CharacterCharacteristicsRule(
+      characterRules.size(),
+      characterRules);
     compositeRules.add(characteristics);
     return compositeRules;
   }

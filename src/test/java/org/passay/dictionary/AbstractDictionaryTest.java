@@ -50,7 +50,7 @@ public abstract class AbstractDictionaryTest
   private static Object[][] fbsdWords;
 
 
-  /**
+  /*
    * Load animal names.
    */
   static {
@@ -82,7 +82,7 @@ public abstract class AbstractDictionaryTest
     animals.add("Yak");
     animals.add("Zebra");
     Collections.shuffle(animals);
-    ANIMALS = animals.toArray(new String[animals.size()]);
+    ANIMALS = animals.toArray(new String[0]);
   }
 
   /** Location of the dictionary file. */

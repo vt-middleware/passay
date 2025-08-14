@@ -19,20 +19,25 @@ public class DictionarySubstringRule extends AbstractDictionaryRule
 
 
   /**
-   * Creates a new dictionary substring rule. The dictionary should be set using the {@link #setDictionary(Dictionary)}
-   * method.
-   */
-  public DictionarySubstringRule() {}
-
-
-  /**
    * Creates a new dictionary substring rule. The dictionary should be ready to use when passed to this constructor.
    *
    * @param  dict  to use for searching
    */
   public DictionarySubstringRule(final Dictionary dict)
   {
-    setDictionary(dict);
+    this(dict, false);
+  }
+
+
+  /**
+   * Creates a new dictionary substring rule. The dictionary should be ready to use when passed to this constructor.
+   *
+   * @param  dict  to use for searching
+   * @param  matchBackwards  whether to match dictionary words backwards
+   */
+  public DictionarySubstringRule(final Dictionary dict, final boolean matchBackwards)
+  {
+    super(dict, matchBackwards);
   }
 
 

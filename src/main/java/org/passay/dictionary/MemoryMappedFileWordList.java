@@ -33,13 +33,13 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
    * called subsequently.</p>
    *
-   * @param  raf  File containing words, one per line.
+   * @param  file  File containing words, one per line.
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf) throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile file) throws IOException
   {
-    this(raf, true);
+    this(file, true);
   }
 
 
@@ -50,14 +50,14 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
    * called subsequently.</p>
    *
-   * @param  raf  File containing words, one per line.
+   * @param  file  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    *
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive) throws IOException
+  public MemoryMappedFileWordList(final RandomAccessFile file, final boolean caseSensitive) throws IOException
   {
-    this(raf, caseSensitive, DEFAULT_CACHE_PERCENT);
+    this(file, caseSensitive, DEFAULT_CACHE_PERCENT);
   }
 
 
@@ -68,17 +68,17 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
    * called subsequently.</p>
    *
-   * @param  raf  File containing words, one per line.
+   * @param  file  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
    *
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent)
+  public MemoryMappedFileWordList(final RandomAccessFile file, final boolean caseSensitive, final int cachePercent)
     throws IOException
   {
-    this(raf, caseSensitive, cachePercent, StandardCharsets.UTF_8.newDecoder());
+    this(file, caseSensitive, cachePercent, StandardCharsets.UTF_8.newDecoder());
   }
 
 
@@ -89,7 +89,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
    * called subsequently.</p>
    *
-   * @param  raf  File containing words, one per line.
+   * @param  file  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
    * @param  decoder  Charset decoder for converting file bytes to characters
@@ -97,10 +97,11 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent,
-    final CharsetDecoder decoder) throws IOException
+  public MemoryMappedFileWordList(
+    final RandomAccessFile file, final boolean caseSensitive, final int cachePercent, final CharsetDecoder decoder)
+    throws IOException
   {
-    this(raf, caseSensitive, cachePercent, decoder, false);
+    this(file, caseSensitive, cachePercent, decoder, false);
   }
 
 
@@ -111,7 +112,7 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * <p><strong>NOTE</strong> Attempts to close the source file will cause {@link IOException} when {@link #get(int)} is
    * called subsequently.</p>
    *
-   * @param  raf  File containing words, one per line.
+   * @param  file  File containing words, one per line.
    * @param  caseSensitive  Set to true to create case-sensitive word list, false otherwise.
    * @param  cachePercent  Percent (0-100) of file to cache in memory for improved read performance.
    * @param  decoder  Charset decoder for converting file bytes to characters
@@ -120,11 +121,11 @@ public class MemoryMappedFileWordList extends AbstractFileWordList
    * @throws  IllegalArgumentException  if cache percent is out of range.
    * @throws  IOException  if an error occurs reading the supplied file
    */
-  public MemoryMappedFileWordList(final RandomAccessFile raf, final boolean caseSensitive, final int cachePercent,
+  public MemoryMappedFileWordList(final RandomAccessFile file, final boolean caseSensitive, final int cachePercent,
     final CharsetDecoder decoder, final boolean allocateDirect) throws IOException
   {
-    super(raf, caseSensitive, decoder);
-    final FileChannel channel = file.getChannel();
+    super(file, caseSensitive, decoder);
+    final FileChannel channel = this.file.getChannel();
     buffer = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
     initialize(cachePercent, allocateDirect);
   }

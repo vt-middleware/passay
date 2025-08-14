@@ -9,9 +9,12 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import org.passay.PassayUtils;
 import org.passay.dictionary.sort.ArraySorter;
 
 /**
@@ -27,6 +30,8 @@ public final class WordLists
     @Override
     public int compare(final String a, final String b)
     {
+      PassayUtils.assertNotNullArg(a, "Compare string cannot be null");
+      PassayUtils.assertNotNullArg(b, "Compare string cannot be null");
       return a.compareTo(b);
     }
     @Override
@@ -41,6 +46,8 @@ public final class WordLists
     @Override
     public int compare(final String a, final String b)
     {
+      PassayUtils.assertNotNullArg(a, "Compare string cannot be null");
+      PassayUtils.assertNotNullArg(b, "Compare string cannot be null");
       return a.compareToIgnoreCase(b);
     }
     @Override
@@ -68,6 +75,8 @@ public final class WordLists
    */
   public static int binarySearch(final WordList wordList, final String word)
   {
+    PassayUtils.assertNotNullArg(wordList, "Word list cannot be null");
+    PassayUtils.assertNotNullArg(word, "Word cannot be null");
     final Comparator<String> comparator = wordList.getComparator();
     int low = 0;
     int high = wordList.size() - 1;
@@ -133,11 +142,15 @@ public final class WordLists
   public static ArrayWordList createFromReader(final Reader[] readers, final boolean caseSensitive,
     final ArraySorter sorter) throws IOException
   {
+    PassayUtils.assertNotNullArgOr(
+      readers,
+      v -> Stream.of(v).anyMatch(Objects::isNull),
+      "Readers cannot be null or contain null");
     final List<String> words = new ArrayList<>();
     for (Reader r : readers) {
       readWordList(r, words);
     }
-    return new ArrayWordList(words.toArray(new String[words.size()]), caseSensitive, sorter);
+    return new ArrayWordList(words.toArray(new String[0]), caseSensitive, sorter);
   }
 
 
@@ -152,6 +165,8 @@ public final class WordLists
    */
   public static void readWords(final Reader reader, final List<String> words) throws IOException
   {
+    PassayUtils.assertNotNullArg(reader, "Reader cannot be null");
+    PassayUtils.assertNotNullArg(words, "Word list cannot be null");
     final BufferedReader bufferedReader = reader instanceof BufferedReader
             ? (BufferedReader) reader
             : new BufferedReader(reader);
@@ -176,6 +191,8 @@ public final class WordLists
    */
   public static void readWords(final InputStream in, final String charset, final List<String> words) throws IOException
   {
+    PassayUtils.assertNotNullArg(in, "Input stream cannot be null");
+    PassayUtils.assertNotNullArg(charset, "Character set cannot be null");
     readWords(new InputStreamReader(in, charset), words);
   }
 
@@ -196,6 +213,9 @@ public final class WordLists
   public static void readZippedWords(final InputStream in, final String charset,
                                       final String regex, final List<String> words) throws IOException
   {
+    PassayUtils.assertNotNullArg(in, "Input stream cannot be null");
+    PassayUtils.assertNotNullArg(charset, "Character set cannot be null");
+    PassayUtils.assertNotNullArg(words, "Word list cannot be null");
     final Pattern pattern = regex == null ? null : Pattern.compile(regex);
     final ZipInputStream zin = new ZipInputStream(in);
     ZipEntry entry;

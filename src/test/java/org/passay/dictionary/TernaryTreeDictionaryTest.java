@@ -135,7 +135,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  /** @throws  Exception  On test failure. */
   @Test(groups = "ttdicttest")
   public void bubbleSort()
   {
@@ -143,7 +142,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  /** @throws  Exception  On test failure. */
   @Test(groups = "ttdicttest")
   public void selectionSort()
   {
@@ -151,7 +149,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  /** @throws  Exception  On test failure. */
   @Test(groups = "ttdicttest")
   public void insertionSort()
   {
@@ -159,7 +156,6 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  /** @throws  Exception  On test failure. */
   @Test(groups = "ttdicttest")
   public void quickSort()
   {

@@ -104,10 +104,8 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
         )
     );
     defaultRule = new HaveIBeenPwnedRule("org.passay", apiUrl);
-    allowExposedRule = new HaveIBeenPwnedRule("org.passay", apiUrl);
-    allowExposedRule.setAllowExposed(true);
-    allowOnExceptionRule = new HaveIBeenPwnedRule("org.passay", apiUrl);
-    allowOnExceptionRule.setAllowOnException(true);
+    allowExposedRule = new HaveIBeenPwnedRule("org.passay", apiUrl, true, false);
+    allowOnExceptionRule = new HaveIBeenPwnedRule("org.passay", apiUrl, false, true);
   }
 
 
@@ -191,8 +189,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void testInvalidPwdAllowExposed()
   {
-    final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl);
-    rule.setAllowExposed(true);
+    final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl, true, false);
     final PasswordValidator validator = new PasswordValidator(rule);
     final RuleResult result = validator.validate(new PasswordData(INVALID_PASSWORD));
     assertThat(result.isValid()).isTrue();
@@ -204,8 +201,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void testInvalidPwdAllowException()
   {
-    final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl);
-    rule.setAllowOnException(true);
+    final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl, false, true);
     final PasswordValidator validator = new PasswordValidator(rule);
     final RuleResult result = validator.validate(new PasswordData(EXCEPTION_PASSWORD));
     assertThat(result.isValid()).isTrue();

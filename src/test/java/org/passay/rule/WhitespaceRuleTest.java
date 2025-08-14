@@ -20,8 +20,6 @@ public class WhitespaceRuleTest extends AbstractRuleTest
 
   /**
    * @return  Test data.
-   *
-   * @throws  Exception  On test data generation failure.
    */
   @DataProvider(name = "passwords")
   public Object[][] passwords()

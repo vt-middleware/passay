@@ -2,6 +2,7 @@
 package org.passay.resolver;
 
 import java.util.Locale;
+import org.passay.PassayUtils;
 import org.passay.RuleResultDetail;
 
 /**
@@ -15,7 +16,18 @@ public abstract class AbstractMessageResolver implements MessageResolver
 {
 
   /** Locale used to format error messages. */
-  private Locale locale;
+  private final Locale locale;
+
+
+  /**
+   * Creates a new abstract message resolver.
+   *
+   * @param  locale  locale
+   */
+  public AbstractMessageResolver(final Locale locale)
+  {
+    this.locale = locale;
+  }
 
 
   /**
@@ -26,17 +38,6 @@ public abstract class AbstractMessageResolver implements MessageResolver
   public Locale getLocale()
   {
     return locale;
-  }
-
-
-  /**
-   * Sets the locale used by this message resolver.
-   *
-   * @param  l  locale
-   */
-  public void setLocale(final Locale l)
-  {
-    locale = l;
   }
 
 
@@ -53,6 +54,7 @@ public abstract class AbstractMessageResolver implements MessageResolver
   @Override
   public String resolve(final RuleResultDetail detail)
   {
+    PassayUtils.assertNotNullArg(detail, "Rule result detail cannot be null");
     String message;
     for (String key : detail.getErrorCodes()) {
       message = getMessage(key);
@@ -69,9 +71,9 @@ public abstract class AbstractMessageResolver implements MessageResolver
     final String format;
     if (!detail.getParameters().isEmpty()) {
       if (locale != null) {
-        format =  String.format(locale, "%s:%s", detail.getErrorCode(), detail.getParameters()).toString();
+        format = String.format(locale, "%s:%s", detail.getErrorCode(), detail.getParameters());
       } else {
-        format =  String.format("%s:%s", detail.getErrorCode(), detail.getParameters()).toString();
+        format = String.format("%s:%s", detail.getErrorCode(), detail.getParameters());
       }
     } else {
       format = detail.getErrorCode();

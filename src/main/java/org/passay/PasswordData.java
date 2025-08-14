@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
  *
  * @author  Middleware Services
  */
-public class PasswordData
+public final class PasswordData
 {
 
   /** Enum to define the origin of a password. */
@@ -26,100 +27,128 @@ public class PasswordData
   }
 
   /** Stores the password. */
-  private String password;
+  private final String password;
 
   /** Stores the username. */
-  private String username;
+  private final String username;
 
   /** Password references. */
-  private List<Reference> passwordReferences = new ArrayList<>();
+  private final List<Reference> passwordReferences = new ArrayList<>();
 
   /** Origin of this password. */
-  private Origin origin = Origin.User;
-
-
-  /** Default constructor. */
-  public PasswordData() {}
+  private final Origin origin;
 
 
   /**
    * Creates a new password data. The origin of this data is assumed to be {@link Origin#User} by default.
    *
-   * @param  p  password
+   * @param  password  password
    */
-  public PasswordData(final String p)
+  public PasswordData(final String password)
   {
-    setPassword(p);
+    this(null, password, Origin.User, Collections.emptyList());
   }
 
 
   /**
    * Creates a new password data. The origin of this data is assumed to be {@link Origin#User} by default.
    *
-   * @param  u  username
-   * @param  p  password
+   * @param  username  username
+   * @param  password  password
    */
-  public PasswordData(final String u, final String p)
+  public PasswordData(final String username, final String password)
   {
-    setUsername(u);
-    setPassword(p);
+    this(username, password, Origin.User, Collections.emptyList());
   }
 
 
   /**
    * Creates a new password data.
    *
-   * @param  p  password
-   * @param  o  origin
+   * @param  password  password
+   * @param  origin  origin
    */
-  public PasswordData(final String p, final Origin o)
+  public PasswordData(final String password, final Origin origin)
   {
-    setPassword(p);
-    setOrigin(o);
+    this(null, password, origin, Collections.emptyList());
   }
 
 
   /**
    * Creates a new password data.
    *
-   * @param  u  username
-   * @param  p  password
-   * @param  o  origin
+   * @param  username  username
+   * @param  password  password
+   * @param  origin  origin
    */
-  public PasswordData(final String u, final String p, final Origin o)
+  public PasswordData(final String username, final String password, final Origin origin)
   {
-    setUsername(u);
-    setPassword(p);
-    setOrigin(o);
+    this(username, password, origin, Collections.emptyList());
   }
 
 
   /**
    * Creates a new password data.
    *
-   * @param  u  username
-   * @param  p  password
-   * @param  r  references
+   * @param  username  username
+   * @param  password  password
+   * @param  references  references
    */
-  public PasswordData(final String u, final String p, final List<Reference> r)
+  public PasswordData(final String username, final String password, final Reference... references)
   {
-    setUsername(u);
-    setPassword(p);
-    setPasswordReferences(r);
+    this(username, password, Origin.User, Arrays.asList(references));
   }
 
 
   /**
-   * Sets the password.
+   * Creates a new password data.
    *
-   * @param  p  password
+   * @param  username  username
+   * @param  password  password
+   * @param  references  references
    */
-  public void setPassword(final String p)
+  public PasswordData(final String username, final String password, final List<Reference> references)
   {
-    if (p == null) {
-      throw new NullPointerException("Password cannot be null");
+    this(username, password, Origin.User, references);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  origin  origin
+   * @param  references  references
+   */
+  public PasswordData(
+    final String username, final String password, final Origin origin, final Reference... references)
+  {
+    this(username, password, origin, Arrays.asList(references));
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  origin  origin
+   * @param  references  references
+   */
+  public PasswordData(
+    final String username, final String password, final Origin origin, final List<Reference> references)
+  {
+    this.username = username;
+    this.password = PassayUtils.assertNotNullArg(password, "Password cannot be null");
+    this.origin = PassayUtils.assertNotNullArg(origin, "Origin cannot be null");
+    if (references != null) {
+      passwordReferences.addAll(
+        PassayUtils.assertNotNullArgOr(
+          references,
+          v -> v.stream().anyMatch(Objects::isNull),
+          "Reference values cannot be null or contain null"));
     }
-    password = p;
   }
 
 
@@ -146,20 +175,6 @@ public class PasswordData
 
 
   /**
-   * Sets the origin.
-   *
-   * @param  o  origin
-   */
-  public void setOrigin(final Origin o)
-  {
-    if (o == null) {
-      throw new NullPointerException("Origin cannot be null");
-    }
-    origin = o;
-  }
-
-
-  /**
    * Returns the origin.
    *
    * @return  origin
@@ -167,20 +182,6 @@ public class PasswordData
   public Origin getOrigin()
   {
     return origin;
-  }
-
-
-  /**
-   * Sets the username.
-   *
-   * @param  s  username
-   */
-  public void setUsername(final String s)
-  {
-    if (s == null) {
-      throw new NullPointerException("Username cannot be null");
-    }
-    username = s;
   }
 
 
@@ -202,7 +203,7 @@ public class PasswordData
    */
   public List<Reference> getPasswordReferences()
   {
-    return passwordReferences;
+    return Collections.unmodifiableList(passwordReferences);
   }
 
 
@@ -217,34 +218,9 @@ public class PasswordData
   @SuppressWarnings("unchecked")
   public <T extends Reference> List<T> getPasswordReferences(final Class<T> type)
   {
-    final List<T> l = new ArrayList<>();
-    if (passwordReferences != null) {
-      l.addAll(passwordReferences.stream().filter(
-        type::isInstance).map(r -> (T) r).collect(Collectors.toList()));
-    }
+    final List<T> l = passwordReferences.stream().filter(
+      type::isInstance).map(r -> (T) r).collect(Collectors.toList());
     return Collections.unmodifiableList(l);
-  }
-
-
-  /**
-   * Sets the password references.
-   *
-   * @param  r  password references
-   */
-  public void setPasswordReferences(final Reference... r)
-  {
-    setPasswordReferences(Arrays.asList(r));
-  }
-
-
-  /**
-   * Sets the password references.
-   *
-   * @param  l  password references
-   */
-  public void setPasswordReferences(final List<Reference> l)
-  {
-    passwordReferences = l;
   }
 
 
@@ -255,14 +231,10 @@ public class PasswordData
    *
    * @return  password data
    */
-  public static PasswordData newPasswordData(final PasswordData data)
+  public static PasswordData copy(final PasswordData data)
   {
-    final PasswordData pd = new PasswordData();
-    pd.setUsername(data.getUsername());
-    pd.setPassword(data.getPassword());
-    pd.setPasswordReferences(data.getPasswordReferences());
-    pd.setOrigin(data.getOrigin());
-    return pd;
+    return new PasswordData(
+      data.getUsername(), data.getPassword(), data.getOrigin(), data.getPasswordReferences());
   }
 
 
@@ -337,11 +309,11 @@ public class PasswordData
     /**
      * Creates a new salt with the given salt data.
      *
-     * @param slt the salt data
+     * @param salt the salt data
      */
-    public SuffixSalt(final String slt)
+    public SuffixSalt(final String salt)
     {
-      salt = slt;
+      this.salt = salt;
     }
 
     @Override
@@ -384,36 +356,36 @@ public class PasswordData
     /**
      * Creates a new historical reference.
      *
-     * @param  pass  password string
+     * @param  password  password string
      */
-    public HistoricalReference(final String pass)
+    public HistoricalReference(final String password)
     {
-      super(null, pass);
+      super(null, password);
     }
 
 
     /**
      * Creates a new historical reference.
      *
-     * @param  lbl  label for this password
-     * @param  pass  password string
+     * @param  label  label for this password
+     * @param  password  password string
      */
-    public HistoricalReference(final String lbl, final String pass)
+    public HistoricalReference(final String label, final String password)
     {
-      super(lbl, pass);
+      super(label, password);
     }
 
 
     /**
      * Creates a new historical reference.
      *
-     * @param  lbl  label for this password
-     * @param  pass  password string
-     * @param  slt  salt that was applied to password
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
      */
-    public HistoricalReference(final String lbl, final String pass, final Salt slt)
+    public HistoricalReference(final String label, final String password, final Salt salt)
     {
-      super(lbl, pass, slt);
+      super(label, password, salt);
     }
   }
 
@@ -426,36 +398,36 @@ public class PasswordData
     /**
      * Creates a new source reference.
      *
-     * @param  pass  password string
+     * @param  password  password string
      */
-    public SourceReference(final String pass)
+    public SourceReference(final String password)
     {
-      super(null, pass);
+      super(null, password);
     }
 
 
     /**
      * Creates a new source reference.
      *
-     * @param  lbl  label for this password
-     * @param  pass  password string
+     * @param  label  label for this password
+     * @param  password  password string
      */
-    public SourceReference(final String lbl, final String pass)
+    public SourceReference(final String label, final String password)
     {
-      super(lbl, pass);
+      super(label, password);
     }
 
 
     /**
      * Creates a new source reference.
      *
-     * @param  lbl  label for this password
-     * @param  pass  password string
-     * @param  slt  salt that was applied to password
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
      */
-    public SourceReference(final String lbl, final String pass, final Salt slt)
+    public SourceReference(final String label, final String password, final Salt salt)
     {
-      super(lbl, pass, slt);
+      super(label, password, salt);
     }
   }
 
@@ -477,27 +449,27 @@ public class PasswordData
     /**
      * Creates a new abstract reference.
      *
-     * @param  lbl  label for this password
-     * @param  pass  password string
-     * @param  slt  salt that was applied to password
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
      */
-    public AbstractReference(final String lbl, final String pass, final Salt slt)
+    public AbstractReference(final String label, final String password, final Salt salt)
     {
-      label = lbl;
-      password = pass;
-      salt = slt;
+      this.label = label;
+      this.password = password;
+      this.salt = salt;
     }
 
 
     /**
      * Creates a new abstract reference.
      *
-     * @param  lbl  label for this password
-     * @param  pass  password string
+     * @param  label  label for this password
+     * @param  password  password string
      */
-    public AbstractReference(final String lbl, final String pass)
+    public AbstractReference(final String label, final String password)
     {
-      this(lbl, pass, null);
+      this(label, password, null);
     }
 
 

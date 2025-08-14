@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.IntStream;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.UnicodeString;
@@ -21,7 +22,7 @@ public class CharacterOccurrencesRule implements Rule
   public static final String ERROR_CODE = "TOO_MANY_OCCURRENCES";
 
   /** Maximum umber of occurrences to allow. */
-  protected int maxOccurrences;
+  protected final int maxOccurrences;
 
   /**
    * Creates a new character occurrences rule.
@@ -36,6 +37,7 @@ public class CharacterOccurrencesRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final String password = passwordData.getPassword();
     final int[] codePoints = IntStream.concat(password.codePoints(), IntStream.of(Integer.MAX_VALUE)).toArray();
@@ -58,15 +60,15 @@ public class CharacterOccurrencesRule implements Rule
   /**
    * Creates the parameter data for the rule result detail.
    *
-   * @param  c  the character that occurred too many times
+   * @param  character  the character that occurred too many times
    * @param  occurrences the number of times the character occurred
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final String c, final int occurrences)
+  protected Map<String, Object> createRuleResultDetailParameters(final String character, final int occurrences)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("matchingCharacter", c);
+    m.put("matchingCharacter", character);
     m.put("matchingCharacterCount", occurrences);
     m.put("maximumOccurrences", maxOccurrences);
     return m;

@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 
@@ -79,7 +80,7 @@ public class NumberRangeRule implements Rule
   public NumberRangeRule(final int lower, final int upper, final MatchBehavior behavior, final boolean reportAll)
   {
     if (lower >= upper) {
-      throw new IllegalArgumentException("lower must be less than upper");
+      throw new IllegalArgumentException("Lower must be less than upper");
     }
     lowerRange = lower;
     upperRange = upper;
@@ -124,6 +125,7 @@ public class NumberRangeRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final String text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {

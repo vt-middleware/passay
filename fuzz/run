@@ -1,0 +1,40 @@
+#!/bin/bash
+
+set -e
+
+FUZZ_VERSION=0.24.0
+# maximum time in seconds for each fuzzer
+MAX_FUZZ_TIME=30
+
+mvn -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
+tar xzf fuzz/jazzer-linux-${FUZZ_VERSION}.tar.gz -C target
+
+for i in target/*.jar; do
+  CLASSPATH=$CLASSPATH:$i
+done
+for i in target/dependency/*.jar; do
+  CLASSPATH=$CLASSPATH:$i
+done
+
+# recommended java options
+export JAVA_OPTS="-XX:-OmitStackTraceInFastThrow -XX:+UseParallelGC -XX:+CriticalJNINatives -XX:+EnableDynamicAgentLoading"
+
+# jazzer can't generate input for these classes
+#"org.passay.dictionary.Dictionary::search;java.lang.IllegalArgumentException"
+
+AUTO_FUZZ=(
+"org.passay.rule.Rule::validate;java.lang.IllegalArgumentException"
+"org.passay.PasswordGenerator::generatePassword;java.lang.IllegalArgumentException,java.lang.IllegalStateException"
+"org.passay.dictionary.sort.ArraySorter::sort;java.lang.IllegalArgumentException,java.lang.NullPointerException,java.lang.ClassCastException"
+"org.passay.entropy.Entropy::estimate;java.lang.IllegalArgumentException"
+"org.passay.resolver.MessageResolver::resolve;java.lang.IllegalArgumentException"
+)
+
+# see https://llvm.org/docs/LibFuzzer.html#options for command line options
+for FUZZ in ${AUTO_FUZZ[@]}; do
+  FUZZ_ARR=(${FUZZ//;/ })
+  echo "-------------------------"
+  echo "  begin autofuzz: ${FUZZ_ARR[0]}  "
+  echo "-------------------------"
+  target/jazzer -max_total_time="$MAX_FUZZ_TIME" -timeout=60 --cp="$CLASSPATH" --reproducer_path=target --autofuzz="${FUZZ_ARR[0]}" --autofuzz_ignore="${FUZZ_ARR[1]}" --coverage_report="target/jazzer_report_${FUZZ_ARR[0]}.txt"
+done

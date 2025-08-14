@@ -19,91 +19,90 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final LengthComplexityRule rule1 = new LengthComplexityRule();
+  private LengthComplexityRule rule1;
 
   /** For testing. */
-  private final LengthComplexityRule rule2 = new LengthComplexityRule();
+  private LengthComplexityRule rule2;
 
 
   /** Initialize rules for this test. */
   @BeforeClass(groups = "passtest")
   public void createRules()
   {
-    rule1.addRules(
-      "[0,12)",
-      new LengthRule(8, 64),
-      new CharacterCharacteristicsRule(
-        4,
-        new CharacterRule(EnglishCharacterData.Digit, 1),
-        new CharacterRule(EnglishCharacterData.Special, 1),
-        new CharacterRule(EnglishCharacterData.UpperCase, 1),
-        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
-      new UsernameRule(true, true),
-      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
-      new IllegalSequenceRule(EnglishSequenceData.Numerical),
-      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-      new RepeatCharacterRegexRule());
+    rule1 = new LengthComplexityRule(
+      new LengthComplexityRule.Entry(
+        "[0,12)",
+        new LengthRule(8, 64),
+        new CharacterCharacteristicsRule(
+          4,
+          new CharacterRule(EnglishCharacterData.Digit, 1),
+          new CharacterRule(EnglishCharacterData.Special, 1),
+          new CharacterRule(EnglishCharacterData.UpperCase, 1),
+          new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+        new UsernameRule(true, true),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical),
+        new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+        new RepeatCharacterRegexRule()),
+      new LengthComplexityRule.Entry(
+        "[12,16)",
+        new LengthRule(8, 64),
+        new CharacterCharacteristicsRule(
+          3,
+          new CharacterRule(EnglishCharacterData.Digit, 1),
+          new CharacterRule(EnglishCharacterData.UpperCase, 1),
+          new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+        new UsernameRule(true, true),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical),
+        new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+        new RepeatCharacterRegexRule()),
+      new LengthComplexityRule.Entry(
+        "[16,20)",
+        new LengthRule(8, 64),
+        new CharacterCharacteristicsRule(
+          2,
+          new CharacterRule(EnglishCharacterData.UpperCase, 1),
+          new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+        new UsernameRule(true, true),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical),
+        new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+        new RepeatCharacterRegexRule()),
+      new LengthComplexityRule.Entry(
+        "[20,128]",
+        new LengthRule(8, 64),
+        new UsernameRule(true, true),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical),
+        new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+        new RepeatCharacterRegexRule()));
 
-    rule1.addRules(
-      "[12,16)",
-      new LengthRule(8, 64),
-      new CharacterCharacteristicsRule(
-        3,
-        new CharacterRule(EnglishCharacterData.Digit, 1),
-        new CharacterRule(EnglishCharacterData.UpperCase, 1),
-        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
-      new UsernameRule(true, true),
-      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
-      new IllegalSequenceRule(EnglishSequenceData.Numerical),
-      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-      new RepeatCharacterRegexRule());
-
-    rule1.addRules(
-      "[16,20)",
-      new LengthRule(8, 64),
-      new CharacterCharacteristicsRule(
-        2,
-        new CharacterRule(EnglishCharacterData.UpperCase, 1),
-        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
-      new UsernameRule(true, true),
-      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
-      new IllegalSequenceRule(EnglishSequenceData.Numerical),
-      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-      new RepeatCharacterRegexRule());
-
-    rule1.addRules(
-      "[20,128]",
-      new LengthRule(8, 64),
-      new UsernameRule(true, true),
-      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
-      new IllegalSequenceRule(EnglishSequenceData.Numerical),
-      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-      new RepeatCharacterRegexRule());
-
-    rule2.setReportFailure(false);
-    rule2.addRules(
-      "[0,20)",
-      new LengthRule(8, 64),
-      new CharacterCharacteristicsRule(
-        4,
-        new CharacterRule(EnglishCharacterData.Digit, 1),
-        new CharacterRule(EnglishCharacterData.Special, 1),
-        new CharacterRule(EnglishCharacterData.UpperCase, 1),
-        new CharacterRule(EnglishCharacterData.LowerCase, 1)),
-      new UsernameRule(true, true),
-      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
-      new IllegalSequenceRule(EnglishSequenceData.Numerical),
-      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-      new RepeatCharacterRegexRule());
-
-    rule2.addRules(
-      "[20,*]",
-      new LengthRule(8, 64),
-      new UsernameRule(true, true),
-      new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
-      new IllegalSequenceRule(EnglishSequenceData.Numerical),
-      new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-      new RepeatCharacterRegexRule());
+    rule2 = new LengthComplexityRule(
+      false,
+      true,
+      new LengthComplexityRule.Entry(
+        "[0,20)",
+        new LengthRule(8, 64),
+        new CharacterCharacteristicsRule(
+          4,
+          new CharacterRule(EnglishCharacterData.Digit, 1),
+          new CharacterRule(EnglishCharacterData.Special, 1),
+          new CharacterRule(EnglishCharacterData.UpperCase, 1),
+          new CharacterRule(EnglishCharacterData.LowerCase, 1)),
+        new UsernameRule(true, true),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical),
+        new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+        new RepeatCharacterRegexRule()),
+      new LengthComplexityRule.Entry(
+        "[20,*]",
+        new LengthRule(8, 64),
+        new UsernameRule(true, true),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical),
+        new IllegalSequenceRule(EnglishSequenceData.USQwerty),
+        new RepeatCharacterRegexRule()));
   }
 
 
@@ -254,9 +253,8 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   @Test(groups = "passtest", dataProvider = "intervals")
   public void checkInterval(final String interval, final boolean valid)
   {
-    final LengthComplexityRule lcr = new LengthComplexityRule();
     try {
-      lcr.addRules(interval, new RepeatCharacterRegexRule());
+      new LengthComplexityRule(new LengthComplexityRule.Entry(interval, new RepeatCharacterRegexRule()));
       if (!valid) {
         fail("Should have thrown IllegalArgumentException");
       }
@@ -275,47 +273,56 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void checkConsistency()
   {
-    // no rules configured
-    final LengthComplexityRule lcr = new LengthComplexityRule();
-    lcr.addRules("[10,20]", new RepeatCharacterRegexRule());
     try {
       // intersecting rules
-      lcr.addRules("(5,11)", new WhitespaceRule());
+      new LengthComplexityRule(
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("(5,11)", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // intersecting rules
-      lcr.addRules("(5,15]", new WhitespaceRule());
+      new LengthComplexityRule(
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("(5,15]", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // intersecting rules
-      lcr.addRules("[15,25)", new WhitespaceRule());
+      new LengthComplexityRule(
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[15,25)", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // intersecting rules
-      lcr.addRules("(19,25)", new WhitespaceRule());
+      new LengthComplexityRule(
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("(19,25)", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // null rules
-      lcr.addRules("(0,1)", (Rule[]) null);
+      new LengthComplexityRule(
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("(0,1)", (Rule[]) null));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
     try {
       // empty rules
-      lcr.addRules("(0,1)", new ArrayList<>());
+      new LengthComplexityRule(
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("(0,1)", new ArrayList<>()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);

@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
@@ -23,10 +24,10 @@ public class LengthRule implements Rule
   public static final String ERROR_CODE_MAX = "TOO_LONG";
 
   /** Stores the minimum length of a password. */
-  private int minimumLength;
+  private final int minimumLength;
 
   /** Stores the maximum length of a password. */
-  private int maximumLength;
+  private final int maximumLength;
 
 
   /** Creates a new length rule with lengths unset. The defaults are 0 and Integer.MAX_VALUE respectively. */
@@ -62,17 +63,6 @@ public class LengthRule implements Rule
 
 
   /**
-   * Sets the minimum password length.
-   *
-   * @param  minLength  minimum length of a password
-   */
-  public void setMinimumLength(final int minLength)
-  {
-    minimumLength = minLength;
-  }
-
-
-  /**
    * Returns the minimum password length.
    *
    * @return  minimum password length
@@ -80,17 +70,6 @@ public class LengthRule implements Rule
   public int getMinimumLength()
   {
     return minimumLength;
-  }
-
-
-  /**
-   * Sets the maximum password length.
-   *
-   * @param  maxLength  maximum length of a password
-   */
-  public void setMaximumLength(final int maxLength)
-  {
-    maximumLength = maxLength;
   }
 
 
@@ -108,6 +87,7 @@ public class LengthRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final int length = passwordData.getCharacterCount();
     if (length < minimumLength) {

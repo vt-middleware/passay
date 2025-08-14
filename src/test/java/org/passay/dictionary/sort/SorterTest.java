@@ -122,6 +122,30 @@ public class SorterTest
   }
 
 
+  @Test(groups = "sorttest")
+  public void emptyArraySort()
+  {
+    new BubbleSort().sort(new String[0]);
+    new BubbleSort().sort(new String[]{""});
+    new InsertionSort().sort(new String[0]);
+    new InsertionSort().sort(new String[]{""});
+    new QuickSort().sort(new String[0]);
+    new QuickSort().sort(new String[]{""});
+    new SelectionSort().sort(new String[0]);
+    new SelectionSort().sort(new String[]{""});
+  }
+
+
+  @Test(groups = "sorttest")
+  public void brokenComparatorSort()
+  {
+    new BubbleSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+    new InsertionSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+    new QuickSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+    new SelectionSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+  }
+
+
   /**
    * Sorts the supplied list with the supplied sorter.
    *

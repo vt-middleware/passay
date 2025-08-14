@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.UnicodeString;
@@ -51,12 +52,12 @@ public class IllegalSequenceRule implements Rule
    * Creates a new sequence rule with the supplied list of characters.
    *
    * @param  data  sequence data for this rule
-   * @param  sl  sequence length
+   * @param  length  sequence length
    * @param  wrap  whether to wrap sequences
    */
-  public IllegalSequenceRule(final SequenceData data, final int sl, final boolean wrap)
+  public IllegalSequenceRule(final SequenceData data, final int length, final boolean wrap)
   {
-    this(data, sl, wrap, true);
+    this(data, length, wrap, true);
   }
 
 
@@ -64,17 +65,17 @@ public class IllegalSequenceRule implements Rule
    * Creates a new sequence rule with the supplied list of characters.
    *
    * @param  data  sequence data for this rule
-   * @param  sl  sequence length
+   * @param  length  sequence length
    * @param  wrap  whether to wrap sequences
    * @param  reportAll  whether to report all sequence matches or just the first
    */
-  public IllegalSequenceRule(final SequenceData data, final int sl, final boolean wrap, final boolean reportAll)
+  public IllegalSequenceRule(final SequenceData data, final int length, final boolean wrap, final boolean reportAll)
   {
-    if (sl < MINIMUM_SEQUENCE_LENGTH) {
-      throw new IllegalArgumentException(String.format("sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH));
+    if (length < MINIMUM_SEQUENCE_LENGTH) {
+      throw new IllegalArgumentException("Sequence length must be >= " + MINIMUM_SEQUENCE_LENGTH);
     }
     sequenceData = data;
-    sequenceLength = sl;
+    sequenceLength = length;
     wrapSequence = wrap;
     reportAllFailures = reportAll;
   }
@@ -105,6 +106,7 @@ public class IllegalSequenceRule implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final RuleResult result = new RuleResult();
     final String password = passwordData.getPassword() + '\uffff';
     final StringBuilder match = new StringBuilder(password.length());
@@ -192,5 +194,4 @@ public class IllegalSequenceRule implements Rule
       result.addError(sequenceData.getErrorCode(), m);
     }
   }
-
 }

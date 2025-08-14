@@ -3,7 +3,9 @@ package org.passay.resolver;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Properties;
+import org.passay.PassayUtils;
 
 /**
  * Resolves messages from rule result details from a properties file. The default properties file is loaded from the
@@ -35,10 +37,20 @@ public class PropertiesMessageResolver extends AbstractMessageResolver
    */
   public PropertiesMessageResolver(final Properties properties)
   {
-    if (properties == null) {
-      throw new IllegalArgumentException("Properties cannot be null.");
-    }
-    messageProperties = properties;
+    this(properties, null);
+  }
+
+
+  /**
+   * Creates a new message resolver with the supplied message properties.
+   *
+   * @param  properties  map of keys to messages.
+   * @param  locale  for resource
+   */
+  public PropertiesMessageResolver(final Properties properties, final Locale locale)
+  {
+    super(locale);
+    messageProperties = PassayUtils.assertNotNullArg(properties, "Properties cannot be null");
   }
 
 
@@ -57,21 +69,13 @@ public class PropertiesMessageResolver extends AbstractMessageResolver
   public static Properties getDefaultProperties()
   {
     final Properties props = new Properties();
-    InputStream in = null;
-    try {
-      in = PropertiesMessageResolver.class.getResourceAsStream(DEFAULT_MESSAGE_PATH);
-      props.load(in);
-    } catch (Exception e) {
-      throw new IllegalStateException("Error loading default message properties.", e);
-    } finally {
+    try (InputStream in = PropertiesMessageResolver.class.getResourceAsStream(DEFAULT_MESSAGE_PATH)) {
       try {
-        if (in != null) {
-          in.close();
-        }
-      } catch (IOException e) {
-        e.printStackTrace();
+        props.load(in);
+      } catch (Exception e) {
+        throw new IllegalStateException("Error loading default message properties.", e);
       }
-    }
+    } catch (IOException ignored) {}
     return props;
   }
 }
