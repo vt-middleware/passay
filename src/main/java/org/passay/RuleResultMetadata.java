@@ -51,26 +51,6 @@ public final class RuleResultMetadata
 
     /** Already leaked password. */
     Pwned;
-
-
-    /**
-     * Returns whether a count category exists with the supplied name.
-     *
-     * @param  name  to check.
-     *
-     * @return  whether the supplied name exists.
-     * @deprecated use the standard {@link CountCategory#valueOf(String)} instead
-     */
-    @Deprecated
-    public static boolean exists(final String name)
-    {
-      for (CountCategory cc : CountCategory.values()) {
-        if (cc.name().equals(name)) {
-          return true;
-        }
-      }
-      return false;
-    }
   }
 
   /** Character count metadata. */

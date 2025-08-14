@@ -53,21 +53,6 @@ public abstract class AbstractWordList implements WordList
 
 
   /**
-   * Throws a {@link ClassCastException} if the supplied object is not an instance of {@link String}.
-   *
-   * @param  o  object to check
-   * @deprecated this method is no longer used and will be removed in a future release
-   */
-  @Deprecated
-  protected void checkIsString(final Object o)
-  {
-    if (!(o instanceof String)) {
-      throw new ClassCastException("Parameter must be of type String");
-    }
-  }
-
-
-  /**
    * An iterator over the {@link WordList}.
    * <p>
    * The iteration order can be either sequential, i.e. incrementing an index from 0 to {@link WordList#size()} - 1,
