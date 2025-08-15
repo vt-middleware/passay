@@ -2,6 +2,7 @@
 package org.passay.dictionary.sort;
 
 import java.util.Comparator;
+import org.passay.PassayUtils;
 
 /**
  * Provides an implementation of the quick sort algorithm.
@@ -12,10 +13,12 @@ public class QuickSort implements ArraySorter
 {
 
   @Override
-  public void sort(final String[] array, final Comparator<String> c)
+  public void sort(final String[] array, final Comparator<String> comparator)
   {
+    PassayUtils.assertNotNullArg(array, "Array cannot be null");
+    PassayUtils.assertNotNullArg(comparator, "Comparator cannot be null");
     if (array.length > 0) {
-      sort(array, c, 0, array.length - 1);
+      sort(array, comparator, 0, array.length - 1);
     }
   }
 
@@ -31,17 +34,19 @@ public class QuickSort implements ArraySorter
    */
   public static void sort(final String[] array, final Comparator<String> c, final int lo, final int hi)
   {
+    PassayUtils.assertNotNullArg(array, "Array cannot be null");
+    PassayUtils.assertNotNullArg(c, "Comparator cannot be null");
     final int m = (lo + hi) >>> 1;
     final String x = array[m];
 
     int i = lo;
     int j = hi;
     do {
-      while (c.compare(x, array[i]) > 0) {
+      while (i < array.length && c.compare(x, array[i]) > 0) {
         i++;
       }
 
-      while (c.compare(x, array[j]) < 0) {
+      while (j > -1 && c.compare(x, array[j]) < 0) {
         j--;
       }
 
@@ -54,10 +59,10 @@ public class QuickSort implements ArraySorter
       }
     } while (i <= j);
 
-    if (lo < j) {
+    if (j > lo && j < hi) {
       sort(array, c, lo, j);
     }
-    if (i < hi) {
+    if (i > lo && i < hi) {
       sort(array, c, i, hi);
     }
   }

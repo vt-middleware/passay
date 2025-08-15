@@ -124,7 +124,7 @@ public class TernaryTree
     }
 
     final List<String> matches = partialSearchNode(root, null, "", word, 0);
-    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[matches.size()]);
+    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[0]);
   }
 
 
@@ -150,7 +150,7 @@ public class TernaryTree
     }
 
     final List<String> matches = nearSearchNode(root, distance, null, "", word, 0);
-    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[matches.size()]);
+    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[0]);
   }
 
 
@@ -451,7 +451,7 @@ public class TernaryTree
         printNode(node.getEqkid(), s + '-' + UnicodeString.toString(cp) + suffix, depth + 1, fullPath, buffer);
       } else {
         final int i = fullPath ? -1 : Math.max(s.lastIndexOf("  /"), s.lastIndexOf("  \\"));
-        final String line = i < 0 ? s : s.substring(0, i).replaceAll(".", " ") + s.substring(i);
+        final String line = i < 0 ? s : s.substring(0, i).replaceAll("\\.", " ") + s.substring(i);
         buffer.append(line).append('-').append(UnicodeString.toString(cp)).append(TernaryTree.LINE_SEPARATOR);
       }
 

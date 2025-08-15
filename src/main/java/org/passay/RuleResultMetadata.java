@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author  Middleware Services
  */
-public class RuleResultMetadata
+public final class RuleResultMetadata
 {
 
   /** Count category. */
@@ -51,30 +51,10 @@ public class RuleResultMetadata
 
     /** Already leaked password. */
     Pwned;
-
-
-    /**
-     * Returns whether a count category exists with the supplied name.
-     *
-     * @param  name  to check.
-     *
-     * @return  whether the supplied name exists.
-     * @deprecated use the standard {@link CountCategory#valueOf(String)} instead
-     */
-    @Deprecated
-    public static boolean exists(final String name)
-    {
-      for (CountCategory cc : CountCategory.values()) {
-        if (cc.name().equals(name)) {
-          return true;
-        }
-      }
-      return false;
-    }
   }
 
   /** Character count metadata. */
-  protected final Map<CountCategory, Integer> counts = new HashMap<>();
+  private final Map<CountCategory, Integer> counts = new HashMap<>();
 
 
   /**
@@ -91,7 +71,10 @@ public class RuleResultMetadata
    */
   public RuleResultMetadata(final CountCategory category, final int value)
   {
-    putCount(category, value);
+    if (value < 0) {
+      throw new IllegalArgumentException("Count value must be greater than or equal to zero");
+    }
+    counts.put(category, value);
   }
 
 
@@ -133,28 +116,18 @@ public class RuleResultMetadata
 
 
   /**
-   * Adds a count to the metadata.
-   *
-   * @param  category  of the count.
-   * @param  value  non-negative character count.
-   */
-  public void putCount(final CountCategory category, final int value)
-  {
-    if (value < 0) {
-      throw new IllegalArgumentException("Count value must be greater than or equals to zero");
-    }
-    counts.put(category, value);
-  }
-
-
-  /**
-   * Merges the supplied metadata with this metadata. This method will overwrite any existing categories.
+   * Merges the supplied metadata with this metadata
    *
    * @param  metadata  to merge.
+   *
+   * @return  new rule result metadata containing counts from this object and the parameter
    */
-  public void merge(final RuleResultMetadata metadata)
+  public RuleResultMetadata merge(final RuleResultMetadata metadata)
   {
-    counts.putAll(metadata.getCounts());
+    final RuleResultMetadata md = new RuleResultMetadata();
+    md.counts.putAll(counts);
+    md.counts.putAll(metadata.counts);
+    return md;
   }
 
 
