@@ -4,11 +4,11 @@ package org.passay.spring;
 import java.util.ArrayList;
 import org.passay.PasswordData;
 import org.passay.PasswordValidator;
-import org.passay.Rule;
 import org.passay.RuleResult;
+import org.passay.rule.Rule;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for Spring integration.
@@ -27,14 +27,12 @@ public class SpringTest
   {
     final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
       new String[] {"/spring-context.xml", });
-    AssertJUnit.assertTrue(context.getBeanDefinitionCount() > 0);
+    assertThat(context.getBeanDefinitionCount()).isGreaterThan(0);
 
     final PasswordValidator validator = new PasswordValidator(
       new ArrayList<>(context.getBeansOfType(Rule.class).values()));
-    final PasswordData pd = new PasswordData("springtest");
-    pd.setUsername("springuser");
-
+    final PasswordData pd = new PasswordData("springuser", "springtest");
     final RuleResult result = validator.validate(pd);
-    AssertJUnit.assertNotNull(result);
+    assertThat(result).isNotNull();
   }
 }

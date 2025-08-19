@@ -3,9 +3,9 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import org.testng.AssertJUnit;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link FileWordList}.
@@ -22,7 +22,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
   protected FileWordList createWordList(final String filePath, final boolean caseSensitive) throws IOException
   {
     final FileWordList list = new FileWordList(
-        new RandomAccessFile(filePath, "r"), caseSensitive, cachePercent > 100 ? 100 : cachePercent);
+        new RandomAccessFile(filePath, "r"), caseSensitive, Math.min(cachePercent, 100));
     cachePercent *= 3 / 2;
     return list;
   }
@@ -40,20 +40,20 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
   {
     try {
       new FileWordList(new RandomAccessFile(file1, "r"), true, -1);
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
-      AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      fail("Should have thrown IllegalArgumentException, threw %s", e.getMessage());
     }
 
     try {
       new FileWordList(new RandomAccessFile(file1, "r"), true, 100 + 1);
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
-      AssertJUnit.assertEquals(e.getClass(), IllegalArgumentException.class);
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     } catch (Exception e) {
-      AssertJUnit.fail("Should have thrown IllegalArgumentException, threw " + e.getMessage());
+      fail("Should have thrown IllegalArgumentException, threw %s", e.getMessage());
     }
 
     FileWordList fwl = new FileWordList(new RandomAccessFile(file1, "r"), true, 0);

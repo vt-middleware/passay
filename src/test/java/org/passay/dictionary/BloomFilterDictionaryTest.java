@@ -1,19 +1,20 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary;
 
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.MessageDigest;
 import com.google.common.hash.BloomFilter;
 import com.google.common.hash.Funnels;
 import com.google.common.io.BaseEncoding;
 import org.passay.dictionary.sort.ArraysSort;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link BloomFilterDictionary}.
@@ -40,7 +41,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   public void createDictionary(final String dict) throws Exception
   {
     final BloomFilter<String> filter1 = BloomFilter.readFrom(
-      new FileInputStream(dict), Funnels.stringFunnel(StandardCharsets.UTF_8));
+      Files.newInputStream(Paths.get(dict)), Funnels.stringFunnel(StandardCharsets.UTF_8));
     filterFromSerialized = new BloomFilterDictionary(filter1);
 
     final ArrayWordList awl = WordLists.createFromReader(
@@ -71,9 +72,9 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "bloomdicttest")
   public void search()
   {
-    AssertJUnit.assertTrue(filterFromTxt.search("manipular"));
-    AssertJUnit.assertFalse(filterFromTxt.search(FALSE_SEARCH));
-    AssertJUnit.assertTrue(filterFromTxt.search("z"));
+    assertThat(filterFromTxt.search("manipular")).isTrue();
+    assertThat(filterFromTxt.search(FALSE_SEARCH)).isFalse();
+    assertThat(filterFromTxt.search("z")).isTrue();
   }
 
 
@@ -81,10 +82,10 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   @Test(groups = "bloomdicttest")
   public void searchSerialized() throws Exception
   {
-    AssertJUnit.assertFalse(filterFromSerialized.search(hashPassword(FALSE_SEARCH)));
-    AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("bbeegguumm...123")));
-    AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("JLR012686jlr")));
-    AssertJUnit.assertTrue(filterFromSerialized.search(hashPassword("Pixiedusts123")));
+    assertThat(filterFromSerialized.search(hashPassword(FALSE_SEARCH))).isFalse();
+    assertThat(filterFromSerialized.search(hashPassword("bbeegguumm...123"))).isTrue();
+    assertThat(filterFromSerialized.search(hashPassword("JLR012686jlr"))).isTrue();
+    assertThat(filterFromSerialized.search(hashPassword("Pixiedusts123"))).isTrue();
   }
 
 

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
+import org.passay.PassayUtils;
 
 /**
  * Provides a {@link Dictionary} backed by a database table.
@@ -16,13 +17,13 @@ public class JDBCDictionary implements Dictionary
 {
 
   /** JDBC data source. */
-  protected DataSource dataSource;
+  protected final DataSource dataSource;
 
   /** SQL search statement. */
-  protected String searchStatement;
+  protected final String searchStatement;
 
   /** SQL size statement. */
-  protected String sizeStatement;
+  protected final String sizeStatement;
 
 
   /**
@@ -34,9 +35,9 @@ public class JDBCDictionary implements Dictionary
    */
   public JDBCDictionary(final DataSource source, final String searchSql, final String sizeSql)
   {
-    dataSource = source;
-    searchStatement = searchSql;
-    sizeStatement = sizeSql;
+    dataSource = PassayUtils.assertNotNullArg(source, "Data source cannot be null");
+    searchStatement = PassayUtils.assertNotNullArg(searchSql, "Search SQL cannot be null");
+    sizeStatement = PassayUtils.assertNotNullArg(sizeSql, "Size SQL cannot be null");
   }
 
 

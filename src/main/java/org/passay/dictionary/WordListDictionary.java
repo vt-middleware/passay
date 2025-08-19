@@ -4,6 +4,7 @@ package org.passay.dictionary;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.passay.PassayUtils;
 import org.passay.dictionary.sort.ArraysSort;
 
 /**
@@ -28,7 +29,7 @@ public class WordListDictionary implements Dictionary
    */
   public WordListDictionary(final WordList wl)
   {
-    wordList = wl;
+    wordList = PassayUtils.assertNotNullArg(wl, "Word list cannot be null");
   }
 
 
@@ -104,7 +105,7 @@ public class WordListDictionary implements Dictionary
 
       // insert data
       final ArrayWordList awl = WordLists.createFromReader(
-        files.toArray(new FileReader[files.size()]),
+        files.toArray(new FileReader[0]),
         caseSensitive,
         new ArraysSort());
       final WordListDictionary dict = new WordListDictionary(awl);
@@ -112,9 +113,9 @@ public class WordListDictionary implements Dictionary
       // perform operation
       if (search) {
         if (dict.search(word)) {
-          System.out.println(String.format("%s was found in this dictionary", word));
+          System.out.printf("%s was found in this dictionary%n", word);
         } else {
-          System.out.println(String.format("%s was not found in this dictionary", word));
+          System.out.printf("%s was not found in this dictionary%n", word);
         }
       } else if (print) {
         System.out.println(dict.getWordList());

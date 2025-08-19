@@ -1,13 +1,12 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.dictionary.sort;
 
-import java.util.Arrays;
 import org.passay.dictionary.TestUtil;
-import org.testng.AssertJUnit;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link ArraySorter} implementations.
@@ -53,9 +52,9 @@ public class SorterTest
   public void bubbleSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
-    AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
+    assertThat(array).isNotEqualTo(sortedArray);
     doSort(new BubbleSort(), array);
-    AssertJUnit.assertArrayEquals(array, sortedArray);
+    assertThat(array).isEqualTo(sortedArray);
   }
 
 
@@ -69,9 +68,9 @@ public class SorterTest
   public void collectionsSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
-    AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
+    assertThat(array).isNotEqualTo(sortedArray);
     doSort(new ArraysSort(), array);
-    AssertJUnit.assertArrayEquals(array, sortedArray);
+    assertThat(array).isEqualTo(sortedArray);
   }
 
 
@@ -85,9 +84,9 @@ public class SorterTest
   public void insertionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
-    AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
+    assertThat(array).isNotEqualTo(sortedArray);
     doSort(new InsertionSort(), array);
-    AssertJUnit.assertArrayEquals(array, sortedArray);
+    assertThat(array).isEqualTo(sortedArray);
   }
 
 
@@ -101,9 +100,9 @@ public class SorterTest
   public void quickSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
-    AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
+    assertThat(array).isNotEqualTo(sortedArray);
     doSort(new QuickSort(), array);
-    AssertJUnit.assertArrayEquals(array, sortedArray);
+    assertThat(array).isEqualTo(sortedArray);
   }
 
 
@@ -117,9 +116,33 @@ public class SorterTest
   public void selectionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
-    AssertJUnit.assertFalse(Arrays.equals(sortedArray, array));
+    assertThat(array).isNotEqualTo(sortedArray);
     doSort(new SelectionSort(), array);
-    AssertJUnit.assertArrayEquals(array, sortedArray);
+    assertThat(array).isEqualTo(sortedArray);
+  }
+
+
+  @Test(groups = "sorttest")
+  public void emptyArraySort()
+  {
+    new BubbleSort().sort(new String[0]);
+    new BubbleSort().sort(new String[]{""});
+    new InsertionSort().sort(new String[0]);
+    new InsertionSort().sort(new String[]{""});
+    new QuickSort().sort(new String[0]);
+    new QuickSort().sort(new String[]{""});
+    new SelectionSort().sort(new String[0]);
+    new SelectionSort().sort(new String[]{""});
+  }
+
+
+  @Test(groups = "sorttest")
+  public void brokenComparatorSort()
+  {
+    new BubbleSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+    new InsertionSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+    new QuickSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
+    new SelectionSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);
   }
 
 
