@@ -1,11 +1,16 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 import org.passay.UnicodeString;
 import org.passay.data.CharacterSequence;
 import org.passay.data.SequenceData;
@@ -74,7 +79,8 @@ public class IllegalSequenceRule implements Rule
     if (length < MINIMUM_SEQUENCE_LENGTH) {
       throw new IllegalArgumentException("Sequence length must be >= " + MINIMUM_SEQUENCE_LENGTH);
     }
-    sequenceData = data;
+    sequenceData = PassayUtils.assertNotNullArgOr(
+      data, v -> v.getSequences() == null && v.getErrorCode() == null, "Sequence data cannot be null or contain null");
     sequenceLength = length;
     wrapSequence = wrap;
     reportAllFailures = reportAll;
@@ -107,7 +113,7 @@ public class IllegalSequenceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final String password = passwordData.getPassword() + '\uffff';
     final StringBuilder match = new StringBuilder(password.length());
     for (CharacterSequence cs : sequenceData.getSequences()) {
@@ -125,7 +131,7 @@ public class IllegalSequenceRule implements Rule
         }
         // if we have a sequence and reached its end, add it to result
         if (diff != direction && match.length() >= sequenceLength) {
-          addError(result, match.toString());
+          addError(details, match.toString());
         }
         // update the current potential sequence
         if (diff == 1 || diff == -1) {
@@ -142,7 +148,7 @@ public class IllegalSequenceRule implements Rule
         i += Character.charCount(cp);
       }
     }
-    return result;
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 
@@ -183,15 +189,15 @@ public class IllegalSequenceRule implements Rule
   /**
    * Adds a validation error to a result.
    *
-   * @param  result  the rule result to which the error is added
+   * @param  details  list of rule results to add a new rule result error
    * @param  match  the illegal sequence in the password that caused the error
    */
-  private void addError(final RuleResult result, final String match)
+  private void addError(final List<RuleResultDetail> details, final String match)
   {
-    if (reportAllFailures || result.getDetails().isEmpty()) {
+    if (reportAllFailures || details.isEmpty()) {
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
-      result.addError(sequenceData.getErrorCode(), m);
+      details.add(new RuleResultDetail(sequenceData.getErrorCode(), m));
     }
   }
 }

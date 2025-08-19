@@ -2,7 +2,6 @@
 package org.passay.rule;
 
 import org.passay.PasswordData;
-import org.passay.PasswordValidator;
 import org.passay.data.CyrillicSequenceData;
 import org.passay.data.CzechSequenceData;
 import org.passay.data.EnglishSequenceData;
@@ -331,7 +330,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // polish and english
         {
-          new PasswordValidator(
+          new CompositeRule(
             new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
             new IllegalSequenceRule(PolishSequenceData.Alphabetical, 5, true, false)),
           new PasswordData("p987rw3sśtuwxyzź"),
@@ -339,7 +338,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // german and english
         {
-          new PasswordValidator(
+          new CompositeRule(
             new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
             new IllegalSequenceRule(GermanSequenceData.Alphabetical, 5, true, false)),
           new PasswordData("P987xyzäö"),
@@ -347,7 +346,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // czech and english
         {
-          new PasswordValidator(
+          new CompositeRule(
             new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
             new IllegalSequenceRule(CzechSequenceData.Alphabetical, 5, true, false)),
           new PasswordData("ABCx12y34zcčdĎeě"),
@@ -355,7 +354,7 @@ public class IllegalSequenceRuleTest extends AbstractRuleTest
         },
         // cyrillic and english
         {
-          new PasswordValidator(
+          new CompositeRule(
             new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, true, false),
             new IllegalSequenceRule(CyrillicSequenceData.Alphabetical, 5, true, false)),
           new PasswordData("ABCx12y34zcабвгд"),

@@ -2,6 +2,7 @@
 package org.passay.rule;
 
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,10 +14,13 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.RuleResultMetadata;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password contains the desired complexity for a certain length. In order to meet the
@@ -85,7 +89,7 @@ public class LengthComplexityRule implements Rule
           throw new IllegalArgumentException("Interval " + i + " intersects existing interval " + existingInterval);
         }
       }
-      rules.put(i, entry.getValue());
+      this.rules.put(i, entry.getValue());
     }
   }
 
@@ -130,32 +134,31 @@ public class LengthComplexityRule implements Rule
     final int passwordLength = passwordData.getCharacterCount();
     final List<Rule> rulesByLength = getRulesByLength(passwordLength);
     if (rulesByLength == null) {
-      return new RuleResult(
-        false,
+      return new FailureRuleResult(
         new RuleResultDetail(ERROR_CODE_RULES, createRuleResultDetailParameters(passwordLength, 0, 0)));
     }
     int successCount = 0;
-    final RuleResult result = new RuleResult();
+    final List<RuleResultDetail> details = new ArrayList<>();
+    final List<RuleResultMetadata> metadata = new ArrayList<>();
     for (Rule rule : rulesByLength) {
       final RuleResult rr = rule.validate(passwordData);
-      if (!rr.isValid()) {
-        if (reportRuleFailures) {
-          result.getDetails().addAll(rr.getDetails());
-        }
-      } else {
+      if (rr.isValid()) {
         successCount++;
       }
-      result.setMetadata(result.getMetadata().merge(rr.getMetadata()));
-    }
-    if (successCount < rulesByLength.size()) {
-      result.setValid(false);
-      if (reportFailure) {
-        result.addError(
-          ERROR_CODE,
-          createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size()));
+      if (reportRuleFailures) {
+        details.addAll(rr.getDetails());
       }
+      metadata.add(rr.getMetadata());
     }
-    return result;
+    final boolean valid = successCount >= rulesByLength.size();
+    if (!valid && reportFailure) {
+      details.add(
+        new RuleResultDetail(
+          ERROR_CODE, createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
+    }
+    return valid ?
+      new SuccessRuleResult(new RuleResultMetadata(metadata)) :
+      new FailureRuleResult(new RuleResultMetadata(metadata), details);
   }
 
 

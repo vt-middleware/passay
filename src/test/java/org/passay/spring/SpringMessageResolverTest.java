@@ -2,9 +2,9 @@
 package org.passay.spring;
 
 import java.util.Locale;
+import org.passay.DefaultPasswordValidator;
 import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.RuleResult;
+import org.passay.ValidationResult;
 import org.passay.rule.LengthRule;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.context.support.StaticMessageSource;
@@ -32,14 +32,14 @@ public class SpringMessageResolverTest
 
     try {
       LocaleContextHolder.setLocale(Locale.FRANCE);
-      final PasswordValidator validator =
-        new PasswordValidator(new SpringMessageResolver(messageSource), new LengthRule(8));
+      final DefaultPasswordValidator validator =
+        new DefaultPasswordValidator(new SpringMessageResolver(messageSource), new LengthRule(8));
       final PasswordData pd = new PasswordData("pass");
 
-      final RuleResult result = validator.validate(pd);
+      final ValidationResult result = validator.validate(pd);
 
       assertThat(result.isValid()).isFalse();
-      assertThat(validator.getMessages(result).get(0)).isEqualTo("to short 8-8 for fr");
+      assertThat(result.getMessages().get(0)).isEqualTo("to short 8-8 for fr");
     } finally {
       LocaleContextHolder.resetLocaleContext();
     }
@@ -55,14 +55,14 @@ public class SpringMessageResolverTest
     messageSource.addMessage("TOO_SHORT", Locale.US, "to short {0}-{1} for us");
     messageSource.addMessage("TOO_SHORT", Locale.JAPAN, "to short {0}-{1} for jp");
 
-    final PasswordValidator validator =
-      new PasswordValidator(new SpringMessageResolver(messageSource, Locale.JAPAN), new LengthRule(8));
+    final DefaultPasswordValidator validator =
+      new DefaultPasswordValidator(new SpringMessageResolver(messageSource, Locale.JAPAN), new LengthRule(8));
     final PasswordData pd = new PasswordData("pass");
 
-    final RuleResult result = validator.validate(pd);
+    final ValidationResult result = validator.validate(pd);
 
     assertThat(result.isValid()).isFalse();
-    assertThat(validator.getMessages(result).get(0)).isEqualTo("to short 8-8 for jp");
+    assertThat(result.getMessages().get(0)).isEqualTo("to short 8-8 for jp");
   }
 
   /**
@@ -73,13 +73,13 @@ public class SpringMessageResolverTest
   {
     final StaticMessageSource messageSource = new StaticMessageSource();
 
-    final PasswordValidator validator =
-      new PasswordValidator(new SpringMessageResolver(messageSource), new LengthRule(8));
+    final DefaultPasswordValidator validator =
+      new DefaultPasswordValidator(new SpringMessageResolver(messageSource), new LengthRule(8));
     final PasswordData pd = new PasswordData("pass");
 
-    final RuleResult result = validator.validate(pd);
+    final ValidationResult result = validator.validate(pd);
 
     assertThat(result.isValid()).isFalse();
-    assertThat(validator.getMessages(result).get(0)).isEqualTo("Password must be 8 or more characters in length.");
+    assertThat(result.getMessages().get(0)).isEqualTo("Password must be 8 or more characters in length.");
   }
 }

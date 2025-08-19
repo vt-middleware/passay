@@ -132,7 +132,7 @@ public class PasswordGenerator
       if (count > 0) {
         retryCount++;
       }
-      final PasswordValidator validator = new PasswordValidator(rules);
+      final DefaultPasswordValidator validator = new DefaultPasswordValidator(rules);
       if (validator.validate(new PasswordData(generated)).isValid()) {
         break;
       }

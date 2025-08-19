@@ -35,8 +35,12 @@ public final class RuleResultDetail
       code,
       String::isEmpty,
       "Code cannot be null or empty");
+    PassayUtils.assertNotNullArgOr(
+      params,
+      v -> v.entrySet().stream().anyMatch(e -> Objects.isNull(e.getKey()) || Objects.isNull(e.getValue())),
+      "Params cannot be null or contain null");
     errorCodes = new String[] {code};
-    parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
+    parameters = new LinkedHashMap<>(params);
   }
 
 
@@ -53,8 +57,12 @@ public final class RuleResultDetail
       codes,
       v -> v.length == 0 || Stream.of(codes).anyMatch(c -> Objects.isNull(c) || c.isEmpty()),
       "Code cannot be null or empty and must contain at least one error code");
+    PassayUtils.assertNotNullArgOr(
+      params,
+      v -> v.entrySet().stream().anyMatch(e -> Objects.isNull(e.getKey()) || Objects.isNull(e.getValue())),
+      "Params cannot be null or contain null");
     errorCodes = codes;
-    parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
+    parameters = new LinkedHashMap<>(params);
   }
 
 

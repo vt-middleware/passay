@@ -5,10 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password matches an allowed regular expression. Passwords must match the expression or
@@ -33,11 +35,7 @@ public class AllowedRegexRule implements Rule
    */
   public AllowedRegexRule(final String regex)
   {
-    try {
-      pattern = Pattern.compile(regex);
-    } catch (PatternSyntaxException e) {
-      throw new IllegalArgumentException(e);
-    }
+    pattern = Pattern.compile(regex);
   }
 
 
@@ -49,11 +47,7 @@ public class AllowedRegexRule implements Rule
    */
   public AllowedRegexRule(final String regex, final int regexFlags)
   {
-    try {
-      pattern = Pattern.compile(regex, regexFlags);
-    } catch (PatternSyntaxException e) {
-      throw new IllegalArgumentException(e);
-    }
+    pattern = Pattern.compile(regex, regexFlags);
   }
 
 
@@ -72,12 +66,11 @@ public class AllowedRegexRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
     final Matcher m = pattern.matcher(passwordData.getPassword());
     if (!m.find()) {
-      result.addError(ERROR_CODE, createRuleResultDetailParameters());
+      return new FailureRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
     }
-    return result;
+    return new SuccessRuleResult();
   }
 
 

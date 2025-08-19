@@ -58,12 +58,12 @@ public class PasswordGeneratorTest
   {
     final List<Rule> ruleSet = Arrays.asList(rules);
     final List<Rule> passRules = addCharacteristics(ruleSet);
-    final PasswordValidator passValidator = new PasswordValidator(passRules);
+    final DefaultPasswordValidator passValidator = new DefaultPasswordValidator(passRules);
     // Add a constraint not met by generated passwords
     final List<Rule> extendedSet = new ArrayList<>(ruleSet);
     extendedSet.add(new CharacterRule(EnglishCharacterData.SpecialUnicode, 1));
     final List<Rule> failRules = addCharacteristics(extendedSet);
-    final PasswordValidator failValidator = new PasswordValidator(failRules);
+    final DefaultPasswordValidator failValidator = new DefaultPasswordValidator(failRules);
     final PasswordGenerator generator = new PasswordGenerator();
     // Perform a number of rounds likely to produce illegal sequences by random chance
     try {

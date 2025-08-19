@@ -1,12 +1,16 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password matches one of any previous password a user has chosen. If no historical password
@@ -48,23 +52,26 @@ public class HistoryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
     final List<PasswordData.HistoricalReference> references = passwordData.getPasswordReferences(
       PasswordData.HistoricalReference.class);
     final int size = references.size();
     if (size == 0) {
-      return result;
+      return new SuccessRuleResult();
     }
 
+    final List<RuleResultDetail> details = new ArrayList<>();
     final String cleartext = passwordData.getPassword();
     if (reportAllFailures) {
-      references.stream().filter(reference -> matches(cleartext, reference)).forEach(
-        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(size)));
+      references.stream()
+        .filter(r -> matches(cleartext, r))
+        .forEach(r -> details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size))));
     } else {
-      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(
-        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(size)));
+      references.stream()
+        .filter(r -> matches(cleartext, r))
+        .findFirst()
+        .ifPresent(r -> details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size))));
     }
-    return result;
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 
