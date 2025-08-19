@@ -137,6 +137,8 @@ public class IllegalRegexRule implements Rule
   @Override
   public String toString()
   {
-    return String.format("%s@%h::pattern=%s", getClass().getName(), hashCode(), pattern);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "pattern=" + pattern + ", " +
+      "reportAllFailures=" + reportAllFailures;
   }
 }

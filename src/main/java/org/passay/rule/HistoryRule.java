@@ -104,4 +104,11 @@ public class HistoryRule implements Rule
     m.put("historySize", size);
     return m;
   }
+
+
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::reportAllFailures=" + reportAllFailures;
+  }
 }

@@ -241,15 +241,11 @@ public final class PasswordData
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::username=%s,password=%s,origin=%s,passwordReferences=%s",
-        getClass().getName(),
-        hashCode(),
-        username,
-        password,
-        origin,
-        passwordReferences);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "username=" + username + ", " +
+      "password=" + password + ", " +
+      "origin=" + origin + ", " +
+      "passwordReferences=" + passwordReferences;
   }
 
 
@@ -501,7 +497,10 @@ public final class PasswordData
     @Override
     public String toString()
     {
-      return String.format("%s@%h::label=%s,password=%s", getClass().getName(), hashCode(), label, password);
+      return getClass().getName() + "@" + hashCode() + "::" +
+        "label=" + label + ", " +
+        "password=" + password + ", " +
+        "salt=" + salt;
     }
   }
 }

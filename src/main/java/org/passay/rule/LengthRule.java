@@ -134,12 +134,8 @@ public class LengthRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::minimumLength=%s,maximumLength=%s",
-        getClass().getName(),
-        hashCode(),
-        minimumLength,
-        maximumLength);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "minimumLength=" + minimumLength + ", " +
+      "maximumLength=" + maximumLength;
   }
 }

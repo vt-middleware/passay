@@ -168,12 +168,8 @@ public class PasswordValidator implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::passwordRules=%s,messageResolver=%s",
-        getClass().getName(),
-        hashCode(),
-        passwordRules,
-        messageResolver);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "passwordRules=" + passwordRules + ", " +
+      "messageResolver=" + messageResolver;
   }
 }

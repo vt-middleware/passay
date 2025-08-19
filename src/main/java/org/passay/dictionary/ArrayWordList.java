@@ -17,7 +17,7 @@ public class ArrayWordList extends AbstractWordList
 {
 
   /** file containing words. */
-  protected String[] words;
+  protected final String[] words;
 
 
   /**
@@ -95,6 +95,6 @@ public class ArrayWordList extends AbstractWordList
   @Override
   public String toString()
   {
-    return String.format("%s@%h::size=%s", getClass().getName(), hashCode(), words.length);
+    return getClass().getName() + "@" + hashCode() + "::" + "size=" + words.length;
   }
 }

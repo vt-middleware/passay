@@ -27,7 +27,7 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
   private static final String REPEAT_CHAR_REGEX = "([^\\x00-\\x1F])\\1{%d}";
 
   /** Number of characters in sequence to match. */
-  protected int sequenceLength;
+  protected final int sequenceLength;
 
 
   /** Creates a new repeat character regex rule with the default sequence length. */
@@ -63,7 +63,7 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
         PassayUtils.assertNotNullArgOr(
           length,
           l -> l < MINIMUM_SEQUENCE_LENGTH,
-          String.format("Sequence length must be >= %s", MINIMUM_SEQUENCE_LENGTH)) - 1),
+          "Sequence length must be >= " + MINIMUM_SEQUENCE_LENGTH) - 1),
       reportAll);
     sequenceLength = length;
   }
@@ -77,5 +77,15 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
   public int getSequenceLength()
   {
     return sequenceLength;
+  }
+
+
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "pattern=" + pattern + ", " +
+      "reportAllFailures=" + reportAllFailures + ", " +
+      "sequenceLength=" + sequenceLength;
   }
 }

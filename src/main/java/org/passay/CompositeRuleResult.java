@@ -123,12 +123,9 @@ public final class CompositeRuleResult implements RuleResult
   @Override
   public String toString()
   {
-    return String.format(
-      "%s@%h::valid=%s,details=%s,metadata=%s",
-      getClass().getName(),
-      hashCode(),
-      isValid(),
-      getDetails(),
-      getMetadata());
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "valid=" + isValid() + ", " +
+      "details=" + getDetails() + ", " +
+      "metadata=" + getMetadata();
   }
 }
