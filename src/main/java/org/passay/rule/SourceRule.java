@@ -102,4 +102,11 @@ public class SourceRule implements Rule
     m.put("source", source);
     return m;
   }
+
+
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::reportAllFailures=" + reportAllFailures;
+  }
 }

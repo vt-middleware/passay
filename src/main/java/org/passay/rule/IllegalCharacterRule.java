@@ -172,13 +172,9 @@ public class IllegalCharacterRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::reportAllFailures=%s,matchBehavior=%s,illegalCharacters=%s",
-        getClass().getName(),
-        hashCode(),
-        reportAllFailures,
-        matchBehavior,
-        Arrays.toString(illegalCharacters));
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "reportAllFailures=" + reportAllFailures + ", " +
+      "illegalCharacters=" + Arrays.toString(illegalCharacters) + ", " +
+      "matchBehavior=" + matchBehavior;
   }
 }

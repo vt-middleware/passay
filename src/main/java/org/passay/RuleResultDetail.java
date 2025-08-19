@@ -113,6 +113,8 @@ public final class RuleResultDetail
   @Override
   public String toString()
   {
-    return String.format("%s:%s", Arrays.toString(errorCodes), parameters);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "errorCodes=" + Arrays.toString(errorCodes) + ", " +
+      "parameters=" + parameters;
   }
 }

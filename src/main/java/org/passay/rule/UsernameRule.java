@@ -157,13 +157,9 @@ public class UsernameRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::ignoreCase=%s,matchBackwards=%s,matchBehavior=%s",
-        getClass().getName(),
-        hashCode(),
-        ignoreCase,
-        matchBackwards,
-        matchBehavior);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "matchBackwards=" + matchBackwards + ", "+
+      "ignoreCase=" + ignoreCase + ", " +
+      "matchBehavior=" + matchBehavior;
   }
 }

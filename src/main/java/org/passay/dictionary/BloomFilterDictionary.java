@@ -77,6 +77,6 @@ public class BloomFilterDictionary implements Dictionary
   @Override
   public String toString()
   {
-    return String.format("%s@%h::bloomFilter=%s", getClass().getName(), hashCode(), bloomFilter);
+    return getClass().getName() + "@" + hashCode() + "::bloomFilter=" + bloomFilter;
   }
 }

@@ -24,7 +24,7 @@ public class NumberRangeRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_NUMBER_RANGE";
 
   /** Whether to report all sequence matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
   /** Lower end of the range. */
   private final int lowerRange;
@@ -168,13 +168,10 @@ public class NumberRangeRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::lowerRange=%s,upperRange=%s,matchBehavior=%s",
-        getClass().getName(),
-        hashCode(),
-        lowerRange,
-        upperRange,
-        matchBehavior);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "reportAllFailures=" + reportAllFailures + ", " +
+      "lowerRange=" + lowerRange + ", " +
+      "upperRange=" + upperRange + ", " +
+      "matchBehavior=" + matchBehavior;
   }
 }

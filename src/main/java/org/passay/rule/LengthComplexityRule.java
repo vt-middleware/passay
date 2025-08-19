@@ -201,13 +201,10 @@ public class LengthComplexityRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::rules=%s,reportRuleFailures=%s",
-        getClass().getName(),
-        hashCode(),
-        rules,
-        reportRuleFailures);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "rules=" + rules + ", " +
+      "reportFailure=" + reportFailure + ", " +
+      "reportRuleFailures=" + reportRuleFailures;
   }
 
 

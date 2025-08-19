@@ -144,6 +144,13 @@ public class PasswordGenerator
   }
 
 
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::retryCount=" + retryCount;
+  }
+
+
   /**
    * Fills the supplied target with count random characters from source.
    *

@@ -34,10 +34,10 @@ public class RepeatCharactersRule implements Rule
   public static final int DEFAULT_SEQUENCE_COUNT = 1;
 
   /** Number of repeating characters to match in each sequence. */
-  protected int sequenceLength;
+  protected final int sequenceLength;
 
   /** Number of sequences of repeating characters to match. */
-  protected int sequenceCount;
+  protected final int sequenceCount;
 
 
   /**
@@ -124,5 +124,14 @@ public class RepeatCharactersRule implements Rule
     m.put("matchesCount", matches.size());
     m.put("matches", matches);
     return m;
+  }
+
+
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "sequenceLength=" + sequenceLength + ", " +
+      "sequenceCount=" + sequenceCount;
   }
 }

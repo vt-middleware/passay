@@ -175,12 +175,9 @@ public class AllowedCharacterRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format("%s@%h::reportAllFailures=%s,matchBehavior=%s,allowedCharacters=%s",
-        getClass().getName(),
-        hashCode(),
-        reportAllFailures,
-        matchBehavior,
-        Arrays.toString(allowedCharacters));
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "reportAllFailures=" + reportAllFailures + ", " +
+      "matchBehavior=" + matchBehavior + ", " +
+      "allowedCharacters=" + Arrays.toString(allowedCharacters);
   }
 }

@@ -84,10 +84,6 @@ public class CharacterOccurrencesRule implements Rule
   @Override
   public String toString()
   {
-    return String.format(
-      "%s@%h::maxOccurrences=%s",
-      getClass().getName(),
-      hashCode(),
-      maxOccurrences);
+    return getClass().getName() + "@" + hashCode() + "::maxOccurrences=" + maxOccurrences;
   }
 }

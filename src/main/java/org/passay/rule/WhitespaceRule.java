@@ -32,7 +32,7 @@ public class WhitespaceRule implements Rule
     (byte) 0x09, (byte) 0x0A, (byte) 0x0B, (byte) 0x0C, (byte) 0x0D, (byte) 0x20);
 
   /** Whether to report all whitespace matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
   /** Stores the whitespace characters that are allowed. */
   private final int[] whitespaceCharacters;
@@ -209,13 +209,9 @@ public class WhitespaceRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::reportAllFailures=%s,matchBehavior=%s,whitespaceCharacters=%s",
-        getClass().getName(),
-        hashCode(),
-        reportAllFailures,
-        matchBehavior,
-        Arrays.toString(whitespaceCharacters));
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "reportAllFailures=" + reportAllFailures + ", " +
+      "whitespaceCharacters" + Arrays.toString(whitespaceCharacters) + ", " +
+      "matchBehavior=" + matchBehavior;
   }
 }

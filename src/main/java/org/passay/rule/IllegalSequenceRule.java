@@ -33,13 +33,13 @@ public class IllegalSequenceRule implements Rule
   protected final SequenceData sequenceData;
 
   /** Number of characters in sequence to match. */
-  protected int sequenceLength;
+  protected final int sequenceLength;
 
   /** Whether or not to wrap a sequence when searching for matches. */
-  protected boolean wrapSequence;
+  protected final boolean wrapSequence;
 
   /** Whether to report all sequence matches or just the first. */
-  protected boolean reportAllFailures;
+  protected final boolean reportAllFailures;
 
 
   /**
@@ -155,14 +155,11 @@ public class IllegalSequenceRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::length=%d,wrap=%s,reportAllFailures=%s",
-        getClass().getName(),
-        hashCode(),
-        sequenceLength,
-        wrapSequence,
-        reportAllFailures);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "sequenceData=" + sequenceData + ", " +
+      "sequenceLength=" + sequenceLength + ", " +
+      "wrapSequence=" + wrapSequence + ", " +
+      "reportAllFailures=" + reportAllFailures;
   }
 
 

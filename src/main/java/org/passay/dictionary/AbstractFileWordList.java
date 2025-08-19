@@ -243,14 +243,10 @@ public abstract class AbstractFileWordList extends AbstractWordList
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::size=%s,cache=%s,charsetDecoder=%s",
-        getClass().getName(),
-        hashCode(),
-        size,
-        cache,
-        charsetDecoder);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "size=" + size + ", " +
+      "cache=" + cache + ", " +
+      "charsetDecoder=" + charsetDecoder;
   }
 
 
@@ -423,15 +419,11 @@ public abstract class AbstractFileWordList extends AbstractWordList
     @Override
     public String toString()
     {
-      return
-        String.format(
-          "%s@%h::size=%s,modulus=%s,allocateDirect=%s,initialized=%s",
-          getClass().getSimpleName(),
-          hashCode(),
-          map != null ? map.capacity() : 0,
-          modulus,
-          allocateDirect,
-          initialized);
+      return getClass().getName() + "@" + hashCode() + "::" +
+        "size=" + (map != null ? map.capacity() : 0) + ", " +
+        "modulus=" + modulus + ", " +
+        "allocateDirect=" + allocateDirect + ", " +
+        "initialized=" + initialized;
     }
   }
 }

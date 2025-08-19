@@ -173,11 +173,8 @@ public class CharacterRule implements Rule
   @Override
   public String toString()
   {
-    return String.format(
-      "%s@%h::characterData=%s,numberOfCharacters=%s",
-      getClass().getName(),
-      hashCode(),
-      characterData,
-      numCharacters);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "characterData=" + characterData + ", " +
+      "numCharacters=" + numCharacters;
   }
 }

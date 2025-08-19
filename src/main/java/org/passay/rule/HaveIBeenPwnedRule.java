@@ -161,6 +161,19 @@ public class HaveIBeenPwnedRule implements Rule
   }
 
 
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "applicationName=" + applicationName + ", " +
+      "apiUrl=" + apiUrl + ", " +
+      "allowExposed=" + allowExposed + ", " +
+      "allowOnException=" + allowOnException + ", " +
+      "connectTimeout=" + connectTimeout + ", " +
+      "readTimeout=" + readTimeout;
+  }
+
+
   /**
    * Reads the supplied reader line by line until a match is found against the supplied hex digest.
    *
