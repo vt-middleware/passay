@@ -229,13 +229,10 @@ public class CharacterCharacteristicsRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::numberOfCharacteristics=%s,rules=%s,reportRuleFailures=%s",
-        getClass().getName(),
-        hashCode(),
-        numCharacteristics,
-        rules,
-        reportRuleFailures);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "numCharacteristics=" + numCharacteristics + ", " +
+      "rules=" + rules + ", " +
+      "reportFailure=" + reportFailure + ", " +
+      "reportRuleFailures=" + reportRuleFailures;
   }
 }

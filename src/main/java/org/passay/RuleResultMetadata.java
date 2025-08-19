@@ -146,6 +146,6 @@ public final class RuleResultMetadata
   @Override
   public String toString()
   {
-    return String.format("counts=%s", counts);
+    return getClass().getName() + "@" + hashCode() + "::counts=" + counts;
   }
 }

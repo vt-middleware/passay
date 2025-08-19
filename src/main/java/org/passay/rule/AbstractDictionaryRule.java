@@ -123,12 +123,8 @@ public abstract class AbstractDictionaryRule implements Rule
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::dictionary=%s,matchBackwards=%s",
-        getClass().getName(),
-        hashCode(),
-        dictionary,
-        matchBackwards);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "dictionary=" + dictionary + ", " +
+      "matchBackwards=" + matchBackwards;
   }
 }

@@ -61,7 +61,7 @@ public class WordListDictionary implements Dictionary
   @Override
   public String toString()
   {
-    return String.format("%s@%h::wordList=%s", getClass().getName(), hashCode(), wordList);
+    return getClass().getName() + "@" + hashCode() + "::wordList=" + wordList;
   }
 
 

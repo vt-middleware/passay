@@ -37,7 +37,7 @@ public final class WordLists
     @Override
     public String toString()
     {
-      return String.format("%s-%s@%d", getClass().getName(), "CASE_SENSITIVE", hashCode());
+      return getClass().getName() + "-CASE_SENSITIVE@" + hashCode();
     }
   };
 
@@ -53,7 +53,7 @@ public final class WordLists
     @Override
     public String toString()
     {
-      return String.format("%s-%s@%d", getClass().getName(), "CASE_INSENSITIVE", hashCode());
+      return getClass().getName() + "-CASE_INSENSITIVE@" + hashCode();
     }
   };
 
