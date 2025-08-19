@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import org.cryptacular.codec.HexEncoder;
 import org.cryptacular.util.CodecUtil;
 import org.cryptacular.util.HashUtil;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
@@ -108,12 +109,12 @@ public class HaveIBeenPwnedRule implements Rule
   public HaveIBeenPwnedRule(
     final String appName, final String address, final boolean allowExposed, final boolean allowOnException)
   {
-    applicationName = PassayUtils.assertNotNullArg(appName, "App name cannot be null");
+    this.applicationName = PassayUtils.assertNotNullArg(appName, "App name cannot be null");
     if (!address.endsWith("/")) {
       throw new IllegalArgumentException("address must end with '/'");
     }
     try {
-      apiUrl = new URL(address);
+      this.apiUrl = new URL(address);
     } catch (MalformedURLException e) {
       throw new IllegalArgumentException(e);
     }
@@ -152,8 +153,9 @@ public class HaveIBeenPwnedRule implements Rule
     try (LineNumberReader lnr = openApiConnectionForRange(hexDigest.substring(0, PREFIX_LENGTH))) {
       return searchResponse(hexDigest, lnr);
     } catch (IOException e) {
-      return new RuleResult(allowOnException,
-        new RuleResultDetail(IO_ERROR_CODE, Collections.singletonMap("url", apiUrl)));
+      return allowOnException ?
+        new DefaultRuleResult(true) :
+        new DefaultRuleResult(new RuleResultDetail(IO_ERROR_CODE, Collections.singletonMap("url", apiUrl)));
     }
   }
 
@@ -168,7 +170,7 @@ public class HaveIBeenPwnedRule implements Rule
    *
    * @throws IOException if an error occurs reading from the reader
    */
-  private RuleResult searchResponse(final String hexDigest, final LineNumberReader reader) throws IOException
+  private DefaultRuleResult searchResponse(final String hexDigest, final LineNumberReader reader) throws IOException
   {
     String line;
     final Pattern p = Pattern.compile("^(" + hexDigest.substring(PREFIX_LENGTH) + "):(\\d+)\\s*$");
@@ -176,12 +178,14 @@ public class HaveIBeenPwnedRule implements Rule
       final Matcher m = p.matcher(line);
       if (m.matches()) {
         final int matchCount = Integer.parseInt(m.group(2));
-        return new RuleResult(allowExposed,
-          new RuleResultDetail(ERROR_CODE, Collections.singletonMap("count", matchCount)),
-          new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount));
+        return allowExposed ?
+          new DefaultRuleResult(true, new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount)) :
+          new DefaultRuleResult(
+            new RuleResultDetail(ERROR_CODE, Collections.singletonMap("count", matchCount)),
+            new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount));
       }
     }
-    return new RuleResult(true);
+    return new DefaultRuleResult(true);
   }
 
 

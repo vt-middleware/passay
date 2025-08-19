@@ -126,7 +126,15 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void checkConsistency()
   {
-    final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule();
+    try {
+      new CharacterCharacteristicsRule();
+      fail("Should have thrown IllegalArgumentException");
+    } catch (Exception e) {
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
+    }
+
+    final CharacterCharacteristicsRule ccr = new CharacterCharacteristicsRule(
+      2, new CharacterRule(EnglishCharacterData.Alphabetical, 4));
     try {
       ccr.validate(new PasswordData("r%scvEW2e93)"));
       fail("Should have thrown IllegalStateException");

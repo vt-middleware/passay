@@ -116,17 +116,10 @@ public class PasswordValidator implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
-    for (Rule rule : passwordRules) {
-      final RuleResult rr = rule.validate(passwordData);
-      if (!rr.isValid()) {
-        result.setValid(false);
-        result.getDetails().addAll(rr.getDetails());
-      }
-      result.setMetadata(result.getMetadata().merge(rr.getMetadata()));
-    }
-    result.freeze();
-    return result;
+    final List<RuleResult> results = passwordRules.stream()
+      .map(rule -> rule.validate(passwordData))
+      .collect(Collectors.toList());
+    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
   }
 
 
