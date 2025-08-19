@@ -3,6 +3,7 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
@@ -95,12 +96,11 @@ public class CharacterRule implements Rule
       passwordData.getPassword(),
       numCharacters);
     if (matchingChars.length() < numCharacters) {
-      return new RuleResult(
-        false,
+      return new DefaultRuleResult(
         new RuleResultDetail(characterData.getErrorCode(), createRuleResultDetailParameters(matchingChars)),
         createRuleResultMetadata(passwordData));
     }
-    return new RuleResult(true, createRuleResultMetadata(passwordData));
+    return new DefaultRuleResult(true, createRuleResultMetadata(passwordData));
   }
 
 

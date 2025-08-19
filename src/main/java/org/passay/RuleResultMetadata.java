@@ -3,7 +3,9 @@ package org.passay;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Describes metadata relevant to the result of rule validation.
@@ -71,10 +73,36 @@ public final class RuleResultMetadata
    */
   public RuleResultMetadata(final CountCategory category, final int value)
   {
+    PassayUtils.assertNotNullArg(category, "Category cannot be null");
     if (value < 0) {
       throw new IllegalArgumentException("Count value must be greater than or equal to zero");
     }
     counts.put(category, value);
+  }
+
+
+  /**
+   * Creates a new rule result metadata.
+   *
+   * @param  metadata  to copy.
+   */
+  public RuleResultMetadata(final RuleResultMetadata metadata)
+  {
+    PassayUtils.assertNotNullArg(metadata, "Metadata cannot be null");
+    counts.putAll(metadata.counts);
+  }
+
+
+  /**
+   * Creates a new rule result metadata.
+   *
+   * @param  metadata  to copy.
+   */
+  public RuleResultMetadata(final List<RuleResultMetadata> metadata)
+  {
+    PassayUtils.assertNotNullArgOr(
+      metadata, v -> v.stream().anyMatch(Objects::isNull), "Metadata cannot be null or contain null");
+    metadata.forEach(md -> counts.putAll(md.getCounts()));
   }
 
 
@@ -112,22 +140,6 @@ public final class RuleResultMetadata
   public Map<CountCategory, Integer> getCounts()
   {
     return Collections.unmodifiableMap(counts);
-  }
-
-
-  /**
-   * Merges the supplied metadata with this metadata
-   *
-   * @param  metadata  to merge.
-   *
-   * @return  new rule result metadata containing counts from this object and the parameter
-   */
-  public RuleResultMetadata merge(final RuleResultMetadata metadata)
-  {
-    final RuleResultMetadata md = new RuleResultMetadata();
-    md.counts.putAll(counts);
-    md.counts.putAll(metadata.counts);
-    return md;
   }
 
 

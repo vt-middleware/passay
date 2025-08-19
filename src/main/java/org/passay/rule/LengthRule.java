@@ -3,9 +3,11 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
 import org.passay.RuleResultMetadata;
 
 /**
@@ -88,15 +90,17 @@ public class LengthRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
     final int length = passwordData.getCharacterCount();
     if (length < minimumLength) {
-      result.addError(ERROR_CODE_MIN, createRuleResultDetailParameters());
+      return new DefaultRuleResult(
+        new RuleResultDetail(ERROR_CODE_MIN, createRuleResultDetailParameters()),
+        createRuleResultMetadata(passwordData));
     } else if (length > maximumLength) {
-      result.addError(ERROR_CODE_MAX, createRuleResultDetailParameters());
+      return new DefaultRuleResult(
+        new RuleResultDetail(ERROR_CODE_MAX, createRuleResultDetailParameters()),
+        createRuleResultMetadata(passwordData));
     }
-    result.setMetadata(createRuleResultMetadata(passwordData));
-    return result;
+    return new DefaultRuleResult(true, createRuleResultMetadata(passwordData));
   }
 
 

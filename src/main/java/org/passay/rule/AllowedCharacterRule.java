@@ -1,14 +1,19 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.passay.CompositeRuleResult;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
 import org.passay.RuleResultMetadata;
 import org.passay.UnicodeString;
 
@@ -111,7 +116,7 @@ public class AllowedCharacterRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
+    final List<RuleResult> results = new ArrayList<>();
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (int cp : text.codePoints().toArray()) {
@@ -122,7 +127,7 @@ public class AllowedCharacterRule implements Rule
             ERROR_CODE + "." + matchBehavior.upperSnakeName(),
             ERROR_CODE,
           };
-          result.addError(codes, createRuleResultDetailParameters(cp));
+          results.add(new DefaultRuleResult(new RuleResultDetail(codes, createRuleResultDetailParameters(cp))));
           if (!reportAllFailures) {
             break;
           }
@@ -130,8 +135,8 @@ public class AllowedCharacterRule implements Rule
         }
       }
     }
-    result.setMetadata(createRuleResultMetadata(passwordData));
-    return result;
+    results.add(new DefaultRuleResult(results.isEmpty(), createRuleResultMetadata(passwordData)));
+    return new CompositeRuleResult(results);
   }
 
 

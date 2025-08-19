@@ -1,13 +1,18 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
+import org.passay.CompositeRuleResult;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
 import org.passay.UnicodeString;
 
 /**
@@ -38,7 +43,7 @@ public class CharacterOccurrencesRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
+    final List<RuleResult> results = new ArrayList<>();
     final String password = passwordData.getPassword();
     final int[] codePoints = IntStream.concat(password.codePoints(), IntStream.of(Integer.MAX_VALUE)).toArray();
     Arrays.sort(codePoints);
@@ -48,13 +53,16 @@ public class CharacterOccurrencesRule implements Rule
         repeat++;
       } else {
         if (repeat > maxOccurrences) {
-          result.addError(
-            ERROR_CODE, createRuleResultDetailParameters(UnicodeString.toString(codePoints[i - 1]), repeat));
+          results.add(
+            new DefaultRuleResult(
+              new RuleResultDetail(
+                ERROR_CODE,
+                createRuleResultDetailParameters(UnicodeString.toString(codePoints[i - 1]), repeat))));
         }
         repeat = 1;
       }
     }
-    return result;
+    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
   }
 
   /**

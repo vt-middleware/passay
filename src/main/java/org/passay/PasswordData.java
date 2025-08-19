@@ -143,7 +143,7 @@ public final class PasswordData
     this.password = PassayUtils.assertNotNullArg(password, "Password cannot be null");
     this.origin = PassayUtils.assertNotNullArg(origin, "Origin cannot be null");
     if (references != null) {
-      passwordReferences.addAll(
+      this.passwordReferences.addAll(
         PassayUtils.assertNotNullArgOr(
           references,
           v -> v.stream().anyMatch(Objects::isNull),

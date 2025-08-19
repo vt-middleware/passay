@@ -7,9 +7,13 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import org.passay.CompositeRuleResult;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
 
 /**
  * Rule for determining if a password contains the desired mix of character types. In order to meet the criteria of this
@@ -104,21 +108,25 @@ public class CharacterCharacteristicsRule implements Rule
    * Creates a new character characteristics rule.
    *
    * @param  reportFailure  whether to report failures
-   * @param  reportRuleFailes  whether to report rule failures
+   * @param  reportRuleFailures  whether to report rule failures
    * @param  numCharacteristics  number of characteristics to enforce, where n &gt; 0
    * @param  rules  character rules to set
    */
   public CharacterCharacteristicsRule(
     final boolean reportFailure,
-    final boolean reportRuleFailes,
+    final boolean reportRuleFailures,
     final int numCharacteristics,
     final List<CharacterRule> rules)
   {
     if (numCharacteristics <= 0) {
       throw new IllegalArgumentException("Number of characteristics must be greater than zero");
     }
+    PassayUtils.assertNotNullArgOr(
+      rules,
+      v -> v.isEmpty() || v.stream().anyMatch(Objects::isNull),
+      "Rules cannot be empty, null or contain null");
     this.reportFailure = reportFailure;
-    reportRuleFailures = reportRuleFailes;
+    this.reportRuleFailures = reportRuleFailures;
     this.numCharacteristics = numCharacteristics;
     this.rules.addAll(rules);
   }
@@ -178,25 +186,28 @@ public class CharacterCharacteristicsRule implements Rule
     }
 
     int successCount = 0;
-    final RuleResult result = new RuleResult();
+    final List<RuleResult> results = new ArrayList<>();
     for (CharacterRule rule : rules) {
       final RuleResult rr = rule.validate(passwordData);
-      if (!rr.isValid()) {
-        if (reportRuleFailures) {
-          result.getDetails().addAll(rr.getDetails());
-        }
-      } else {
+      if (rr.isValid()) {
         successCount++;
       }
-      result.setMetadata(result.getMetadata().merge(rr.getMetadata()));
-    }
-    if (successCount < numCharacteristics) {
-      result.setValid(false);
-      if (reportFailure) {
-        result.addError(ERROR_CODE, createRuleResultDetailParameters(successCount));
+      if (reportRuleFailures) {
+        results.add(rr);
+      } else {
+        results.add(new DefaultRuleResult(rr.isValid(), rr.getMetadata()));
       }
     }
-    return result;
+    final boolean valid = successCount >= numCharacteristics;
+    if (!valid) {
+      if (reportFailure) {
+        results.add(
+          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount))));
+      } else {
+        results.add(new DefaultRuleResult(false));
+      }
+    }
+    return new CompositeRuleResult(results, rr -> valid, r -> valid == r.isValid(), md -> true);
   }
 
 

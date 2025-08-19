@@ -1,12 +1,16 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import org.passay.CompositeRuleResult;
+import org.passay.DefaultRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
 
 /**
  * Rule for determining if a password matches one of any previous password a user has chosen. If no historical password
@@ -48,23 +52,28 @@ public class HistoryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
     final List<PasswordData.HistoricalReference> references = passwordData.getPasswordReferences(
       PasswordData.HistoricalReference.class);
     final int size = references.size();
     if (size == 0) {
-      return result;
+      return new DefaultRuleResult(true);
     }
 
+    final List<RuleResult> results = new ArrayList<>();
     final String cleartext = passwordData.getPassword();
     if (reportAllFailures) {
-      references.stream().filter(reference -> matches(cleartext, reference)).forEach(
-        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(size)));
+      references.stream()
+        .filter(r -> matches(cleartext, r))
+        .forEach(r -> results.add(
+          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)))));
     } else {
-      references.stream().filter(reference -> matches(cleartext, reference)).findFirst().ifPresent(
-        reference -> result.addError(ERROR_CODE, createRuleResultDetailParameters(size)));
+      references.stream()
+        .filter(r -> matches(cleartext, r))
+        .findFirst()
+        .ifPresent(r -> results.add(
+          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)))));
     }
-    return result;
+    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
   }
 
 
