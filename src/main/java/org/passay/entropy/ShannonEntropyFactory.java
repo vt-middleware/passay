@@ -2,6 +2,7 @@
 package org.passay.entropy;
 
 import java.util.List;
+import org.passay.DefaultPasswordValidator;
 import org.passay.PasswordData;
 import org.passay.PasswordValidator;
 import org.passay.data.EnglishCharacterData;
@@ -26,7 +27,7 @@ public final class ShannonEntropyFactory
 
   /* Initialize the composition rule. */
   static {
-    COMPOSITION_VALIDATOR = new PasswordValidator(
+    COMPOSITION_VALIDATOR = new DefaultPasswordValidator(
       new CharacterCharacteristicsRule(
         COMPOSITION_CHARACTERISTICS_REQUIREMENT,
         new CharacterRule(EnglishCharacterData.Digit, 1),

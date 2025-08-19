@@ -4,6 +4,8 @@ package org.passay;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
+import java.util.ResourceBundle;
 import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
@@ -17,7 +19,9 @@ import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
 import org.passay.entropy.RandomPasswordEntropy;
-import org.passay.rule.AbstractRuleTest;
+import org.passay.resolver.MessageResolver;
+import org.passay.resolver.PropertiesMessageResolver;
+import org.passay.resolver.ResourceBundleMessageResolver;
 import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.CharacterCharacteristicsRule;
 import org.passay.rule.CharacterRule;
@@ -44,8 +48,15 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author  Middleware Services
  */
-public class PasswordValidatorTest extends AbstractRuleTest
+public class PasswordValidatorTest
 {
+
+  /** test message resolver. */
+  protected static final MessageResolver TEST_RESOLVER = new ResourceBundleMessageResolver(
+    ResourceBundle.getBundle("passay-test"));
+
+  /** empty message resolver. */
+  protected static final MessageResolver EMPTY_RESOLVER = new PropertiesMessageResolver(new Properties());
 
   /** Test password. */
   private static final String VALID_PASS = "aBcD3FgH1Jk";
@@ -137,7 +148,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     rules.add(userIDRule);
     rules.add(historyRule);
     rules.add(sourceRule);
-    validator = new PasswordValidator(rules);
+    validator = new DefaultPasswordValidator(DefaultPasswordValidator.DEFAULT_ENTROPY_PROVIDER, rules);
   }
 
   /**
@@ -185,10 +196,12 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     //Test for no character based rules.
     final List<Rule> l = new ArrayList<>();
-    final PasswordValidator pv = new PasswordValidator(l);
+    final DefaultPasswordValidator pv = new DefaultPasswordValidator(
+      DefaultPasswordValidator.DEFAULT_ENTROPY_PROVIDER, l);
 
     try {
-      pv.estimateEntropy(new PasswordData("heLlo", PasswordData.Origin.Generated));
+      final ValidationResult result = pv.validate(new PasswordData("heLlo", PasswordData.Origin.Generated));
+      result.getEntropy();
       fail("Should have thrown IllegalArgumentException");
     } catch (Throwable e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
@@ -197,32 +210,32 @@ public class PasswordValidatorTest extends AbstractRuleTest
     //User Password Origin Tests:
 
     //Length 5
-    assertThat(pv.estimateEntropy(length5AllLowercasePassword)).isEqualTo(12.0);
+    assertThat(pv.validate(length5AllLowercasePassword).getEntropy()).isEqualTo(12.0);
     //Length 5 + Composition
-    assertThat(pv.estimateEntropy(length5CompositionPassword)).isEqualTo(15.0);
+    assertThat(pv.validate(length5CompositionPassword).getEntropy()).isEqualTo(15.0);
     //Length 10
-    assertThat(pv.estimateEntropy(length10AllLowercasePassword)).isEqualTo(21.0);
+    assertThat(pv.validate(length10AllLowercasePassword).getEntropy()).isEqualTo(21.0);
     //Length 10 + Composition
-    assertThat(pv.estimateEntropy(length10CompositionPassword)).isEqualTo(27.0);
+    assertThat(pv.validate(length10CompositionPassword).getEntropy()).isEqualTo(27.0);
     //Length 22
-    assertThat(pv.estimateEntropy(length22AllLowercasePassword)).isEqualTo(38.0);
+    assertThat(pv.validate(length22AllLowercasePassword).getEntropy()).isEqualTo(38.0);
     //Length 22 + Composition
-    assertThat(pv.estimateEntropy(length22CompositionPassword)).isEqualTo(44.0);
+    assertThat(pv.validate(length22CompositionPassword).getEntropy()).isEqualTo(44.0);
 
     //Empty dictionary check
     l.add(new DictionarySubstringRule(new WordListDictionary(new ArrayWordList(new String[]{}))));
 
     //Test Length 10 + Composition + Empty Dictionary
-    assertThat(pv.estimateEntropy(length10CompositionPassword)).isEqualTo(27.0);
+    assertThat(pv.validate(length10CompositionPassword).getEntropy()).isEqualTo(27.0);
     //Test Length 10 + Empty Dictionary
-    assertThat(pv.estimateEntropy(length10AllLowercasePassword)).isEqualTo(21.0);
+    assertThat(pv.validate(length10AllLowercasePassword).getEntropy()).isEqualTo(21.0);
 
     //Test Length 5 + Composition + Dictionary
-    assertThat(validator.estimateEntropy(length5CompositionPassword)).isEqualTo(20.0);
+    assertThat(validator.validate(length5CompositionPassword).getEntropy()).isEqualTo(20.0);
     //Test Length 10 + Composition + Dictionary
-    assertThat(validator.estimateEntropy(length10CompositionPassword)).isEqualTo(32.0);
+    assertThat(validator.validate(length10CompositionPassword).getEntropy()).isEqualTo(32.0);
     //Test Length 22 + Composition + Dictionary
-    assertThat(validator.estimateEntropy(length22CompositionPassword)).isEqualTo(44.0);
+    assertThat(validator.validate(length22CompositionPassword).getEntropy()).isEqualTo(44.0);
 
     //Generated Password Origin Tests:
 
@@ -232,11 +245,11 @@ public class PasswordValidatorTest extends AbstractRuleTest
     length22CompositionPassword = new PasswordData("he1loHellohellohello!!", PasswordData.Origin.Generated);
 
     //Random generated password test log2(b^l):
-    assertThat(validator.estimateEntropy(length5CompositionPassword))
+    assertThat(validator.validate(length5CompositionPassword).getEntropy())
       .isEqualTo(new RandomPasswordEntropy(182, 5).estimate());
-    assertThat(validator.estimateEntropy(length10CompositionPassword))
+    assertThat(validator.validate(length10CompositionPassword).getEntropy())
       .isEqualTo(new RandomPasswordEntropy(182, 10).estimate());
-    assertThat(validator.estimateEntropy(length22CompositionPassword))
+    assertThat(validator.validate(length22CompositionPassword).getEntropy())
       .isEqualTo(new RandomPasswordEntropy(182, 22).estimate());
 
     //Random generated password test with AllowedCharacterRule
@@ -245,8 +258,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
       'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
       'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!'));
     al.add(allowedRule);
-    final PasswordValidator pvAl = new PasswordValidator(al);
-    assertThat(pvAl.estimateEntropy(length5CompositionPassword))
+    final DefaultPasswordValidator pvAl = new DefaultPasswordValidator(
+      DefaultPasswordValidator.DEFAULT_ENTROPY_PROVIDER, al);
+    assertThat(pvAl.validate(length5CompositionPassword).getEntropy())
       .isEqualTo(
         new RandomPasswordEntropy(
           allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate());
@@ -274,14 +288,14 @@ public class PasswordValidatorTest extends AbstractRuleTest
     l.add(new IllegalSequenceRule(EnglishSequenceData.Numerical));
     l.add(new RepeatCharacterRegexRule());
 
-    final PasswordValidator pv = new PasswordValidator(l);
-    final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
+    final DefaultPasswordValidator pv = new DefaultPasswordValidator(new PropertiesMessageResolver(), l);
+    final ValidationResult resultPass = pv.validate(new PasswordData(VALID_PASS));
     assertThat(resultPass.isValid()).isTrue();
-    assertThat(pv.getMessages(resultPass).isEmpty()).isTrue();
+    assertThat(resultPass.getMessages().isEmpty()).isTrue();
 
-    final RuleResult resultFail = pv.validate(new PasswordData(INVALID_PASS));
+    final ValidationResult resultFail = pv.validate(new PasswordData(INVALID_PASS));
     assertThat(resultFail.isValid()).isFalse();
-    assertThat(pv.getMessages(resultFail).size()).isGreaterThan(0);
+    assertThat(resultFail.getMessages().size()).isGreaterThan(0);
 
     l.add(new UsernameRule(true, true));
 
@@ -302,7 +316,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
   @Test(groups = "passtest")
   public void constructor()
   {
-    new PasswordValidator();
+    new DefaultPasswordValidator();
   }
 
 
@@ -637,6 +651,50 @@ public class PasswordValidatorTest extends AbstractRuleTest
       };
   }
 
+
+  /**
+   * @param  passwordValidator  to check password with
+   * @param  passwordData  to check
+   * @param  errorCodes  Array of error codes to be produced on a failed password validation attempt. A null value
+   *                     indicates that password validation should succeed.
+   */
+  @Test(groups = "passtest", dataProvider = "passwords")
+  public void checkPassword(
+    final PasswordValidator passwordValidator, final PasswordData passwordData, final String[] errorCodes)
+  {
+    final ValidationResult result = passwordValidator.validate(passwordData);
+    if (errorCodes != null) {
+      assertThat(result.isValid()).isFalse();
+      assertThat(result.getDetails().size()).isEqualTo(errorCodes.length);
+      for (String code : errorCodes) {
+        assertThat(hasErrorCode(code, result)).isTrue();
+      }
+    } else {
+      assertThat(result.isValid()).isTrue();
+    }
+  }
+
+
+  /**
+   * @param  passwordValidator  to check password with
+   * @param  passwordData  to check
+   * @param  messages  Array of messages to be produced on a failed password validation attempt
+   */
+  @Test(groups = "passtest", dataProvider = "messages")
+  public void checkMessage(
+    final PasswordValidator passwordValidator, final PasswordData passwordData, final String[] messages)
+  {
+    final ValidationResult result = passwordValidator.validate(passwordData);
+    assertThat(result.isValid()).isFalse();
+    assertThat(result.getDetails().size()).isEqualTo(messages.length);
+    for (int i = 0; i < result.getDetails().size(); i++) {
+      final RuleResultDetail detail = result.getDetails().get(i);
+      assertThat(TEST_RESOLVER.resolve(detail)).isEqualTo(messages[i]);
+      assertThat(EMPTY_RESOLVER.resolve(detail)).isNotNull();
+    }
+  }
+
+
   /**
    * Test producer extends.
    */
@@ -647,8 +705,40 @@ public class PasswordValidatorTest extends AbstractRuleTest
     final List<CharacterRule> l = new ArrayList<>();
     l.add(new CharacterRule(EnglishCharacterData.LowerCase));
     l.add(new CharacterRule(EnglishCharacterData.UpperCase));
-    new PasswordValidator(l);
-    new PasswordValidator(
+    new DefaultPasswordValidator(l);
+    new DefaultPasswordValidator(
       new CharacterRule(EnglishCharacterData.LowerCase), new CharacterRule(EnglishCharacterData.UpperCase));
+  }
+
+
+  /**
+   * Converts one or more error codes to a string array.
+   *
+   * @param  codes  One or more error codes.
+   *
+   * @return  Array of error codes.
+   */
+  protected static String[] codes(final String... codes)
+  {
+    return codes;
+  }
+
+
+  /**
+   * Determines whether the given error code is found among the details of the give rule validation result.
+   *
+   * @param  code  to search for in result details.
+   * @param  result  to search for given code.
+   *
+   * @return  True if code is found among result details, false otherwise.
+   */
+  protected static boolean hasErrorCode(final String code, final ValidationResult result)
+  {
+    for (RuleResultDetail detail : result.getDetails()) {
+      if (code.equals(detail.getErrorCode())) {
+        return true;
+      }
+    }
+    return false;
   }
 }

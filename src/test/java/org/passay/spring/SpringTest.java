@@ -2,9 +2,9 @@
 package org.passay.spring;
 
 import java.util.ArrayList;
+import org.passay.DefaultPasswordValidator;
 import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.RuleResult;
+import org.passay.ValidationResult;
 import org.passay.rule.Rule;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.testng.annotations.Test;
@@ -29,10 +29,10 @@ public class SpringTest
       new String[] {"/spring-context.xml", });
     assertThat(context.getBeanDefinitionCount()).isGreaterThan(0);
 
-    final PasswordValidator validator = new PasswordValidator(
+    final DefaultPasswordValidator validator = new DefaultPasswordValidator(
       new ArrayList<>(context.getBeansOfType(Rule.class).values()));
     final PasswordData pd = new PasswordData("springuser", "springtest");
-    final RuleResult result = validator.validate(pd);
+    final ValidationResult result = validator.validate(pd);
     assertThat(result).isNotNull();
   }
 }

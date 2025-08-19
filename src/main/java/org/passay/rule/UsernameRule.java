@@ -1,11 +1,16 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password contains the username associated with that password.  This rule returns true if a
@@ -73,7 +78,7 @@ public class UsernameRule implements Rule
   {
     this.matchBackwards = matchBackwards;
     this.ignoreCase = ignoreCase;
-    matchBehavior = behavior;
+    this.matchBehavior = behavior;
   }
 
 
@@ -103,7 +108,7 @@ public class UsernameRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
+    final List<RuleResultDetail> details = new ArrayList<>();
     String user = passwordData.getUsername();
     if (user != null && !user.isEmpty()) {
       String text = passwordData.getPassword();
@@ -116,7 +121,7 @@ public class UsernameRule implements Rule
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
           ERROR_CODE,
         };
-        result.addError(codes, createRuleResultDetailParameters(user));
+        details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(user)));
       }
       if (matchBackwards) {
         final String reverseUser = new StringBuilder(user).reverse().toString();
@@ -125,11 +130,11 @@ public class UsernameRule implements Rule
             ERROR_CODE_REVERSED + "." + matchBehavior.upperSnakeName(),
             ERROR_CODE_REVERSED,
           };
-          result.addError(codes, createRuleResultDetailParameters(user));
+          details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(user)));
         }
       }
     }
-    return result;
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

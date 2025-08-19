@@ -1,11 +1,16 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
+import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -31,7 +36,7 @@ public abstract class AbstractDictionaryRule implements Rule
    */
   public AbstractDictionaryRule(final Dictionary dict, final boolean matchBackwards)
   {
-    dictionary = PassayUtils.assertNotNullArg(dict, "Dictionary cannot be null");
+    this.dictionary = PassayUtils.assertNotNullArg(dict, "Dictionary cannot be null");
     this.matchBackwards = matchBackwards;
   }
 
@@ -63,20 +68,20 @@ public abstract class AbstractDictionaryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final RuleResult result = new RuleResult();
+    final List<RuleResultDetail> details = new ArrayList<>();
     String text = passwordData.getPassword();
     String matchingWord = doWordSearch(text);
     if (matchingWord != null) {
-      result.addError(getErrorCode(false), createRuleResultDetailParameters(matchingWord));
+      details.add(new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord)));
     }
     if (matchBackwards && text.length() > 1) {
       text = new StringBuilder(passwordData.getPassword()).reverse().toString();
       matchingWord = doWordSearch(text);
       if (matchingWord != null) {
-        result.addError(getErrorCode(true), createRuleResultDetailParameters(matchingWord));
+        details.add(new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord)));
       }
     }
-    return result;
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

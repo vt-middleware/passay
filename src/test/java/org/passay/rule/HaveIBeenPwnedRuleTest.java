@@ -4,10 +4,10 @@ package org.passay.rule;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.passay.DefaultPasswordValidator;
 import org.passay.PasswordData;
-import org.passay.PasswordValidator;
-import org.passay.RuleResult;
 import org.passay.RuleResultMetadata;
+import org.passay.ValidationResult;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
@@ -190,11 +190,11 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   public void testInvalidPwdAllowExposed()
   {
     final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl, true, false);
-    final PasswordValidator validator = new PasswordValidator(rule);
-    final RuleResult result = validator.validate(new PasswordData(INVALID_PASSWORD));
+    final DefaultPasswordValidator validator = new DefaultPasswordValidator(rule);
+    final ValidationResult result = validator.validate(new PasswordData(INVALID_PASSWORD));
     assertThat(result.isValid()).isTrue();
     assertThat(result.getMetadata().getCount(RuleResultMetadata.CountCategory.Pwned)).isEqualTo(351295);
-    assertThat(validator.getMessages(result).size()).isEqualTo(0);
+    assertThat(result.getMessages().size()).isEqualTo(0);
   }
 
 
@@ -202,10 +202,10 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   public void testInvalidPwdAllowException()
   {
     final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl, false, true);
-    final PasswordValidator validator = new PasswordValidator(rule);
-    final RuleResult result = validator.validate(new PasswordData(EXCEPTION_PASSWORD));
+    final DefaultPasswordValidator validator = new DefaultPasswordValidator(rule);
+    final ValidationResult result = validator.validate(new PasswordData(EXCEPTION_PASSWORD));
     assertThat(result.isValid()).isTrue();
     assertThat(result.getMetadata().getCounts().size()).isEqualTo(0);
-    assertThat(validator.getMessages(result).size()).isEqualTo(0);
+    assertThat(result.getMessages().size()).isEqualTo(0);
   }
 }
