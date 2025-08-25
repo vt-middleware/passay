@@ -44,24 +44,28 @@ public class CharacterOccurrencesRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
-    final String password = passwordData.getPassword();
+    final UnicodeString password = passwordData.getPassword();
     final int[] codePoints = IntStream.concat(password.codePoints(), IntStream.of(Integer.MAX_VALUE)).toArray();
     Arrays.sort(codePoints);
-    int repeat = 1;
-    for (int i = 1; i < codePoints.length; i++) {
-      if (codePoints[i] == codePoints[i - 1]) {
-        repeat++;
-      } else {
-        if (repeat > maxOccurrences) {
-          details.add(
-            new RuleResultDetail(
+    try {
+      int repeat = 1;
+      for (int i = 1; i < codePoints.length; i++) {
+        if (codePoints[i] == codePoints[i - 1]) {
+          repeat++;
+        } else {
+          if (repeat > maxOccurrences) {
+            details.add(
+              new RuleResultDetail(
                 ERROR_CODE,
-                createRuleResultDetailParameters(UnicodeString.toString(codePoints[i - 1]), repeat)));
+                createRuleResultDetailParameters(PassayUtils.toString(codePoints[i - 1]), repeat)));
+          }
+          repeat = 1;
         }
-        repeat = 1;
       }
+      return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
+    } finally {
+      PassayUtils.clear(codePoints);
     }
-    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
   /**

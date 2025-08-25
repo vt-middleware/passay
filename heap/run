@@ -1,0 +1,30 @@
+#!/bin/bash
+
+#
+# This script executes the org.passay.HeapDump class which uses the HotSpotDiagnosticMXBean to dump the JVM heap to a file.
+# Examination of the heap file is left as an exercise for the invoker but VisualVM is a capable tool: https://visualvm.github.io/
+# Using the OQL console in VisualVM, the following types of queries can be used to search the heap:
+#
+# select s from java.lang.String s where s.toString().contains("some_password")
+# select cb from java.nio.HeapCharBuffer cb where cb.hb[0] == 'a'
+# select c from char[] c where c[0] == 'a'
+#
+
+set -e
+
+HEAP_DUMP_FILE="target/HeapDump.hprof"
+
+mvn -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
+for i in target/*.jar; do
+  CLASSPATH=$CLASSPATH:$i
+done
+for i in target/dependency/*.jar; do
+  CLASSPATH=$CLASSPATH:$i
+done
+
+# don't perform garbage collection
+export JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -XX:+AlwaysPreTouch -Xms256m -Xmx256m"
+
+# create java heap dump
+java ${JAVA_OPTS} -cp ${CLASSPATH} org.passay.HeapDump ${HEAP_DUMP_FILE}
+

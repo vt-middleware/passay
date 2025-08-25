@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -42,19 +43,20 @@ public class DictionarySubstringRule extends AbstractDictionaryRule
 
 
   @Override
-  protected String doWordSearch(final String text)
+  protected CharSequence doWordSearch(final UnicodeString text)
   {
-    int i = Character.charCount(text.codePointAt(0));
-    while (i < text.length()) {
+    int i = 1;
+    while (i < text.codePointCount()) {
       int j = 0;
-      while (j + i <= text.length()) {
-        final String s = text.substring(j, j + i);
+      while (j + i <= text.codePointCount()) {
+        final UnicodeString s = text.substring(j, j + i);
         if (getDictionary().search(s)) {
           return s;
         }
-        j += Character.charCount(text.codePointAt(j));
+        s.clear();
+        j++;
       }
-      i += Character.charCount(text.codePointAt(i));
+      i++;
     }
     return null;
   }

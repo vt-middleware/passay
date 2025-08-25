@@ -212,8 +212,13 @@ public class HaveIBeenPwnedRule implements Rule
    */
   private static String getHexDigest(final PasswordData passwordData)
   {
-    final byte[] digest = HashUtil.sha1(passwordData.getPassword().getBytes(Charset.defaultCharset()));
-    return CodecUtil.encode(new HexEncoder(false, true), digest);
+    final byte[] bytes = PassayUtils.toByteArray(passwordData.getPassword(), Charset.defaultCharset());
+    try {
+      final byte[] digest = HashUtil.sha1(bytes);
+      return CodecUtil.encode(new HexEncoder(false, true), digest);
+    } finally {
+      PassayUtils.clear(bytes);
+    }
   }
 
 

@@ -11,6 +11,7 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.SuccessRuleResult;
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -69,19 +70,25 @@ public abstract class AbstractDictionaryRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
-    String text = passwordData.getPassword();
-    String matchingWord = doWordSearch(text);
-    if (matchingWord != null) {
-      details.add(new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord)));
-    }
-    if (matchBackwards && text.length() > 1) {
-      text = new StringBuilder(passwordData.getPassword()).reverse().toString();
-      matchingWord = doWordSearch(text);
+    UnicodeString text = UnicodeString.copy(passwordData.getPassword());
+    try {
+      CharSequence matchingWord = doWordSearch(text);
       if (matchingWord != null) {
-        details.add(new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord)));
+        details.add(
+          new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord.toString())));
       }
+      if (matchBackwards && text.codePointCount() > 1) {
+        text = text.reverse(true);
+        matchingWord = doWordSearch(text);
+        if (matchingWord != null) {
+          details.add(
+            new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord.toString())));
+        }
+      }
+      return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
+    } finally {
+      text.clear();
     }
-    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 
@@ -92,7 +99,7 @@ public abstract class AbstractDictionaryRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final String word)
+  protected Map<String, Object> createRuleResultDetailParameters(final CharSequence word)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("matchingWord", word);
@@ -117,7 +124,7 @@ public abstract class AbstractDictionaryRule implements Rule
    *
    * @return  matching word
    */
-  protected abstract String doWordSearch(String text);
+  protected abstract CharSequence doWordSearch(UnicodeString text);
 
 
   @Override

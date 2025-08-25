@@ -133,7 +133,7 @@ public class TernaryTreeTest
   @Test(groups = "tttest", dataProvider = "partialSearchData")
   public void partialSearch(final TernaryTree tt, final String searchTerm, final String[] expected)
   {
-    final String[] actual = tt.partialSearch(searchTerm);
+    final CharSequence[] actual = tt.partialSearch(searchTerm);
     System.out.println("Partial search results: " + Arrays.toString(actual));
     System.out.println("Partial search expected: " + Arrays.toString(expected));
     assertThat(actual).isEqualTo(expected);
@@ -149,7 +149,7 @@ public class TernaryTreeTest
   @Test(groups = "tttest", dataProvider = "nearSearchData")
   public void nearSearch(final TernaryTree tt, final String word, final int distance, final String[] expected)
   {
-    final String[] actual = tt.nearSearch(word, distance);
+    final CharSequence[] actual = tt.nearSearch(word, distance);
     System.out.println("Near search results: " + Arrays.toString(actual));
     System.out.println("Near search expected: " + Arrays.toString(expected));
     assertThat(actual).isEqualTo(expected);

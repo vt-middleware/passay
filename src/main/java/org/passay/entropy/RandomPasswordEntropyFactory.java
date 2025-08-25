@@ -6,8 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.passay.PassayUtils;
 import org.passay.PasswordData;
-import org.passay.UnicodeString;
 import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.CharacterCharacteristicsRule;
 import org.passay.rule.CharacterRule;
@@ -54,8 +54,7 @@ public final class RandomPasswordEntropyFactory
         uniqueCharacters.addAll(getUniqueCharacters(characterRule.getValidCharacters()));
       } else if (rule instanceof AllowedCharacterRule) {
         final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
-        uniqueCharacters.addAll(
-          getUniqueCharacters(UnicodeString.toString(allowedCharacterRule.getAllowedCharacters().getCodePoints())));
+        uniqueCharacters.addAll(getUniqueCharacters(allowedCharacterRule.getAllowedCharacters()));
       }
     });
     if (uniqueCharacters.isEmpty()) {
@@ -73,10 +72,10 @@ public final class RandomPasswordEntropyFactory
    *
    * @return  unique characters
    */
-  private static Set<String> getUniqueCharacters(final String characters)
+  private static Set<String> getUniqueCharacters(final CharSequence characters)
   {
-    if (characters != null) {
-      return characters.codePoints().mapToObj(UnicodeString::toString).collect(Collectors.toSet());
+    if (characters != null && characters.length() > 0) {
+      return characters.codePoints().mapToObj(PassayUtils::toString).collect(Collectors.toSet());
     }
     return Collections.emptySet();
   }

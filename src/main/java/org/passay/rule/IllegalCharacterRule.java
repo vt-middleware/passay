@@ -83,7 +83,7 @@ public class IllegalCharacterRule implements Rule
    */
   public IllegalCharacterRule(final UnicodeString unicodeString, final MatchBehavior behavior, final boolean reportAll)
   {
-    illegalCharacters = unicodeString.getCodePoints();
+    illegalCharacters = unicodeString.toCodePointArray();
     matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
@@ -117,9 +117,9 @@ public class IllegalCharacterRule implements Rule
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
     final Set<String> matches = new HashSet<>();
-    final String text = passwordData.getPassword();
+    final UnicodeString text = passwordData.getPassword();
     for (int cp : illegalCharacters) {
-      if (matchBehavior.match(text, cp) && !matches.contains(UnicodeString.toString(cp))) {
+      if (matchBehavior.match(text, cp) && !matches.contains(PassayUtils.toString(cp))) {
         final String[] codes = {
           ERROR_CODE + "." + cp,
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
@@ -129,7 +129,7 @@ public class IllegalCharacterRule implements Rule
         if (!reportAllFailures) {
           break;
         }
-        matches.add(UnicodeString.toString(cp));
+        matches.add(PassayUtils.toString(cp));
       }
     }
     return details.isEmpty() ?
@@ -148,7 +148,7 @@ public class IllegalCharacterRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int codePoint)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", UnicodeString.toString(codePoint));
+    m.put("illegalCharacter", PassayUtils.toString(codePoint));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -165,7 +165,7 @@ public class IllegalCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Illegal,
-      UnicodeString.countMatchingCharacters(illegalCharacters, password.getPassword()));
+      password.getPassword().countMatchingCodePoints(illegalCharacters));
   }
 
 

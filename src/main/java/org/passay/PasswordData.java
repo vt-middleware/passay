@@ -1,6 +1,8 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.nio.Buffer;
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,10 +29,10 @@ public final class PasswordData
   }
 
   /** Stores the password. */
-  private final String password;
+  private final UnicodeString password;
 
   /** Stores the username. */
-  private final String username;
+  private final UnicodeString username;
 
   /** Password references. */
   private final List<Reference> passwordReferences = new ArrayList<>();
@@ -46,6 +48,17 @@ public final class PasswordData
    */
   public PasswordData(final String password)
   {
+    this(new UnicodeString(password));
+  }
+
+
+  /**
+   * Creates a new password data. The origin of this data is assumed to be {@link Origin#User} by default.
+   *
+   * @param  password  password
+   */
+  public PasswordData(final UnicodeString password)
+  {
     this(null, password, Origin.User, Collections.emptyList());
   }
 
@@ -58,6 +71,18 @@ public final class PasswordData
    */
   public PasswordData(final String username, final String password)
   {
+    this(new UnicodeString(username), new UnicodeString(password));
+  }
+
+
+  /**
+   * Creates a new password data. The origin of this data is assumed to be {@link Origin#User} by default.
+   *
+   * @param  username  username
+   * @param  password  password
+   */
+  public PasswordData(final UnicodeString username, final UnicodeString password)
+  {
     this(username, password, Origin.User, Collections.emptyList());
   }
 
@@ -69,6 +94,18 @@ public final class PasswordData
    * @param  origin  origin
    */
   public PasswordData(final String password, final Origin origin)
+  {
+    this(new UnicodeString(password), origin);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  password  password
+   * @param  origin  origin
+   */
+  public PasswordData(final UnicodeString password, final Origin origin)
   {
     this(null, password, origin, Collections.emptyList());
   }
@@ -83,6 +120,19 @@ public final class PasswordData
    */
   public PasswordData(final String username, final String password, final Origin origin)
   {
+    this(new UnicodeString(username), new UnicodeString(password), origin);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  origin  origin
+   */
+  public PasswordData(final UnicodeString username, final UnicodeString password, final Origin origin)
+  {
     this(username, password, origin, Collections.emptyList());
   }
 
@@ -96,6 +146,19 @@ public final class PasswordData
    */
   public PasswordData(final String username, final String password, final Reference... references)
   {
+    this(new UnicodeString(username), new UnicodeString(password), references);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  references  references
+   */
+  public PasswordData(final UnicodeString username, final UnicodeString password, final Reference... references)
+  {
     this(username, password, Origin.User, Arrays.asList(references));
   }
 
@@ -108,6 +171,19 @@ public final class PasswordData
    * @param  references  references
    */
   public PasswordData(final String username, final String password, final List<Reference> references)
+  {
+    this(new UnicodeString(username), new UnicodeString(password), references);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  references  references
+   */
+  public PasswordData(final UnicodeString username, final UnicodeString password, final List<Reference> references)
   {
     this(username, password, Origin.User, references);
   }
@@ -124,6 +200,21 @@ public final class PasswordData
   public PasswordData(
     final String username, final String password, final Origin origin, final Reference... references)
   {
+    this(new UnicodeString(username), new UnicodeString(password), origin, references);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  origin  origin
+   * @param  references  references
+   */
+  public PasswordData(
+    final UnicodeString username, final UnicodeString password, final Origin origin, final Reference... references)
+  {
     this(username, password, origin, Arrays.asList(references));
   }
 
@@ -138,6 +229,21 @@ public final class PasswordData
    */
   public PasswordData(
     final String username, final String password, final Origin origin, final List<Reference> references)
+  {
+    this(new UnicodeString(username), new UnicodeString(password), origin, references);
+  }
+
+
+  /**
+   * Creates a new password data.
+   *
+   * @param  username  username
+   * @param  password  password
+   * @param  origin  origin
+   * @param  references  references
+   */
+  public PasswordData(
+    final UnicodeString username, final UnicodeString password, final Origin origin, final List<Reference> references)
   {
     this.username = username;
     this.password = PassayUtils.assertNotNullArg(password, "Password cannot be null");
@@ -157,7 +263,7 @@ public final class PasswordData
    *
    * @return  password
    */
-  public String getPassword()
+  public UnicodeString getPassword()
   {
     return password;
   }
@@ -170,7 +276,7 @@ public final class PasswordData
    */
   public int getCharacterCount()
   {
-    return UnicodeString.charCount(password);
+    return password.codePointCount();
   }
 
 
@@ -190,7 +296,7 @@ public final class PasswordData
    *
    * @return  username
    */
-  public String getUsername()
+  public UnicodeString getUsername()
   {
     return username;
   }
@@ -225,11 +331,26 @@ public final class PasswordData
 
 
   /**
-   * Returns a password data initialized with the supplied data.
+   * Clears the memory of the underlying objects in this password data. See {@link UnicodeString#clear()}.
+   */
+  public void clear()
+  {
+    if (password != null) {
+      password.clear();
+    }
+    if (username != null) {
+      username.clear();
+    }
+    passwordReferences.forEach(Reference::clear);
+  }
+
+
+  /**
+   * Returns a new password data initialized with the supplied data.
    *
    * @param  data  password data to read properties from
    *
-   * @return  password data
+   * @return  new password data
    */
   public static PasswordData copy(final PasswordData data)
   {
@@ -262,7 +383,7 @@ public final class PasswordData
      * @param password the cleartext password to apply the salt to
      * @return the salted password
      */
-    String applyTo(String password);
+    CharBuffer applyTo(CharBuffer password);
   }
 
 
@@ -286,9 +407,12 @@ public final class PasswordData
     }
 
     @Override
-    public String applyTo(final String password)
+    public CharBuffer applyTo(final CharBuffer password)
     {
-      return salt + password;
+      final CharBuffer salted = CharBuffer.allocate(salt.length() + password.length());
+      salted.put(salt).put(password);
+      ((Buffer) salted).flip();
+      return salted;
     }
   }
 
@@ -313,9 +437,12 @@ public final class PasswordData
     }
 
     @Override
-    public String applyTo(final String password)
+    public CharBuffer applyTo(final CharBuffer password)
     {
-      return password + salt;
+      final CharBuffer salted = CharBuffer.allocate(salt.length() + password.length());
+      salted.put(password).put(salt);
+      ((Buffer) salted).flip();
+      return salted;
     }
   }
 
@@ -329,7 +456,14 @@ public final class PasswordData
      *
      * @return  password string
      */
-    String getPassword();
+    UnicodeString getPassword();
+
+
+    /**
+     * Clears the memory of the underlying objects in this reference.
+     */
+    void clear();
+
 
     /**
      * Returns the salt that was applied to the reference password before digesting it.
@@ -363,6 +497,17 @@ public final class PasswordData
     /**
      * Creates a new historical reference.
      *
+     * @param  password  password string
+     */
+    public HistoricalReference(final UnicodeString password)
+    {
+      super(null, password);
+    }
+
+
+    /**
+     * Creates a new historical reference.
+     *
      * @param  label  label for this password
      * @param  password  password string
      */
@@ -377,9 +522,34 @@ public final class PasswordData
      *
      * @param  label  label for this password
      * @param  password  password string
+     */
+    public HistoricalReference(final String label, final UnicodeString password)
+    {
+      super(label, password);
+    }
+
+
+    /**
+     * Creates a new historical reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
      * @param  salt  salt that was applied to password
      */
     public HistoricalReference(final String label, final String password, final Salt salt)
+    {
+      super(label, password, salt);
+    }
+
+
+    /**
+     * Creates a new historical reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
+     */
+    public HistoricalReference(final String label, final UnicodeString password, final Salt salt)
     {
       super(label, password, salt);
     }
@@ -405,10 +575,33 @@ public final class PasswordData
     /**
      * Creates a new source reference.
      *
+     * @param  password  password string
+     */
+    public SourceReference(final UnicodeString password)
+    {
+      super(null, password);
+    }
+
+
+    /**
+     * Creates a new source reference.
+     *
      * @param  label  label for this password
      * @param  password  password string
      */
     public SourceReference(final String label, final String password)
+    {
+      super(label, password);
+    }
+
+
+    /**
+     * Creates a new source reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
+     */
+    public SourceReference(final String label, final UnicodeString password)
     {
       super(label, password);
     }
@@ -425,6 +618,19 @@ public final class PasswordData
     {
       super(label, password, salt);
     }
+
+
+    /**
+     * Creates a new source reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
+     */
+    public SourceReference(final String label, final UnicodeString password, final Salt salt)
+    {
+      super(label, password, salt);
+    }
   }
 
 
@@ -436,25 +642,10 @@ public final class PasswordData
     private final String label;
 
     /** Reference password. */
-    private final String password;
+    private final UnicodeString password;
 
     /** Salt that was applied to reference password before digesting it. */
     private final Salt salt;
-
-
-    /**
-     * Creates a new abstract reference.
-     *
-     * @param  label  label for this password
-     * @param  password  password string
-     * @param  salt  salt that was applied to password
-     */
-    public AbstractReference(final String label, final String password, final Salt salt)
-    {
-      this.label = label;
-      this.password = password;
-      this.salt = salt;
-    }
 
 
     /**
@@ -470,6 +661,46 @@ public final class PasswordData
 
 
     /**
+     * Creates a new abstract reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
+     */
+    public AbstractReference(final String label, final UnicodeString password)
+    {
+      this(label, password, null);
+    }
+
+
+    /**
+     * Creates a new abstract reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
+     */
+    public AbstractReference(final String label, final String password, final Salt salt)
+    {
+      this(label, new UnicodeString(password), salt);
+    }
+
+
+    /**
+     * Creates a new abstract reference.
+     *
+     * @param  label  label for this password
+     * @param  password  password string
+     * @param  salt  salt that was applied to password
+     */
+    public AbstractReference(final String label, final UnicodeString password, final Salt salt)
+    {
+      this.label = label;
+      this.password = password;
+      this.salt = salt;
+    }
+
+
+    /**
      * Returns the label.
      *
      * @return  reference label
@@ -481,7 +712,7 @@ public final class PasswordData
 
 
     @Override
-    public String getPassword()
+    public UnicodeString getPassword()
     {
       return password;
     }
@@ -501,6 +732,15 @@ public final class PasswordData
         "label=" + label + ", " +
         "password=" + password + ", " +
         "salt=" + salt;
+    }
+
+
+    @Override
+    public void clear()
+    {
+      if (password != null) {
+        password.clear();
+      }
     }
   }
 }

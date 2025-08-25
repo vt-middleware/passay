@@ -93,7 +93,7 @@ public class CharacterRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final String matchingChars = getMatchingCharacters(
-      String.valueOf(characterData.getCharacters()),
+      characterData.getCharacters(),
       passwordData.getPassword(),
       numCharacters);
     if (matchingChars.length() < numCharacters) {
@@ -116,7 +116,7 @@ public class CharacterRule implements Rule
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("minimumRequired", numCharacters);
-    m.put("matchingCharacterCount", UnicodeString.charCount(matchingChars));
+    m.put("matchingCharacterCount", PassayUtils.codePointCount(matchingChars));
     m.put("validCharacters", String.valueOf(characterData.getCharacters()));
     m.put("matchingCharacters", matchingChars);
     return m;
@@ -135,7 +135,7 @@ public class CharacterRule implements Rule
     try {
       return new RuleResultMetadata(
         RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
-        UnicodeString.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+        password.getPassword().countMatchingCodePoints(characterData.getCharacters().codePoints().toArray()));
     } catch (IllegalArgumentException e) {
       return new RuleResultMetadata();
     }
@@ -151,20 +151,21 @@ public class CharacterRule implements Rule
    *
    * @return  matching characters or empty string
    */
-  private static String getMatchingCharacters(final String characters, final String input, final int maximumLength)
+  private static String getMatchingCharacters(
+    final String characters, final UnicodeString input, final int maximumLength)
   {
-    final StringBuilder sb = new StringBuilder(input.length());
+    final StringBuilder sb = new StringBuilder(input.codePointCount());
     int i = 0;
-    while (i < input.length()) {
+    while (i < input.codePointCount()) {
       final int cp = input.codePointAt(i);
       if (characters.indexOf(cp) != -1) {
         if (sb.length() < maximumLength) {
-          sb.append(UnicodeString.toString(cp));
+          sb.append(PassayUtils.toString(cp));
         } else {
           break;
         }
       }
-      i += Character.charCount(cp);
+      i++;
     }
     return sb.toString();
   }

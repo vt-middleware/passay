@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
@@ -114,41 +115,48 @@ public class IllegalSequenceRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
-    final String password = passwordData.getPassword() + '\uffff';
-    final StringBuilder match = new StringBuilder(password.length());
-    for (CharacterSequence cs : sequenceData.getSequences()) {
-      final int csLength = cs.length();
-      int direction = 0;
-      int prevPosition = -1;
-      int i = 0;
-      while (i < password.length()) {
-        final int cp = password.codePointAt(i);
-        final int position = indexOf(cs, cp);
-        // set diff to +1 for increase in sequence, -1 for decrease, anything else for neither
-        int diff = (position | prevPosition) < 0 ? 0 : position - prevPosition;
-        if (wrapSequence && (diff == csLength - 1 || diff == 1 - csLength)) {
-          diff -= Integer.signum(diff) * csLength;
-        }
-        // if we have a sequence and reached its end, add it to result
-        if (diff != direction && match.length() >= sequenceLength) {
-          addError(details, match.toString());
-        }
-        // update the current potential sequence
-        if (diff == 1 || diff == -1) {
-          if (diff != direction) {
-            match.delete(0, match.length() - 1);
-            direction = diff;
+    final int[] codePoints = IntStream.concat(
+      passwordData.getPassword().codePoints(), IntStream.of('\uffff')).toArray();
+    final UnicodeString password = new UnicodeString(codePoints);
+    try {
+      final StringBuilder match = new StringBuilder(password.codePointCount());
+      for (CharacterSequence cs : sequenceData.getSequences()) {
+        final int csLength = cs.length();
+        int direction = 0;
+        int prevPosition = -1;
+        int i = 0;
+        while (i < password.codePointCount()) {
+          final int cp = password.codePointAt(i);
+          final int position = indexOf(cs, cp);
+          // set diff to +1 for increase in sequence, -1 for decrease, anything else for neither
+          int diff = (position | prevPosition) < 0 ? 0 : position - prevPosition;
+          if (wrapSequence && (diff == csLength - 1 || diff == 1 - csLength)) {
+            diff -= Integer.signum(diff) * csLength;
           }
-        } else {
-          match.setLength(0);
-          direction = 0;
+          // if we have a sequence and reached its end, add it to result
+          if (diff != direction && match.length() >= sequenceLength) {
+            addError(details, match.toString());
+          }
+          // update the current potential sequence
+          if (diff == 1 || diff == -1) {
+            if (diff != direction) {
+              match.delete(0, match.length() - 1);
+              direction = diff;
+            }
+          } else {
+            match.setLength(0);
+            direction = 0;
+          }
+          match.append(PassayUtils.toString(cp));
+          prevPosition = position;
+          i++;
         }
-        match.append(UnicodeString.toString(cp));
-        prevPosition = position;
-        i += Character.charCount(cp);
       }
+      return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
+    } finally {
+      PassayUtils.clear(codePoints);
+      password.clear();
     }
-    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

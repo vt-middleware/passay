@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -43,9 +44,12 @@ public class DictionaryRule extends AbstractDictionaryRule
 
 
   @Override
-  protected String doWordSearch(final String text)
+  protected CharSequence doWordSearch(final UnicodeString text)
   {
-    return getDictionary().search(text) ? text : null;
+    if (getDictionary().search(text)) {
+      return text;
+    }
+    return null;
   }
 
 

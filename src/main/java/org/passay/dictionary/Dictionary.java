@@ -17,7 +17,7 @@ public interface Dictionary
    *
    * @return  whether word was found
    */
-  boolean search(String word);
+  boolean search(CharSequence word);
 
 
   /**

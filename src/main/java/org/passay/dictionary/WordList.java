@@ -19,7 +19,7 @@ public interface WordList
    *
    * @return  comparator for words in the list.
    */
-  Comparator<String> getComparator();
+  Comparator<CharSequence> getComparator();
 
 
   /**
