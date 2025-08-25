@@ -55,7 +55,7 @@ public final class RandomPasswordEntropyFactory
       } else if (rule instanceof AllowedCharacterRule) {
         final AllowedCharacterRule allowedCharacterRule = (AllowedCharacterRule) rule;
         uniqueCharacters.addAll(
-          getUniqueCharacters(UnicodeString.toString(allowedCharacterRule.getAllowedCharacters().getCodePoints())));
+          getUniqueCharacters(UnicodeString.toString(allowedCharacterRule.getAllowedCharacters())));
       }
     });
     if (uniqueCharacters.isEmpty()) {

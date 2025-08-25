@@ -7,6 +7,7 @@ import java.io.LineNumberReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -212,8 +213,18 @@ public class HaveIBeenPwnedRule implements Rule
    */
   private static String getHexDigest(final PasswordData passwordData)
   {
-    final byte[] digest = HashUtil.sha1(passwordData.getPassword().getBytes(Charset.defaultCharset()));
-    return CodecUtil.encode(new HexEncoder(false, true), digest);
+    final CharBuffer buffer = passwordData.getPassword().toCharBuffer();
+    try {
+      final byte[] bytes = PassayUtils.toByteArray(buffer, Charset.defaultCharset());
+      try {
+        final byte[] digest = HashUtil.sha1(bytes);
+        return CodecUtil.encode(new HexEncoder(false, true), digest);
+      } finally {
+        PassayUtils.clear(bytes);
+      }
+    } finally {
+      PassayUtils.clear(buffer);
+    }
   }
 
 

@@ -26,13 +26,33 @@ public final class WordLists
 {
 
   /** Case sensitive comparator. */
-  public static final Comparator<String> CASE_SENSITIVE_COMPARATOR = new Comparator<String>() {
+  // CheckStyle:AnonInnerLength OFF
+  // CheckStyle:ReturnCount OFF
+  public static final Comparator<CharSequence> CASE_SENSITIVE_COMPARATOR = new Comparator<CharSequence>() {
     @Override
-    public int compare(final String a, final String b)
+    @SuppressWarnings("unchecked")
+    public int compare(final CharSequence a, final CharSequence b)
     {
-      PassayUtils.assertNotNullArg(a, "Compare string cannot be null");
-      PassayUtils.assertNotNullArg(b, "Compare string cannot be null");
-      return a.compareTo(b);
+      if (PassayUtils.assertNotNullArg(a, "Compare argument cannot be null") ==
+          PassayUtils.assertNotNullArg(b, "Compare argument cannot be null")) {
+        return 0;
+      }
+      final int[] codePointsA = a.codePoints().toArray();
+      final int[] codePointsB = b.codePoints().toArray();
+      try {
+        final int len = Math.min(codePointsA.length, codePointsB.length);
+        for (int i = 0; i < len; i++) {
+          final int charA = codePointsA[i];
+          final int charB = codePointsB[i];
+          if (charA != charB) {
+            return charA - charB;
+          }
+        }
+        return codePointsA.length - codePointsB.length;
+      } finally {
+        PassayUtils.clear(codePointsA);
+        PassayUtils.clear(codePointsB);
+      }
     }
     @Override
     public String toString()
@@ -40,15 +60,37 @@ public final class WordLists
       return getClass().getName() + "-CASE_SENSITIVE@" + hashCode();
     }
   };
+  // CheckStyle:ReturnCount ON
+  // CheckStyle:AnonInnerLength ON
 
   /** Case insensitive comparator. */
-  public static final Comparator<String> CASE_INSENSITIVE_COMPARATOR = new Comparator<String>() {
+  // CheckStyle:AnonInnerLength OFF
+  // CheckStyle:ReturnCount OFF
+  public static final Comparator<CharSequence> CASE_INSENSITIVE_COMPARATOR = new Comparator<CharSequence>() {
     @Override
-    public int compare(final String a, final String b)
+    @SuppressWarnings("unchecked")
+    public int compare(final CharSequence a, final CharSequence b)
     {
-      PassayUtils.assertNotNullArg(a, "Compare string cannot be null");
-      PassayUtils.assertNotNullArg(b, "Compare string cannot be null");
-      return a.compareToIgnoreCase(b);
+      if (PassayUtils.assertNotNullArg(a, "Compare argument cannot be null") ==
+          PassayUtils.assertNotNullArg(b, "Compare argument cannot be null")) {
+        return 0;
+      }
+      final int[] codePointsA = a.codePoints().toArray();
+      final int[] codePointsB = b.codePoints().toArray();
+      try {
+        final int len = Math.min(codePointsA.length, codePointsB.length);
+        for (int i = 0; i < len; i++) {
+          final int charA = Character.toLowerCase(codePointsA[i]);
+          final int charB = Character.toLowerCase(codePointsB[i]);
+          if (charA != charB) {
+            return charA - charB;
+          }
+        }
+        return codePointsA.length - codePointsB.length;
+      } finally {
+        PassayUtils.clear(codePointsA);
+        PassayUtils.clear(codePointsB);
+      }
     }
     @Override
     public String toString()
@@ -56,6 +98,8 @@ public final class WordLists
       return getClass().getName() + "-CASE_INSENSITIVE@" + hashCode();
     }
   };
+  // CheckStyle:ReturnCount ON
+  // CheckStyle:AnonInnerLength ON
 
   /** Index returned when word not found by binary search. */
   public static final int NOT_FOUND = -1;
@@ -73,11 +117,11 @@ public final class WordLists
    *
    * @return  index of supplied word in list or a negative number if not found.
    */
-  public static int binarySearch(final WordList wordList, final String word)
+  public static int binarySearch(final WordList wordList, final CharSequence word)
   {
     PassayUtils.assertNotNullArg(wordList, "Word list cannot be null");
     PassayUtils.assertNotNullArg(word, "Word cannot be null");
-    final Comparator<String> comparator = wordList.getComparator();
+    final Comparator<CharSequence> comparator = wordList.getComparator();
     int low = 0;
     int high = wordList.size() - 1;
     int mid;

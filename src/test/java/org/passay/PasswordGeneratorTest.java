@@ -67,8 +67,8 @@ public class PasswordGeneratorTest
     final PasswordGenerator generator = new PasswordGenerator();
     // Perform a number of rounds likely to produce illegal sequences by random chance
     try {
-      for (int i = 0; i < 100000; i++) {
-        final String password = generator.generatePassword(22, ruleSet);
+      for (int i = 0; i < 500000; i++) {
+        final UnicodeString password = generator.generatePassword(22, ruleSet);
         final PasswordData pd = new PasswordData(password);
         assertThat(passValidator.validate(pd).isValid()).isTrue();
         assertThat(failValidator.validate(pd).isValid()).isFalse();

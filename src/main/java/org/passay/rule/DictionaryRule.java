@@ -1,6 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.nio.CharBuffer;
+import org.passay.PassayUtils;
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -43,9 +46,14 @@ public class DictionaryRule extends AbstractDictionaryRule
 
 
   @Override
-  protected String doWordSearch(final String text)
+  protected CharSequence doWordSearch(final UnicodeString text)
   {
-    return getDictionary().search(text) ? text : null;
+    final CharBuffer buffer = text.toCharBuffer();
+    if (getDictionary().search(buffer)) {
+      return buffer;
+    }
+    PassayUtils.clear(buffer);
+    return null;
   }
 
 

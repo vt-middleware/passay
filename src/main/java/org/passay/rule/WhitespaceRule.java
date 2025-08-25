@@ -117,7 +117,7 @@ public class WhitespaceRule implements Rule
    */
   public WhitespaceRule(final UnicodeString unicodeString, final MatchBehavior behavior, final boolean reportAll)
   {
-    final int[] cp = unicodeString.getCodePoints();
+    final int[] cp = unicodeString.codePoints();
     for (int c : cp) {
       if (!Character.isWhitespace(c)) {
         throw new IllegalArgumentException("Character '" + c + "' is not whitespace");
@@ -156,7 +156,7 @@ public class WhitespaceRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
-    final String text = passwordData.getPassword();
+    final UnicodeString text = passwordData.getPassword();
     for (int cp : whitespaceCharacters) {
       if (matchBehavior.match(text, cp)) {
         final String[] codes = {
@@ -202,7 +202,7 @@ public class WhitespaceRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Whitespace,
-      UnicodeString.countMatchingCharacters(whitespaceCharacters, password.getPassword()));
+      password.getPassword().countMatchingCharacters(whitespaceCharacters));
   }
 
 

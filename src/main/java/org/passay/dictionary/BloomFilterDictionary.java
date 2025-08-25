@@ -15,7 +15,7 @@ public class BloomFilterDictionary implements Dictionary
 {
 
   /** Filter used for searching. */
-  private final BloomFilter<String> bloomFilter;
+  private final BloomFilter<CharSequence> bloomFilter;
 
 
   /**
@@ -27,7 +27,7 @@ public class BloomFilterDictionary implements Dictionary
    *
    * @param  filter  bloom filter used to determine if a word exists.
    */
-  public BloomFilterDictionary(final BloomFilter<String> filter)
+  public BloomFilterDictionary(final BloomFilter<CharSequence> filter)
   {
     bloomFilter = PassayUtils.assertNotNullArg(filter, "Bloom filter cannot be null");
   }
@@ -38,7 +38,7 @@ public class BloomFilterDictionary implements Dictionary
    *
    * @return  bloom filter
    */
-  public BloomFilter<String> getBloomFilter()
+  public BloomFilter<CharSequence> getBloomFilter()
   {
     return bloomFilter;
   }
@@ -68,7 +68,7 @@ public class BloomFilterDictionary implements Dictionary
    * bloom filter
    */
   @Override
-  public boolean search(final String word)
+  public boolean search(final CharSequence word)
   {
     return bloomFilter.mightContain(word);
   }

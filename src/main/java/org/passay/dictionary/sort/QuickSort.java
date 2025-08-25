@@ -13,7 +13,7 @@ public class QuickSort implements ArraySorter
 {
 
   @Override
-  public void sort(final String[] array, final Comparator<String> comparator)
+  public void sort(final String[] array, final Comparator<CharSequence> comparator)
   {
     PassayUtils.assertNotNullArg(array, "Array cannot be null");
     PassayUtils.assertNotNullArg(comparator, "Comparator cannot be null");
@@ -32,7 +32,7 @@ public class QuickSort implements ArraySorter
    * @param  lo  index to beginning sorting at
    * @param  hi  index to stop sorting at
    */
-  public static void sort(final String[] array, final Comparator<String> c, final int lo, final int hi)
+  public static void sort(final String[] array, final Comparator<CharSequence> c, final int lo, final int hi)
   {
     PassayUtils.assertNotNullArg(array, "Array cannot be null");
     PassayUtils.assertNotNullArg(c, "Comparator cannot be null");

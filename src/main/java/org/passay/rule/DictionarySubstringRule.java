@@ -1,6 +1,9 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.nio.CharBuffer;
+import org.passay.PassayUtils;
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -42,19 +45,20 @@ public class DictionarySubstringRule extends AbstractDictionaryRule
 
 
   @Override
-  protected String doWordSearch(final String text)
+  protected CharSequence doWordSearch(final UnicodeString text)
   {
-    int i = Character.charCount(text.codePointAt(0));
+    int i = 1;
     while (i < text.length()) {
       int j = 0;
       while (j + i <= text.length()) {
-        final String s = text.substring(j, j + i);
-        if (getDictionary().search(s)) {
-          return s;
+        final CharBuffer cb = text.substring(j, j + i).toCharBuffer(true);
+        if (getDictionary().search(cb)) {
+          return cb;
         }
-        j += Character.charCount(text.codePointAt(j));
+        PassayUtils.clear(cb);
+        j++;
       }
-      i += Character.charCount(text.codePointAt(i));
+      i++;
     }
     return null;
   }

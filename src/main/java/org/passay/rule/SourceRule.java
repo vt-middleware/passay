@@ -11,6 +11,7 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.SuccessRuleResult;
+import org.passay.UnicodeString;
 
 /**
  * Rule for determining if a password matches a password from a different source. Useful for when separate systems
@@ -60,7 +61,7 @@ public class SourceRule implements Rule
     }
 
     final List<RuleResultDetail> details = new ArrayList<>();
-    final String cleartext = passwordData.getPassword();
+    final UnicodeString cleartext = passwordData.getPassword();
     if (reportAllFailures) {
       references.stream()
         .filter(r -> matches(cleartext, r))
@@ -83,7 +84,7 @@ public class SourceRule implements Rule
    *
    * @return  true if passwords match, false otherwise.
    */
-  protected boolean matches(final String password, final PasswordData.Reference reference)
+  protected boolean matches(final UnicodeString password, final PasswordData.Reference reference)
   {
     return password.equals(reference.getPassword());
   }

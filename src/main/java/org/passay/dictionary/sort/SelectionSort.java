@@ -13,7 +13,7 @@ public class SelectionSort implements ArraySorter
 {
 
   @Override
-  public void sort(final String[] array, final Comparator<String> comparator)
+  public void sort(final String[] array, final Comparator<CharSequence> comparator)
   {
     PassayUtils.assertNotNullArg(array, "Array cannot be null");
     PassayUtils.assertNotNullArg(comparator, "Comparator cannot be null");

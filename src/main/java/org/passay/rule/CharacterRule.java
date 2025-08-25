@@ -93,7 +93,7 @@ public class CharacterRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final String matchingChars = getMatchingCharacters(
-      String.valueOf(characterData.getCharacters()),
+      characterData.getCharacters(),
       passwordData.getPassword(),
       numCharacters);
     if (matchingChars.length() < numCharacters) {
@@ -135,7 +135,7 @@ public class CharacterRule implements Rule
     try {
       return new RuleResultMetadata(
         RuleResultMetadata.CountCategory.valueOf(characterData.toString()),
-        UnicodeString.countMatchingCharacters(characterData.getCharacters(), password.getPassword()));
+        password.getPassword().countMatchingCharacters(characterData.getCharacters().codePoints().toArray()));
     } catch (IllegalArgumentException e) {
       return new RuleResultMetadata();
     }
@@ -151,7 +151,8 @@ public class CharacterRule implements Rule
    *
    * @return  matching characters or empty string
    */
-  private static String getMatchingCharacters(final String characters, final String input, final int maximumLength)
+  private static String getMatchingCharacters(
+    final String characters, final UnicodeString input, final int maximumLength)
   {
     final StringBuilder sb = new StringBuilder(input.length());
     int i = 0;
@@ -164,7 +165,7 @@ public class CharacterRule implements Rule
           break;
         }
       }
-      i += Character.charCount(cp);
+      i++;
     }
     return sb.toString();
   }

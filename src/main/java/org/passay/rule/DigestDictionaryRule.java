@@ -1,10 +1,13 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.nio.Buffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.HashBean;
 import org.passay.PassayUtils;
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -74,9 +77,20 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
 
 
   @Override
-  protected String doWordSearch(final String text)
+  protected CharSequence doWordSearch(final UnicodeString text)
   {
-    return getDictionary().search(hashBean.hash(text.getBytes(charset))) ? text : null;
+    final CharBuffer buffer = text.toCharBuffer();
+    try {
+      final byte[] bytes = PassayUtils.toByteArray(buffer, charset);
+      try {
+        ((Buffer) buffer).rewind();
+        return getDictionary().search(hashBean.hash(bytes)) ? buffer : null;
+      } finally {
+        PassayUtils.clear(bytes);
+      }
+    } finally {
+      PassayUtils.clear(buffer);
+    }
   }
 
 

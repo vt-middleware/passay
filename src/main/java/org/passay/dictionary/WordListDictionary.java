@@ -52,7 +52,7 @@ public class WordListDictionary implements Dictionary
 
 
   @Override
-  public boolean search(final String word)
+  public boolean search(final CharSequence word)
   {
     return WordLists.binarySearch(wordList, word) >= 0;
   }
