@@ -29,5 +29,5 @@ public interface ArraySorter
    * @param  array  To sort
    * @param  c  Comparator to sort with
    */
-  void sort(String[] array, Comparator<String> c);
+  void sort(String[] array, Comparator<CharSequence> c);
 }

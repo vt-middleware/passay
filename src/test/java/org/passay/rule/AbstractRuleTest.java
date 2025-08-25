@@ -41,7 +41,9 @@ public abstract class AbstractRuleTest
     final RuleResult result = rule.validate(passwordData);
     if (errorCodes != null) {
       assertThat(result.isValid()).isFalse();
-      assertThat(result.getDetails().size()).isEqualTo(errorCodes.length);
+      assertThat(result.getDetails().size())
+        .withFailMessage("Found details: %s", result.getDetails())
+        .isEqualTo(errorCodes.length);
       for (String code : errorCodes) {
         assertThat(hasErrorCode(code, result)).isTrue();
       }

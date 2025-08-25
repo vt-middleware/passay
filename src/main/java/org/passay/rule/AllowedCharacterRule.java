@@ -83,7 +83,7 @@ public class AllowedCharacterRule implements Rule
    */
   public AllowedCharacterRule(final UnicodeString unicodeString, final MatchBehavior behavior, final boolean reportAll)
   {
-    allowedCharacters = unicodeString.getCodePoints();
+    allowedCharacters = unicodeString.toCodePointArray();
     Arrays.sort(allowedCharacters);
     matchBehavior = behavior;
     reportAllFailures = reportAll;
@@ -118,26 +118,31 @@ public class AllowedCharacterRule implements Rule
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
     final Set<String> matches = new HashSet<>();
-    final String text = passwordData.getPassword();
-    for (int cp : text.codePoints().toArray()) {
-      if (Arrays.binarySearch(allowedCharacters, cp) < 0 && !matches.contains(UnicodeString.toString(cp))) {
-        if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, cp)) {
-          final String[] codes = {
-            ERROR_CODE + "." + cp,
-            ERROR_CODE + "." + matchBehavior.upperSnakeName(),
-            ERROR_CODE,
-          };
-          details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(cp)));
-          if (!reportAllFailures) {
-            break;
+    final UnicodeString text = passwordData.getPassword();
+    final int[] codePoints = text.toCodePointArray();
+    try {
+      for (int cp : codePoints) {
+        if (Arrays.binarySearch(allowedCharacters, cp) < 0 && !matches.contains(PassayUtils.toString(cp))) {
+          if (MatchBehavior.Contains.equals(matchBehavior) || matchBehavior.match(text, cp)) {
+            final String[] codes = {
+              ERROR_CODE + "." + cp,
+              ERROR_CODE + "." + matchBehavior.upperSnakeName(),
+              ERROR_CODE,
+            };
+            details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(cp)));
+            if (!reportAllFailures) {
+              break;
+            }
+            matches.add(PassayUtils.toString(cp));
           }
-          matches.add(UnicodeString.toString(cp));
         }
       }
+      return details.isEmpty() ?
+        new SuccessRuleResult(createRuleResultMetadata(passwordData)) :
+        new FailureRuleResult(createRuleResultMetadata(passwordData), details);
+    } finally {
+      PassayUtils.clear(codePoints);
     }
-    return details.isEmpty() ?
-      new SuccessRuleResult(createRuleResultMetadata(passwordData)) :
-      new FailureRuleResult(createRuleResultMetadata(passwordData), details);
   }
 
 
@@ -151,7 +156,7 @@ public class AllowedCharacterRule implements Rule
   protected Map<String, Object> createRuleResultDetailParameters(final int cp)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
-    m.put("illegalCharacter", UnicodeString.toString(cp));
+    m.put("illegalCharacter", PassayUtils.toString(cp));
     m.put("matchBehavior", matchBehavior);
     return m;
   }
@@ -168,7 +173,7 @@ public class AllowedCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Allowed,
-      UnicodeString.countMatchingCharacters(allowedCharacters, password.getPassword()));
+      password.getPassword().countMatchingCodePoints(allowedCharacters));
   }
 
 

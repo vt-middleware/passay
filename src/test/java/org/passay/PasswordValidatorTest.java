@@ -263,7 +263,8 @@ public class PasswordValidatorTest
     assertThat(pvAl.validate(length5CompositionPassword).getEntropy())
       .isEqualTo(
         new RandomPasswordEntropy(
-          allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate());
+          allowedRule.getAllowedCharacters().codePointCount(),
+          length5CompositionPassword.getCharacterCount()).estimate());
   }
 
   /**
@@ -332,7 +333,7 @@ public class PasswordValidatorTest
 
         /* invalid character rule passwords. */
 
-        /* all digits */
+        // all digits
         {
           validator,
           new PasswordData(USER, "4326789032", references),
@@ -344,7 +345,7 @@ public class PasswordValidatorTest
             EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
-        /* all non-alphanumeric */
+        // all non-alphanumeric
         {
           validator,
           new PasswordData(USER, "$&!$#@*{{>", references),
@@ -355,7 +356,7 @@ public class PasswordValidatorTest
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
 
-        /* all lowercase */
+        // all lowercase
         {
           validator,
           new PasswordData(USER, "aycdopezss", references),
@@ -367,7 +368,7 @@ public class PasswordValidatorTest
             DictionarySubstringRule.ERROR_CODE),
         },
 
-        /* all uppercase */
+        // all uppercase
         {
           validator,
           new PasswordData(USER, "AYCDOPEZSS", references),
@@ -379,7 +380,7 @@ public class PasswordValidatorTest
             DictionarySubstringRule.ERROR_CODE),
         },
 
-        /* digits and non-alphanumeric */
+        // digits and non-alphanumeric
         {
           validator,
           new PasswordData(USER, "@&3*(%5{}^", references),
@@ -389,7 +390,7 @@ public class PasswordValidatorTest
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
 
-        /* digits and lowercase */
+        // digits and lowercase
         {
           validator,
           new PasswordData(USER, "ay3dop5zss", references),
@@ -399,7 +400,7 @@ public class PasswordValidatorTest
             EnglishCharacterData.Special.getErrorCode()),
         },
 
-        /* digits and uppercase */
+        // digits and uppercase
         {
           validator,
           new PasswordData(USER, "AY3DOP5ZSS", references),
@@ -409,7 +410,7 @@ public class PasswordValidatorTest
             EnglishCharacterData.Special.getErrorCode()),
         },
 
-        /* non-alphanumeric and lowercase */
+        // non-alphanumeric and lowercase
         {
           validator,
           new PasswordData(USER, "a&c*o%ea}s", references),
@@ -419,7 +420,7 @@ public class PasswordValidatorTest
             EnglishCharacterData.UpperCase.getErrorCode()),
         },
 
-        /* non-alphanumeric and uppercase */
+        // non-alphanumeric and uppercase
         {
           validator,
           new PasswordData(USER, "A&C*O%EA}S", references),
@@ -429,7 +430,7 @@ public class PasswordValidatorTest
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
 
-        /* uppercase and lowercase */
+        // uppercase and lowercase
         {
           validator,
           new PasswordData(USER, "AycDOPdsyz", references),
@@ -441,7 +442,7 @@ public class PasswordValidatorTest
 
         /* invalid whitespace rule passwords. */
 
-        /* contains a space */
+        // contains a space
         {
           validator,
           new PasswordData(USER, "AycD Pdsyz", references),
@@ -452,7 +453,7 @@ public class PasswordValidatorTest
             WhitespaceRule.ERROR_CODE),
         },
 
-        /* contains a tab */
+        // contains a tab
         {
           validator,
           new PasswordData(USER, "AycD    Psyz", references),
@@ -465,14 +466,14 @@ public class PasswordValidatorTest
 
         /* invalid length rule passwords. */
 
-        /* too short */
+        // too short
         {
           validator,
           new PasswordData(USER, "p4T3t#", references),
           codes(LengthRule.ERROR_CODE_MIN),
         },
 
-        /* too long */
+        // too long
         {
           validator,
           new PasswordData(USER, "p4t3t#n6574632vbad#@!8", references),
@@ -481,14 +482,14 @@ public class PasswordValidatorTest
 
         /* invalid dictionary rule passwords. */
 
-        /* matches dictionary word 'none' */
+        // matches dictionary word 'none'
         {
           validator,
           new PasswordData(USER, "p4t3t#none", references),
           codes(DictionaryRule.ERROR_CODE),
         },
 
-        /* matches dictionary word 'none' backwards */
+        // matches dictionary word 'none' backwards
         {
           validator,
           new PasswordData(USER, "p4t3t#enon", references),
@@ -497,24 +498,21 @@ public class PasswordValidatorTest
 
         /* invalid sequence rule passwords. */
 
-        /* matches sequence 'zxcvb' */
+        // matches sequence 'zxcvb'
         {
           validator,
           new PasswordData(USER, "p4zxcvb#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
-        /*
-         * matches sequence 'werty' backwards
-         * 'wert' is a dictionary word
-         */
+       // matches sequence 'werty' backwards; 'wert' is a dictionary word
         {
           validator,
           new PasswordData(USER, "p4ytrew#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
         },
 
-        /* matches sequence 'iop[]' ignore case */
+        // matches sequence 'iop[]' ignore case
         {
           validator,
           new PasswordData(USER, "p4iOP[]#n65", references),
@@ -523,30 +521,21 @@ public class PasswordValidatorTest
 
         /* invalid userid rule passwords. */
 
-        /*
-         * contains userid 'testuser'
-         * 'test' and 'user' are dictionary words
-         */
+        // contains userid 'testuser'; 'test' and 'user' are dictionary words
         {
           validator,
           new PasswordData(USER, "p4testuser#n65", references),
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
         },
 
-        /*
-         * contains userid 'testuser' backwards
-         * 'test' and 'user' are dictionary words
-         */
+        // contains userid 'testuser' backwards; 'test' and 'user' are dictionary words
         {
           validator,
           new PasswordData(USER, "p4resutset#n65", references),
           codes(UsernameRule.ERROR_CODE_REVERSED, DictionaryRule.ERROR_CODE_REVERSED),
         },
 
-        /*
-         * contains userid 'testuser' ignore case
-         * 'test' and 'user' are dictionary words
-         */
+        // contains userid 'testuser' ignore case; 'test' and 'user' are dictionary words
         {
           validator,
           new PasswordData(USER, "p4TeStusEr#n65", references),
@@ -555,21 +544,21 @@ public class PasswordValidatorTest
 
         /* invalid history rule passwords. */
 
-        /* contains history password */
+        // contains history password
         {
           validator,
           new PasswordData(USER, "t3stUs3r02", references),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        /* contains history password */
+        // contains history password
         {
           validator,
           new PasswordData(USER, "t3stUs3r03", references),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        /* contains source password */
+        // contains source password
         {
           validator,
           new PasswordData(USER, "t3stUs3r04", references),
@@ -578,35 +567,35 @@ public class PasswordValidatorTest
 
         /* valid passwords. */
 
-        /* digits, non-alphanumeric, lowercase, uppercase */
+        // digits, non-alphanumeric, lowercase, uppercase
         {
           validator,
           new PasswordData(USER, "p4T3t#N65", references),
           null,
         },
 
-        /* digits, non-alphanumeric, lowercase */
+        // digits, non-alphanumeric, lowercase
         {
           validator,
           new PasswordData(USER, "p4t3t#n65", references),
           null,
         },
 
-        /* digits, non-alphanumeric, uppercase */
+        // digits, non-alphanumeric, uppercase
         {
           validator,
           new PasswordData(USER, "P4T3T#N65", references),
           null,
         },
 
-        /* digits, uppercase, lowercase */
+        // digits, uppercase, lowercase
         {
           validator,
           new PasswordData(USER, "p4t3tCn65", references),
           null,
         },
 
-        /* non-alphanumeric, lowercase, uppercase */
+        // non-alphanumeric, lowercase, uppercase
         {
           validator,
           new PasswordData(USER, "pxT%t#Nwq", references),

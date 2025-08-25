@@ -11,6 +11,7 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.SuccessRuleResult;
+import org.passay.UnicodeString;
 
 /**
  * Rule for determining if a password contains the username associated with that password.  This rule returns true if a
@@ -109,29 +110,38 @@ public class UsernameRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
-    String user = passwordData.getUsername();
-    if (user != null && !user.isEmpty()) {
-      String text = passwordData.getPassword();
-      if (ignoreCase) {
-        text = text.toLowerCase();
-        user = user.toLowerCase();
-      }
-      if (matchBehavior.match(text, user)) {
-        final String[] codes = {
-          ERROR_CODE + "." + matchBehavior.upperSnakeName(),
-          ERROR_CODE,
-        };
-        details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(user)));
-      }
-      if (matchBackwards) {
-        final String reverseUser = new StringBuilder(user).reverse().toString();
-        if (matchBehavior.match(text, reverseUser)) {
-          final String[] codes = {
-            ERROR_CODE_REVERSED + "." + matchBehavior.upperSnakeName(),
-            ERROR_CODE_REVERSED,
-          };
-          details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(user)));
+    if (passwordData.getUsername() != null && !passwordData.getUsername().isEmpty()) {
+      UnicodeString text = UnicodeString.copy(passwordData.getPassword());
+      UnicodeString user = UnicodeString.copy(passwordData.getUsername());
+      try {
+        if (ignoreCase) {
+          text = text.toLowerCase(true);
+          user = user.toLowerCase(true);
         }
+        if (matchBehavior.match(text, user)) {
+          final String[] codes = {
+            ERROR_CODE + "." + matchBehavior.upperSnakeName(),
+            ERROR_CODE,
+          };
+          details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(user.toString())));
+        }
+        if (matchBackwards) {
+          final UnicodeString reverseUser = user.reverse();
+          try {
+            if (matchBehavior.match(text, reverseUser)) {
+              final String[] codes = {
+                ERROR_CODE_REVERSED + "." + matchBehavior.upperSnakeName(),
+                ERROR_CODE_REVERSED,
+              };
+              details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(user.toString())));
+            }
+          } finally {
+            reverseUser.clear();
+          }
+        }
+      } finally {
+        text.clear();
+        user.clear();
       }
     }
     return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
@@ -145,7 +155,7 @@ public class UsernameRule implements Rule
    *
    * @return  map of parameter name to value
    */
-  protected Map<String, Object> createRuleResultDetailParameters(final String username)
+  protected Map<String, Object> createRuleResultDetailParameters(final CharSequence username)
   {
     final Map<String, Object> m = new LinkedHashMap<>();
     m.put("username", username);

@@ -1,7 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.data;
 
-import org.passay.UnicodeString;
+import org.passay.PassayUtils;
 
 /**
  * Models a sequence of characters in one or more forms as strings of equal length where each string represents one form
@@ -73,6 +73,6 @@ public class CharacterSequence
   /** @return  Length of character sequence. */
   public int length()
   {
-    return UnicodeString.charCount(forms[0]);
+    return PassayUtils.codePointCount(forms[0]);
   }
 }

@@ -27,7 +27,7 @@ public class ArraysSort implements ArraySorter
 
 
   @Override
-  public void sort(final String[] array, final Comparator<String> comparator)
+  public void sort(final String[] array, final Comparator<CharSequence> comparator)
   {
     Arrays.sort(
       PassayUtils.assertNotNullArgOr(

@@ -1,11 +1,13 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.HashBean;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
+import org.passay.UnicodeString;
 
 /**
  * Rule for determining if a password matches a digested password from a different source. Useful for when separate
@@ -57,10 +59,16 @@ public class DigestSourceRule extends SourceRule
    * @return  true if passwords match, false otherwise.
    */
   @Override
-  protected boolean matches(final String password, final PasswordData.Reference reference)
+  protected boolean matches(final UnicodeString password, final PasswordData.Reference reference)
   {
     final PasswordData.Salt salt = reference.getSalt();
-    final String undigested = salt == null ? password : salt.applyTo(password);
-    return hashBean.compare(reference.getPassword(), undigested.getBytes(charset));
+    final CharBuffer buffer = CharBuffer.wrap(password.toCharArray());
+    final CharBuffer undigested = salt == null ? buffer : salt.applyTo(buffer);
+    try {
+      return hashBean.compare(reference.getPassword().toString(), PassayUtils.toByteArray(undigested, charset));
+    } finally {
+      PassayUtils.clear(buffer);
+      PassayUtils.clear(undigested);
+    }
   }
 }

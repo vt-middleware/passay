@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.cryptacular.bean.HashBean;
 import org.passay.PassayUtils;
+import org.passay.UnicodeString;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -74,9 +75,14 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
 
 
   @Override
-  protected String doWordSearch(final String text)
+  protected CharSequence doWordSearch(final UnicodeString text)
   {
-    return getDictionary().search(hashBean.hash(text.getBytes(charset))) ? text : null;
+    final byte[] bytes = PassayUtils.toByteArray(text, charset);
+    try {
+      return getDictionary().search(hashBean.hash(bytes)) ? text : null;
+    } finally {
+      PassayUtils.clear(bytes);
+    }
   }
 
 

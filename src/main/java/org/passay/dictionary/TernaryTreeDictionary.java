@@ -89,7 +89,7 @@ public class TernaryTreeDictionary implements Dictionary
 
 
   @Override
-  public boolean search(final String word)
+  public boolean search(final CharSequence word)
   {
     return tree.search(word);
   }
@@ -103,7 +103,7 @@ public class TernaryTreeDictionary implements Dictionary
    *
    * @return  array of matching words
    */
-  public String[] partialSearch(final String word)
+  public CharSequence[] partialSearch(final CharSequence word)
   {
     return tree.partialSearch(word);
   }
@@ -118,7 +118,7 @@ public class TernaryTreeDictionary implements Dictionary
    *
    * @return  array of matching words
    */
-  public String[] nearSearch(final String word, final int distance)
+  public CharSequence[] nearSearch(final CharSequence word, final int distance)
   {
     return tree.nearSearch(word, distance);
   }
@@ -207,14 +207,14 @@ public class TernaryTreeDictionary implements Dictionary
           System.out.printf("%s was not found in this dictionary%n", word);
         }
       } else if (partialSearch) {
-        final String[] matches = dict.partialSearch(word);
+        final CharSequence[] matches = dict.partialSearch(word);
         System.out.printf(
           "Found %s matches for %s in this dictionary : %s%n",
           matches.length,
           word,
           Arrays.asList(matches));
       } else if (nearSearch) {
-        final String[] matches = dict.nearSearch(word, distance);
+        final CharSequence[] matches = dict.nearSearch(word, distance);
         System.out.printf(
           "Found %s matches for %s in this dictionary at a distance of %s " +
             ": %s%n",
