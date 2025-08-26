@@ -9,7 +9,7 @@ package org.passay.entropy;
  *
  * @author  Middleware Services
  */
-public class RandomPasswordEntropy implements Entropy
+public final class RandomPasswordEntropy implements Entropy
 {
 
   /** Size of the alphabet. */
