@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password contains any number within a defined range, lower inclusive, upper exclusive.
@@ -131,7 +131,7 @@ public class NumberRangeRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final String text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {
       if (matchBehavior.match(text, Integer.toString(i))) {
@@ -139,13 +139,13 @@ public class NumberRangeRule implements Rule
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
           ERROR_CODE,
         };
-        results.add(new DefaultRuleResult(new RuleResultDetail(codes, createRuleResultDetailParameters(i))));
+        details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(i)));
         if (!reportAllFailures) {
           break;
         }
       }
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

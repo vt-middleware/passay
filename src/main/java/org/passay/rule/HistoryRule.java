@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password matches one of any previous password a user has chosen. If no historical password
@@ -56,24 +56,22 @@ public class HistoryRule implements Rule
       PasswordData.HistoricalReference.class);
     final int size = references.size();
     if (size == 0) {
-      return new DefaultRuleResult(true);
+      return new SuccessRuleResult();
     }
 
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final String cleartext = passwordData.getPassword();
     if (reportAllFailures) {
       references.stream()
         .filter(r -> matches(cleartext, r))
-        .forEach(r -> results.add(
-          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)))));
+        .forEach(r -> details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size))));
     } else {
       references.stream()
         .filter(r -> matches(cleartext, r))
         .findFirst()
-        .ifPresent(r -> results.add(
-          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size)))));
+        .ifPresent(r -> details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(size))));
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

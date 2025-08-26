@@ -8,13 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.RuleResultMetadata;
+import org.passay.SuccessRuleResult;
 import org.passay.UnicodeString;
 
 /**
@@ -115,7 +115,7 @@ public class IllegalCharacterRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final Set<String> matches = new HashSet<>();
     final String text = passwordData.getPassword();
     for (int cp : illegalCharacters) {
@@ -125,15 +125,16 @@ public class IllegalCharacterRule implements Rule
           ERROR_CODE + "." + matchBehavior.upperSnakeName(),
           ERROR_CODE,
         };
-        results.add(new DefaultRuleResult(new RuleResultDetail(codes, createRuleResultDetailParameters(cp))));
+        details.add(new RuleResultDetail(codes, createRuleResultDetailParameters(cp)));
         if (!reportAllFailures) {
           break;
         }
         matches.add(UnicodeString.toString(cp));
       }
     }
-    results.add(new DefaultRuleResult(results.isEmpty(), createRuleResultMetadata(passwordData)));
-    return new CompositeRuleResult(results);
+    return details.isEmpty() ?
+      new SuccessRuleResult(createRuleResultMetadata(passwordData)) :
+      new FailureRuleResult(createRuleResultMetadata(passwordData), details);
   }
 
 

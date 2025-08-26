@@ -9,12 +9,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password matches an illegal regular expression. Passwords which match the expression will
@@ -100,21 +100,20 @@ public class IllegalRegexRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final Matcher m = pattern.matcher(passwordData.getPassword());
     final Set<String> matches = new HashSet<>();
     while (m.find()) {
       final String match = m.group();
       if (!matches.contains(match)) {
-        results.add(
-          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(match))));
+        details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(match)));
         if (!reportAllFailures) {
           break;
         }
         matches.add(match);
       }
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

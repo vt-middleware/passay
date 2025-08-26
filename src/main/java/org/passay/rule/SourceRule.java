@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password matches a password from a different source. Useful for when separate systems
@@ -56,24 +56,22 @@ public class SourceRule implements Rule
     final List<PasswordData.SourceReference> references = passwordData.getPasswordReferences(
       PasswordData.SourceReference.class);
     if (references.isEmpty()) {
-      return new DefaultRuleResult(true);
+      return new SuccessRuleResult();
     }
 
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final String cleartext = passwordData.getPassword();
     if (reportAllFailures) {
       references.stream()
         .filter(r -> matches(cleartext, r))
-        .forEach(r -> results.add(
-          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(r.getLabel())))));
+        .forEach(r -> details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(r.getLabel()))));
     } else {
       references.stream()
         .filter(r -> matches(cleartext, r))
         .findFirst()
-        .ifPresent(r -> results.add(
-          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(r.getLabel())))));
+        .ifPresent(r -> details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(r.getLabel()))));
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 import org.passay.UnicodeString;
 import org.passay.data.CharacterSequence;
 import org.passay.data.SequenceData;
@@ -113,7 +113,7 @@ public class IllegalSequenceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     final String password = passwordData.getPassword() + '\uffff';
     final StringBuilder match = new StringBuilder(password.length());
     for (CharacterSequence cs : sequenceData.getSequences()) {
@@ -131,7 +131,7 @@ public class IllegalSequenceRule implements Rule
         }
         // if we have a sequence and reached its end, add it to result
         if (diff != direction && match.length() >= sequenceLength) {
-          addError(results, match.toString());
+          addError(details, match.toString());
         }
         // update the current potential sequence
         if (diff == 1 || diff == -1) {
@@ -148,7 +148,7 @@ public class IllegalSequenceRule implements Rule
         i += Character.charCount(cp);
       }
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 
@@ -186,15 +186,15 @@ public class IllegalSequenceRule implements Rule
   /**
    * Adds a validation error to a result.
    *
-   * @param  results  list of rule results to add a new rule result error
+   * @param  details  list of rule results to add a new rule result error
    * @param  match  the illegal sequence in the password that caused the error
    */
-  private void addError(final List<RuleResult> results, final String match)
+  private void addError(final List<RuleResultDetail> details, final String match)
   {
-    if (reportAllFailures || results.isEmpty()) {
+    if (reportAllFailures || details.isEmpty()) {
       final Map<String, Object> m = new LinkedHashMap<>();
       m.put("sequence", match);
-      results.add(new DefaultRuleResult(new RuleResultDetail(sequenceData.getErrorCode(), m)));
+      details.add(new RuleResultDetail(sequenceData.getErrorCode(), m));
     }
   }
 }

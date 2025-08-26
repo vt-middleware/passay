@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password contains multiple sequences of repeating characters.
@@ -103,9 +104,9 @@ public class RepeatCharactersRule implements Rule
       i += Character.charCount(curr);
     }
     if (count >= sequenceCount) {
-      return new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(matches)));
+      return new FailureRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(matches)));
     }
-    return new DefaultRuleResult(true);
+    return new SuccessRuleResult();
   }
 
   /**

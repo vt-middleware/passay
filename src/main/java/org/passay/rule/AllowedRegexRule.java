@@ -5,11 +5,12 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password matches an allowed regular expression. Passwords must match the expression or
@@ -67,9 +68,9 @@ public class AllowedRegexRule implements Rule
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final Matcher m = pattern.matcher(passwordData.getPassword());
     if (!m.find()) {
-      return new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
+      return new FailureRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
     }
-    return new DefaultRuleResult(true);
+    return new SuccessRuleResult();
   }
 
 

@@ -3,12 +3,13 @@ package org.passay.rule;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.RuleResultMetadata;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password is within a desired length. The minimum and maximum lengths are used inclusively
@@ -92,15 +93,15 @@ public class LengthRule implements Rule
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final int length = passwordData.getCharacterCount();
     if (length < minimumLength) {
-      return new DefaultRuleResult(
-        new RuleResultDetail(ERROR_CODE_MIN, createRuleResultDetailParameters()),
-        createRuleResultMetadata(passwordData));
+      return new FailureRuleResult(
+        createRuleResultMetadata(passwordData),
+        new RuleResultDetail(ERROR_CODE_MIN, createRuleResultDetailParameters()));
     } else if (length > maximumLength) {
-      return new DefaultRuleResult(
-        new RuleResultDetail(ERROR_CODE_MAX, createRuleResultDetailParameters()),
-        createRuleResultMetadata(passwordData));
+      return new FailureRuleResult(
+        createRuleResultMetadata(passwordData),
+        new RuleResultDetail(ERROR_CODE_MAX, createRuleResultDetailParameters()));
     }
-    return new DefaultRuleResult(true, createRuleResultMetadata(passwordData));
+    return new SuccessRuleResult(createRuleResultMetadata(passwordData));
   }
 
 

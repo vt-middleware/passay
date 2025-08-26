@@ -16,12 +16,13 @@ import java.util.regex.Pattern;
 import org.cryptacular.codec.HexEncoder;
 import org.cryptacular.util.CodecUtil;
 import org.cryptacular.util.HashUtil;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.RuleResultMetadata;
+import org.passay.SuccessRuleResult;
 
 /**
  * Validates the password against the online database of <code>haveibeenpwned.com</code>
@@ -154,8 +155,8 @@ public class HaveIBeenPwnedRule implements Rule
       return searchResponse(hexDigest, lnr);
     } catch (IOException e) {
       return allowOnException ?
-        new DefaultRuleResult(true) :
-        new DefaultRuleResult(new RuleResultDetail(IO_ERROR_CODE, Collections.singletonMap("url", apiUrl)));
+        new SuccessRuleResult() :
+        new FailureRuleResult(new RuleResultDetail(IO_ERROR_CODE, Collections.singletonMap("url", apiUrl)));
     }
   }
 
@@ -183,7 +184,7 @@ public class HaveIBeenPwnedRule implements Rule
    *
    * @throws IOException if an error occurs reading from the reader
    */
-  private DefaultRuleResult searchResponse(final String hexDigest, final LineNumberReader reader) throws IOException
+  private RuleResult searchResponse(final String hexDigest, final LineNumberReader reader) throws IOException
   {
     String line;
     final Pattern p = Pattern.compile("^(" + hexDigest.substring(PREFIX_LENGTH) + "):(\\d+)\\s*$");
@@ -192,13 +193,13 @@ public class HaveIBeenPwnedRule implements Rule
       if (m.matches()) {
         final int matchCount = Integer.parseInt(m.group(2));
         return allowExposed ?
-          new DefaultRuleResult(true, new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount)) :
-          new DefaultRuleResult(
-            new RuleResultDetail(ERROR_CODE, Collections.singletonMap("count", matchCount)),
-            new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount));
+          new SuccessRuleResult(new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount)) :
+          new FailureRuleResult(
+            new RuleResultMetadata(RuleResultMetadata.CountCategory.Pwned, matchCount),
+            new RuleResultDetail(ERROR_CODE, Collections.singletonMap("count", matchCount)));
       }
     }
-    return new DefaultRuleResult(true);
+    return new SuccessRuleResult();
   }
 
 

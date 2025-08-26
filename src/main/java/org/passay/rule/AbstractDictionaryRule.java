@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.SuccessRuleResult;
 import org.passay.dictionary.Dictionary;
 
 /**
@@ -68,24 +68,20 @@ public abstract class AbstractDictionaryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
     String text = passwordData.getPassword();
     String matchingWord = doWordSearch(text);
     if (matchingWord != null) {
-      results.add(
-        new DefaultRuleResult(
-          new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord))));
+      details.add(new RuleResultDetail(getErrorCode(false), createRuleResultDetailParameters(matchingWord)));
     }
     if (matchBackwards && text.length() > 1) {
       text = new StringBuilder(passwordData.getPassword()).reverse().toString();
       matchingWord = doWordSearch(text);
       if (matchingWord != null) {
-        results.add(
-          new DefaultRuleResult(
-            new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord))));
+        details.add(new RuleResultDetail(getErrorCode(true), createRuleResultDetailParameters(matchingWord)));
       }
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

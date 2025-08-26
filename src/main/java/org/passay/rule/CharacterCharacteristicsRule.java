@@ -8,12 +8,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.RuleResultMetadata;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password contains the desired mix of character types. In order to meet the criteria of this
@@ -186,28 +187,25 @@ public class CharacterCharacteristicsRule implements Rule
     }
 
     int successCount = 0;
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
+    final List<RuleResultMetadata> metadata = new ArrayList<>();
     for (CharacterRule rule : rules) {
       final RuleResult rr = rule.validate(passwordData);
       if (rr.isValid()) {
         successCount++;
       }
       if (reportRuleFailures) {
-        results.add(rr);
-      } else {
-        results.add(new DefaultRuleResult(rr.isValid(), rr.getMetadata()));
+        details.addAll(rr.getDetails());
       }
+      metadata.add(rr.getMetadata());
     }
     final boolean valid = successCount >= numCharacteristics;
-    if (!valid) {
-      if (reportFailure) {
-        results.add(
-          new DefaultRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount))));
-      } else {
-        results.add(new DefaultRuleResult(false));
-      }
+    if (!valid && reportFailure) {
+      details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(successCount)));
     }
-    return new CompositeRuleResult(results, rr -> valid, r -> valid == r.isValid(), md -> true);
+    return valid ?
+      new SuccessRuleResult(new RuleResultMetadata(metadata)) :
+      new FailureRuleResult(new RuleResultMetadata(metadata), details);
   }
 
 

@@ -14,12 +14,13 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import org.passay.CompositeRuleResult;
-import org.passay.DefaultRuleResult;
+import org.passay.FailureRuleResult;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
+import org.passay.RuleResultMetadata;
+import org.passay.SuccessRuleResult;
 
 /**
  * Rule for determining if a password contains the desired complexity for a certain length. In order to meet the
@@ -133,34 +134,31 @@ public class LengthComplexityRule implements Rule
     final int passwordLength = passwordData.getCharacterCount();
     final List<Rule> rulesByLength = getRulesByLength(passwordLength);
     if (rulesByLength == null) {
-      return new DefaultRuleResult(
+      return new FailureRuleResult(
         new RuleResultDetail(ERROR_CODE_RULES, createRuleResultDetailParameters(passwordLength, 0, 0)));
     }
     int successCount = 0;
-    final List<RuleResult> results = new ArrayList<>();
+    final List<RuleResultDetail> details = new ArrayList<>();
+    final List<RuleResultMetadata> metadata = new ArrayList<>();
     for (Rule rule : rulesByLength) {
       final RuleResult rr = rule.validate(passwordData);
       if (rr.isValid()) {
         successCount++;
       }
       if (reportRuleFailures) {
-        results.add(rr);
-      } else {
-        results.add(new DefaultRuleResult(rr.isValid(), rr.getMetadata()));
+        details.addAll(rr.getDetails());
       }
+      metadata.add(rr.getMetadata());
     }
-    if (successCount < rulesByLength.size()) {
-      if (reportFailure) {
-        results.add(
-          new DefaultRuleResult(
-            new RuleResultDetail(
-              ERROR_CODE,
-              createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size()))));
-      } else {
-        results.add(new DefaultRuleResult(false));
-      }
+    final boolean valid = successCount >= rulesByLength.size();
+    if (!valid && reportFailure) {
+      details.add(
+        new RuleResultDetail(
+          ERROR_CODE, createRuleResultDetailParameters(passwordLength, successCount, rulesByLength.size())));
     }
-    return results.isEmpty() ? new DefaultRuleResult(true) : new CompositeRuleResult(results);
+    return valid ?
+      new SuccessRuleResult(new RuleResultMetadata(metadata)) :
+      new FailureRuleResult(new RuleResultMetadata(metadata), details);
   }
 
 
