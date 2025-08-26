@@ -1,25 +1,32 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import org.passay.entropy.Entropy;
 import org.passay.entropy.RandomPasswordEntropyFactory;
 import org.passay.entropy.ShannonEntropyFactory;
+import org.passay.resolver.MessageResolver;
+import org.passay.resolver.PropertiesMessageResolver;
+import org.passay.rule.AllowedRegexRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.IllegalRegexRule;
+import org.passay.rule.Rule;
 
 /**
  * The central component for evaluating multiple password rules against a candidate password.
  *
  * @author  Middleware Services
  */
-
 public class PasswordValidator implements Rule
 {
 
   /** Password rules. */
-  private final List<? extends Rule> passwordRules;
+  private final List<Rule> passwordRules = new ArrayList<>();
 
   /** Message resolver. */
   private final MessageResolver messageResolver;
@@ -67,8 +74,12 @@ public class PasswordValidator implements Rule
    */
   public PasswordValidator(final MessageResolver resolver, final List<? extends Rule> rules)
   {
-    messageResolver = resolver;
-    passwordRules = rules;
+    messageResolver = PassayUtils.assertNotNullArg(resolver, "Message resolver cannot be null");
+    passwordRules.addAll(
+      PassayUtils.assertNotNullArgOr(
+        rules,
+        v -> v.stream().anyMatch(Objects::isNull),
+        "Password rules cannot be null or contain null"));
   }
 
 
@@ -104,16 +115,21 @@ public class PasswordValidator implements Rule
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {
-    final RuleResult result = new RuleResult();
+    PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
+    boolean success = true;
+    final List<RuleResultDetail> details = new ArrayList<>();
+    final List<RuleResultMetadata> metadata = new ArrayList<>();
     for (Rule rule : passwordRules) {
-      final RuleResult rr = rule.validate(passwordData);
-      if (!rr.isValid()) {
-        result.setValid(false);
-        result.getDetails().addAll(rr.getDetails());
+      final RuleResult result = rule.validate(passwordData);
+      if (success && !result.isValid()) {
+        success = false;
       }
-      result.getMetadata().merge(rr.getMetadata());
+      details.addAll(result.getDetails());
+      metadata.add(result.getMetadata());
     }
-    return result;
+    return success ?
+      new SuccessRuleResult(new RuleResultMetadata(metadata)) :
+      new FailureRuleResult(new RuleResultMetadata(metadata), details);
   }
 
 
@@ -154,19 +170,16 @@ public class PasswordValidator implements Rule
    */
   public List<String> getMessages(final RuleResult result)
   {
-    return result.getDetails().stream().map(messageResolver::resolve).collect(Collectors.toList());
+    return Collections.unmodifiableList(
+      result.getDetails().stream().map(messageResolver::resolve).collect(Collectors.toList()));
   }
 
 
   @Override
   public String toString()
   {
-    return
-      String.format(
-        "%s@%h::passwordRules=%s,messageResolver=%s",
-        getClass().getName(),
-        hashCode(),
-        passwordRules,
-        messageResolver);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "passwordRules=" + passwordRules + ", " +
+      "messageResolver=" + messageResolver;
   }
 }

@@ -19,39 +19,38 @@ public final class UnicodeString
   /**
    * Creates a new code points.
    *
-   * @param  c  characters
+   * @param  chars  characters
    */
-  public UnicodeString(final char... c)
+  public UnicodeString(final char... chars)
   {
-    this(new String(c));
+    this(new String(chars));
   }
 
 
   /**
    * Creates a new code points.
    *
-   * @param  s  characters
+   * @param  string  characters
    */
-  public UnicodeString(final String s)
+  public UnicodeString(final String string)
   {
-    if (s == null || s.isEmpty()) {
-      throw new IllegalArgumentException("String cannot be null or have a length of zero");
-    }
-    codePoints = s.codePoints().toArray();
+    PassayUtils.assertNotNullArgOr(string, String::isEmpty, "String cannot be null or have a length of zero");
+    codePoints = string.codePoints().toArray();
   }
 
 
   /**
    * Creates a new code points.
    *
-   * @param  cp  character code points
+   * @param  codePoints  character code points
    */
-  public UnicodeString(final int... cp)
+  public UnicodeString(final int... codePoints)
   {
-    if (cp == null || cp.length == 0) {
-      throw new IllegalArgumentException("Code points cannot be null or have a length of zero");
-    }
-    codePoints = Arrays.copyOf(cp, cp.length);
+    PassayUtils.assertNotNullArgOr(
+      codePoints,
+      v -> v.length == 0,
+      "Code points cannot be null or have a length of zero");
+    this.codePoints = Arrays.copyOf(codePoints, codePoints.length);
   }
 
 
@@ -91,13 +90,13 @@ public final class UnicodeString
   /**
    * Returns the number of code points in the supplied string.
    *
-   * @param  s  to count characters
+   * @param  string  to count characters
    *
    * @return  number of code points
    */
-  public static int charCount(final String s)
+  public static int charCount(final String string)
   {
-    return s != null ? s.codePointCount(0, s.length()) : 0;
+    return string != null ? string.codePointCount(0, string.length()) : 0;
   }
 
 

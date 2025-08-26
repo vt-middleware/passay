@@ -3,38 +3,39 @@ package org.passay.entropy;
 
 /**
  * Entropy bits estimate defined in NIST SP-800-63-1 User Selected Passwords.
- *
+ * <p>
  * See <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a> A1.
  * "User Selected Passwords"
+ * </p>
  *
  * @author  Middleware Services
  */
-public class ShannonEntropy implements Entropy
+public final class ShannonEntropy implements Entropy
 {
 
   /** Length of the first phase. */
-  public static final int FIRST_PHASE_LENGTH = 1;
+  private static final int FIRST_PHASE_LENGTH = 1;
 
   /** Length of the second phase. */
-  public static final int SECOND_PHASE_LENGTH = 8;
+  private static final int SECOND_PHASE_LENGTH = 8;
 
   /** Length of the second phase. */
-  public static final int THIRD_PHASE_LENGTH = 20;
+  private static final int THIRD_PHASE_LENGTH = 20;
 
   /** Entropy bonus of the first phase. */
-  public static final double FIRST_PHASE_BONUS = 4.0;
+  private static final double FIRST_PHASE_BONUS = 4.0;
 
   /** Entropy bonus of the second phase. */
-  public static final double SECOND_PHASE_BONUS = 2.0;
+  private static final double SECOND_PHASE_BONUS = 2.0;
 
   /** Entropy bonus of the third phase. */
-  public static final double THIRD_PHASE_BONUS = 1.5;
+  private static final double THIRD_PHASE_BONUS = 1.5;
 
   /** Array used for determining dictionary entropy "bonus" for calculating the Shannon entropy estimate. */
-  public static final int[] SHANNON_DICTIONARY_SIEVE = {0, 0, 0, 4, 5, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0};
+  private static final int[] SHANNON_DICTIONARY_SIEVE = {0, 0, 0, 4, 5, 6, 6, 6, 5, 5, 4, 4, 3, 3, 2, 2, 1, 1, 0};
 
   /** Array used for determining composition "bonus" for calculating the Shannon entropy estimate. **/
-  public static final int[] SHANNON_COMPOSITION_SIEVE = {0, 0, 0, 2, 3, 3, 5, 6};
+  private static final int[] SHANNON_COMPOSITION_SIEVE = {0, 0, 0, 2, 3, 3, 5, 6};
 
   /** Whether a dictionary was used to check the password. */
   private final boolean hasDictionaryCheck;
@@ -66,9 +67,10 @@ public class ShannonEntropy implements Entropy
   /**
    * Returns the entropy bits of a user selected password. This estimate is based on a 94 Character Alphabet and is a
    * "ballpark" estimate based on Claude Shannon's observations.
-   *
+   * <p>
    * See <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
    * A1. "User Selected Passwords"
+   * </p>
    *
    * @return  estimated entropy bits given password properties
    */

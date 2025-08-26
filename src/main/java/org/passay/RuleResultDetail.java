@@ -2,22 +2,25 @@
 package org.passay;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * Describes an exact cause of a rule validation failure.
  *
  * @author  Middleware Services
  */
-public class RuleResultDetail
+public final class RuleResultDetail
 {
 
   /** Detail error codes. */
-  protected final String[] errorCodes;
+  private final String[] errorCodes;
 
   /** Additional parameters that provide information about validation failure. */
-  protected final Map<String, Object> parameters;
+  private final Map<String, Object> parameters;
 
 
   /**
@@ -28,11 +31,16 @@ public class RuleResultDetail
    */
   public RuleResultDetail(final String code, final Map<String, Object> params)
   {
-    if (code == null || code.isEmpty()) {
-      throw new IllegalArgumentException("Code cannot be null or empty.");
-    }
+    PassayUtils.assertNotNullArgOr(
+      code,
+      String::isEmpty,
+      "Code cannot be null or empty");
+    PassayUtils.assertNotNullArgOr(
+      params,
+      v -> v.entrySet().stream().anyMatch(e -> Objects.isNull(e.getKey()) || Objects.isNull(e.getValue())),
+      "Params cannot be null or contain null");
     errorCodes = new String[] {code};
-    parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
+    parameters = new LinkedHashMap<>(params);
   }
 
 
@@ -45,16 +53,16 @@ public class RuleResultDetail
    */
   public RuleResultDetail(final String[] codes, final Map<String, Object> params)
   {
-    if (codes == null || codes.length == 0) {
-      throw new IllegalArgumentException("Must specify at least one error code.");
-    }
-    for (String code : codes) {
-      if (code == null || code.isEmpty()) {
-        throw new IllegalArgumentException("Code cannot be null or empty.");
-      }
-    }
+    PassayUtils.assertNotNullArgOr(
+      codes,
+      v -> v.length == 0 || Stream.of(codes).anyMatch(c -> Objects.isNull(c) || c.isEmpty()),
+      "Code cannot be null or empty and must contain at least one error code");
+    PassayUtils.assertNotNullArgOr(
+      params,
+      v -> v.entrySet().stream().anyMatch(e -> Objects.isNull(e.getKey()) || Objects.isNull(e.getValue())),
+      "Params cannot be null or contain null");
     errorCodes = codes;
-    parameters = params == null ? new LinkedHashMap<>() : new LinkedHashMap<>(params);
+    parameters = new LinkedHashMap<>(params);
   }
 
 
@@ -76,7 +84,7 @@ public class RuleResultDetail
    */
   public String[] getErrorCodes()
   {
-    return errorCodes;
+    return Arrays.copyOf(errorCodes, errorCodes.length);
   }
 
 
@@ -87,7 +95,7 @@ public class RuleResultDetail
    */
   public Map<String, Object> getParameters()
   {
-    return parameters;
+    return Collections.unmodifiableMap(parameters);
   }
 
 
@@ -105,6 +113,8 @@ public class RuleResultDetail
   @Override
   public String toString()
   {
-    return String.format("%s:%s", Arrays.toString(errorCodes), parameters);
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "errorCodes=" + Arrays.toString(errorCodes) + ", " +
+      "parameters=" + parameters;
   }
 }

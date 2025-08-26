@@ -9,17 +9,35 @@ import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
 import org.passay.PasswordData.HistoricalReference;
 import org.passay.PasswordData.SourceReference;
+import org.passay.data.EnglishCharacterData;
+import org.passay.data.EnglishSequenceData;
 import org.passay.dictionary.ArrayWordList;
 import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
 import org.passay.entropy.RandomPasswordEntropy;
-import org.testng.AssertJUnit;
+import org.passay.rule.AbstractRuleTest;
+import org.passay.rule.AllowedCharacterRule;
+import org.passay.rule.CharacterCharacteristicsRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.DictionaryRule;
+import org.passay.rule.DictionarySubstringRule;
+import org.passay.rule.DigestHistoryRule;
+import org.passay.rule.DigestSourceRule;
+import org.passay.rule.HistoryRule;
+import org.passay.rule.IllegalSequenceRule;
+import org.passay.rule.LengthRule;
+import org.passay.rule.RepeatCharacterRegexRule;
+import org.passay.rule.Rule;
+import org.passay.rule.SourceRule;
+import org.passay.rule.UsernameRule;
+import org.passay.rule.WhitespaceRule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
+import static org.assertj.core.api.Assertions.*;
 
 /**
  * Unit test for {@link PasswordValidator}.
@@ -65,7 +83,6 @@ public class PasswordValidatorTest extends AbstractRuleTest
       false,
       new ArraysSort());
     dict = new WordListDictionary(awl);
-    validator = new PasswordValidator(rules);
   }
 
   /**
@@ -85,8 +102,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     final LengthRule lengthRule = new LengthRule(8, 16);
 
-    final DictionarySubstringRule dictRule = new DictionarySubstringRule(dict);
-    dictRule.setMatchBackwards(true);
+    final DictionarySubstringRule dictRule = new DictionarySubstringRule(dict, true);
 
     final IllegalSequenceRule qwertySeqRule = new IllegalSequenceRule(EnglishSequenceData.USQwerty);
 
@@ -121,6 +137,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
     rules.add(userIDRule);
     rules.add(historyRule);
     rules.add(sourceRule);
+    validator = new PasswordValidator(rules);
   }
 
   /**
@@ -158,13 +175,13 @@ public class PasswordValidatorTest extends AbstractRuleTest
      */
 
     final PasswordData length5AllLowercasePassword = new PasswordData("hello");
-    final PasswordData length5CompositionPassword = new PasswordData("h3L!o");
+    PasswordData length5CompositionPassword = new PasswordData("h3L!o");
 
     final PasswordData length10AllLowercasePassword = new PasswordData("hellohello");
-    final PasswordData length10CompositionPassword = new PasswordData("h3!Lohell0");
+    PasswordData length10CompositionPassword = new PasswordData("h3!Lohell0");
 
     final PasswordData length22AllLowercasePassword = new PasswordData("hellohellohellohellooo");
-    final PasswordData length22CompositionPassword = new PasswordData("he1loHellohellohello!!");
+    PasswordData length22CompositionPassword = new PasswordData("he1loHellohellohello!!");
 
     //Test for no character based rules.
     final List<Rule> l = new ArrayList<>();
@@ -172,70 +189,67 @@ public class PasswordValidatorTest extends AbstractRuleTest
 
     try {
       pv.estimateEntropy(new PasswordData("heLlo", PasswordData.Origin.Generated));
-      AssertJUnit.fail("Should have thrown IllegalArgumentException");
+      fail("Should have thrown IllegalArgumentException");
     } catch (Throwable e) {
-      AssertJUnit.assertEquals(IllegalArgumentException.class, e.getClass());
+      assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 
     //User Password Origin Tests:
 
     //Length 5
-    AssertJUnit.assertEquals(12.0, pv.estimateEntropy(length5AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length5AllLowercasePassword)).isEqualTo(12.0);
     //Length 5 + Composition
-    AssertJUnit.assertEquals(15.0, pv.estimateEntropy(length5CompositionPassword));
+    assertThat(pv.estimateEntropy(length5CompositionPassword)).isEqualTo(15.0);
     //Length 10
-    AssertJUnit.assertEquals(21.0, pv.estimateEntropy(length10AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length10AllLowercasePassword)).isEqualTo(21.0);
     //Length 10 + Composition
-    AssertJUnit.assertEquals(27.0, pv.estimateEntropy(length10CompositionPassword));
+    assertThat(pv.estimateEntropy(length10CompositionPassword)).isEqualTo(27.0);
     //Length 22
-    AssertJUnit.assertEquals(38.0, pv.estimateEntropy(length22AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length22AllLowercasePassword)).isEqualTo(38.0);
     //Length 22 + Composition
-    AssertJUnit.assertEquals(44.0, pv.estimateEntropy(length22CompositionPassword));
+    assertThat(pv.estimateEntropy(length22CompositionPassword)).isEqualTo(44.0);
 
     //Empty dictionary check
     l.add(new DictionarySubstringRule(new WordListDictionary(new ArrayWordList(new String[]{}))));
 
     //Test Length 10 + Composition + Empty Dictionary
-    AssertJUnit.assertEquals(27.0, pv.estimateEntropy(length10CompositionPassword));
+    assertThat(pv.estimateEntropy(length10CompositionPassword)).isEqualTo(27.0);
     //Test Length 10 + Empty Dictionary
-    AssertJUnit.assertEquals(21.0, pv.estimateEntropy(length10AllLowercasePassword));
+    assertThat(pv.estimateEntropy(length10AllLowercasePassword)).isEqualTo(21.0);
 
     //Test Length 5 + Composition + Dictionary
-    AssertJUnit.assertEquals(20.0, validator.estimateEntropy(length5CompositionPassword));
+    assertThat(validator.estimateEntropy(length5CompositionPassword)).isEqualTo(20.0);
     //Test Length 10 + Composition + Dictionary
-    AssertJUnit.assertEquals(32.0, validator.estimateEntropy(length10CompositionPassword));
+    assertThat(validator.estimateEntropy(length10CompositionPassword)).isEqualTo(32.0);
     //Test Length 22 + Composition + Dictionary
-    AssertJUnit.assertEquals(44.0, validator.estimateEntropy(length22CompositionPassword));
+    assertThat(validator.estimateEntropy(length22CompositionPassword)).isEqualTo(44.0);
 
     //Generated Password Origin Tests:
 
     //182 total unique characters from given CharacterRules in validator
-    length5CompositionPassword.setOrigin(PasswordData.Origin.Generated);
-    length10CompositionPassword.setOrigin(PasswordData.Origin.Generated);
-    length22CompositionPassword.setOrigin(PasswordData.Origin.Generated);
+    length5CompositionPassword = new PasswordData("h3L!o", PasswordData.Origin.Generated);
+    length10CompositionPassword = new PasswordData("h3!Lohell0", PasswordData.Origin.Generated);
+    length22CompositionPassword = new PasswordData("he1loHellohellohello!!", PasswordData.Origin.Generated);
 
     //Random generated password test log2(b^l):
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(182, 5).estimate(),
-      validator.estimateEntropy(length5CompositionPassword));
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(182, 10).estimate(),
-      validator.estimateEntropy(length10CompositionPassword));
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(182, 22).estimate(),
-      validator.estimateEntropy(length22CompositionPassword));
+    assertThat(validator.estimateEntropy(length5CompositionPassword))
+      .isEqualTo(new RandomPasswordEntropy(182, 5).estimate());
+    assertThat(validator.estimateEntropy(length10CompositionPassword))
+      .isEqualTo(new RandomPasswordEntropy(182, 10).estimate());
+    assertThat(validator.estimateEntropy(length22CompositionPassword))
+      .isEqualTo(new RandomPasswordEntropy(182, 22).estimate());
 
     //Random generated password test with AllowedCharacterRule
     final List<Rule> al = new ArrayList<>();
-    final PasswordValidator pvAl = new PasswordValidator(al);
     final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new UnicodeString(
-      new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!', }));
+      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', '0', '!'));
     al.add(allowedRule);
-    AssertJUnit.assertEquals(
-      new RandomPasswordEntropy(
-        allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate(),
-      pvAl.estimateEntropy(length5CompositionPassword));
+    final PasswordValidator pvAl = new PasswordValidator(al);
+    assertThat(pvAl.estimateEntropy(length5CompositionPassword))
+      .isEqualTo(
+        new RandomPasswordEntropy(
+          allowedRule.getAllowedCharacters().length(), length5CompositionPassword.getCharacterCount()).estimate());
   }
 
   /**
@@ -245,8 +259,6 @@ public class PasswordValidatorTest extends AbstractRuleTest
   public void validate()
   {
     final List<Rule> l = new ArrayList<>();
-    final PasswordValidator pv = new PasswordValidator(l);
-
     l.add(new LengthRule(8, 16));
 
     final CharacterCharacteristicsRule ccRule = new CharacterCharacteristicsRule(
@@ -262,26 +274,35 @@ public class PasswordValidatorTest extends AbstractRuleTest
     l.add(new IllegalSequenceRule(EnglishSequenceData.Numerical));
     l.add(new RepeatCharacterRegexRule());
 
+    final PasswordValidator pv = new PasswordValidator(l);
     final RuleResult resultPass = pv.validate(new PasswordData(VALID_PASS));
-    AssertJUnit.assertTrue(resultPass.isValid());
-    AssertJUnit.assertTrue(pv.getMessages(resultPass).isEmpty());
+    assertThat(resultPass.isValid()).isTrue();
+    assertThat(pv.getMessages(resultPass).isEmpty()).isTrue();
 
     final RuleResult resultFail = pv.validate(new PasswordData(INVALID_PASS));
-    AssertJUnit.assertFalse(resultFail.isValid());
-    AssertJUnit.assertTrue(pv.getMessages(resultFail).size() > 0);
+    assertThat(resultFail.isValid()).isFalse();
+    assertThat(pv.getMessages(resultFail).size()).isGreaterThan(0);
 
     l.add(new UsernameRule(true, true));
 
-    AssertJUnit.assertTrue(pv.validate(new PasswordData(VALID_PASS)).isValid());
-    AssertJUnit.assertTrue(pv.validate(new PasswordData("", VALID_PASS)).isValid());
+    assertThat(pv.validate(new PasswordData(VALID_PASS)).isValid()).isTrue();
+    assertThat(pv.validate(new PasswordData("", VALID_PASS)).isValid()).isTrue();
 
-    final PasswordData valid = new PasswordData(VALID_PASS);
-    valid.setUsername(USER);
-    AssertJUnit.assertTrue(pv.validate(valid).isValid());
+    final PasswordData valid = new PasswordData(USER, VALID_PASS);
+    assertThat(pv.validate(valid).isValid()).isTrue();
 
-    final PasswordData invalid = new PasswordData(INVALID_PASS);
-    invalid.setUsername(USER);
-    AssertJUnit.assertFalse(pv.validate(invalid).isValid());
+    final PasswordData invalid = new PasswordData(USER, INVALID_PASS);
+    assertThat(pv.validate(invalid).isValid()).isFalse();
+  }
+
+
+  /**
+   * Test object construction.
+   */
+  @Test(groups = "passtest")
+  public void constructor()
+  {
+    new PasswordValidator();
   }
 
 
@@ -295,9 +316,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
     return
       new Object[][] {
 
-        /** invalid character rule passwords. */
+        /* invalid character rule passwords. */
 
-        /** all digits */
+        /* all digits */
         {
           validator,
           new PasswordData(USER, "4326789032", references),
@@ -309,7 +330,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
-        /** all non-alphanumeric */
+        /* all non-alphanumeric */
         {
           validator,
           new PasswordData(USER, "$&!$#@*{{>", references),
@@ -320,7 +341,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
 
-        /** all lowercase */
+        /* all lowercase */
         {
           validator,
           new PasswordData(USER, "aycdopezss", references),
@@ -332,7 +353,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             DictionarySubstringRule.ERROR_CODE),
         },
 
-        /** all uppercase */
+        /* all uppercase */
         {
           validator,
           new PasswordData(USER, "AYCDOPEZSS", references),
@@ -344,7 +365,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             DictionarySubstringRule.ERROR_CODE),
         },
 
-        /** digits and non-alphanumeric */
+        /* digits and non-alphanumeric */
         {
           validator,
           new PasswordData(USER, "@&3*(%5{}^", references),
@@ -354,7 +375,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
 
-        /** digits and lowercase */
+        /* digits and lowercase */
         {
           validator,
           new PasswordData(USER, "ay3dop5zss", references),
@@ -364,7 +385,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.Special.getErrorCode()),
         },
 
-        /** digits and uppercase */
+        /* digits and uppercase */
         {
           validator,
           new PasswordData(USER, "AY3DOP5ZSS", references),
@@ -374,7 +395,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.Special.getErrorCode()),
         },
 
-        /** non-alphanumeric and lowercase */
+        /* non-alphanumeric and lowercase */
         {
           validator,
           new PasswordData(USER, "a&c*o%ea}s", references),
@@ -384,7 +405,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.UpperCase.getErrorCode()),
         },
 
-        /** non-alphanumeric and uppercase */
+        /* non-alphanumeric and uppercase */
         {
           validator,
           new PasswordData(USER, "A&C*O%EA}S", references),
@@ -394,7 +415,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
 
-        /** uppercase and lowercase */
+        /* uppercase and lowercase */
         {
           validator,
           new PasswordData(USER, "AycDOPdsyz", references),
@@ -404,9 +425,9 @@ public class PasswordValidatorTest extends AbstractRuleTest
             EnglishCharacterData.Special.getErrorCode()),
         },
 
-        /** invalid whitespace rule passwords. */
+        /* invalid whitespace rule passwords. */
 
-        /** contains a space */
+        /* contains a space */
         {
           validator,
           new PasswordData(USER, "AycD Pdsyz", references),
@@ -417,7 +438,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
             WhitespaceRule.ERROR_CODE),
         },
 
-        /** contains a tab */
+        /* contains a tab */
         {
           validator,
           new PasswordData(USER, "AycD    Psyz", references),
@@ -428,48 +449,48 @@ public class PasswordValidatorTest extends AbstractRuleTest
             WhitespaceRule.ERROR_CODE),
         },
 
-        /** invalid length rule passwords. */
+        /* invalid length rule passwords. */
 
-        /** too short */
+        /* too short */
         {
           validator,
           new PasswordData(USER, "p4T3t#", references),
           codes(LengthRule.ERROR_CODE_MIN),
         },
 
-        /** too long */
+        /* too long */
         {
           validator,
           new PasswordData(USER, "p4t3t#n6574632vbad#@!8", references),
           codes(LengthRule.ERROR_CODE_MAX),
         },
 
-        /** invalid dictionary rule passwords. */
+        /* invalid dictionary rule passwords. */
 
-        /** matches dictionary word 'none' */
+        /* matches dictionary word 'none' */
         {
           validator,
           new PasswordData(USER, "p4t3t#none", references),
           codes(DictionaryRule.ERROR_CODE),
         },
 
-        /** matches dictionary word 'none' backwards */
+        /* matches dictionary word 'none' backwards */
         {
           validator,
           new PasswordData(USER, "p4t3t#enon", references),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
         },
 
-        /** invalid sequence rule passwords. */
+        /* invalid sequence rule passwords. */
 
-        /** matches sequence 'zxcvb' */
+        /* matches sequence 'zxcvb' */
         {
           validator,
           new PasswordData(USER, "p4zxcvb#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
-        /**
+        /*
          * matches sequence 'werty' backwards
          * 'wert' is a dictionary word
          */
@@ -479,16 +500,16 @@ public class PasswordValidatorTest extends AbstractRuleTest
           codes(EnglishSequenceData.USQwerty.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
         },
 
-        /** matches sequence 'iop[]' ignore case */
+        /* matches sequence 'iop[]' ignore case */
         {
           validator,
           new PasswordData(USER, "p4iOP[]#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
 
-        /** invalid userid rule passwords. */
+        /* invalid userid rule passwords. */
 
-        /**
+        /*
          * contains userid 'testuser'
          * 'test' and 'user' are dictionary words
          */
@@ -498,7 +519,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
         },
 
-        /**
+        /*
          * contains userid 'testuser' backwards
          * 'test' and 'user' are dictionary words
          */
@@ -508,7 +529,7 @@ public class PasswordValidatorTest extends AbstractRuleTest
           codes(UsernameRule.ERROR_CODE_REVERSED, DictionaryRule.ERROR_CODE_REVERSED),
         },
 
-        /**
+        /*
          * contains userid 'testuser' ignore case
          * 'test' and 'user' are dictionary words
          */
@@ -518,60 +539,60 @@ public class PasswordValidatorTest extends AbstractRuleTest
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
         },
 
-        /** invalid history rule passwords. */
+        /* invalid history rule passwords. */
 
-        /** contains history password */
+        /* contains history password */
         {
           validator,
           new PasswordData(USER, "t3stUs3r02", references),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        /** contains history password */
+        /* contains history password */
         {
           validator,
           new PasswordData(USER, "t3stUs3r03", references),
           codes(HistoryRule.ERROR_CODE),
         },
 
-        /** contains source password */
+        /* contains source password */
         {
           validator,
           new PasswordData(USER, "t3stUs3r04", references),
           codes(SourceRule.ERROR_CODE),
         },
 
-        /** valid passwords. */
+        /* valid passwords. */
 
-        /** digits, non-alphanumeric, lowercase, uppercase */
+        /* digits, non-alphanumeric, lowercase, uppercase */
         {
           validator,
           new PasswordData(USER, "p4T3t#N65", references),
           null,
         },
 
-        /** digits, non-alphanumeric, lowercase */
+        /* digits, non-alphanumeric, lowercase */
         {
           validator,
           new PasswordData(USER, "p4t3t#n65", references),
           null,
         },
 
-        /** digits, non-alphanumeric, uppercase */
+        /* digits, non-alphanumeric, uppercase */
         {
           validator,
           new PasswordData(USER, "P4T3T#N65", references),
           null,
         },
 
-        /** digits, uppercase, lowercase */
+        /* digits, uppercase, lowercase */
         {
           validator,
           new PasswordData(USER, "p4t3tCn65", references),
           null,
         },
 
-        /** non-alphanumeric, lowercase, uppercase */
+        /* non-alphanumeric, lowercase, uppercase */
         {
           validator,
           new PasswordData(USER, "pxT%t#Nwq", references),

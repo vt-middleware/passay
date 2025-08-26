@@ -3,13 +3,13 @@ package org.passay.entropy;
 
 /**
  * Entropy bits estimate defined in NIST SP-800-63-1 Randomly Selected Passwords.
- *
+ * <p>
  * See <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
  * A1. "Randomly Selected Passwords"
  *
  * @author  Middleware Services
  */
-public class RandomPasswordEntropy implements Entropy
+public final class RandomPasswordEntropy implements Entropy
 {
 
   /** Size of the alphabet. */
@@ -35,9 +35,10 @@ public class RandomPasswordEntropy implements Entropy
   /**
    * Returns the entropy bits of a randomly generated password given the size of the unique characters used
    * (alphabetSize) and the size of the password.
-   *
+   * <p>
    * See <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
    * A1. "Randomly Selected Passwords"
+   * </p>
    *
    * @return  estimated entropy bits given password properties
    */

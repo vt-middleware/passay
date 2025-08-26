@@ -3,13 +3,13 @@ package org.passay.entropy;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.passay.AllowedCharacterRule;
-import org.passay.CharacterCharacteristicsRule;
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
 import org.passay.PasswordData;
-import org.passay.Rule;
 import org.passay.UnicodeString;
+import org.passay.data.EnglishCharacterData;
+import org.passay.rule.AllowedCharacterRule;
+import org.passay.rule.CharacterCharacteristicsRule;
+import org.passay.rule.CharacterRule;
+import org.passay.rule.Rule;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -31,8 +31,8 @@ public abstract class AbstractEntropyFactoryTest
   public void createRules()
   {
     final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new UnicodeString(
-      new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-        'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L', }));
+      'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+      'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'L'));
 
     final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
       3,

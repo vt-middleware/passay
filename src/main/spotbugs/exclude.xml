@@ -23,25 +23,14 @@
   <!-- Allow platform specific encoding when reading dictionary files -->
   <Match>
     <Or>
-      <Class name="org.passay.dictionary.DictionaryBuilder" />
       <Class name="org.passay.dictionary.WordListDictionary" />
       <Class name="org.passay.dictionary.TernaryTreeDictionary" />
     </Or>
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
-  <!-- API breaking change to make field package protected -->
-  <Match>
-    <Or>
-      <Class name="org.passay.WhitespaceRule" />
-      <Class name="org.passay.entropy.ShannonEntropy" />
-    </Or>
-    <Bug pattern="MS_PKGPROTECT" />
-  </Match>
-
   <!-- Readers are closed in WordLists#readWordList -->
   <Match>
-    <Class name="org.passay.dictionary.DictionaryBuilder" />
     <Method name="addFile" />
     <Bug pattern="OBL_UNSATISFIED_OBLIGATION" />
   </Match>

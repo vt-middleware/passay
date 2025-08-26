@@ -2,6 +2,9 @@
 package org.passay.dictionary;
 
 import java.util.Arrays;
+import java.util.Objects;
+import java.util.stream.Stream;
+import org.passay.PassayUtils;
 import org.passay.dictionary.sort.ArraySorter;
 
 /**
@@ -14,7 +17,7 @@ public class ArrayWordList extends AbstractWordList
 {
 
   /** file containing words. */
-  protected String[] words;
+  protected final String[] words;
 
 
   /**
@@ -56,17 +59,15 @@ public class ArrayWordList extends AbstractWordList
    */
   public ArrayWordList(final String[] array, final boolean caseSensitive, final ArraySorter sorter)
   {
-    if (array == null) {
-      throw new IllegalArgumentException("Array cannot be null.");
-    }
+    PassayUtils.assertNotNullArgOr(
+      array,
+      v -> Stream.of(v).anyMatch(Objects::isNull),
+      "Array cannot be null or contain null entries");
     comparator = caseSensitive ? WordLists.CASE_SENSITIVE_COMPARATOR : WordLists.CASE_INSENSITIVE_COMPARATOR;
     if (sorter != null) {
       sorter.sort(array, comparator);
     }
     for (int i = 0; i < array.length; i++) {
-      if (array[i] == null) {
-        throw new IllegalArgumentException(Arrays.toString(array) + " cannot contain null entry at index " + i);
-      }
       if (i > 0 && comparator.compare(array[i], array[i - 1]) < 0) {
         throw new IllegalArgumentException(
           Arrays.toString(array) + " sorted by " + sorter + " is not correct for " + comparator + " at index " + i);
@@ -94,6 +95,6 @@ public class ArrayWordList extends AbstractWordList
   @Override
   public String toString()
   {
-    return String.format("%s@%h::size=%s", getClass().getName(), hashCode(), words.length);
+    return getClass().getName() + "@" + hashCode() + "::" + "size=" + words.length;
   }
 }
