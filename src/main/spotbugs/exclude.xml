@@ -29,15 +29,6 @@
     <Bug pattern="DM_DEFAULT_ENCODING" />
   </Match>
 
-  <!-- API breaking change to make field package protected -->
-  <Match>
-    <Or>
-      <Class name="org.passay.rule.WhitespaceRule" />
-      <Class name="org.passay.entropy.ShannonEntropy" />
-    </Or>
-    <Bug pattern="MS_PKGPROTECT" />
-  </Match>
-
   <!-- Readers are closed in WordLists#readWordList -->
   <Match>
     <Method name="addFile" />
