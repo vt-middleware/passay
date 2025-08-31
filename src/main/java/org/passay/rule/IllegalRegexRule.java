@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -100,20 +101,25 @@ public class IllegalRegexRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<RuleResultDetail> details = new ArrayList<>();
-    final Matcher m = pattern.matcher(passwordData.getPassword());
-    final Set<String> matches = new HashSet<>();
-    while (m.find()) {
-      final String match = m.group();
-      if (!matches.contains(match)) {
-        details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(match)));
-        if (!reportAllFailures) {
-          break;
+    final CharBuffer password = passwordData.getPassword().toCharBuffer();
+    try {
+      final List<RuleResultDetail> details = new ArrayList<>();
+      final Matcher m = pattern.matcher(password);
+      final Set<String> matches = new HashSet<>();
+      while (m.find()) {
+        final String match = m.group();
+        if (!matches.contains(match)) {
+          details.add(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters(match)));
+          if (!reportAllFailures) {
+            break;
+          }
+          matches.add(match);
         }
-        matches.add(match);
       }
+      return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
+    } finally {
+      PassayUtils.clear(password);
     }
-    return details.isEmpty() ? new SuccessRuleResult() : new FailureRuleResult(details);
   }
 
 

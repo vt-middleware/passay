@@ -31,22 +31,15 @@
 
   <parameter name="bloomFile" value="src/test/resources/bloom.bin"/>
 
-  <test name="coretests" parallel="methods" thread-count="2">
+  <test name="tests" parallel="methods" thread-count="2">
     <groups>
-      <run>
+      <define name="core">
         <include name="passtest" />
         <include name="entrpytest" />
         <include name="passgentest" />
         <include name="seqperftest" />
-      </run>
-    </groups>
-    <packages>
-      <package name="org.passay.*" />
-    </packages>
-  </test>
-  <test name="dicttests" parallel="methods" thread-count="6">
-    <groups>
-      <run>
+      </define>
+      <define name="dict">
         <include name="wltest" />
         <include name="tttest" />
         <include name="sorttest" />
@@ -54,21 +47,19 @@
         <include name="ttdicttest" />
         <include name="jdbcdicttest" />
         <include name="bloomdicttest" />
-      </run>
-    </groups>
-    <packages>
-      <package name="org.passay.dictionary.*" />
-    </packages>
-  </test>
-  <test name="dictperftests" parallel="methods" thread-count="6">
-    <groups>
-      <run>
+      </define>
+      <define name="dictperf">
         <include name="ttperftest" />
         <include name="wlperftest" />
+      </define>
+      <run>
+        <include name="core"/>
+        <include name="dict"/>
+        <include name="dictperf"/>
       </run>
     </groups>
     <packages>
-      <package name="org.passay.dictionary.*" />
+      <package name="org.passay.*" />
     </packages>
   </test>
 </suite>

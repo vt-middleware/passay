@@ -66,7 +66,7 @@ public class TernaryTree
    *
    * @param  word  to insert
    */
-  public void insert(final String word)
+  public void insert(final CharSequence word)
   {
     if (word != null) {
       root = insertNode(root, word, 0);
@@ -79,10 +79,10 @@ public class TernaryTree
    *
    * @param  words  to insert
    */
-  public void insert(final String[] words)
+  public void insert(final CharSequence[] words)
   {
     if (words != null) {
-      for (String s : words) {
+      for (CharSequence s : words) {
         insert(s);
       }
     }
@@ -96,9 +96,9 @@ public class TernaryTree
    *
    * @return  whether the word was found
    */
-  public boolean search(final String word)
+  public boolean search(final CharSequence word)
   {
-    return searchNode(root, word, 0);
+    return searchNode(root, word.codePoints().toArray(), 0);
   }
 
 
@@ -117,14 +117,14 @@ public class TernaryTree
    *
    * @throws  UnsupportedOperationException  if this is a case insensitive ternary tree
    */
-  public String[] partialSearch(final String word)
+  public CharSequence[] partialSearch(final CharSequence word)
   {
     if (comparator == CASE_INSENSITIVE_COMPARATOR) {
       throw new UnsupportedOperationException("Partial search is not supported for case insensitive ternary trees");
     }
 
-    final List<String> matches = partialSearchNode(root, null, "", word, 0);
-    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[0]);
+    final List<CharSequence> matches = partialSearchNode(root, null, "", word, 0);
+    return matches == null ? EMPTY_ARRAY : matches.toArray(new CharSequence[0]);
   }
 
 
@@ -143,14 +143,14 @@ public class TernaryTree
    *
    * @throws  UnsupportedOperationException  if this is a case insensitive ternary tree
    */
-  public String[] nearSearch(final String word, final int distance)
+  public CharSequence[] nearSearch(final CharSequence word, final int distance)
   {
     if (comparator == CASE_INSENSITIVE_COMPARATOR) {
       throw new UnsupportedOperationException("Near search is not supported for case insensitive ternary trees");
     }
 
-    final List<String> matches = nearSearchNode(root, distance, null, "", word, 0);
-    return matches == null ? EMPTY_ARRAY : matches.toArray(new String[0]);
+    final List<CharSequence> matches = nearSearchNode(root, distance, null, "", word, 0);
+    return matches == null ? EMPTY_ARRAY : matches.toArray(new CharSequence[0]);
   }
 
 
@@ -160,9 +160,9 @@ public class TernaryTree
    *
    * @return  unmodifiable list of words
    */
-  public List<String> getWords()
+  public List<CharSequence> getWords()
   {
-    final List<String> words = traverseNode(root, "", new ArrayList<>());
+    final List<CharSequence> words = traverseNode(root, "", new ArrayList<>());
     return Collections.unmodifiableList(words);
   }
 
@@ -211,11 +211,12 @@ public class TernaryTree
    * @return  ternary node to insert
    */
   // CheckStyle:FinalParametersCheck OFF
-  private TernaryNode insertNode(TernaryNode node, final String word, final int index)
+  private TernaryNode insertNode(TernaryNode node, final CharSequence word, final int index)
   // CheckStyle:FinalParametersCheck ON
   {
     if (index < word.length()) {
-      final int cp = word.codePointAt(index);
+      final int[] codePoints = word.codePoints().toArray();
+      final int cp = codePoints[index];
       if (node == null) {
         // CheckStyle:ParameterAssignmentCheck OFF
         node = new TernaryNode(cp);
@@ -245,20 +246,20 @@ public class TernaryTree
    * @param  word  to search for
    * @param  index  of character in word
    *
-   * @return  whether or not the word was found
+   * @return  whether the word was found
    */
   // CheckStyle:ReturnCount OFF
-  private boolean searchNode(final TernaryNode node, final String word, final int index)
+  private boolean searchNode(final TernaryNode node, final int[] word, final int index)
   {
-    if (node != null && index < word.length()) {
-      final int cp = word.codePointAt(index);
+    if (node != null && index < word.length) {
+      final int cp = word[index];
       final String split = UnicodeString.toString(node.getSplitChar());
       final int cmp = comparator.compare(UnicodeString.toString(cp), split);
       if (cmp < 0) {
         return searchNode(node.getLokid(), word, index);
       } else if (cmp > 0) {
         return searchNode(node.getHikid(), word, index);
-      } else if (index == word.length() - 1) {
+      } else if (index == word.length - 1) {
         return node.isEndOfWord();
       } else {
         return searchNode(node.getEqkid(), word, index + Character.charCount(cp));
@@ -281,12 +282,13 @@ public class TernaryTree
    * @return  list of matches
    */
   // CheckStyle:FinalParametersCheck OFF
-  private List<String> partialSearchNode(final TernaryNode node, List<String> matches,
-    final String match, final String word, final int index)
+  private List<CharSequence> partialSearchNode(final TernaryNode node, List<CharSequence> matches,
+    final CharSequence match, final CharSequence word, final int index)
   // CheckStyle:FinalParametersCheck ON
   {
+    final int[] codePoints = word.codePoints().toArray();
     if (node != null && index < word.length()) {
-      final int cp = word.codePointAt(index);
+      final int cp = codePoints[index];
       final String split = UnicodeString.toString(node.getSplitChar());
       final int cmp = comparator.compare(UnicodeString.toString(cp), split);
       if (cp == '.' || cmp < 0) {
@@ -333,13 +335,14 @@ public class TernaryTree
    * @return  list of matches
    */
   // CheckStyle:FinalParametersCheck OFF
-  private List<String> nearSearchNode(final TernaryNode node, final int distance, List<String> matches,
-    final String match, final String word, final int index)
+  private List<CharSequence> nearSearchNode(final TernaryNode node, final int distance, List<CharSequence> matches,
+    final CharSequence match, final CharSequence word, final int index)
   // CheckStyle:FinalParametersCheck ON
   {
     if (node != null && distance >= 0) {
 
-      final int cp = index < word.length() ? word.codePointAt(index) : Character.MAX_VALUE;
+      final int[] codePoints = word.codePoints().toArray();
+      final int cp = index < word.length() ? codePoints[index] : Character.MAX_VALUE;
       final String split = UnicodeString.toString(node.getSplitChar());
       final int cmp = comparator.compare(UnicodeString.toString(cp), split);
 
@@ -400,7 +403,7 @@ public class TernaryTree
    * @return  list of strings containing all words from the supplied node
    */
   // CheckStyle:FinalParametersCheck OFF
-  private List<String> traverseNode(final TernaryNode node, final String s, List<String> words)
+  private List<CharSequence> traverseNode(final TernaryNode node, final String s, List<CharSequence> words)
   // CheckStyle:FinalParametersCheck ON
   {
     if (node != null) {

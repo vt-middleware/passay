@@ -40,7 +40,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
   @BeforeClass(groups = "bloomdicttest")
   public void createDictionary(final String dict) throws Exception
   {
-    final BloomFilter<String> filter1 = BloomFilter.readFrom(
+    final BloomFilter<CharSequence> filter1 = BloomFilter.readFrom(
       Files.newInputStream(Paths.get(dict)), Funnels.stringFunnel(StandardCharsets.UTF_8));
     filterFromSerialized = new BloomFilterDictionary(filter1);
 
@@ -48,7 +48,7 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
       new FileReader[] {new FileReader(webFile)},
       true,
       new ArraysSort());
-    final BloomFilter<String> filter2 = BloomFilter.create(
+    final BloomFilter<CharSequence> filter2 = BloomFilter.create(
       Funnels.stringFunnel(StandardCharsets.UTF_8), awl.size(), 0.0001);
     for (int i = 0; i < awl.size(); i++) {
       filter2.put(awl.get(i));

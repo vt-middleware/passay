@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -e
+
+HEAP_DUMP_FILE="target/HeapDump.hprof"
+
+mvn -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
+for i in target/*.jar; do
+  CLASSPATH=$CLASSPATH:$i
+done
+for i in target/dependency/*.jar; do
+  CLASSPATH=$CLASSPATH:$i
+done
+
+# don't perform garbage collection
+export JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -XX:+AlwaysPreTouch -Xms256m -Xmx256m"
+
+# create java heap dump
+java ${JAVA_OPTS} -cp ${CLASSPATH} org.passay.HeapDump ${HEAP_DUMP_FILE}

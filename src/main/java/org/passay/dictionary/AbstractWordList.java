@@ -14,11 +14,11 @@ public abstract class AbstractWordList implements WordList
 {
 
   /** Word comparator. */
-  protected Comparator<String> comparator;
+  protected Comparator<CharSequence> comparator;
 
 
   @Override
-  public Comparator<String> getComparator()
+  public Comparator<CharSequence> getComparator()
   {
     return comparator;
   }

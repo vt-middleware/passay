@@ -42,7 +42,7 @@ public class JDBCDictionary implements Dictionary
 
 
   @Override
-  public boolean search(final String word)
+  public boolean search(final CharSequence word)
   {
     try {
       return executeStatement(searchStatement, String.class, word) != null;

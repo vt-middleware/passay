@@ -74,7 +74,7 @@ public class PasswordGenerator
    * @return  generated password
    */
   @SuppressWarnings("unchecked")
-  public <T extends Rule> String generatePassword(final int length, final T... rules)
+  public <T extends Rule> UnicodeString generatePassword(final int length, final T... rules)
   {
     PassayUtils.assertNotNullArgOr(
       rules,
@@ -93,7 +93,7 @@ public class PasswordGenerator
    *
    * @return  generated password
    */
-  public String generatePassword(final int length, final List<? extends Rule> rules)
+  public UnicodeString generatePassword(final int length, final List<? extends Rule> rules)
   {
     if (length <= 0) {
       throw new IllegalArgumentException("Length must be greater than 0");
@@ -108,7 +108,7 @@ public class PasswordGenerator
 
     final StringBuilder allChars = new StringBuilder();
     final CharBuffer buffer = CharBuffer.allocate(length);
-    String generated;
+    UnicodeString generated;
     int count = 0;
 
     do {
@@ -128,19 +128,26 @@ public class PasswordGenerator
       // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
       ((Buffer) buffer).flip();
       randomize(buffer);
-      generated = buffer.toString();
+      generated = new UnicodeString(buffer);
       if (count > 0) {
         retryCount++;
       }
       final DefaultPasswordValidator validator = new DefaultPasswordValidator(rules);
       if (validator.validate(new PasswordData(generated)).isValid()) {
         break;
+      } else {
+        generated.clear();
       }
     } while (++count <= RETRY_LIMIT);
     if (count > RETRY_LIMIT) {
+      generated.clear();
       throw new IllegalStateException("Exceeded maximum number of password generation retries");
     }
-    return generated;
+    try {
+      return generated;
+    } finally {
+      PassayUtils.clear(buffer);
+    }
   }
 
 

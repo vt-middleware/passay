@@ -11,6 +11,7 @@ import org.passay.PasswordData;
 import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.SuccessRuleResult;
+import org.passay.UnicodeString;
 
 /**
  * Rule for determining if a password contains any number within a defined range, lower inclusive, upper exclusive.
@@ -132,7 +133,7 @@ public class NumberRangeRule implements Rule
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
-    final String text = passwordData.getPassword();
+    final UnicodeString text = passwordData.getPassword();
     for (int i = lowerRange; i < upperRange; i++) {
       if (matchBehavior.match(text, Integer.toString(i))) {
         final String[] codes = {

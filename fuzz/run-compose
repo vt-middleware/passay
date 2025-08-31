@@ -3,4 +3,4 @@
 docker compose -f fuzz/docker-compose.yml down && \
   docker network prune -f && \
   docker compose -f fuzz/docker-compose.yml pull && \
-  docker compose -f fuzz/docker-compose.yml up --build --attach passay
+  docker compose -f fuzz/docker-compose.yml up --build --attach passay-fuzz

@@ -93,7 +93,7 @@ public class WordListsTest
 
 
   /**
-   * Test for {@link WordLists#binarySearch(WordList, String)}.
+   * Test for {@link WordLists#binarySearch(WordList, CharSequence)}.
    *
    * @param  wl  Test word list.
    * @param  word  Word to search for.

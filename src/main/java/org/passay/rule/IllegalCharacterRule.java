@@ -83,7 +83,7 @@ public class IllegalCharacterRule implements Rule
    */
   public IllegalCharacterRule(final UnicodeString unicodeString, final MatchBehavior behavior, final boolean reportAll)
   {
-    illegalCharacters = unicodeString.getCodePoints();
+    illegalCharacters = unicodeString.codePoints();
     matchBehavior = behavior;
     reportAllFailures = reportAll;
   }
@@ -117,7 +117,7 @@ public class IllegalCharacterRule implements Rule
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
     final List<RuleResultDetail> details = new ArrayList<>();
     final Set<String> matches = new HashSet<>();
-    final String text = passwordData.getPassword();
+    final UnicodeString text = passwordData.getPassword();
     for (int cp : illegalCharacters) {
       if (matchBehavior.match(text, cp) && !matches.contains(UnicodeString.toString(cp))) {
         final String[] codes = {
@@ -165,7 +165,7 @@ public class IllegalCharacterRule implements Rule
   {
     return new RuleResultMetadata(
       RuleResultMetadata.CountCategory.Illegal,
-      UnicodeString.countMatchingCharacters(illegalCharacters, password.getPassword()));
+      password.getPassword().countMatchingCharacters(illegalCharacters));
   }
 
 

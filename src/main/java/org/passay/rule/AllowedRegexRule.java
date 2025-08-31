@@ -1,6 +1,7 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
 package org.passay.rule;
 
+import java.nio.CharBuffer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -66,11 +67,16 @@ public class AllowedRegexRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final Matcher m = pattern.matcher(passwordData.getPassword());
-    if (!m.find()) {
-      return new FailureRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
+    final CharBuffer password = passwordData.getPassword().toCharBuffer();
+    try {
+      final Matcher m = pattern.matcher(password);
+      if (!m.find()) {
+        return new FailureRuleResult(new RuleResultDetail(ERROR_CODE, createRuleResultDetailParameters()));
+      }
+      return new SuccessRuleResult();
+    } finally {
+      PassayUtils.clear(password);
     }
-    return new SuccessRuleResult();
   }
 
 
