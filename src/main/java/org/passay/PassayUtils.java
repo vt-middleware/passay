@@ -8,6 +8,7 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.function.Predicate;
 
 /**
@@ -180,6 +181,29 @@ public final class PassayUtils
       ((Buffer) o).flip();
     } else {
       throw new IllegalArgumentException("Unsupported type: " + o.getClass().getName());
+    }
+  }
+
+
+  /**
+   * Appends characters to the supplied target with count random characters from source.
+   *
+   * @param  source  of random characters.
+   * @param  target  character sequence that will hold characters.
+   * @param  count  number of random characters.
+   * @param  rand  to select characters from source.
+   */
+  public static void appendRandomCharacters(
+    final UnicodeString source, final CharBuffer target, final int count, final Random rand)
+  {
+    if (source == null || source.isEmpty()) {
+      return;
+    }
+    for (int i = 0; i < count; i++) {
+      final String s = PassayUtils.toString(source.codePointAt(rand.nextInt(source.length())));
+      if (target.position() + s.length() <= target.limit()) {
+        target.append(s);
+      }
     }
   }
 }

@@ -218,4 +218,89 @@ public class UnicodeStringTest
     assertThat(new UnicodeString("ABC12\uD83C\uDDEE\uD83C\uDDF8")
       .endsWith(new UnicodeString(127470, 127480))).isTrue();
   }
+
+
+  @Test
+  public void intersection()
+  {
+    assertThat(new UnicodeString().intersection(new UnicodeString()))
+      .isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString("ABC123").intersection(new UnicodeString()))
+      .isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString().intersection(new UnicodeString("XYZ098")))
+      .isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString("ABC123").intersection(new UnicodeString("XYZ098")))
+      .isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString("abcdefg").intersection(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("efg"));
+    assertThat(new UnicodeString("ABC123").intersection(new UnicodeString("ZBX920")))
+      .isEqualTo(new UnicodeString("B2"));
+    assertThat(new UnicodeString("AB¢123").intersection(new UnicodeString("ZBX920")))
+      .isEqualTo(new UnicodeString("B2"));
+    assertThat(new UnicodeString("AB\uD808\uDF34123").intersection(new UnicodeString("ZBX920")))
+      .isEqualTo(new UnicodeString("B2"));
+    assertThat(new UnicodeString("AB\uD83C\uDDEE\uD83C\uDDF8123").intersection(new UnicodeString("ZBX920")))
+      .isEqualTo(new UnicodeString("B2"));
+    assertThat(new UnicodeString("AB¢123").intersection(new UnicodeString("ZBX9¢0")))
+      .isEqualTo(new UnicodeString("B¢"));
+    assertThat(new UnicodeString("AB\uD808\uDF34123").intersection(new UnicodeString("ZBX9\uD808\uDF340")))
+      .isEqualTo(new UnicodeString("B\uD808\uDF34"));
+    assertThat(new UnicodeString("AB\uD83C\uDDEE\uD83C\uDDF8123")
+      .intersection(new UnicodeString("ZBX9\uD83C\uDDEE\uD83C\uDDF80")))
+      .isEqualTo(new UnicodeString("B\uD83C\uDDEE\uD83C\uDDF8"));
+  }
+
+
+  @Test
+  public void union()
+  {
+    assertThat(new UnicodeString().union(new UnicodeString())).isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString("ABC123").union(new UnicodeString()))
+      .isEqualTo(new UnicodeString("ABC123"));
+    assertThat(new UnicodeString().union(new UnicodeString("XYZ098")))
+      .isEqualTo(new UnicodeString("XYZ098"));
+    assertThat(new UnicodeString("ABC123").union(new UnicodeString("XYZ098")))
+      .isEqualTo(new UnicodeString("ABC123XYZ098"));
+    assertThat(new UnicodeString("abcdefg").union(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("abcdefghij"));
+    assertThat(new UnicodeString("ab¢defg").union(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("ab¢defghij"));
+    assertThat(new UnicodeString("ab\uD808\uDF34defg").union(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("ab\uD808\uDF34defghij"));
+    assertThat(new UnicodeString("ab\uD83C\uDDEE\uD83C\uDDF8defg").union(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("ab\uD83C\uDDEE\uD83C\uDDF8defghij"));
+    assertThat(new UnicodeString("abcdefg").union(new UnicodeString("¢fghij")))
+      .isEqualTo(new UnicodeString("abcdefg¢hij"));
+    assertThat(new UnicodeString("abcdefg").union(new UnicodeString("\uD808\uDF34fghij")))
+      .isEqualTo(new UnicodeString("abcdefg\uD808\uDF34hij"));
+    assertThat(new UnicodeString("abcdefg").union(new UnicodeString("\uD83C\uDDEE\uD83C\uDDF8fghij")))
+      .isEqualTo(new UnicodeString("abcdefg\uD83C\uDDEE\uD83C\uDDF8hij"));
+  }
+
+
+  @Test
+  public void difference()
+  {
+    assertThat(new UnicodeString().difference(new UnicodeString())).isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString("ABC123").difference(new UnicodeString()))
+      .isEqualTo(new UnicodeString("ABC123"));
+    assertThat(new UnicodeString().difference(new UnicodeString("XYZ098")))
+      .isEqualTo(new UnicodeString());
+    assertThat(new UnicodeString("ABC123").difference(new UnicodeString("XYZ098")))
+      .isEqualTo(new UnicodeString("ABC123"));
+    assertThat(new UnicodeString("abcdefg").difference(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("abcd"));
+    assertThat(new UnicodeString("ab¢defg").difference(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("ab¢d"));
+    assertThat(new UnicodeString("ab\uD808\uDF34defg").difference(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("ab\uD808\uDF34d"));
+    assertThat(new UnicodeString("ab\uD83C\uDDEE\uD83C\uDDF8defg").difference(new UnicodeString("efghij")))
+      .isEqualTo(new UnicodeString("ab\uD83C\uDDEE\uD83C\uDDF8d"));
+    assertThat(new UnicodeString("abcdefg").difference(new UnicodeString("¢fghij")))
+      .isEqualTo(new UnicodeString("abcde"));
+    assertThat(new UnicodeString("abcdefg").difference(new UnicodeString("\uD808\uDF34fghij")))
+      .isEqualTo(new UnicodeString("abcde"));
+    assertThat(new UnicodeString("abcdefg").difference(new UnicodeString("\uD83C\uDDEE\uD83C\uDDF8fghij")))
+      .isEqualTo(new UnicodeString("abcde"));
+  }
 }

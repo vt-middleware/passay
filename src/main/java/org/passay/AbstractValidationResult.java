@@ -84,4 +84,16 @@ public abstract class AbstractValidationResult implements ValidationResult
   {
     return Collections.emptyList();
   }
+
+
+  @Override
+  public String toString()
+  {
+    return getClass().getName() + "@" + hashCode() + "::" +
+      "valid=" + isValid() + ", " +
+      "details=" + getDetails() + ", " +
+      "metadata=" + getMetadata() + ", " +
+      "entropy=" + getEntropy() + ", " +
+      "messages=" + getMessages();
+  }
 }

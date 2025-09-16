@@ -183,12 +183,12 @@ public final class HeapDump
    */
   public static void generatePassword()
   {
-    final PasswordGenerator generator = new PasswordGenerator();
-    final UnicodeString password = generator.generatePassword(
+    final PasswordGenerator generator = new PasswordGenerator(
       22,
       new CharacterRule(EnglishCharacterData.Digit, 1),
       new CharacterRule(EnglishCharacterData.UpperCase, 1),
       new CharacterRule(EnglishCharacterData.LowerCase, 20));
+    final UnicodeString password = generator.generate();
     try {
       printPassword("Generated password", password);
     } finally {
