@@ -496,7 +496,7 @@ public final class UnicodeString implements CharSequence
    *
    * @param  other  to search this unicode string
    *
-   * @return  the code point index of other in this unicdoe string
+   * @return  the code point index of other in this unicode string
    */
   // CheckStyle:ReturnCount OFF
   int indexOf(final UnicodeString other)

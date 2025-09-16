@@ -12,11 +12,11 @@ import org.passay.entropy.Entropy;
 import org.passay.entropy.RandomPasswordEntropyFactory;
 import org.passay.entropy.ShannonEntropyFactory;
 import org.passay.resolver.MessageResolver;
-import org.passay.resolver.PropertiesMessageResolver;
 import org.passay.rule.Rule;
 
 /**
- * The central component for evaluating multiple password rules against a candidate password.
+ * Default implementation for evaluating multiple password rules against a candidate password. Supports a fail fast flag
+ * to indicate that rule validation should stop if any rule fails.
  *
  * @author  Middleware Services
  */
@@ -32,11 +32,11 @@ public class DefaultPasswordValidator implements PasswordValidator
    *
    * @see <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
    */
-  public static final BiFunction<List<Rule>, PasswordData, Entropy> DEFAULT_ENTROPY_PROVIDER =
-    new BiFunction<List<Rule>, PasswordData, Entropy>()
+  public static final BiFunction<List<? extends Rule>, PasswordData, Entropy> DEFAULT_ENTROPY_PROVIDER =
+    new BiFunction<List<? extends Rule>, PasswordData, Entropy>()
     {
       @Override
-      public Entropy apply(final List<Rule> rules, final PasswordData passwordData)
+      public Entropy apply(final List<? extends Rule> rules, final PasswordData passwordData)
       {
         if (passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
           return RandomPasswordEntropyFactory.createEntropy(rules, passwordData);
@@ -54,7 +54,7 @@ public class DefaultPasswordValidator implements PasswordValidator
     };
 
   /** Message resolver that returns null for any rule result detail. */
-  private static final MessageResolver NULL_MESSAGE_RESOLVER = new MessageResolver()
+  public static final MessageResolver NULL_MESSAGE_RESOLVER = new MessageResolver()
   {
     @Override
     public String resolve(final RuleResultDetail detail)
@@ -70,11 +70,11 @@ public class DefaultPasswordValidator implements PasswordValidator
   };
 
   /** Entropy provider that returns -1. */
-  private static final BiFunction<List<Rule>, PasswordData, Entropy> NO_ENTROPY_PROVIDER =
-    new BiFunction<List<Rule>, PasswordData, Entropy>()
+  public static final BiFunction<List<? extends Rule>, PasswordData, Entropy> NO_ENTROPY_PROVIDER =
+    new BiFunction<List<? extends Rule>, PasswordData, Entropy>()
     {
       @Override
-      public Entropy apply(final List<Rule> rules, final PasswordData passwordData)
+      public Entropy apply(final List<? extends Rule> rules, final PasswordData passwordData)
       {
         return () -> -1;
       }
@@ -89,104 +89,174 @@ public class DefaultPasswordValidator implements PasswordValidator
   /** Password rules. */
   private final List<Rule> passwordRules = new ArrayList<>();
 
+  /** Whether password validation should fail fast. */
+  private final boolean failFast;
+
   /** Message resolver. */
   private final MessageResolver messageResolver;
 
   /** Entropy provider. */
-  private final BiFunction<List<Rule>, PasswordData, Entropy> entropyProvider;
+  private final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider;
 
 
   /**
-   * See {@link #DefaultPasswordValidator(List)}.
+   * Creates a new default password validator.
    *
    * @param  rules  to validate
    */
   public DefaultPasswordValidator(final Rule... rules)
   {
-    this(NULL_MESSAGE_RESOLVER, NO_ENTROPY_PROVIDER, Arrays.asList(rules));
+    this(false, NULL_MESSAGE_RESOLVER, NO_ENTROPY_PROVIDER, Arrays.asList(rules));
   }
 
 
   /**
-   * Creates a new password validator with a {@link PropertiesMessageResolver}.
+   * Creates a new default password validator.
    *
    * @param  rules  to validate
    */
   public DefaultPasswordValidator(final List<? extends Rule> rules)
   {
-    this(NULL_MESSAGE_RESOLVER, NO_ENTROPY_PROVIDER, rules);
+    this(false, NULL_MESSAGE_RESOLVER, NO_ENTROPY_PROVIDER, rules);
   }
 
 
   /**
-   * See {@link #DefaultPasswordValidator(MessageResolver, List)}.
+   * Creates a new default password validator.
+   *
+   * @param  failFast  whether rule validation should fail fast
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(final boolean failFast, final Rule... rules)
+  {
+    this(failFast, NULL_MESSAGE_RESOLVER, NO_ENTROPY_PROVIDER, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new default password validator.
+   *
+   * @param  failFast  whether rule validation should fail fast
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(final boolean failFast, final List<? extends Rule> rules)
+  {
+    this(failFast, NULL_MESSAGE_RESOLVER, NO_ENTROPY_PROVIDER, rules);
+  }
+
+
+  /**
+   * Creates a new default password validator.
    *
    * @param  resolver  message resolver.
    * @param  rules  to validate
    */
   public DefaultPasswordValidator(final MessageResolver resolver, final Rule... rules)
   {
-    this(resolver, NO_ENTROPY_PROVIDER, Arrays.asList(rules));
+    this(false, resolver, NO_ENTROPY_PROVIDER, Arrays.asList(rules));
   }
 
 
   /**
-   * Creates a new password validator.
+   * Creates a new default password validator.
    *
    * @param  resolver  message resolver.
    * @param  rules  to validate
    */
   public DefaultPasswordValidator(final MessageResolver resolver, final List<? extends Rule> rules)
   {
-    this(resolver, NO_ENTROPY_PROVIDER, rules);
+    this(false, resolver, NO_ENTROPY_PROVIDER, rules);
   }
 
 
   /**
-   * Creates a new password validator.
+   * Creates a new default password validator.
    *
-   * @param  entropyProvider  to calculate entropy estimate
+   * @param  failFast  whether rule validation should fail fast
+   * @param  resolver  message resolver.
    * @param  rules  to validate
    */
-  public DefaultPasswordValidator(
-    final BiFunction<List<Rule>, PasswordData, Entropy> entropyProvider, final Rule... rules)
+  public DefaultPasswordValidator(final boolean failFast, final MessageResolver resolver, final Rule... rules)
   {
-    this(NULL_MESSAGE_RESOLVER, entropyProvider, Arrays.asList(rules));
+    this(failFast, resolver, NO_ENTROPY_PROVIDER, Arrays.asList(rules));
   }
 
 
   /**
-   * Creates a new password validator.
+   * Creates a new default password validator.
+   *
+   * @param  failFast  whether rule validation should fail fast
+   * @param  resolver  message resolver.
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(
+    final boolean failFast, final MessageResolver resolver, final List<? extends Rule> rules)
+  {
+    this(failFast, resolver, NO_ENTROPY_PROVIDER, rules);
+  }
+
+
+  /**
+   * Creates a new default password validator.
    *
    * @param  entropyProvider  to calculate entropy estimate
    * @param  rules  to validate
    */
   public DefaultPasswordValidator(
-    final BiFunction<List<Rule>, PasswordData, Entropy> entropyProvider,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider, final Rule... rules)
+  {
+    this(false, NULL_MESSAGE_RESOLVER, entropyProvider, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new default password validator.
+   *
+   * @param  entropyProvider  to calculate entropy estimate
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
     final List<? extends Rule> rules)
   {
-    this(NULL_MESSAGE_RESOLVER, entropyProvider, rules);
+    this(false, NULL_MESSAGE_RESOLVER, entropyProvider, rules);
   }
 
 
   /**
-   * Creates a new password validator.
+   * Creates a new default password validator.
    *
-   * @param  resolver  message resolver.
+   * @param  failFast  whether rule validation should fail fast
    * @param  entropyProvider  to calculate entropy estimate
    * @param  rules  to validate
    */
   public DefaultPasswordValidator(
-    final MessageResolver resolver,
-    final BiFunction<List<Rule>, PasswordData, Entropy> entropyProvider,
+    final boolean failFast,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
     final Rule... rules)
   {
-    this(resolver, entropyProvider, Arrays.asList(rules));
+    this(failFast, NULL_MESSAGE_RESOLVER, entropyProvider, Arrays.asList(rules));
   }
 
 
   /**
-   * Creates a new password validator.
+   * Creates a new default password validator.
+   *
+   * @param  failFast  whether rule validation should fail fast
+   * @param  entropyProvider  to calculate entropy estimate
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(
+    final boolean failFast,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
+    final List<? extends Rule> rules)
+  {
+    this(failFast, NULL_MESSAGE_RESOLVER, entropyProvider, rules);
+  }
+
+
+  /**
+   * Creates a new default password validator.
    *
    * @param  resolver  message resolver.
    * @param  entropyProvider  to calculate entropy estimate
@@ -194,9 +264,62 @@ public class DefaultPasswordValidator implements PasswordValidator
    */
   public DefaultPasswordValidator(
     final MessageResolver resolver,
-    final BiFunction<List<Rule>, PasswordData, Entropy> entropyProvider,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
+    final Rule... rules)
+  {
+    this(false, resolver, entropyProvider, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new default password validator.
+   *
+   * @param  resolver  message resolver.
+   * @param  entropyProvider  to calculate entropy estimate
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(
+    final MessageResolver resolver,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
     final List<? extends Rule> rules)
   {
+    this(false, resolver, entropyProvider, rules);
+  }
+
+
+  /**
+   * Creates a new default password validator.
+   *
+   * @param  failFast  whether rule validation should fail fast
+   * @param  resolver  message resolver.
+   * @param  entropyProvider  to calculate entropy estimate
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(
+    final boolean failFast,
+    final MessageResolver resolver,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
+    final Rule... rules)
+  {
+    this(failFast, resolver, entropyProvider, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new default password validator.
+   *
+   * @param  failFast  whether rule validation should fail fast
+   * @param  resolver  message resolver.
+   * @param  entropyProvider  to calculate entropy estimate
+   * @param  rules  to validate
+   */
+  public DefaultPasswordValidator(
+    final boolean failFast,
+    final MessageResolver resolver,
+    final BiFunction<List<? extends Rule>, PasswordData, Entropy> entropyProvider,
+    final List<? extends Rule> rules)
+  {
+    this.failFast = failFast;
     this.messageResolver = PassayUtils.assertNotNullArg(resolver, "Message resolver cannot be null");
     this.entropyProvider = PassayUtils.assertNotNullArg(entropyProvider, "Entropy supplier cannot be null");
     this.passwordRules.addAll(
@@ -222,7 +345,7 @@ public class DefaultPasswordValidator implements PasswordValidator
 
 
   @Override
-  public BiFunction<List<Rule>, PasswordData, Entropy> getEntropyProvider()
+  public BiFunction<List<? extends Rule>, PasswordData, Entropy> getEntropyProvider()
   {
     return entropyProvider;
   }
@@ -242,6 +365,9 @@ public class DefaultPasswordValidator implements PasswordValidator
       }
       details.addAll(result.getDetails());
       metadata.add(result.getMetadata());
+      if (!success && failFast) {
+        break;
+      }
     }
     final double entropy = entropyProvider.apply(passwordRules, passwordData).estimate();
     final List<String> messages = success ?
