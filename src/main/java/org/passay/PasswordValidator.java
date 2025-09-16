@@ -37,7 +37,7 @@ public interface PasswordValidator
    *
    * @return  entropy provider
    */
-  BiFunction<List<Rule>, PasswordData, Entropy> getEntropyProvider();
+  BiFunction<List<? extends Rule>, PasswordData, Entropy> getEntropyProvider();
 
 
   /**

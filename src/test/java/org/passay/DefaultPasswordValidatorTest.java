@@ -25,6 +25,7 @@ import org.passay.resolver.ResourceBundleMessageResolver;
 import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.CharacterCharacteristicsRule;
 import org.passay.rule.CharacterRule;
+import org.passay.rule.CompositeRule;
 import org.passay.rule.DictionaryRule;
 import org.passay.rule.DictionarySubstringRule;
 import org.passay.rule.DigestHistoryRule;
@@ -48,7 +49,7 @@ import static org.assertj.core.api.Assertions.*;
  *
  * @author  Middleware Services
  */
-public class PasswordValidatorTest
+public class DefaultPasswordValidatorTest
 {
 
   /** test message resolver. */
@@ -78,6 +79,9 @@ public class PasswordValidatorTest
 
   /** For testing. */
   private PasswordValidator validator;
+
+  /** For testing. */
+  private PasswordValidator failFastValidator;
 
 
   /**
@@ -149,6 +153,11 @@ public class PasswordValidatorTest
     rules.add(historyRule);
     rules.add(sourceRule);
     validator = new DefaultPasswordValidator(DefaultPasswordValidator.DEFAULT_ENTROPY_PROVIDER, rules);
+    failFastValidator = new DefaultPasswordValidator(
+      true,
+      new CompositeRule(charRule, whitespaceRule, lengthRule, userIDRule),
+      new CompositeRule(qwertySeqRule, alphaSeqRule, numSeqRule, dupSeqRule),
+      new CompositeRule(dictRule, historyRule, sourceRule));
   }
 
   /**
@@ -344,10 +353,28 @@ public class PasswordValidatorTest
             EnglishCharacterData.Special.getErrorCode(),
             EnglishSequenceData.USQwerty.getErrorCode()),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "4326789032", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.UpperCase.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode()),
+        },
 
         // all non-alphanumeric
         {
           validator,
+          new PasswordData(USER, "$&!$#@*{{>", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.UpperCase.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode()),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "$&!$#@*{{>", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
@@ -367,6 +394,15 @@ public class PasswordValidatorTest
             EnglishCharacterData.Special.getErrorCode(),
             DictionarySubstringRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "aycdopezss", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.UpperCase.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode()),
+        },
 
         // all uppercase
         {
@@ -379,10 +415,27 @@ public class PasswordValidatorTest
             EnglishCharacterData.Special.getErrorCode(),
             DictionarySubstringRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "AYCDOPEZSS", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode()),
+        },
 
         // digits and non-alphanumeric
         {
           validator,
+          new PasswordData(USER, "@&3*(%5{}^", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.UpperCase.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode()),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "@&3*(%5{}^", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
@@ -399,10 +452,26 @@ public class PasswordValidatorTest
             EnglishCharacterData.UpperCase.getErrorCode(),
             EnglishCharacterData.Special.getErrorCode()),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "ay3dop5zss", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.UpperCase.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode()),
+        },
 
         // digits and uppercase
         {
           validator,
+          new PasswordData(USER, "AY3DOP5ZSS", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.LowerCase.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode()),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "AY3DOP5ZSS", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
@@ -419,6 +488,14 @@ public class PasswordValidatorTest
             EnglishCharacterData.Digit.getErrorCode(),
             EnglishCharacterData.UpperCase.getErrorCode()),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "a&c*o%ea}s", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.UpperCase.getErrorCode()),
+        },
 
         // non-alphanumeric and uppercase
         {
@@ -429,10 +506,26 @@ public class PasswordValidatorTest
             EnglishCharacterData.Digit.getErrorCode(),
             EnglishCharacterData.LowerCase.getErrorCode()),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "A&C*O%EA}S", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode()),
+        },
 
         // uppercase and lowercase
         {
           validator,
+          new PasswordData(USER, "AycDOPdsyz", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode()),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "AycDOPdsyz", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
@@ -452,10 +545,28 @@ public class PasswordValidatorTest
             EnglishCharacterData.Special.getErrorCode(),
             WhitespaceRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "AycD Pdsyz", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode(),
+            WhitespaceRule.ERROR_CODE),
+        },
 
         // contains a tab
         {
           validator,
+          new PasswordData(USER, "AycD    Psyz", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Digit.getErrorCode(),
+            EnglishCharacterData.Special.getErrorCode(),
+            WhitespaceRule.ERROR_CODE),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "AycD    Psyz", references),
           codes(
             CharacterCharacteristicsRule.ERROR_CODE,
@@ -472,10 +583,20 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4T3t#", references),
           codes(LengthRule.ERROR_CODE_MIN),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4T3t#", references),
+          codes(LengthRule.ERROR_CODE_MIN),
+        },
 
         // too long
         {
           validator,
+          new PasswordData(USER, "p4t3t#n6574632vbad#@!8", references),
+          codes(LengthRule.ERROR_CODE_MAX),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "p4t3t#n6574632vbad#@!8", references),
           codes(LengthRule.ERROR_CODE_MAX),
         },
@@ -488,10 +609,20 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4t3t#none", references),
           codes(DictionaryRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4t3t#none", references),
+          codes(DictionaryRule.ERROR_CODE),
+        },
 
         // matches dictionary word 'none' backwards
         {
           validator,
+          new PasswordData(USER, "p4t3t#enon", references),
+          codes(DictionaryRule.ERROR_CODE_REVERSED),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "p4t3t#enon", references),
           codes(DictionaryRule.ERROR_CODE_REVERSED),
         },
@@ -504,6 +635,11 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4zxcvb#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4zxcvb#n65", references),
+          codes(EnglishSequenceData.USQwerty.getErrorCode()),
+        },
 
        // matches sequence 'werty' backwards; 'wert' is a dictionary word
         {
@@ -511,10 +647,20 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4ytrew#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode(), DictionaryRule.ERROR_CODE_REVERSED),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4ytrew#n65", references),
+          codes(EnglishSequenceData.USQwerty.getErrorCode()),
+        },
 
         // matches sequence 'iop[]' ignore case
         {
           validator,
+          new PasswordData(USER, "p4iOP[]#n65", references),
+          codes(EnglishSequenceData.USQwerty.getErrorCode()),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "p4iOP[]#n65", references),
           codes(EnglishSequenceData.USQwerty.getErrorCode()),
         },
@@ -527,6 +673,11 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4testuser#n65", references),
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4testuser#n65", references),
+          codes(UsernameRule.ERROR_CODE),
+        },
 
         // contains userid 'testuser' backwards; 'test' and 'user' are dictionary words
         {
@@ -534,12 +685,22 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4resutset#n65", references),
           codes(UsernameRule.ERROR_CODE_REVERSED, DictionaryRule.ERROR_CODE_REVERSED),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4resutset#n65", references),
+          codes(UsernameRule.ERROR_CODE_REVERSED),
+        },
 
         // contains userid 'testuser' ignore case; 'test' and 'user' are dictionary words
         {
           validator,
           new PasswordData(USER, "p4TeStusEr#n65", references),
           codes(UsernameRule.ERROR_CODE, DictionaryRule.ERROR_CODE),
+        },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4TeStusEr#n65", references),
+          codes(UsernameRule.ERROR_CODE),
         },
 
         /* invalid history rule passwords. */
@@ -550,6 +711,11 @@ public class PasswordValidatorTest
           new PasswordData(USER, "t3stUs3r02", references),
           codes(HistoryRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "t3stUs3r02", references),
+          codes(HistoryRule.ERROR_CODE),
+        },
 
         // contains history password
         {
@@ -557,10 +723,20 @@ public class PasswordValidatorTest
           new PasswordData(USER, "t3stUs3r03", references),
           codes(HistoryRule.ERROR_CODE),
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "t3stUs3r03", references),
+          codes(HistoryRule.ERROR_CODE),
+        },
 
         // contains source password
         {
           validator,
+          new PasswordData(USER, "t3stUs3r04", references),
+          codes(SourceRule.ERROR_CODE),
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "t3stUs3r04", references),
           codes(SourceRule.ERROR_CODE),
         },
@@ -573,10 +749,20 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4T3t#N65", references),
           null,
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4T3t#N65", references),
+          null,
+        },
 
         // digits, non-alphanumeric, lowercase
         {
           validator,
+          new PasswordData(USER, "p4t3t#n65", references),
+          null,
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "p4t3t#n65", references),
           null,
         },
@@ -587,6 +773,11 @@ public class PasswordValidatorTest
           new PasswordData(USER, "P4T3T#N65", references),
           null,
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "P4T3T#N65", references),
+          null,
+        },
 
         // digits, uppercase, lowercase
         {
@@ -594,10 +785,20 @@ public class PasswordValidatorTest
           new PasswordData(USER, "p4t3tCn65", references),
           null,
         },
+        {
+          failFastValidator,
+          new PasswordData(USER, "p4t3tCn65", references),
+          null,
+        },
 
         // non-alphanumeric, lowercase, uppercase
         {
           validator,
+          new PasswordData(USER, "pxT%t#Nwq", references),
+          null,
+        },
+        {
+          failFastValidator,
           new PasswordData(USER, "pxT%t#Nwq", references),
           null,
         },
@@ -613,6 +814,16 @@ public class PasswordValidatorTest
             EnglishCharacterData.UpperCase.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode(),
+            LengthRule.ERROR_CODE_MIN),
+        },
+        {
+          failFastValidator,
+          new PasswordData(USER, "1234567", references),
+          codes(
+            CharacterCharacteristicsRule.ERROR_CODE,
+            EnglishCharacterData.Special.getErrorCode(),
+            EnglishCharacterData.LowerCase.getErrorCode(),
+            EnglishCharacterData.UpperCase.getErrorCode(),
             LengthRule.ERROR_CODE_MIN),
         },
       };
@@ -697,6 +908,34 @@ public class PasswordValidatorTest
     new DefaultPasswordValidator(l);
     new DefaultPasswordValidator(
       new CharacterRule(EnglishCharacterData.LowerCase), new CharacterRule(EnglishCharacterData.UpperCase));
+  }
+
+
+  /**
+   * Test fail fast validator.
+   */
+  @Test(groups = "passtest")
+  public void failFastValidator()
+  {
+    final DefaultPasswordValidator failValidator = new DefaultPasswordValidator(
+      true,
+      new CharacterRule(EnglishCharacterData.LowerCase),
+      new CharacterRule(EnglishCharacterData.UpperCase),
+      passwordData -> {
+        throw new IllegalStateException("This rule always throws");
+      });
+    try {
+      failValidator.validate(new PasswordData(USER, "Pxt%t#nwq", references));
+      fail("Should have thrown Exception");
+    } catch (Exception e) {
+      assertThat(e).isExactlyInstanceOf(IllegalStateException.class);
+    }
+    try {
+      final ValidationResult result = failValidator.validate(new PasswordData(USER, "pxt%t#nwq", references));
+      assertThat(result.isValid()).isFalse();
+    } catch (Exception e) {
+      fail("Should not have thrown Exception");
+    }
   }
 
 
