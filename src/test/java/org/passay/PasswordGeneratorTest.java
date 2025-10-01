@@ -50,9 +50,8 @@ public class PasswordGeneratorTest
         new CharacterRule(EnglishCharacterData.Digit, 3),
         new AllowedCharacterRule(
           new UnicodeString(
-            '0', '1', '2', '3', '4', '5',
-            'a', 'b', 'c', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'x', 'y', 'z')),
-        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+            EnglishCharacterData.Digit.getCharacters() + EnglishCharacterData.Alphabetical.getCharacters())),
+        new IllegalSequenceRule(EnglishSequenceData.Numerical, 3),
       },
       new Object[] {
         new CharacterRule(EnglishCharacterData.Digit, 1),
@@ -67,12 +66,9 @@ public class PasswordGeneratorTest
           new CharacterRule(EnglishCharacterData.UpperCase, 1),
           new CharacterRule(EnglishCharacterData.LowerCase, 1),
           new CharacterRule(EnglishCharacterData.SpecialAscii, 1)),
-        new AllowedCharacterRule(new UnicodeString(
-          '0', '1', '2', '3', '4', '5',
-          'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',  'M', 'N', 'O', 'P',
-          'k',  'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
-          '!', '@', '#', '^', '&', '*')),
-        new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
+        new AllowedCharacterRule(
+          new UnicodeString("012345" + EnglishCharacterData.Alphabetical.getCharacters() + "!@#^&*")),
+        new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 3),
       },
     };
   }
@@ -104,11 +100,7 @@ public class PasswordGeneratorTest
         assertThat(failValidator.validate(pd).isValid()).isFalse();
       }
     } catch (IllegalStateException e) {
-      if (e.getMessage().equals("Exceeded maximum number of password generation retries")) {
-        fail(e.getMessage());
-      } else {
-        throw e;
-      }
+      assertThat(e.getMessage()).isEqualTo("Exceeded maximum number of password generation retries");
     }
     assertThat(generator.getRetryCount()).isGreaterThan(0);
   }
