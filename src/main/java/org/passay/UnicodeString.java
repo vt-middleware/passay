@@ -370,8 +370,8 @@ public final class UnicodeString implements CharSequence
 
 
   /**
-   * Returns the union of this string and the other string. Union is defined as the unique set of code points in both
-   * strings.
+   * Returns the union of this string and the other string. Union is defined as the unique set of code points in either
+   * string.
    *
    * @param  other  string to intersect
    *
@@ -384,8 +384,8 @@ public final class UnicodeString implements CharSequence
 
 
   /**
-   * Returns the union of this string and the other string. Union is defined as the unique set of code points in both
-   * strings.
+   * Returns the union of this string and the other string. Union is defined as the unique set of code points in either
+   * string.
    *
    * @param  other  string to intersect
    * @param  clear  whether to invoke {@link #clear()} at the conclusion of this method
