@@ -187,7 +187,7 @@ public class PasswordGenerator
     final UnicodeString fillChars;
     if (!allowedChars.isEmpty()) {
       if (!illegalChars.isEmpty()) {
-        fillChars = allowedChars.difference(illegalChars, true);
+        fillChars = allowedChars.difference(illegalChars);
       } else {
         fillChars = allowedChars;
       }
@@ -196,7 +196,7 @@ public class PasswordGenerator
       final UnicodeString chars = getCharacters(rules);
       if (!chars.isEmpty()) {
         if (!illegalChars.isEmpty()) {
-          fillChars = chars.difference(illegalChars, true);
+          fillChars = chars.difference(illegalChars);
         } else {
           fillChars = chars;
         }
@@ -259,7 +259,7 @@ public class PasswordGenerator
     if (!characterRules.isEmpty()) {
       chars = new UnicodeString(characterRules.get(0).getValidCharacters());
       for (int i = 1; i < characterRules.size(); i++) {
-        chars = chars.union(new UnicodeString(characterRules.get(i).getValidCharacters()), true);
+        chars = chars.union(new UnicodeString(characterRules.get(i).getValidCharacters()));
       }
     }
     return chars != null ? chars : new UnicodeString();
@@ -282,7 +282,7 @@ public class PasswordGenerator
         if (allowedChars == null) {
           allowedChars = ((AllowedCharacterRule) rule).getAllowedCharacters();
         } else {
-          allowedChars = allowedChars.intersection(((AllowedCharacterRule) rule).getAllowedCharacters(), true);
+          allowedChars = allowedChars.intersection(((AllowedCharacterRule) rule).getAllowedCharacters());
         }
       }
     }
@@ -305,7 +305,7 @@ public class PasswordGenerator
         if (illegalChars == null) {
           illegalChars = ((IllegalCharacterRule) rule).getIllegalCharacters();
         } else {
-          illegalChars = illegalChars.union(((IllegalCharacterRule) rule).getIllegalCharacters(), true);
+          illegalChars = illegalChars.union(((IllegalCharacterRule) rule).getIllegalCharacters());
         }
       }
     }
@@ -378,7 +378,7 @@ public class PasswordGenerator
     {
       UnicodeString characters = appenders.get(0).getCharacters();
       for (int i = 1; i < appenders.size(); i++) {
-        characters = characters.union(appenders.get(i).getCharacters(), true);
+        characters = characters.union(appenders.get(i).getCharacters());
       }
       return characters;
     }
@@ -423,10 +423,10 @@ public class PasswordGenerator
       numberOfCharacters = rule.getNumberOfCharacters();
       UnicodeString validChars = new UnicodeString(rule.getValidCharacters());
       if (!allowedChars.isEmpty()) {
-        validChars = validChars.intersection(allowedChars, true);
+        validChars = validChars.intersection(allowedChars);
       }
       if (!illegalChars.isEmpty()) {
-        validChars = validChars.difference(illegalChars, true);
+        validChars = validChars.difference(illegalChars);
       }
       characters = validChars;
       random = rand;

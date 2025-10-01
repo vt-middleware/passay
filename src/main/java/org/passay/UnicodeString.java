@@ -338,34 +338,13 @@ public final class UnicodeString implements CharSequence
    */
   public UnicodeString intersection(final UnicodeString other)
   {
-    return intersection(other, false);
-  }
-
-
-  /**
-   * Returns the intersection of this string and the other string. Intersection is defined as the unique set of code
-   * points that both strings have in common.
-   *
-   * @param  other  string to intersect
-   * @param  clear  whether to invoke {@link #clear()} at the conclusion of this method
-   *
-   * @return  new unicode string
-   */
-  public UnicodeString intersection(final UnicodeString other, final boolean clear)
-  {
-    try {
-      final Set<Integer> intersection = new LinkedHashSet<>();
-      for (int cp : codePoints) {
-        if (other.indexOf(cp) != -1) {
-          intersection.add(cp);
-        }
-      }
-      return new UnicodeString(intersection.stream().mapToInt(Integer::intValue).toArray());
-    } finally {
-      if (clear) {
-        clear();
+    final Set<Integer> intersection = new LinkedHashSet<>();
+    for (int cp : codePoints) {
+      if (other.indexOf(cp) != -1) {
+        intersection.add(cp);
       }
     }
+    return new UnicodeString(intersection.stream().mapToInt(Integer::intValue).toArray());
   }
 
 
@@ -379,35 +358,14 @@ public final class UnicodeString implements CharSequence
    */
   public UnicodeString union(final UnicodeString other)
   {
-    return union(other, false);
-  }
-
-
-  /**
-   * Returns the union of this string and the other string. Union is defined as the unique set of code points in either
-   * string.
-   *
-   * @param  other  string to intersect
-   * @param  clear  whether to invoke {@link #clear()} at the conclusion of this method
-   *
-   * @return  new unicode string
-   */
-  public UnicodeString union(final UnicodeString other, final boolean clear)
-  {
-    try {
-      final Set<Integer> union = new LinkedHashSet<>();
-      for (int cp : codePoints) {
-        union.add(cp);
-      }
-      for (int cp : other.toCodePointArray()) {
-        union.add(cp);
-      }
-      return new UnicodeString(union.stream().mapToInt(Integer::intValue).toArray());
-    } finally {
-      if (clear) {
-        clear();
-      }
+    final Set<Integer> union = new LinkedHashSet<>();
+    for (int cp : codePoints) {
+      union.add(cp);
     }
+    for (int cp : other.toCodePointArray()) {
+      union.add(cp);
+    }
+    return new UnicodeString(union.stream().mapToInt(Integer::intValue).toArray());
   }
 
 
@@ -421,34 +379,13 @@ public final class UnicodeString implements CharSequence
    */
   public UnicodeString difference(final UnicodeString other)
   {
-    return difference(other, false);
-  }
-
-
-  /**
-   * Returns the difference of this string and the other string. Difference is defined as the unique set of code points
-   * that are in this string but not in the other string.
-   *
-   * @param  other  string to difference
-   * @param  clear  whether to invoke {@link #clear()} at the conclusion of this method
-   *
-   * @return  new unicode string
-   */
-  public UnicodeString difference(final UnicodeString other, final boolean clear)
-  {
-    try {
-      final Set<Integer> difference = new LinkedHashSet<>();
-      for (int cp : codePoints) {
-        if (other.indexOf(cp) == -1) {
-          difference.add(cp);
-        }
-      }
-      return new UnicodeString(difference.stream().mapToInt(Integer::intValue).toArray());
-    } finally {
-      if (clear) {
-        clear();
+    final Set<Integer> difference = new LinkedHashSet<>();
+    for (int cp : codePoints) {
+      if (other.indexOf(cp) == -1) {
+        difference.add(cp);
       }
     }
+    return new UnicodeString(difference.stream().mapToInt(Integer::intValue).toArray());
   }
 
 
