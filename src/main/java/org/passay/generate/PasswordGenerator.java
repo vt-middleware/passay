@@ -1,5 +1,5 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.passay;
+package org.passay.generate;
 
 import java.nio.Buffer;
 import java.nio.CharBuffer;
@@ -10,8 +10,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.passay.DefaultPasswordValidator;
+import org.passay.PassayUtils;
+import org.passay.PasswordData;
+import org.passay.UnicodeString;
 import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.CharacterCharacteristicsRule;
 import org.passay.rule.CharacterRule;
@@ -43,9 +46,6 @@ public class PasswordGenerator
 
   /** Character appenders derived from the rules. */
   private final List<CharacterAppender> characterAppenders = new ArrayList<>();
-
-  /** Valid characters used to satisfy the requested password length. */
-  private final UnicodeString fillCharacters;
 
   /** Tracks the total number of retries. */
   private int retryCount;
@@ -97,19 +97,10 @@ public class PasswordGenerator
     this.random = PassayUtils.assertNotNullArg(random, "Random cannot be null");
     this.length = length;
 
-    // characters defined in all AllowedCharacterRules
-    final UnicodeString allowedChars = getAllowedCharacters(rules);
-    // characters defined in all IllegalCharacterRules
-    final UnicodeString illegalChars = getIllegalCharacters(rules);
-    // valid characters used to fill the generated password
-    this.fillCharacters = getFillCharacters(rules, allowedChars, illegalChars);
-    if (this.fillCharacters.isEmpty()) {
-      throw new IllegalArgumentException("Rules did not produce any combination of valid characters");
-    }
-
-    this.characterAppenders.addAll(getCharacterAppenders(rules, allowedChars, illegalChars, this.random));
+    this.characterAppenders.addAll(
+      getCharacterAppenders(rules, getAllowedCharacters(rules), getIllegalCharacters(rules), this.random));
     if (this.characterAppenders.isEmpty() ||
-        this.characterAppenders.stream().allMatch(c -> c.getCharacters().isEmpty()))
+        this.characterAppenders.stream().anyMatch(c -> c.getCharacters().isEmpty()))
     {
       throw new IllegalArgumentException("Rules did not produce any combination of valid characters");
     }
@@ -140,12 +131,7 @@ public class PasswordGenerator
     UnicodeString generated;
     int count = 0;
     do {
-      for (CharacterAppender appender : characterAppenders) {
-        // for each rule append characters that satisfy the rule
-        appender.append(buffer, length);
-      }
-      // fill any additional characters needed to satisfy the length of the password
-      PassayUtils.appendRandomCharacters(fillCharacters, buffer, length - buffer.position(), random);
+      characterAppenders.forEach(appender -> appender.append(buffer, length));
       // cast to Buffer prevents NoSuchMethodError when compiled on JDK9+ and run on JDK8
       ((Buffer) buffer).flip();
       randomize(buffer);
@@ -173,50 +159,15 @@ public class PasswordGenerator
 
 
   /**
-   * Returns the fill characters used to populate a generated password.
-   *
-   * @param  rules  to derive characters from
-   * @param  allowedChars  characters allowed
-   * @param  illegalChars  characters not allowed
-   *
-   * @return  fill characters
-   */
-  protected UnicodeString getFillCharacters(
-    final List<? extends Rule> rules, final  UnicodeString allowedChars, final UnicodeString illegalChars)
-  {
-    final UnicodeString fillChars;
-    if (!allowedChars.isEmpty()) {
-      if (!illegalChars.isEmpty()) {
-        fillChars = allowedChars.difference(illegalChars);
-      } else {
-        fillChars = allowedChars;
-      }
-    } else {
-      // characters defined in all CharacterRules
-      final UnicodeString chars = getCharacters(rules);
-      if (!chars.isEmpty()) {
-        if (!illegalChars.isEmpty()) {
-          fillChars = chars.difference(illegalChars);
-        } else {
-          fillChars = chars;
-        }
-      } else {
-        fillChars = new UnicodeString();
-      }
-    }
-    return fillChars;
-  }
-
-
-  /**
-   * Returns the list of character appenders used for password generation.
+   * Returns the list of character appenders used for password generation. The last element of this list is guaranteed
+   * to be {@link FillRemainingCharactersAppender} to ensure password generation satisfies the requested length.
    *
    * @param  rules  to derive password characters
    * @param  allowedChars  characters allowed
    * @param  illegalChars  characters not allowed
    * @param  rand  to randomize character selection
    *
-   * @return  character appenders
+   * @return  unmodifiable list of character appenders
    */
   protected List<CharacterAppender> getCharacterAppenders(
     final List<? extends Rule> rules,
@@ -233,36 +184,9 @@ public class PasswordGenerator
           new CharacterCharacteristicsAppender((CharacterCharacteristicsRule) rule, allowedChars, illegalChars, rand));
       }
     }
-    return appenders;
-  }
-
-
-  /**
-   * Return a unicode string that contains the unique characters from all {@link CharacterRule} or
-   * {@link CharacterCharacteristicsRule} contained in the supplied list.
-   *
-   * @param  rules  to extract unique characters from
-   *
-   * @return  unicode string containing unique characters or empty string
-   */
-  private UnicodeString getCharacters(final List<? extends Rule> rules)
-  {
-    final List<CharacterRule> characterRules = new ArrayList<>();
-    for (Rule rule : rules) {
-      if (rule instanceof CharacterRule) {
-        characterRules.add((CharacterRule) rule);
-      } else if (rule instanceof CharacterCharacteristicsRule) {
-        characterRules.addAll(((CharacterCharacteristicsRule) rule).getRules());
-      }
-    }
-    UnicodeString chars = null;
-    if (!characterRules.isEmpty()) {
-      chars = new UnicodeString(characterRules.get(0).getValidCharacters());
-      for (int i = 1; i < characterRules.size(); i++) {
-        chars = chars.union(new UnicodeString(characterRules.get(i).getValidCharacters()));
-      }
-    }
-    return chars != null ? chars : new UnicodeString();
+    // the last appender is used to fill any remaining characters to satisfy the length of the password
+    appenders.add(new FillRemainingCharactersAppender(rules, allowedChars, illegalChars, rand));
+    return Collections.unmodifiableList(appenders);
   }
 
 
@@ -335,138 +259,5 @@ public class PasswordGenerator
       buffer.put(n, buffer.get(i));
       buffer.put(i, c);
     }
-  }
-
-
-  /** Character appender for {@link CharacterCharacteristicsRule}. */
-  public static class CharacterCharacteristicsAppender implements CharacterAppender
-  {
-    /** Number of characteristics. */
-    private final int numberOfCharacteristics;
-
-    /** Character rule appenders. */
-    private final List<CharacterRuleAppender> appenders;
-
-    /** To select random characters. */
-    private final Random random;
-
-
-    /**
-     * Creates a new character characteristics appender.
-     *
-     * @param  rule  to build appender from
-     * @param  allowedChars  characters allowed in password generation
-     * @param  illegalChars  characters not allowed in password generation
-     * @param  rand  to randomize character selection
-     */
-    public CharacterCharacteristicsAppender(
-      final CharacterCharacteristicsRule rule,
-      final UnicodeString allowedChars,
-      final UnicodeString illegalChars,
-      final Random rand)
-    {
-      numberOfCharacteristics = rule.getNumberOfCharacteristics();
-      appenders = rule.getRules().stream()
-        .map(r -> new CharacterRuleAppender(r, allowedChars, illegalChars, rand))
-        .collect(Collectors.toList());
-      random = rand;
-    }
-
-
-    @Override
-    public UnicodeString getCharacters()
-    {
-      UnicodeString characters = appenders.get(0).getCharacters();
-      for (int i = 1; i < appenders.size(); i++) {
-        characters = characters.union(appenders.get(i).getCharacters());
-      }
-      return characters;
-    }
-
-
-    @Override
-    public void append(final CharBuffer target, final int count)
-    {
-      final List<CharacterRuleAppender> randomAppender = new ArrayList<>(appenders);
-      Collections.shuffle(randomAppender, random);
-      for (int i = 0; i < numberOfCharacteristics; i++) {
-        randomAppender.get(i).append(target, count);
-      }
-    }
-  }
-
-
-  /** Character appender for {@link CharacterRule}. */
-  public static class CharacterRuleAppender implements CharacterAppender
-  {
-    /** Number of characters. */
-    private final int numberOfCharacters;
-
-    /** Valid characters. */
-    private final UnicodeString characters;
-
-    /** To select random characters. */
-    private final Random random;
-
-
-    /**
-     * Creates a new character rule appender.
-     *
-     * @param  rule  to build appender from
-     * @param  allowedChars  characters allowed for appending
-     * @param  illegalChars  characters not allowed for appending
-     * @param  rand  to randomize character selection
-     */
-    public CharacterRuleAppender(
-      final CharacterRule rule, final UnicodeString allowedChars, final UnicodeString illegalChars, final Random rand)
-    {
-      numberOfCharacters = rule.getNumberOfCharacters();
-      UnicodeString validChars = new UnicodeString(rule.getValidCharacters());
-      if (!allowedChars.isEmpty()) {
-        validChars = validChars.intersection(allowedChars);
-      }
-      if (!illegalChars.isEmpty()) {
-        validChars = validChars.difference(illegalChars);
-      }
-      characters = validChars;
-      random = rand;
-    }
-
-
-    @Override
-    public UnicodeString getCharacters()
-    {
-      return characters;
-    }
-
-
-    @Override
-    public void append(final CharBuffer target, final int count)
-    {
-      PassayUtils.appendRandomCharacters(characters, target, Math.min(count, numberOfCharacters), random);
-    }
-  }
-
-
-  /** Interface for appending characters. */
-  public interface CharacterAppender
-  {
-
-
-    /**
-     * Returns the characters that may be used in by this appender.
-     *
-     * @return  valid characters
-     */
-    UnicodeString getCharacters();
-
-
-    /**
-     * Fills the target buffer with count characters from this appender.
-     *
-     * @param  target  buffer to add characters to
-     * @param  count  number of characters to add to buffer
-     */
-    void append(CharBuffer target, int count);
   }
 }

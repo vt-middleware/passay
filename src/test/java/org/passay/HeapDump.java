@@ -18,6 +18,7 @@ import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
+import org.passay.generate.PasswordGenerator;
 import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.AllowedRegexRule;
 import org.passay.rule.CharacterCharacteristicsRule;

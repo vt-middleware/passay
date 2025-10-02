@@ -1,10 +1,13 @@
 /* See LICENSE for licensing and NOTICE for copyright. */
-package org.passay;
+package org.passay.generate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.passay.DefaultPasswordValidator;
+import org.passay.PasswordData;
+import org.passay.UnicodeString;
 import org.passay.data.EnglishCharacterData;
 import org.passay.data.EnglishSequenceData;
 import org.passay.rule.AllowedCharacterRule;
