@@ -18,6 +18,7 @@ import org.passay.dictionary.Dictionary;
 import org.passay.dictionary.WordListDictionary;
 import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
+import org.passay.generate.PasswordGenerator;
 import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.AllowedRegexRule;
 import org.passay.rule.CharacterCharacteristicsRule;
@@ -183,12 +184,12 @@ public final class HeapDump
    */
   public static void generatePassword()
   {
-    final PasswordGenerator generator = new PasswordGenerator();
-    final UnicodeString password = generator.generatePassword(
+    final PasswordGenerator generator = new PasswordGenerator(
       22,
       new CharacterRule(EnglishCharacterData.Digit, 1),
       new CharacterRule(EnglishCharacterData.UpperCase, 1),
       new CharacterRule(EnglishCharacterData.LowerCase, 20));
+    final UnicodeString password = generator.generate();
     try {
       printPassword("Generated password", password);
     } finally {

@@ -59,6 +59,18 @@ public class IllegalSequenceRule implements Rule
    *
    * @param  data  sequence data for this rule
    * @param  length  sequence length
+   */
+  public IllegalSequenceRule(final SequenceData data, final int length)
+  {
+    this(data, length, false, true);
+  }
+
+
+  /**
+   * Creates a new sequence rule with the supplied list of characters.
+   *
+   * @param  data  sequence data for this rule
+   * @param  length  sequence length
    * @param  wrap  whether to wrap sequences
    */
   public IllegalSequenceRule(final SequenceData data, final int length, final boolean wrap)

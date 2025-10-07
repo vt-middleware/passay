@@ -2,7 +2,9 @@
 package org.passay;
 
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 /**
@@ -323,6 +325,85 @@ public final class UnicodeString implements CharSequence
         clear();
       }
     }
+  }
+
+
+  /**
+   * Returns the intersection of this string and the other string. Intersection is defined as the unique set of code
+   * points that both strings have in common.
+   *
+   * @param  other  string to intersect
+   *
+   * @return  new unicode string
+   */
+  public UnicodeString intersection(final UnicodeString other)
+  {
+    final Set<Integer> intersection = new LinkedHashSet<>();
+    for (int cp : codePoints) {
+      if (other.indexOf(cp) != -1) {
+        intersection.add(cp);
+      }
+    }
+    return new UnicodeString(intersection.stream().mapToInt(Integer::intValue).toArray());
+  }
+
+
+  /**
+   * Returns the union of this string and the other string. Union is defined as the unique set of code points in either
+   * string.
+   *
+   * @param  other  string to intersect
+   *
+   * @return  new unicode string
+   */
+  public UnicodeString union(final UnicodeString other)
+  {
+    final Set<Integer> union = new LinkedHashSet<>();
+    for (int cp : codePoints) {
+      union.add(cp);
+    }
+    for (int cp : other.toCodePointArray()) {
+      union.add(cp);
+    }
+    return new UnicodeString(union.stream().mapToInt(Integer::intValue).toArray());
+  }
+
+
+  /**
+   * Returns the difference of this string and the other string. Difference is defined as the unique set of code points
+   * that are in this string but not in the other string.
+   *
+   * @param  other  string to difference
+   *
+   * @return  new unicode string
+   */
+  public UnicodeString difference(final UnicodeString other)
+  {
+    final Set<Integer> difference = new LinkedHashSet<>();
+    for (int cp : codePoints) {
+      if (other.indexOf(cp) == -1) {
+        difference.add(cp);
+      }
+    }
+    return new UnicodeString(difference.stream().mapToInt(Integer::intValue).toArray());
+  }
+
+
+  /**
+   * Returns the array index of the supplied code point in this code points array.
+   *
+   * @param  codePoint  to search for
+   *
+   * @return  array index
+   */
+  private int indexOf(final int codePoint)
+  {
+    for (int i = 0; i < codePoints.length; i++) {
+      if (codePoints[i] == codePoint) {
+        return i;
+      }
+    }
+    return -1;
   }
 
 
