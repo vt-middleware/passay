@@ -13,6 +13,7 @@ import org.passay.entropy.RandomPasswordEntropyFactory;
 import org.passay.entropy.ShannonEntropyFactory;
 import org.passay.resolver.MessageResolver;
 import org.passay.rule.Rule;
+import org.passay.support.Origin;
 
 /**
  * Default implementation for evaluating multiple password rules against a candidate password. Supports a fail fast flag
@@ -27,8 +28,7 @@ public class DefaultPasswordValidator implements PasswordValidator
    * Calculates the entropy of the given {@link PasswordData} based on the password rules specified. <em>It's important
    * to note that this function does NOT take into account {@link org.passay.rule.IllegalRegexRule} or
    * {@link org.passay.rule.AllowedRegexRule}</em> as the regular expressions driving the rules may be negative matches.
-   * The supplied password data must have an origin of {@link PasswordData.Origin#Generated} or
-   * {@link PasswordData.Origin#User}.
+   * The supplied password data must have an origin of {@link Origin#Generated} or {@link Origin#User}.
    *
    * @see <a href="http://csrc.nist.gov/publications/nistpubs/800-63-1/SP-800-63-1.pdf">PDF Publication</a>
    */
@@ -38,9 +38,9 @@ public class DefaultPasswordValidator implements PasswordValidator
       @Override
       public Entropy apply(final List<? extends Rule> rules, final PasswordData passwordData)
       {
-        if (passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
+        if (Origin.Generated.equals(passwordData.getOrigin())) {
           return RandomPasswordEntropyFactory.createEntropy(rules, passwordData);
-        } else if (passwordData.getOrigin().equals(PasswordData.Origin.User)) {
+        } else if (Origin.User.equals(passwordData.getOrigin())) {
           return ShannonEntropyFactory.createEntropy(rules, passwordData);
         }
         throw new IllegalArgumentException("Unknown password origin: " + passwordData);

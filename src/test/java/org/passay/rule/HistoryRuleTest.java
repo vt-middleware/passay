@@ -4,7 +4,8 @@ package org.passay.rule;
 import java.util.ArrayList;
 import java.util.List;
 import org.passay.PasswordData;
-import org.passay.PasswordData.HistoricalReference;
+import org.passay.support.HistoricalReference;
+import org.passay.support.Reference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -17,7 +18,7 @@ public class HistoryRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final List<PasswordData.Reference> history = new ArrayList<>();
+  private final List<Reference> history = new ArrayList<>();
 
   /** For testing. */
   private final HistoryRule rule = new HistoryRule();

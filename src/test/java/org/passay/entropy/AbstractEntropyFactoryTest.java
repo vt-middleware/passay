@@ -10,6 +10,7 @@ import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.CharacterCharacteristicsRule;
 import org.passay.rule.CharacterRule;
 import org.passay.rule.Rule;
+import org.passay.support.Origin;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -54,7 +55,7 @@ public abstract class AbstractEntropyFactoryTest
       new Object[][] {
         {
           rules,
-          new PasswordData("heLlo", PasswordData.Origin.Generated),
+          new PasswordData("heLlo", Origin.Generated),
         },
       };
   }
@@ -70,7 +71,7 @@ public abstract class AbstractEntropyFactoryTest
       new Object[][] {
         {
           rules,
-          new PasswordData("heLlo", PasswordData.Origin.User),
+          new PasswordData("heLlo", Origin.User),
         },
       };
   }

@@ -12,6 +12,8 @@ import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.SuccessRuleResult;
 import org.passay.UnicodeString;
+import org.passay.support.Reference;
+import org.passay.support.SourceReference;
 
 /**
  * Rule for determining if a password matches a password from a different source. Useful for when separate systems
@@ -54,8 +56,7 @@ public class SourceRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<PasswordData.SourceReference> references = passwordData.getPasswordReferences(
-      PasswordData.SourceReference.class);
+    final List<SourceReference> references = passwordData.getPasswordReferences(SourceReference.class);
     if (references.isEmpty()) {
       return new SuccessRuleResult();
     }
@@ -84,7 +85,7 @@ public class SourceRule implements Rule
    *
    * @return  true if passwords match, false otherwise.
    */
-  protected boolean matches(final UnicodeString password, final PasswordData.Reference reference)
+  protected boolean matches(final UnicodeString password, final Reference reference)
   {
     return password.equals(reference.getPassword());
   }

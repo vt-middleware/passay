@@ -12,6 +12,8 @@ import org.passay.RuleResult;
 import org.passay.RuleResultDetail;
 import org.passay.SuccessRuleResult;
 import org.passay.UnicodeString;
+import org.passay.support.HistoricalReference;
+import org.passay.support.Reference;
 
 /**
  * Rule for determining if a password matches one of any previous password a user has chosen. If no historical password
@@ -53,8 +55,7 @@ public class HistoryRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final List<PasswordData.HistoricalReference> references = passwordData.getPasswordReferences(
-      PasswordData.HistoricalReference.class);
+    final List<HistoricalReference> references = passwordData.getPasswordReferences(HistoricalReference.class);
     final int size = references.size();
     if (size == 0) {
       return new SuccessRuleResult();
@@ -84,7 +85,7 @@ public class HistoryRule implements Rule
    *
    * @return  true if passwords match, false otherwise.
    */
-  protected boolean matches(final UnicodeString password, final PasswordData.Reference reference)
+  protected boolean matches(final UnicodeString password, final Reference reference)
   {
     return password.equals(reference.getPassword());
   }

@@ -8,6 +8,8 @@ import org.cryptacular.bean.HashBean;
 import org.passay.PassayUtils;
 import org.passay.PasswordData;
 import org.passay.UnicodeString;
+import org.passay.support.Reference;
+import org.passay.support.Salt;
 
 /**
  * Rule for determining if a password matches one of any previous digested password a user has chosen. If no password
@@ -59,9 +61,9 @@ public class DigestHistoryRule extends HistoryRule
    * @return  true if passwords match, false otherwise.
    */
   @Override
-  protected boolean matches(final UnicodeString password, final PasswordData.Reference reference)
+  protected boolean matches(final UnicodeString password, final Reference reference)
   {
-    final PasswordData.Salt salt = reference.getSalt();
+    final Salt salt = reference.getSalt();
     final CharBuffer buffer = CharBuffer.wrap(password.toCharArray());
     final CharBuffer undigested = salt == null ? buffer : salt.applyTo(buffer);
     try {
