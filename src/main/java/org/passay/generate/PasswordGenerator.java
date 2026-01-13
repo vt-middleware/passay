@@ -33,7 +33,7 @@ public class PasswordGenerator
   private static final int MAX_PASSWORD_LENGTH = 1024;
 
   /** Retry password generation at most this many times. */
-  private static final int RETRY_LIMIT = 2;
+  private int retryLimit = 2;
 
   /** Source of random data. */
   private final Random random;
@@ -106,7 +106,15 @@ public class PasswordGenerator
     }
     this.passwordRules.addAll(rules);
   }
-
+  
+  /**
+   * Sets the retry limit for password generation.
+   *
+   * @param retryLimit maximum number of retries
+   */
+  public void setRetryLimit(final int retryLimit) {
+    this.retryLimit = retryLimit;
+  }
 
   /**
    * Tracks the number retries. A password generator with a high percentage of retries may be indicative of a password
@@ -145,8 +153,8 @@ public class PasswordGenerator
       } else {
         generated.clear();
       }
-    } while (++count <= RETRY_LIMIT);
-    if (count > RETRY_LIMIT) {
+    } while (++count <= retryLimit);
+    if (count > retryLimit) {
       generated.clear();
       throw new IllegalStateException("Exceeded maximum number of password generation retries");
     }
