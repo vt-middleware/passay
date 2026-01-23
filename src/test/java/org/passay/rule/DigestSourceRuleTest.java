@@ -7,6 +7,8 @@ import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
 import org.passay.PasswordData;
+import org.passay.support.Reference;
+import org.passay.support.SourceReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -19,7 +21,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final List<PasswordData.Reference> sourceRefs = new ArrayList<>();
+  private final List<Reference> sourceRefs = new ArrayList<>();
 
   /** For testing. */
   private final DigestSourceRule digestRule = new DigestSourceRule(
@@ -34,7 +36,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
   @BeforeClass(groups = "passtest")
   public void createRules()
   {
-    sourceRefs.add(new PasswordData.SourceReference("System B", "CJGTDMQRP+rmHApkcijC80aDV0o="));
+    sourceRefs.add(new SourceReference("System B", "CJGTDMQRP+rmHApkcijC80aDV0o="));
   }
 
 

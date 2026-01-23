@@ -47,18 +47,35 @@ public class LengthComplexityRule implements Rule
   private final boolean reportRuleFailures;
 
 
+  /**
+   * Creates a new length complexity rule.
+   *
+   * @param  intervals  interval string to rules
+   */
   public LengthComplexityRule(final Entry... intervals)
   {
     this(true, true, intervals);
   }
 
 
+  /**
+   * Creates a new length complexity rule.
+   *
+   * @param  intervals  interval string to rules
+   */
   public LengthComplexityRule(final Collection<Entry> intervals)
   {
     this(true, true, intervals);
   }
 
 
+  /**
+   * Creates a new length complexity rule.
+   *
+   * @param  reportFailure  whether to report failures
+   * @param  reportRuleFailures  whether to report rule failures
+   * @param  intervals  interval string to rules
+   */
   public LengthComplexityRule(
     final boolean reportFailure, final boolean reportRuleFailures, final Entry... intervals)
   {
@@ -73,6 +90,13 @@ public class LengthComplexityRule implements Rule
   }
 
 
+  /**
+   * Creates a new length complexity rule.
+   *
+   * @param  reportFailure  whether to report failures
+   * @param  reportRuleFailures  whether to report rule failures
+   * @param  intervals  interval string to rules
+   */
   public LengthComplexityRule(
     final boolean reportFailure, final boolean reportRuleFailures, final Collection<Entry> intervals)
   {
@@ -131,7 +155,7 @@ public class LengthComplexityRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final int passwordLength = passwordData.getCharacterCount();
+    final int passwordLength = passwordData.getPassword().codePointCount();
     final List<Rule> rulesByLength = getRulesByLength(passwordLength);
     if (rulesByLength == null) {
       return new FailureRuleResult(

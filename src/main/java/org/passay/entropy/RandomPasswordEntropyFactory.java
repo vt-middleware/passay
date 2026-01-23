@@ -12,6 +12,7 @@ import org.passay.rule.AllowedCharacterRule;
 import org.passay.rule.CharacterCharacteristicsRule;
 import org.passay.rule.CharacterRule;
 import org.passay.rule.Rule;
+import org.passay.support.Origin;
 
 /**
  * Factory for creating {@link RandomPasswordEntropy} from password rules and password data.
@@ -40,8 +41,8 @@ public final class RandomPasswordEntropyFactory
     final List<? extends Rule> passwordRules,
     final PasswordData passwordData)
   {
-    if (!passwordData.getOrigin().equals(PasswordData.Origin.Generated)) {
-      throw new IllegalArgumentException("Password data must have an origin of " + PasswordData.Origin.Generated);
+    if (!Origin.Generated.equals(passwordData.getOrigin())) {
+      throw new IllegalArgumentException("Password data must have an origin of " + Origin.Generated);
     }
     final Set<String> uniqueCharacters = new HashSet<>();
     passwordRules.forEach(rule -> {
@@ -61,7 +62,7 @@ public final class RandomPasswordEntropyFactory
       throw new IllegalArgumentException(
         "Password rules must contain at least 1 unique character by CharacterRule definition");
     }
-    return new RandomPasswordEntropy(uniqueCharacters.size(), passwordData.getCharacterCount());
+    return new RandomPasswordEntropy(uniqueCharacters.size(), passwordData.getPassword().codePointCount());
   }
 
 

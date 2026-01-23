@@ -91,7 +91,7 @@ public class LengthRule implements Rule
   public RuleResult validate(final PasswordData passwordData)
   {
     PassayUtils.assertNotNullArg(passwordData, "Password data cannot be null");
-    final int length = passwordData.getCharacterCount();
+    final int length = passwordData.getPassword().codePointCount();
     if (length < minimumLength) {
       return new FailureRuleResult(
         createRuleResultMetadata(passwordData),
@@ -128,7 +128,7 @@ public class LengthRule implements Rule
    */
   protected RuleResultMetadata createRuleResultMetadata(final PasswordData password)
   {
-    return new RuleResultMetadata(RuleResultMetadata.CountCategory.Length, password.getCharacterCount());
+    return new RuleResultMetadata(RuleResultMetadata.CountCategory.Length, password.getPassword().codePointCount());
   }
 
 

@@ -4,7 +4,8 @@ package org.passay.rule;
 import java.util.ArrayList;
 import java.util.List;
 import org.passay.PasswordData;
-import org.passay.PasswordData.SourceReference;
+import org.passay.support.Reference;
+import org.passay.support.SourceReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -17,7 +18,7 @@ public class SourceRuleTest extends AbstractRuleTest
 {
 
   /** For testing. */
-  private final List<PasswordData.Reference> sources = new ArrayList<>();
+  private final List<Reference> sources = new ArrayList<>();
 
   /** For testing. */
   private final SourceRule rule = new SourceRule();

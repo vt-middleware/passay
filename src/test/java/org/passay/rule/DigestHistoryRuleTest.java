@@ -8,8 +8,10 @@ import org.cryptacular.bean.EncodingHashBean;
 import org.cryptacular.spec.CodecSpec;
 import org.cryptacular.spec.DigestSpec;
 import org.passay.PasswordData;
-import org.passay.PasswordData.HistoricalReference;
-import org.passay.PasswordData.Reference;
+import org.passay.support.HistoricalReference;
+import org.passay.support.PrefixSalt;
+import org.passay.support.Reference;
+import org.passay.support.SuffixSalt;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
 
@@ -64,12 +66,12 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
     saltedDigestRefs.add(new HistoricalReference("salted-history", "rv1mF2DuarrF//LPP9+AFJal8bMc9G5z"));
     saltedDigestRefs.add(new HistoricalReference("salted-history", "3lABdWxtWhfGKtXBx4MfiWZ1737KnFuG"));
 
-    final PasswordData.PrefixSalt prefixSalt = new PasswordData.PrefixSalt("xyz");
+    final PrefixSalt prefixSalt = new PrefixSalt("xyz");
     prefixSaltedDigestRefs.add(new HistoricalReference("pre-salt-history", "lHGQFf9tTVUOCG3CoNqdKaiCThA=", prefixSalt));
     prefixSaltedDigestRefs.add(new HistoricalReference("pre-salt-history", "GtEfsfrBomR/3aD5RfBGWPOKlYc=", prefixSalt));
     prefixSaltedDigestRefs.add(new HistoricalReference("pre-salt-history", "XZ2CO63FrS5N7wvCmyzkiBAYNoY=", prefixSalt));
 
-    final PasswordData.SuffixSalt suffixSalt = new PasswordData.SuffixSalt("xyz");
+    final SuffixSalt suffixSalt = new SuffixSalt("xyz");
     suffixSaltedDigestRefs.add(new HistoricalReference("suf-salt-history", "HnBhNzaSRdKqmIZbau97E++rysM=", suffixSalt));
     suffixSaltedDigestRefs.add(new HistoricalReference("suf-salt-history", "ScDf3gIY16LF6UAeWVr7nZHSvbE=", suffixSalt));
     suffixSaltedDigestRefs.add(new HistoricalReference("suf-salt-history", "apjCHJyez2IvOlBM5mqD2DvSk6o=", suffixSalt));
