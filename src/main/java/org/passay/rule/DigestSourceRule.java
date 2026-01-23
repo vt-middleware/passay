@@ -22,7 +22,7 @@ public class DigestSourceRule extends SourceRule
 {
 
   /** Hash bean to use for comparing hashed passwords. */
-  private final HashBean<String> hashBean;
+  private final HashBean<CharSequence> hashBean;
 
   /** Character set to use for undigested passwords. */
   private final Charset charset;
@@ -33,7 +33,7 @@ public class DigestSourceRule extends SourceRule
    *
    * @param  bean  encoding hash bean
    */
-  public DigestSourceRule(final HashBean<String> bean)
+  public DigestSourceRule(final HashBean<CharSequence> bean)
   {
     this(bean, StandardCharsets.UTF_8);
   }
@@ -45,7 +45,7 @@ public class DigestSourceRule extends SourceRule
    * @param  bean  encoding hash bean
    * @param  set  to use for undigested passwords
    */
-  public DigestSourceRule(final HashBean<String> bean, final Charset set)
+  public DigestSourceRule(final HashBean<CharSequence> bean, final Charset set)
   {
     hashBean = PassayUtils.assertNotNullArg(bean, "Hash bean cannot be null");
     charset = PassayUtils.assertNotNullArg(set, "Character set cannot be null");
@@ -67,7 +67,7 @@ public class DigestSourceRule extends SourceRule
     final CharBuffer buffer = CharBuffer.wrap(password.toCharArray());
     final CharBuffer undigested = salt == null ? buffer : salt.applyTo(buffer);
     try {
-      return hashBean.compare(reference.getPassword().toString(), PassayUtils.toByteArray(undigested, charset));
+      return hashBean.compare(reference.getPassword(), (Object) PassayUtils.toByteArray(undigested, charset));
     } finally {
       PassayUtils.clear(buffer);
       PassayUtils.clear(undigested);

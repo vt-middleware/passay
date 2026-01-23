@@ -23,7 +23,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
   public static final String ERROR_CODE_REVERSED = "ILLEGAL_DIGEST_WORD_REVERSED";
 
   /** Hash bean to use for comparing hashed passwords. */
-  private final HashBean<String> hashBean;
+  private final HashBean<CharSequence> hashBean;
 
   /** Character set to use for undigested passwords. */
   private final Charset charset;
@@ -36,7 +36,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
    * @param  dict  to use for searching
    * @param  bean  encoding hash bean
    */
-  public DigestDictionaryRule(final HashBean<String> bean, final Dictionary dict)
+  public DigestDictionaryRule(final HashBean<CharSequence> bean, final Dictionary dict)
   {
     this(bean, dict, false);
   }
@@ -50,7 +50,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
    * @param  bean  encoding hash bean
    * @param  matchBackwards  whether to match dictionary words backwards
    */
-  public DigestDictionaryRule(final HashBean<String> bean, final Dictionary dict, final boolean matchBackwards)
+  public DigestDictionaryRule(final HashBean<CharSequence> bean, final Dictionary dict, final boolean matchBackwards)
   {
     this(bean, dict, matchBackwards, StandardCharsets.UTF_8);
   }
@@ -66,7 +66,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
    * @param  set  to use for undigested passwords
    */
   public DigestDictionaryRule(
-    final HashBean<String> bean, final Dictionary dict, final boolean matchBackwards, final Charset set)
+    final HashBean<CharSequence> bean, final Dictionary dict, final boolean matchBackwards, final Charset set)
   {
     super(dict, matchBackwards);
     hashBean = PassayUtils.assertNotNullArg(bean, "Hash bean cannot be null");
@@ -79,7 +79,7 @@ public class DigestDictionaryRule extends AbstractDictionaryRule
   {
     final byte[] bytes = PassayUtils.toByteArray(text, charset);
     try {
-      return getDictionary().search(hashBean.hash(bytes)) ? text : null;
+      return getDictionary().search(hashBean.hash((Object) bytes)) ? text : null;
     } finally {
       PassayUtils.clear(bytes);
     }
