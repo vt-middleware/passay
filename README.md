@@ -10,4 +10,4 @@ mvn package
 ```
 
 ### Documentation
-See the website: http://www.passay.org
+See the website: https://www.passay.org

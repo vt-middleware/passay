@@ -132,7 +132,7 @@
             <configuration>
               <rules>
                 <requireMavenVersion>
-                  <version>[3.8.0,)</version>
+                  <version>[3.9.0,)</version>
                 </requireMavenVersion>
               </rules>
             </configuration>
@@ -370,7 +370,7 @@
           <links>
             <link>https://docs.oracle.com/javase/8/docs/api</link>
           </links>
-          <bottom><![CDATA[<i>Copyright &#169; 2003-2025 Virginia Tech. All Rights Reserved.</i>]]></bottom>
+          <bottom><![CDATA[<i>Copyright &#169; 2003-2026 Virginia Tech. All Rights Reserved.</i>]]></bottom>
         </configuration>
         <executions>
           <execution>
