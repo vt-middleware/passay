@@ -93,7 +93,16 @@ git checkout v${RELEASE_VERSION}
 echo "Switched to the tag version ${RELEASE_VERSION}"
 
 # build the release distribution
-mvn -Dsign=true repository:bundle-create
+echo "Prime gpg-agent caches"
+echo "prime" | gpg --clearsign
+mvn deploy -Dmaven.test.skip=true -Daether.checksums.algorithms=MD5,SHA-1,SHA-256,SHA-512 -Dsign=true -DaltDeploymentRepository=local::file:target/deploy-maven
+COMPILE_VERSION=$(javap -classpath target/${PROJECT}-${RELEASE_VERSION}.jar -verbose org.passay.PasswordValidator |grep "major version:" |tr -d '[:space:]' |cut -d':' -f2)
+echo "Class compile version is ${COMPILE_VERSION}"
+if [ "${COMPILE_VERSION}" != "52" ]; then
+  echo "Release must be compiled for Java 8"
+  exit
+fi
+jar cMf target/${PROJECT}-${RELEASE_VERSION}-maven.zip -C target/deploy-maven .
 gpg --armor --detach-sign target/${PROJECT}-${RELEASE_VERSION}-dist.tar.gz
 gpg --armor --detach-sign target/${PROJECT}-${RELEASE_VERSION}-dist.zip
 
@@ -106,9 +115,18 @@ git pull origin gh-pages
 # remove root directory javadocs
 git rm -r javadocs/org javadocs/*.html javadocs/*.css javadocs/*.js javadocs/package-list
 # add new javadocs to root directory
-cp -Rp target/apidocs/ javadocs
+cp target/${PROJECT}-${RELEASE_VERSION}-javadoc.jar javadocs
+pushd javadocs
+jar xf ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+rm -rf META-INF ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+popd
 # add new javadocs to release version directory
-cp -Rp target/apidocs/ javadocs/${RELEASE_VERSION}
+mkdir javadocs/${RELEASE_VERSION}
+cp target/${PROJECT}-${RELEASE_VERSION}-javadoc.jar javadocs/${RELEASE_VERSION}
+pushd javadocs/${RELEASE_VERSION}
+jar xf ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+rm -rf META-INF ${PROJECT}-${RELEASE_VERSION}-javadoc.jar
+popd
 git add javadocs
 git commit -a -m "Updated javadocs for ${RELEASE_VERSION} release."
 echo "Committed new javadocs"
@@ -130,9 +148,11 @@ git push origin gh-pages
 echo "Uploading bundle jar to sonatype"
 user_continue
 
-curl -i -u ${SONATYPE_USER}:${SONATYPE_PASSWORD} \
-  -F "file=@target/${PROJECT}-"${RELEASE_VERSION}"-bundle.jar" \
-  "https://oss.sonatype.org/service/local/staging/bundle_upload"
+SONATYPE_TOKEN=$(echo -n "${SONATYPE_USER}:${SONATYPE_PASSWORD}" | base64)
+curl --verbose --request POST \
+  --header "Authorization: Bearer ${SONATYPE_TOKEN}" \
+  -F "file=@target/${PROJECT}-${RELEASE_VERSION}-maven.zip" \
+  "https://central.sonatype.com/api/v1/publisher/upload?name=${PROJECT}-${RELEASE_VERSION}&publishingType=USER_MANAGED"
 
-echo "Finished release ${RELEASE_VERSION} for ${PROJECT}"
+echo "Finished ${PROJECT} release ${RELEASE_VERSION}"
 
