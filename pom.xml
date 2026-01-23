@@ -74,27 +74,27 @@
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>
-      <version>33.4.8-jre</version>
+      <version>33.5.0-jre</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>6.2.8</version>
+      <version>7.0.3</version>
       <optional>true</optional>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.testng</groupId>
       <artifactId>testng</artifactId>
-      <version>7.11.0</version>
+      <version>7.12.0</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
-      <version>3.27.3</version>
+      <version>3.27.6</version>
       <scope>test</scope>
     </dependency>
     <dependency>
@@ -112,7 +112,7 @@
     <dependency>
       <groupId>org.wiremock</groupId>
       <artifactId>wiremock</artifactId>
-      <version>3.0.1</version>
+      <version>3.13.2</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -122,7 +122,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.6.1</version>
+        <version>3.6.2</version>
         <executions>
           <execution>
             <id>enforce-maven</id>
@@ -142,7 +142,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.4.0</version>
         <executions>
           <execution>
             <id>copy-info</id>
@@ -207,7 +207,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.0</version>
+        <version>3.14.1</version>
         <configuration>
           <fork>true</fork>
           <debug>true</debug>
@@ -232,7 +232,7 @@
           <dependency>
             <groupId>com.puppycrawl.tools</groupId>
             <artifactId>checkstyle</artifactId>
-            <version>11.0.0</version>
+            <version>12.3.1</version>
           </dependency>
         </dependencies>
         <configuration>
@@ -257,7 +257,7 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.9.3.2</version>
+        <version>4.9.8.2</version>
         <configuration>
           <effort>Max</effort>
           <threshold>Medium</threshold>
@@ -276,7 +276,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.3</version>
+        <version>3.5.4</version>
         <configuration>
           <argLine>-Xms128m -Xmx1g -Duser.language=en</argLine>
           <suiteXmlFiles>
@@ -287,7 +287,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
-        <version>3.5.1</version>
+        <version>3.6.3</version>
         <executions>
           <execution>
             <!-- Use -Dexec.skip=true to skip plugin execution -->
@@ -328,7 +328,7 @@
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.23.1</version>
+        <version>0.25.4</version>
         <configuration>
           <oldVersion>
             <dependency>
@@ -364,7 +364,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.11.2</version>
+        <version>3.12.0</version>
         <configuration>
           <source>8</source>
           <links>
@@ -385,7 +385,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <version>3.3.1</version>
+        <version>3.4.0</version>
         <executions>
           <execution>
             <id>source</id>
@@ -399,7 +399,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.4.2</version>
+        <version>3.5.0</version>
         <configuration>
           <archive>
             <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
@@ -418,7 +418,7 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>5.1.9</version>
+        <version>6.0.0</version>
         <executions>
           <execution>
             <id>bundle-manifest</id>
@@ -432,7 +432,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.7.1</version>
+        <version>3.8.0</version>
         <configuration>
           <appendAssemblyId>true</appendAssemblyId>
           <attach>false</attach>
