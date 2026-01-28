@@ -22,7 +22,7 @@ public class DigestHistoryRule extends HistoryRule
 {
 
   /** Hash bean to use for comparing hashed passwords. */
-  private final HashBean<String> hashBean;
+  private final HashBean<CharSequence> hashBean;
 
   /** Character set to use for undigested passwords. */
   private final Charset charset;
@@ -33,7 +33,7 @@ public class DigestHistoryRule extends HistoryRule
    *
    * @param  bean  encoding hash bean
    */
-  public DigestHistoryRule(final HashBean<String> bean)
+  public DigestHistoryRule(final HashBean<CharSequence> bean)
   {
     this(bean, StandardCharsets.UTF_8);
   }
@@ -45,7 +45,7 @@ public class DigestHistoryRule extends HistoryRule
    * @param  bean  encoding hash bean
    * @param  set  to use for undigested passwords
    */
-  public DigestHistoryRule(final HashBean<String> bean, final Charset set)
+  public DigestHistoryRule(final HashBean<CharSequence> bean, final Charset set)
   {
     hashBean = PassayUtils.assertNotNullArg(bean, "Hash bean cannot be null");
     charset = PassayUtils.assertNotNullArg(set, "Character set cannot be null");

@@ -131,9 +131,7 @@ public class DefaultPasswordValidatorTest
 
     final UsernameRule userIDRule = new UsernameRule(true, true);
 
-    final EncodingHashBean sha1Bean = new EncodingHashBean();
-    sha1Bean.setDigestSpec(new DigestSpec("SHA1"));
-    sha1Bean.setCodecSpec(new CodecSpec("Base64"));
+    final EncodingHashBean sha1Bean = new EncodingHashBean(new CodecSpec("Base64"), new DigestSpec("SHA1"));
 
     final DigestHistoryRule historyRule = new DigestHistoryRule(sha1Bean);
     references.add(new HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));
