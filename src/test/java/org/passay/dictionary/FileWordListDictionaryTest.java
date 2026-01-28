@@ -23,7 +23,7 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
 
 
   /** @throws  Exception  On test failure. */
-  @BeforeClass(groups = "wldicttest")
+  @BeforeClass
   public void createDictionary() throws Exception
   {
     final FileWordList fwl1 = new FileWordList(new RandomAccessFile(fbsdFileSorted, "r"), true, 25);
@@ -36,7 +36,7 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = "wldicttest")
+  @AfterClass
   public void closeDictionary()
   {
     caseSensitive = null;
@@ -47,7 +47,7 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
   /**
    * Test search.
    */
-  @Test(groups = "wldicttest")
+  @Test
   public void search()
   {
     assertThat(caseSensitive.search("TrustedBSD")).isTrue();
@@ -60,7 +60,7 @@ public class FileWordListDictionaryTest extends AbstractDictionaryTest
   /**
    * @param  word  to search for.
    */
-  @Test(groups = "wldicttest", dataProvider = "all-fbsd-words")
+  @Test(dataProvider = "all-fbsd-words")
   public void searchAll(final String word)
   {
     assertThat(caseSensitive.search(word)).isTrue();

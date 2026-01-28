@@ -179,7 +179,7 @@ public class IllegalCharacterRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = "passtest")
+  @Test
   public void checkMetadata()
   {
     final IllegalCharacterRule rule = new IllegalCharacterRule(new UnicodeString('@', '$'));

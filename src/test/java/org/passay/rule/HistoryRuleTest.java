@@ -31,7 +31,7 @@ public class HistoryRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = "passtest")
+  @BeforeClass
   public void createRules()
   {
     history.add(new HistoricalReference("history", "t3stUs3r01"));

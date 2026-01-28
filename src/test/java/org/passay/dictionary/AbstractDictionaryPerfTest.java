@@ -70,7 +70,7 @@ public abstract class AbstractDictionaryPerfTest
   /**
    * Close test resources.
    */
-  @AfterSuite(groups = {"ttperftest", "wlperftest"})
+  @AfterSuite
   public void tearDown()
   {
     randomFbsdWordsLarge = null;

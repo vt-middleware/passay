@@ -55,7 +55,7 @@ public class DigestHistoryRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = "passtest")
+  @BeforeClass
   public void createRules()
   {
     digestRefs.add(new HistoricalReference("history", "safx/LW8+SsSy/o3PmCNy4VEm5s="));

@@ -33,7 +33,7 @@ public class DigestSourceRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = "passtest")
+  @BeforeClass
   public void createRules()
   {
     sourceRefs.add(new SourceReference("System B", "CJGTDMQRP+rmHApkcijC80aDV0o="));

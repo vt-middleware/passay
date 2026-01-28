@@ -92,7 +92,7 @@ public class DefaultPasswordValidatorTest
    * @throws  Exception  On test failure.
    */
   @Parameters("dictionaryFile")
-  @BeforeClass(groups = "passtest")
+  @BeforeClass
   public void createDictionary(final String dictFile) throws Exception
   {
     final ArrayWordList awl = WordLists.createFromReader(
@@ -105,7 +105,7 @@ public class DefaultPasswordValidatorTest
   /**
    * Setup test resources.
    */
-  @BeforeClass(groups = "passtest", dependsOnMethods = "createDictionary")
+  @BeforeClass(dependsOnMethods = "createDictionary")
   public void createChecker()
   {
     final CharacterCharacteristicsRule charRule = new CharacterCharacteristicsRule(
@@ -162,7 +162,7 @@ public class DefaultPasswordValidatorTest
   /**
    * Test estimate entropy.
    */
-  @Test(groups = "passtest")
+  @Test
   public void estimateEntropy()
   {
     /*
@@ -278,7 +278,7 @@ public class DefaultPasswordValidatorTest
   /**
    * Test validation.
    */
-  @Test(groups = "passtest")
+  @Test
   public void validate()
   {
     final List<Rule> l = new ArrayList<>();
@@ -322,7 +322,7 @@ public class DefaultPasswordValidatorTest
   /**
    * Test object construction.
    */
-  @Test(groups = "passtest")
+  @Test
   public void constructor()
   {
     new DefaultPasswordValidator();
@@ -857,7 +857,7 @@ public class DefaultPasswordValidatorTest
    * @param  errorCodes  Array of error codes to be produced on a failed password validation attempt. A null value
    *                     indicates that password validation should succeed.
    */
-  @Test(groups = "passtest", dataProvider = "passwords")
+  @Test(dataProvider = "passwords")
   public void checkPassword(
     final PasswordValidator passwordValidator, final PasswordData passwordData, final String[] errorCodes)
   {
@@ -879,7 +879,7 @@ public class DefaultPasswordValidatorTest
    * @param  passwordData  to check
    * @param  messages  Array of messages to be produced on a failed password validation attempt
    */
-  @Test(groups = "passtest", dataProvider = "messages")
+  @Test(dataProvider = "messages")
   public void checkMessage(
     final PasswordValidator passwordValidator, final PasswordData passwordData, final String[] messages)
   {
@@ -897,7 +897,7 @@ public class DefaultPasswordValidatorTest
   /**
    * Test producer extends.
    */
-  @Test(groups = "passtest")
+  @Test
   public void producerExtends()
   {
     // test that password validator will accept any list of rules that extends Rule
@@ -913,7 +913,7 @@ public class DefaultPasswordValidatorTest
   /**
    * Test fail fast validator.
    */
-  @Test(groups = "passtest")
+  @Test
   public void failFastValidator()
   {
     final DefaultPasswordValidator failValidator = new DefaultPasswordValidator(

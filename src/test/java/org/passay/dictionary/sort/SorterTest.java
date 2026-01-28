@@ -26,7 +26,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFileSorted")
-  @BeforeClass(groups = "sorttest")
+  @BeforeClass
   public void create(final String dict) throws Exception
   {
     sortedArray = TestUtil.fileToArray(dict);
@@ -35,7 +35,7 @@ public class SorterTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = "sorttest")
+  @AfterClass
   public void destroy()
   {
     sortedArray = null;
@@ -48,7 +48,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = "sorttest")
+  @Test
   public void bubbleSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -64,7 +64,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = "sorttest")
+  @Test
   public void collectionsSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -80,7 +80,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = "sorttest")
+  @Test
   public void insertionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -96,7 +96,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = "sorttest")
+  @Test
   public void quickSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -112,7 +112,7 @@ public class SorterTest
    * @throws  Exception  On test failure.
    */
   @Parameters("fbsdFile")
-  @Test(groups = "sorttest")
+  @Test
   public void selectionSort(final String dict) throws Exception
   {
     final String[] array = TestUtil.fileToArray(dict);
@@ -122,7 +122,7 @@ public class SorterTest
   }
 
 
-  @Test(groups = "sorttest")
+  @Test
   public void emptyArraySort()
   {
     new BubbleSort().sort(new String[0]);
@@ -136,7 +136,7 @@ public class SorterTest
   }
 
 
-  @Test(groups = "sorttest")
+  @Test
   public void brokenComparatorSort()
   {
     new BubbleSort().sort(new java.lang.String[]{"a", "b", "c"}, (o1, o2) -> -1);

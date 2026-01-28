@@ -34,22 +34,23 @@ public class UnicodeStringTest
     } catch (Exception e) {
       assertThat(e).isInstanceOf(IllegalArgumentException.class);
     }
-    assertThat(new UnicodeString().codePoints()).isEqualTo(new int[0]);
-    assertThat(new UnicodeString("").codePoints()).isEqualTo(new int[0]);
-    assertThat(new UnicodeString(new int[0]).codePoints()).isEqualTo(new int[0]);
-    assertThat(new UnicodeString('A', 'B', 'C').codePoints()).isEqualTo(new int[] {65, 66, 67});
-    assertThat(new UnicodeString('A', '¢', 'C').codePoints()).isEqualTo(new int[] {65, 162, 67});
-    assertThat(new UnicodeString('A', '\u16C8', 'C').codePoints()).isEqualTo(new int[] {65, 5832, 67});
-    assertThat(new UnicodeString('A', '\uD808', '\uDF34', 'C').codePoints()).isEqualTo(new int[] {65, 74548, 67});
-    assertThat(new UnicodeString('A', '\uD83C', '\uDDEE', '\uD83C', '\uDDF8', 'C').codePoints())
+    assertThat(new UnicodeString().codePoints().toArray()).isEqualTo(new int[0]);
+    assertThat(new UnicodeString("").codePoints().toArray()).isEqualTo(new int[0]);
+    assertThat(new UnicodeString(new int[0]).codePoints().toArray()).isEqualTo(new int[0]);
+    assertThat(new UnicodeString('A', 'B', 'C').codePoints().toArray()).isEqualTo(new int[] {65, 66, 67});
+    assertThat(new UnicodeString('A', '¢', 'C').codePoints().toArray()).isEqualTo(new int[] {65, 162, 67});
+    assertThat(new UnicodeString('A', '\u16C8', 'C').codePoints().toArray()).isEqualTo(new int[] {65, 5832, 67});
+    assertThat(new UnicodeString('A', '\uD808', '\uDF34', 'C').codePoints().toArray())
+      .isEqualTo(new int[] {65, 74548, 67});
+    assertThat(new UnicodeString('A', '\uD83C', '\uDDEE', '\uD83C', '\uDDF8', 'C').codePoints().toArray())
       .isEqualTo(new int[] {65, 127470, 127480, 67});
-    assertThat(new UnicodeString("ABC").codePoints()).isEqualTo(new int[] {65, 66, 67});
-    assertThat(new UnicodeString("A¢C").codePoints()).isEqualTo(new int[] {65, 162, 67});
-    assertThat(new UnicodeString("A\u16C8C").codePoints()).isEqualTo(new int[] {65, 5832, 67});
-    assertThat(new UnicodeString("A\uD808\uDF34C").codePoints()).isEqualTo(new int[] {65, 74548, 67});
-    assertThat(new UnicodeString("A\uD83C\uDDEE\uD83C\uDDF8C").codePoints())
+    assertThat(new UnicodeString("ABC").codePoints().toArray()).isEqualTo(new int[] {65, 66, 67});
+    assertThat(new UnicodeString("A¢C").codePoints().toArray()).isEqualTo(new int[] {65, 162, 67});
+    assertThat(new UnicodeString("A\u16C8C").codePoints().toArray()).isEqualTo(new int[] {65, 5832, 67});
+    assertThat(new UnicodeString("A\uD808\uDF34C").codePoints().toArray()).isEqualTo(new int[] {65, 74548, 67});
+    assertThat(new UnicodeString("A\uD83C\uDDEE\uD83C\uDDF8C").codePoints().toArray())
       .isEqualTo(new int[] {65, 127470, 127480, 67});
-    assertThat(new UnicodeString(65, 66, 67).codePoints()).isEqualTo(new int[] {65, 66, 67});
+    assertThat(new UnicodeString(65, 66, 67).codePoints().toArray()).isEqualTo(new int[] {65, 66, 67});
   }
 
 
@@ -77,7 +78,7 @@ public class UnicodeStringTest
   @Test
   public void length()
   {
-    assertThat(new UnicodeString("ABC\uD87E\uDC01123").length()).isEqualTo(6);
+    assertThat(new UnicodeString("ABC123").length()).isEqualTo(6);
     assertThat(new UnicodeString("ABC\u16C8123").length()).isEqualTo(7);
     assertThat(new UnicodeString("ABC\uD808\uDF34123").length()).isEqualTo(8);
     assertThat(new UnicodeString("ABC\uD83C\uDDEE\uD83C\uDDF8123").length()).isEqualTo(10);

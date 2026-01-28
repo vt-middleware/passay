@@ -29,7 +29,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
    * @throws  Exception  On test failure.
    */
   @Parameters({ "webFileSorted", "fbsdFileSorted" })
-  @BeforeClass(groups = "wlperftest")
+  @BeforeClass
   public void createDictionary(final String dict1, final String dict2) throws Exception
   {
     super.initialize(dict1, dict2);
@@ -44,7 +44,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = "wlperftest")
+  @AfterClass
   public void closeDictionary()
   {
     System.out.println(
@@ -60,7 +60,7 @@ public class ArrayWordListDictionaryPerfTest extends AbstractDictionaryPerfTest
   /**
    * @param  word  to search for
    */
-  @Test(groups = "wlperftest", dataProvider = "search-words-web-large")
+  @Test(dataProvider = "search-words-web-large")
   public void wordListSearch(final String word)
   {
     wldSearchTime += doSearch(wld, word);

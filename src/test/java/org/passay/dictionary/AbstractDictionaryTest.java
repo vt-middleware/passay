@@ -131,7 +131,7 @@ public abstract class AbstractDictionaryTest
     "fbsdFileSorted",
     "fbsdFileLowerCase",
     "fbsdFileLowerCaseSorted"})
-  @BeforeClass(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
+  @BeforeClass
   public void createDictionaries(final String dict1, final String dict2, final String dict3, final String dict4,
     final String dict5, final String dict6, final String dict7, final String dict8) throws Exception
   {
@@ -157,7 +157,7 @@ public abstract class AbstractDictionaryTest
   /**
    * Close test resources.
    */
-  @AfterSuite(groups = {"bloomdicttest", "jdbcdicttest", "ttdicttest", "wldicttest"})
+  @AfterSuite
   public void tearDown()
   {
     webWords = null;

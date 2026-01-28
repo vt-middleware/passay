@@ -82,7 +82,7 @@ public class PasswordGeneratorTest
    *
    * @param rules Password validation rules. Should NOT include characteristics as these are managed by the test.
    */
-  @Test(groups = "passgentest", dataProvider = "ruleSets")
+  @Test(dataProvider = "ruleSets")
   public void testGenerateWithRetry(final Rule... rules)
   {
     final List<Rule> ruleSet = Arrays.asList(rules);
@@ -108,7 +108,7 @@ public class PasswordGeneratorTest
     assertThat(generator.getRetryCount()).isGreaterThan(0);
   }
 
-  @Test(groups = "passgentest")
+  @Test
   public void testInvalidRuleCombination()
   {
     try {
@@ -172,7 +172,7 @@ public class PasswordGeneratorTest
   }
 
 
-  @Test(groups = "passgentest")
+  @Test
   public void testBufferOverflow()
   {
     try {

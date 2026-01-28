@@ -35,7 +35,7 @@ public abstract class AbstractRuleTest
    * @param  errorCodes  Array of error codes to be produced on a failed password validation attempt. A null value
    *                     indicates that password validation should succeed.
    */
-  @Test(groups = "passtest", dataProvider = "passwords")
+  @Test(dataProvider = "passwords")
   public void checkPassword(final Rule rule, final PasswordData passwordData, final String[] errorCodes)
   {
     final RuleResult result = rule.validate(passwordData);
@@ -58,7 +58,7 @@ public abstract class AbstractRuleTest
    * @param  passwordData  to check
    * @param  messages  Array of messages to be produced on a failed password validation attempt
    */
-  @Test(groups = "passtest", dataProvider = "messages")
+  @Test(dataProvider = "messages")
   public void checkMessage(final Rule rule, final PasswordData passwordData, final String[] messages)
   {
     final RuleResult result = rule.validate(passwordData);

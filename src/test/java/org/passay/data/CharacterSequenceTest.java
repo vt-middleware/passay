@@ -14,7 +14,7 @@ public class CharacterSequenceTest
 {
 
   /** Tests no arg constructor. */
-  @Test(groups = "passtest", expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testNoSequencesFailure()
   {
     new CharacterSequence();
@@ -22,7 +22,7 @@ public class CharacterSequenceTest
 
 
   /** Tests failure condition where constructor arguments are not same length. */
-  @Test(groups = "passtest", expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void testUnequalSequenceFailure()
   {
     new CharacterSequence("12345", "!@#$");
@@ -32,7 +32,7 @@ public class CharacterSequenceTest
   /**
    * Tests the {@link CharacterSequence#matches(int, int)} method.
    */
-  @Test(groups = "passtest")
+  @Test
   public void testMatches()
   {
     final CharacterSequence sequence = new CharacterSequence("12345", "ABCDE", "abcde");
@@ -43,7 +43,7 @@ public class CharacterSequenceTest
   }
 
 
-  @Test(groups = "passtest")
+  @Test
   public void testValidSequences()
   {
     assertThat(PolishSequenceData.values()).isNotNull();

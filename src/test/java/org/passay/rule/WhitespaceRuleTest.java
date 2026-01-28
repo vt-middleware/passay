@@ -128,7 +128,7 @@ public class WhitespaceRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = "passtest")
+  @Test
   public void checkMetadata()
   {
     final WhitespaceRule rule = new WhitespaceRule();
@@ -145,7 +145,7 @@ public class WhitespaceRuleTest extends AbstractRuleTest
   /**
    * Test valid characters.
    */
-  @Test(groups = "passtest", expectedExceptions = IllegalArgumentException.class)
+  @Test(expectedExceptions = IllegalArgumentException.class)
   public void checkValidCharacters()
   {
     new WhitespaceRule(new UnicodeString(' ', 'a'));

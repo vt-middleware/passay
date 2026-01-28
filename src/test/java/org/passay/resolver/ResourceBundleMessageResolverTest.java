@@ -18,7 +18,7 @@ public class ResourceBundleMessageResolverTest
   /**
    * Test bundle loading with {@link ResourceBundle#getBundle(String, Locale)}.
    */
-  @Test(groups = "passtest")
+  @Test
   public void loadBundle()
   {
     assertThat(

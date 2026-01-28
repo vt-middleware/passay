@@ -51,7 +51,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   /** Test rule. */
   private HaveIBeenPwnedRule allowOnExceptionRule;
 
-  @BeforeTest(groups = "passtest")
+  @BeforeTest
   public void beforeTest()
   {
     wireMockServer = new WireMockServer(WireMockConfiguration.options().dynamicPort());
@@ -109,7 +109,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   }
 
 
-  @AfterTest(groups = "passtest")
+  @AfterTest
   public void tearDown()
   {
     wireMockServer.stop();
@@ -186,7 +186,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   }
 
 
-  @Test(groups = "passtest")
+  @Test
   public void testInvalidPwdAllowExposed()
   {
     final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl, true, false);
@@ -198,7 +198,7 @@ public class HaveIBeenPwnedRuleTest extends AbstractRuleTest
   }
 
 
-  @Test(groups = "passtest")
+  @Test
   public void testInvalidPwdAllowException()
   {
     final HaveIBeenPwnedRule rule = new HaveIBeenPwnedRule("org.passay", apiUrl, false, true);

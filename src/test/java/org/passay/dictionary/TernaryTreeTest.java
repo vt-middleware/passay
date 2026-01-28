@@ -32,7 +32,7 @@ public class TernaryTreeTest
    * @throws  Exception  On test failure.
    */
   @Parameters({ "webFile", "webFileSorted" })
-  @BeforeClass(groups = "tttest")
+  @BeforeClass
   public void createTernaryTrees(final String dict1, final String dict2) throws Exception
   {
     caseSensitive.insert(TestUtil.fileToArray(dict1));
@@ -43,7 +43,7 @@ public class TernaryTreeTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = "tttest")
+  @AfterClass
   public void closeDictionary()
   {
     caseSensitive = null;
@@ -118,7 +118,7 @@ public class TernaryTreeTest
    * @param  word  Target word.
    * @param  expected  Expected search result.
    */
-  @Test(groups = "tttest", dataProvider = "searchData")
+  @Test(dataProvider = "searchData")
   public void search(final TernaryTree tt, final String word, final boolean expected)
   {
     assertThat(tt.search(word)).isEqualTo(expected);
@@ -130,7 +130,7 @@ public class TernaryTreeTest
    * @param  searchTerm  Partial search term.
    * @param  expected  Expected partial search results.
    */
-  @Test(groups = "tttest", dataProvider = "partialSearchData")
+  @Test(dataProvider = "partialSearchData")
   public void partialSearch(final TernaryTree tt, final String searchTerm, final String[] expected)
   {
     final CharSequence[] actual = tt.partialSearch(searchTerm);
@@ -146,7 +146,7 @@ public class TernaryTreeTest
    * @param  distance  for near search
    * @param  expected  Expected partial search results.
    */
-  @Test(groups = "tttest", dataProvider = "nearSearchData")
+  @Test(dataProvider = "nearSearchData")
   public void nearSearch(final TernaryTree tt, final String word, final int distance, final String[] expected)
   {
     final CharSequence[] actual = tt.nearSearch(word, distance);

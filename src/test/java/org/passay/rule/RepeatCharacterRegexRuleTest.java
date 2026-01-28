@@ -121,7 +121,7 @@ public class RepeatCharacterRegexRuleTest extends AbstractRuleTest
   /**
    * Test with an arabic default locale.
    */
-  @Test(groups = "passtest")
+  @Test
   public void arabicLocale()
   {
     // Get the current default Locale

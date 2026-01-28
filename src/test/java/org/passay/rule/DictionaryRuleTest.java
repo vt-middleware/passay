@@ -40,7 +40,7 @@ public class DictionaryRuleTest extends AbstractRuleTest
    * @param  dictFile  dictionary file to read
    */
   @Parameters("dictionaryFile")
-  @BeforeClass(groups = "passtest")
+  @BeforeClass
   public void createRules(final String dictFile) throws IOException
   {
     final Dictionary caseSensitiveDict = new WordListDictionary(

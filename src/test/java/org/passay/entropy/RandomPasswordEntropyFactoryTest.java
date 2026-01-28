@@ -19,7 +19,7 @@ public class RandomPasswordEntropyFactoryTest extends AbstractEntropyFactoryTest
    * @param  rules  to create entropy with
    * @param  data  to create entropy with
    */
-  @Test(groups = "entrpytest", dataProvider = "randomGeneratedData")
+  @Test(dataProvider = "randomGeneratedData")
   public void createEntropy(final List<Rule> rules, final PasswordData data)
   {
     RandomPasswordEntropyFactory.createEntropy(rules, data);
@@ -30,10 +30,7 @@ public class RandomPasswordEntropyFactoryTest extends AbstractEntropyFactoryTest
    * @param  rules  to create entropy with
    * @param  data  to create entropy with
    */
-  @Test(
-    groups = "entrpytest",
-    dataProvider = "userGeneratedData",
-    expectedExceptions = IllegalArgumentException.class)
+  @Test(dataProvider = "userGeneratedData", expectedExceptions = IllegalArgumentException.class)
   public void invalidPasswordData(final List<Rule> rules, final PasswordData data)
   {
     RandomPasswordEntropyFactory.createEntropy(rules, data);

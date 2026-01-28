@@ -28,7 +28,7 @@ public abstract class AbstractEntropyFactoryTest
   /**
    * Setup test resources.
    */
-  @BeforeClass(groups = "entrpytest")
+  @BeforeClass
   public void createRules()
   {
     final AllowedCharacterRule allowedRule = new AllowedCharacterRule(new UnicodeString(

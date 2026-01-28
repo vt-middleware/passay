@@ -22,7 +22,7 @@ public class SpringMessageResolverTest
   /**
    * Perform test for using locale associated current thread.
    */
-  @Test(groups = "passtest")
+  @Test
   public void testWithLocaleAssociatedCurrentThread()
   {
     final StaticMessageSource messageSource = new StaticMessageSource();
@@ -48,7 +48,7 @@ public class SpringMessageResolverTest
   /**
    * Perform test for using specified locale.
    */
-  @Test(groups = "passtest")
+  @Test
   public void testWithSpecifiedLocale()
   {
     final StaticMessageSource messageSource = new StaticMessageSource();
@@ -68,7 +68,7 @@ public class SpringMessageResolverTest
   /**
    * Perform test for fallback message provided by passay.
    */
-  @Test(groups = "passtest")
+  @Test
   public void testFallback()
   {
     final StaticMessageSource messageSource = new StaticMessageSource();

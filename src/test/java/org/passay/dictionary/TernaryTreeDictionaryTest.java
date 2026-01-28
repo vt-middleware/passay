@@ -31,7 +31,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
 
   /** @throws  Exception  On test failure. */
-  @BeforeClass(groups = "ttdicttest")
+  @BeforeClass
   public void createDictionary() throws Exception
   {
     final ArrayWordList awl1 = WordLists.createFromReader(
@@ -51,7 +51,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /**
    * Close test resources.
    */
-  @AfterClass(groups = "ttdicttest")
+  @AfterClass
   public void closeDictionary()
   {
     caseSensitive = null;
@@ -62,7 +62,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   /**
    * Test search.
    */
-  @Test(groups = "ttdicttest")
+  @Test
   public void search()
   {
     assertThat(caseSensitive.search("manipular")).isTrue();
@@ -80,7 +80,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
    *
    * @param  word  to search for.
    */
-  @Test(groups = "ttdicttest", dataProvider = "all-web-words", enabled = false)
+  @Test(dataProvider = "all-web-words", enabled = false)
   public void searchAll(final String word)
   {
     assertThat(caseSensitive.search(word)).isTrue();
@@ -95,7 +95,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
    * @param  results  case sensitive results
    */
   @Parameters({ "partialSearchWord", "partialSearchResults" })
-  @Test(groups = "ttdicttest")
+  @Test
   public void partialSearch(final String word, final String results)
   {
     assertThat(caseSensitive.partialSearch(word)).isEqualTo(results.split("\\|"));
@@ -118,7 +118,7 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
    * @param  results  case sensitive results
    */
   @Parameters({ "nearSearchWord", "nearSearchDistance", "nearSearchResults" })
-  @Test(groups = "ttdicttest")
+  @Test
   public void nearSearch(final String word, final int distance, final String results)
   {
     assertThat(caseSensitive.nearSearch(word, distance)).isEqualTo(results.split("\\|"));
@@ -135,28 +135,28 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
   }
 
 
-  @Test(groups = "ttdicttest")
+  @Test
   public void bubbleSort()
   {
     testSort(new BubbleSort());
   }
 
 
-  @Test(groups = "ttdicttest")
+  @Test
   public void selectionSort()
   {
     testSort(new SelectionSort());
   }
 
 
-  @Test(groups = "ttdicttest")
+  @Test
   public void insertionSort()
   {
     testSort(new InsertionSort());
   }
 
 
-  @Test(groups = "ttdicttest")
+  @Test
   public void quickSort()
   {
     testSort(new QuickSort());

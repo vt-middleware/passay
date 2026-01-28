@@ -32,32 +32,6 @@
   <parameter name="bloomFile" value="src/test/resources/bloom.bin"/>
 
   <test name="tests" parallel="methods" thread-count="2">
-    <groups>
-      <define name="core">
-        <include name="passtest" />
-        <include name="entrpytest" />
-        <include name="passgentest" />
-        <include name="seqperftest" />
-      </define>
-      <define name="dict">
-        <include name="wltest" />
-        <include name="tttest" />
-        <include name="sorttest" />
-        <include name="wldicttest" />
-        <include name="ttdicttest" />
-        <include name="jdbcdicttest" />
-        <include name="bloomdicttest" />
-      </define>
-      <define name="dictperf">
-        <include name="ttperftest" />
-        <include name="wlperftest" />
-      </define>
-      <run>
-        <include name="core"/>
-        <include name="dict"/>
-        <include name="dictperf"/>
-      </run>
-    </groups>
     <packages>
       <package name="org.passay.*" />
     </packages>

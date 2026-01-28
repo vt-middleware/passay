@@ -27,7 +27,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
 
 
   /** Initialize rules for this test. */
-  @BeforeClass(groups = "passtest")
+  @BeforeClass
   public void createRules()
   {
     rule1 = new CharacterCharacteristicsRule(
@@ -123,7 +123,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   /**
    * Test consistency.
    */
-  @Test(groups = "passtest")
+  @Test
   public void checkConsistency()
   {
     try {
@@ -183,7 +183,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   /**
    * Test custom resolver.
    */
-  @Test(groups = "passtest")
+  @Test
   public void customResolver()
   {
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
@@ -216,7 +216,7 @@ public class CharacterCharacteristicsRuleTest extends AbstractRuleTest
   /**
    * Test Metadata.
    */
-  @Test(groups = "passtest")
+  @Test
   public void checkMetadata()
   {
     final CharacterCharacteristicsRule rule = new CharacterCharacteristicsRule(
