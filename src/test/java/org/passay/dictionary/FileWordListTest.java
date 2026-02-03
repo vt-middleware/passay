@@ -3,7 +3,6 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -29,17 +28,13 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
 
 
   /**
-   * @param  file1  dictionary to load.
-   * @param  file2  dictionary to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
   @Test
-  public void construct(final String file1, final String file2) throws Exception
+  public void construct() throws Exception
   {
     try {
-      new FileWordList(new RandomAccessFile(file1, "r"), true, -1);
+      new FileWordList(new RandomAccessFile("src/test/resources/freebsd.sort", "r"), true, -1);
       fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
@@ -48,7 +43,7 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
     }
 
     try {
-      new FileWordList(new RandomAccessFile(file1, "r"), true, 100 + 1);
+      new FileWordList(new RandomAccessFile("src/test/resources/freebsd.sort", "r"), true, 100 + 1);
       fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
@@ -56,23 +51,20 @@ public class FileWordListTest extends AbstractWordListTest<FileWordList>
       fail("Should have thrown IllegalArgumentException, threw %s", e.getMessage());
     }
 
-    FileWordList fwl = new FileWordList(new RandomAccessFile(file1, "r"), true, 0);
+    FileWordList fwl = new FileWordList(new RandomAccessFile("src/test/resources/freebsd.sort", "r"), true, 0);
     fwl.close();
 
-    fwl = new FileWordList(new RandomAccessFile(file2, "r"), false, 0);
+    fwl = new FileWordList(new RandomAccessFile("src/test/resources/freebsd.lc.sort", "r"), false, 0);
     fwl.close();
   }
 
 
   /**
-   * @param  file  dictionary to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("eignFileSorted")
   @Test
-  public void smallFileCache(final String file) throws Exception
+  public void smallFileCache() throws Exception
   {
-    new FileWordList(new RandomAccessFile(file, "r"), true, 1);
+    new FileWordList(new RandomAccessFile("src/test/resources/eign.sort", "r"), true, 1);
   }
 }

@@ -9,7 +9,6 @@ import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 
 /**
  * Unit test for {@link DictionarySubstringRule}.
@@ -18,6 +17,9 @@ import org.testng.annotations.Parameters;
  */
 public class DictionarySubstringRuleTest extends AbstractRuleTest
 {
+
+  /** Test dictionary. */
+  private static final String DICTIONARY = "src/test/resources/web2-gt3";
 
   /** For testing. */
   private DictionarySubstringRule rule;
@@ -35,22 +37,19 @@ public class DictionarySubstringRuleTest extends AbstractRuleTest
   /**
    * Initialize rules for this test.
    *
-   * @param  dictFile  dictionary file to read
-   *
    * @throws  Exception  if dictionary files cannot be read
    */
-  @Parameters("dictionaryFile")
   @BeforeClass
-  public void createRules(final String dictFile) throws Exception
+  public void createRules() throws Exception
   {
     final ArrayWordList caseSensitiveWordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(dictFile)},
+      new FileReader[] {new FileReader(DICTIONARY)},
       true,
       new ArraysSort());
     final WordListDictionary caseSensitiveDict = new WordListDictionary(caseSensitiveWordList);
 
     final ArrayWordList caseInsensitiveWordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(dictFile)},
+      new FileReader[] {new FileReader(DICTIONARY)},
       false,
       new ArraysSort());
     final WordListDictionary caseInsensitiveDict = new WordListDictionary(caseInsensitiveWordList);

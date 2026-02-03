@@ -11,7 +11,6 @@ import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 
 /**
  * Unit test for {@link DictionaryRule}.
@@ -20,6 +19,9 @@ import org.testng.annotations.Parameters;
  */
 public class DictionaryRuleTest extends AbstractRuleTest
 {
+
+  /** Test dictionary. */
+  private static final String DICTIONARY = "src/test/resources/web2-gt3";
 
   /** For testing. */
   private DictionaryRule rule;
@@ -36,17 +38,14 @@ public class DictionaryRuleTest extends AbstractRuleTest
 
   /**
    * Initialize rules for this test.
-   *
-   * @param  dictFile  dictionary file to read
    */
-  @Parameters("dictionaryFile")
   @BeforeClass
-  public void createRules(final String dictFile) throws IOException
+  public void createRules() throws IOException
   {
     final Dictionary caseSensitiveDict = new WordListDictionary(
-      WordLists.createFromReader(new Reader[] {new FileReader(dictFile)}, true, new ArraysSort()));
+      WordLists.createFromReader(new Reader[] {new FileReader(DICTIONARY)}, true, new ArraysSort()));
     final Dictionary caseInsensitiveDict = new WordListDictionary(
-      WordLists.createFromReader(new Reader[] {new FileReader(dictFile)}, false, new ArraysSort()));
+      WordLists.createFromReader(new Reader[] {new FileReader(DICTIONARY)}, false, new ArraysSort()));
     rule = new DictionaryRule(caseSensitiveDict);
     backwardsRule = new DictionaryRule(caseSensitiveDict, true);
     ignoreCaseRule = new DictionaryRule(caseInsensitiveDict);

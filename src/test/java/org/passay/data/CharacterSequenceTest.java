@@ -14,18 +14,18 @@ public class CharacterSequenceTest
 {
 
   /** Tests no arg constructor. */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test
   public void testNoSequencesFailure()
   {
-    new CharacterSequence();
+    assertThatThrownBy(CharacterSequence::new).isInstanceOf(IllegalArgumentException.class);
   }
 
 
   /** Tests failure condition where constructor arguments are not same length. */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test
   public void testUnequalSequenceFailure()
   {
-    new CharacterSequence("12345", "!@#$");
+    assertThatThrownBy(() -> new CharacterSequence("12345", "!@#$")).isInstanceOf(IllegalArgumentException.class);
   }
 
 

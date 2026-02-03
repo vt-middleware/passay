@@ -11,7 +11,6 @@ import org.passay.dictionary.sort.QuickSort;
 import org.passay.dictionary.sort.SelectionSort;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -91,13 +90,14 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * @param  word  to search for.
-   * @param  results  case sensitive results
+   * Test for partial word search.
    */
-  @Parameters({ "partialSearchWord", "partialSearchResults" })
   @Test
-  public void partialSearch(final String word, final String results)
+  public void partialSearch()
   {
+    final String word = ".e.e.e.e";
+    final String results = "Genevese|reserene|teleseme|terebene";
+
     assertThat(caseSensitive.partialSearch(word)).isEqualTo(results.split("\\|"));
     assertThat(Arrays.equals(results.split("\\|"), caseSensitive.partialSearch(FALSE_SEARCH))).isFalse();
 
@@ -113,14 +113,15 @@ public class TernaryTreeDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * @param  word  to search for.
-   * @param  distance  for near search
-   * @param  results  case sensitive results
+   * Test for near word search.
    */
-  @Parameters({ "nearSearchWord", "nearSearchDistance", "nearSearchResults" })
   @Test
-  public void nearSearch(final String word, final int distance, final String results)
+  public void nearSearch()
   {
+    final String word = "Jicaque";
+    final int distance = 2;
+    final String results = "Jicaque|Jicaquean|Xicaque|macaque";
+
     assertThat(caseSensitive.nearSearch(word, distance)).isEqualTo(results.split("\\|"));
     assertThat(Arrays.equals(results.split("\\|"), caseSensitive.nearSearch(FALSE_SEARCH, distance))).isFalse();
 

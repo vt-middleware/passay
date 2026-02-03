@@ -13,7 +13,6 @@ import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -33,22 +32,18 @@ public class WordListsTest
 
 
   /**
-   * @param  file1  dictionary to load.
-   * @param  file2  dictionary to load.
-   *
    * @throws  Exception  On word list creation.
    */
-  @Parameters({ "fbsdFile", "webFile" })
   @BeforeClass
-  public void createWordLists(final String file1, final String file2) throws Exception
+  public void createWordLists() throws Exception
   {
     caseSensitiveWordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(file1)},
+      new FileReader[] {new FileReader("src/test/resources/freebsd")},
       true,
       new ArraysSort());
 
     caseInsensitiveWordList = WordLists.createFromReader(
-      new FileReader[] {new FileReader(file2)},
+      new FileReader[] {new FileReader("src/test/resources/web2")},
       false,
       new ArraysSort());
   }

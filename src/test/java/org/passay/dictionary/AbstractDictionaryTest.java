@@ -9,7 +9,6 @@ import java.util.List;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 
 /**
  * Base class for dictionary tests.
@@ -111,38 +110,19 @@ public abstract class AbstractDictionaryTest
 
 
   /**
-   * @param  dict1  to load.
-   * @param  dict2  to load.
-   * @param  dict3  to load.
-   * @param  dict4  to load.
-   * @param  dict5  to load.
-   * @param  dict6  to load.
-   * @param  dict7  to load.
-   * @param  dict8  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters({
-    "webFile",
-    "webFileSorted",
-    "webFileLowerCase",
-    "webFileLowerCaseSorted",
-    "fbsdFile",
-    "fbsdFileSorted",
-    "fbsdFileLowerCase",
-    "fbsdFileLowerCaseSorted"})
   @BeforeClass
-  public void createDictionaries(final String dict1, final String dict2, final String dict3, final String dict4,
-    final String dict5, final String dict6, final String dict7, final String dict8) throws Exception
+  public void createDictionaries() throws Exception
   {
-    webFile = dict1;
-    webFileSorted = dict2;
-    webFileLowerCase = dict3;
-    webFileLowerCaseSorted = dict4;
-    fbsdFile = dict5;
-    fbsdFileSorted = dict6;
-    fbsdFileLowerCase = dict7;
-    fbsdFileLowerCaseSorted = dict8;
+    webFile = "src/test/resources/web2";
+    webFileSorted = "src/test/resources/web2.sort";
+    webFileLowerCase = "src/test/resources/web2.lc";
+    webFileLowerCaseSorted = "src/test/resources/web2.lc.sort";
+    fbsdFile = "src/test/resources/freebsd";
+    fbsdFileSorted = "src/test/resources/freebsd.sort";
+    fbsdFileLowerCase = "src/test/resources/freebsd.lc";
+    fbsdFileLowerCaseSorted = "src/test/resources/freebsd.lc.sort";
 
     synchronized (LOCK) {
       if (webWords == null) {

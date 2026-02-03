@@ -42,7 +42,6 @@ import org.passay.support.Reference;
 import org.passay.support.SourceReference;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -60,6 +59,9 @@ public class DefaultPasswordValidatorTest
 
   /** empty message resolver. */
   protected static final MessageResolver EMPTY_RESOLVER = new PropertiesMessageResolver(new Properties());
+
+  /** Test dictionary. */
+  private static final String DICTIONARY = "src/test/resources/web2-gt3";
 
   /** Test password. */
   private static final String VALID_PASS = "aBcD3FgH1Jk";
@@ -87,16 +89,13 @@ public class DefaultPasswordValidatorTest
 
 
   /**
-   * @param  dictFile  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("dictionaryFile")
   @BeforeClass
-  public void createDictionary(final String dictFile) throws Exception
+  public void createDictionary() throws Exception
   {
     final ArrayWordList awl = WordLists.createFromReader(
-      new FileReader[] {new FileReader(dictFile)},
+      new FileReader[] {new FileReader(DICTIONARY)},
       false,
       new ArraysSort());
     dict = new WordListDictionary(awl);

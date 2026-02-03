@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -26,17 +25,13 @@ public class TernaryTreeTest
 
 
   /**
-   * @param  dict1  to load.
-   * @param  dict2  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters({ "webFile", "webFileSorted" })
   @BeforeClass
-  public void createTernaryTrees(final String dict1, final String dict2) throws Exception
+  public void createTernaryTrees() throws Exception
   {
-    caseSensitive.insert(TestUtil.fileToArray(dict1));
-    caseInsensitive.insert(TestUtil.fileToArray(dict2));
+    caseSensitive.insert(TestUtil.fileToArray("src/test/resources/web2"));
+    caseInsensitive.insert(TestUtil.fileToArray("src/test/resources/web2.sort"));
   }
 
 

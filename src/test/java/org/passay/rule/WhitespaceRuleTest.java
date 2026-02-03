@@ -145,9 +145,10 @@ public class WhitespaceRuleTest extends AbstractRuleTest
   /**
    * Test valid characters.
    */
-  @Test(expectedExceptions = IllegalArgumentException.class)
+  @Test
   public void checkValidCharacters()
   {
-    new WhitespaceRule(new UnicodeString(' ', 'a'));
+    assertThatThrownBy(() -> new WhitespaceRule(new UnicodeString(' ', 'a')))
+      .isInstanceOf(IllegalArgumentException.class);
   }
 }

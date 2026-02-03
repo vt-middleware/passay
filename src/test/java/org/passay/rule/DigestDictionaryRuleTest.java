@@ -14,7 +14,6 @@ import org.passay.dictionary.WordLists;
 import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Parameters;
 
 /**
  * Unit test for {@link DigestDictionaryRule}.
@@ -23,6 +22,9 @@ import org.testng.annotations.Parameters;
  */
 public class DigestDictionaryRuleTest extends AbstractRuleTest
 {
+
+  /** Test dictionary. */
+  private static final String DICTIONARY = "src/test/resources/sha1s.txt";
 
   /** For testing. */
   private DigestDictionaryRule rule;
@@ -33,15 +35,12 @@ public class DigestDictionaryRuleTest extends AbstractRuleTest
 
   /**
    * Initialize rules for this test.
-   *
-   * @param  dictFile  dictionary file to read
    */
-  @Parameters("digestDictionaryFile")
   @BeforeClass
-  public void createRules(final String dictFile) throws IOException
+  public void createRules() throws IOException
   {
     final Dictionary caseSensitiveDict = new WordListDictionary(
-      WordLists.createFromReader(new Reader[] {new FileReader(dictFile)}, true, new ArraysSort()));
+      WordLists.createFromReader(new Reader[] {new FileReader(DICTIONARY)}, true, new ArraysSort()));
     rule = new DigestDictionaryRule(
       new EncodingHashBean(new CodecSpec("Hex-Upper"), new DigestSpec("SHA1")), caseSensitiveDict);
     backwardsRule = new DigestDictionaryRule(

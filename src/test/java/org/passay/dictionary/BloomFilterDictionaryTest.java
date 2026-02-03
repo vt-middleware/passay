@@ -12,7 +12,6 @@ import com.google.common.io.BaseEncoding;
 import org.passay.dictionary.sort.ArraysSort;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -25,6 +24,9 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
 {
 
   /** Test dictionary. */
+  private static final String DICTIONARY = "src/test/resources/bloom.bin";
+
+  /** Test dictionary. */
   private BloomFilterDictionary filterFromSerialized;
 
   /** Test dictionary. */
@@ -32,16 +34,13 @@ public class BloomFilterDictionaryTest extends AbstractDictionaryTest
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("bloomFile")
   @BeforeClass
-  public void createDictionary(final String dict) throws Exception
+  public void createDictionary() throws Exception
   {
     final BloomFilter<CharSequence> filter1 = BloomFilter.readFrom(
-      Files.newInputStream(Paths.get(dict)), Funnels.stringFunnel(StandardCharsets.UTF_8));
+      Files.newInputStream(Paths.get(DICTIONARY)), Funnels.stringFunnel(StandardCharsets.UTF_8));
     filterFromSerialized = new BloomFilterDictionary(filter1);
 
     final ArrayWordList awl = WordLists.createFromReader(

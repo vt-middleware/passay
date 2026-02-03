@@ -4,7 +4,6 @@ package org.passay.dictionary;
 import java.io.RandomAccessFile;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 /**
@@ -23,16 +22,12 @@ public class MemoryMappedFileWordListDictionaryPerfTest extends AbstractDictiona
 
 
   /**
-   * @param  dict1  to load.
-   * @param  dict2  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters({ "webFileSorted", "fbsdFileSorted" })
   @BeforeClass
-  public void createDictionary(final String dict1, final String dict2) throws Exception
+  public void createDictionary() throws Exception
   {
-    super.initialize(dict1, dict2);
+    super.initialize("src/test/resources/web2.sort", "src/test/resources/freebsd.sort");
 
     long t = System.currentTimeMillis();
     wld = new WordListDictionary(new MemoryMappedFileWordList(new RandomAccessFile(webFile, "r")));

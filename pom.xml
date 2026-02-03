@@ -58,7 +58,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
     <spotbugs.dir>${basedir}/src/main/spotbugs</spotbugs.dir>
-    <testng.dir>${basedir}/src/test/testng</testng.dir>
     <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
     <japicmp.enabled>false</japicmp.enabled>
     <japicmp.oldVersion>1.6.0</japicmp.oldVersion>
@@ -279,9 +278,7 @@
         <version>3.5.4</version>
         <configuration>
           <argLine>-Xms128m -Xmx1g -Duser.language=en</argLine>
-          <suiteXmlFiles>
-            <suiteXmlFile>${testng.dir}/testng.xml</suiteXmlFile>
-          </suiteXmlFiles>
+          <redirectTestOutputToFile>true</redirectTestOutputToFile>
         </configuration>
       </plugin>
       <plugin>

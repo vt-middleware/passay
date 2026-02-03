@@ -3,7 +3,6 @@ package org.passay.dictionary;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -30,17 +29,13 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
 
 
   /**
-   * @param  file1  dictionary to load.
-   * @param  file2  dictionary to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters({ "fbsdFileSorted", "fbsdFileLowerCaseSorted" })
   @Test
-  public void construct(final String file1, final String file2) throws Exception
+  public void construct() throws Exception
   {
     try {
-      new MemoryMappedFileWordList(new RandomAccessFile(file1, "r"), true, -1);
+      new MemoryMappedFileWordList(new RandomAccessFile("src/test/resources/freebsd.sort", "r"), true, -1);
       fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
@@ -49,7 +44,7 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
     }
 
     try {
-      new MemoryMappedFileWordList(new RandomAccessFile(file1, "r"), true, 100 + 1);
+      new MemoryMappedFileWordList(new RandomAccessFile("src/test/resources/freebsd.sort", "r"), true, 100 + 1);
       fail("Should have thrown IllegalArgumentException");
     } catch (IllegalArgumentException e) {
       assertThat(e).isExactlyInstanceOf(IllegalArgumentException.class);
@@ -57,10 +52,11 @@ public class MemoryMappedFileWordListTest extends AbstractWordListTest<MemoryMap
       fail("Should have thrown IllegalArgumentException, threw %s", e.getMessage());
     }
 
-    MemoryMappedFileWordList fwl = new MemoryMappedFileWordList(new RandomAccessFile(file1, "r"), true, 0);
+    MemoryMappedFileWordList fwl = new MemoryMappedFileWordList(
+      new RandomAccessFile("src/test/resources/freebsd.sort", "r"), true, 0);
     fwl.close();
 
-    fwl = new MemoryMappedFileWordList(new RandomAccessFile(file2, "r"), false, 0);
+    fwl = new MemoryMappedFileWordList(new RandomAccessFile("src/test/resources/freebsd.lc.sort", "r"), false, 0);
     fwl.close();
   }
 }

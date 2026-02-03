@@ -4,7 +4,6 @@ package org.passay.dictionary.sort;
 import org.passay.dictionary.TestUtil;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -16,20 +15,23 @@ import static org.assertj.core.api.Assertions.*;
 public class SorterTest
 {
 
+  /** Test dictionary. */
+  private static final String DICTIONARY = "src/test/resources/freebsd";
+
+  /** Test dictionary sorted. */
+  private static final String DICTIONARY_SORTED = "src/test/resources/freebsd.sort";
+
   /** word list to use for comparison. */
   private String[] sortedArray;
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("fbsdFileSorted")
   @BeforeClass
-  public void create(final String dict) throws Exception
+  public void create() throws Exception
   {
-    sortedArray = TestUtil.fileToArray(dict);
+    sortedArray = TestUtil.fileToArray(DICTIONARY_SORTED);
   }
 
   /**
@@ -43,15 +45,12 @@ public class SorterTest
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("fbsdFile")
   @Test
-  public void bubbleSort(final String dict) throws Exception
+  public void bubbleSort() throws Exception
   {
-    final String[] array = TestUtil.fileToArray(dict);
+    final String[] array = TestUtil.fileToArray(DICTIONARY);
     assertThat(array).isNotEqualTo(sortedArray);
     doSort(new BubbleSort(), array);
     assertThat(array).isEqualTo(sortedArray);
@@ -59,15 +58,12 @@ public class SorterTest
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("fbsdFile")
   @Test
-  public void collectionsSort(final String dict) throws Exception
+  public void collectionsSort() throws Exception
   {
-    final String[] array = TestUtil.fileToArray(dict);
+    final String[] array = TestUtil.fileToArray(DICTIONARY);
     assertThat(array).isNotEqualTo(sortedArray);
     doSort(new ArraysSort(), array);
     assertThat(array).isEqualTo(sortedArray);
@@ -75,15 +71,12 @@ public class SorterTest
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("fbsdFile")
   @Test
-  public void insertionSort(final String dict) throws Exception
+  public void insertionSort() throws Exception
   {
-    final String[] array = TestUtil.fileToArray(dict);
+    final String[] array = TestUtil.fileToArray(DICTIONARY);
     assertThat(array).isNotEqualTo(sortedArray);
     doSort(new InsertionSort(), array);
     assertThat(array).isEqualTo(sortedArray);
@@ -91,15 +84,12 @@ public class SorterTest
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("fbsdFile")
   @Test
-  public void quickSort(final String dict) throws Exception
+  public void quickSort() throws Exception
   {
-    final String[] array = TestUtil.fileToArray(dict);
+    final String[] array = TestUtil.fileToArray(DICTIONARY);
     assertThat(array).isNotEqualTo(sortedArray);
     doSort(new QuickSort(), array);
     assertThat(array).isEqualTo(sortedArray);
@@ -107,15 +97,12 @@ public class SorterTest
 
 
   /**
-   * @param  dict  to load.
-   *
    * @throws  Exception  On test failure.
    */
-  @Parameters("fbsdFile")
   @Test
-  public void selectionSort(final String dict) throws Exception
+  public void selectionSort() throws Exception
   {
-    final String[] array = TestUtil.fileToArray(dict);
+    final String[] array = TestUtil.fileToArray(DICTIONARY);
     assertThat(array).isNotEqualTo(sortedArray);
     doSort(new SelectionSort(), array);
     assertThat(array).isEqualTo(sortedArray);
