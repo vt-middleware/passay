@@ -6,13 +6,10 @@ FUZZ_VERSION=0.24.0
 # maximum time in seconds for each fuzzer
 MAX_FUZZ_TIME=30
 
-mvn -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
-tar xzf fuzz/jazzer-linux-${FUZZ_VERSION}.tar.gz -C target
+mvn -Pfuzz -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
+tar xzf fuzz/jazzer-linux-${FUZZ_VERSION}.tar.gz -C fuzz/target
 
-for i in target/*.jar; do
-  CLASSPATH=$CLASSPATH:$i
-done
-for i in target/dependency/*.jar; do
+for i in fuzz/target/dependency/*.jar; do
   CLASSPATH=$CLASSPATH:$i
 done
 
@@ -36,5 +33,5 @@ for FUZZ in ${AUTO_FUZZ[@]}; do
   echo "-------------------------"
   echo "  begin autofuzz: ${FUZZ_ARR[0]}  "
   echo "-------------------------"
-  target/jazzer -max_total_time="$MAX_FUZZ_TIME" -timeout=60 --cp="$CLASSPATH" --reproducer_path=target --autofuzz="${FUZZ_ARR[0]}" --autofuzz_ignore="${FUZZ_ARR[1]}" --coverage_report="target/jazzer_report_${FUZZ_ARR[0]}.txt"
+  fuzz/target/jazzer -max_total_time="$MAX_FUZZ_TIME" -timeout=60 --cp="$CLASSPATH" --reproducer_path=fuzz/target --autofuzz="${FUZZ_ARR[0]}" --autofuzz_ignore="${FUZZ_ARR[1]}" --coverage_report="fuzz/target/jazzer_report_${FUZZ_ARR[0]}.txt"
 done

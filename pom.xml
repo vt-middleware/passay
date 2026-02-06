@@ -5,10 +5,10 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.passay</groupId>
-  <artifactId>passay</artifactId>
-  <packaging>jar</packaging>
+  <artifactId>passay-parent</artifactId>
+  <packaging>pom</packaging>
   <version>2.0.0-SNAPSHOT</version>
-  <name>Passay Library</name>
+  <name>Passay Parent</name>
   <description>Library for checking that a password complies with a custom set of rules</description>
   <url>https://www.passay.org</url>
   <issueManagement>
@@ -56,72 +56,204 @@
     <maven.compiler.release>8</maven.compiler.release>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <checkstyle.dir>${basedir}/src/main/checkstyle</checkstyle.dir>
-    <spotbugs.dir>${basedir}/src/main/spotbugs</spotbugs.dir>
-    <assembly.dir>${basedir}/src/main/assembly</assembly.dir>
+    <checkstyle.dir>src/main/checkstyle</checkstyle.dir>
+    <spotbugs.dir>src/main/spotbugs</spotbugs.dir>
     <japicmp.enabled>false</japicmp.enabled>
     <japicmp.oldVersion>1.6.0</japicmp.oldVersion>
   </properties>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.cryptacular</groupId>
-      <artifactId>cryptacular</artifactId>
-      <version>1.3.0</version>
-      <optional>true</optional>
-    </dependency>
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>33.5.0-jre</version>
-      <optional>true</optional>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-      <version>7.0.3</version>
-      <optional>true</optional>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testng</groupId>
-      <artifactId>testng</artifactId>
-      <version>7.12.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.27.6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.hsqldb</groupId>
-      <artifactId>hsqldb</artifactId>
-      <version>2.7.4</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.codemodel</groupId>
-      <artifactId>codemodel</artifactId>
-      <version>2.6</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.wiremock</groupId>
-      <artifactId>wiremock</artifactId>
-      <version>3.13.2</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <modules>
+    <module>core</module>
+    <module>crypt</module>
+    <module>bloom</module>
+    <module>spring</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.passay</groupId>
+        <artifactId>passay</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.passay</groupId>
+        <artifactId>passay-crypt</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.passay</groupId>
+        <artifactId>passay-bloom</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.passay</groupId>
+        <artifactId>passay-spring</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.cryptacular</groupId>
+        <artifactId>cryptacular</artifactId>
+        <version>1.3.0</version>
+      </dependency>
+      <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>33.5.0-jre</version>
+      </dependency>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>7.0.3</version>
+      </dependency>
+      <dependency>
+        <groupId>org.testng</groupId>
+        <artifactId>testng</artifactId>
+        <version>7.12.0</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <version>3.27.6</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.hsqldb</groupId>
+        <artifactId>hsqldb</artifactId>
+        <version>2.7.4</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.sun.codemodel</groupId>
+        <artifactId>codemodel</artifactId>
+        <version>2.6</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.wiremock</groupId>
+        <artifactId>wiremock</artifactId>
+        <version>3.13.2</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.4</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.21.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>3.6.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.9.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.4.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.14.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>3.6.0</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>12.3.1</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>4.9.8.2</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.5.4</version>
+          <configuration>
+            <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>build-helper-maven-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.6.3</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.12.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-source-plugin</artifactId>
+          <version>3.4.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.5.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>6.0.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>3.8.0</version>
+        </plugin>
+        <plugin>
+          <groupId>com.github.siom79.japicmp</groupId>
+          <artifactId>japicmp-maven-plugin</artifactId>
+          <version>0.25.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
-        <version>3.6.2</version>
         <executions>
           <execution>
             <id>enforce-maven</id>
@@ -140,100 +272,20 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.4.0</version>
-        <executions>
-          <execution>
-            <id>copy-info</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/package-info</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${basedir}</directory>
-                  <filtering>false</filtering>
-                  <includes>
-                    <include>README*</include>
-                    <include>LICENSE*</include>
-                    <include>NOTICE*</include>
-                    <include>pom.xml</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-scripts</id>
-            <phase>validate</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${basedir}/target/bin</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>bin</directory>
-                  <filtering>true</filtering>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>3.5.0</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>3.1.4</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-install-plugin</artifactId>
-        <version>3.1.4</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-site-plugin</artifactId>
-        <version>3.21.0</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.14.1</version>
         <configuration>
           <fork>true</fork>
           <debug>true</debug>
           <showDeprecation>true</showDeprecation>
           <showWarnings>true</showWarnings>
-          <compilerArgument>-Xlint:unchecked</compilerArgument>
+          <compilerArgs>
+            <arg>-Xlint:unchecked</arg>
+          </compilerArgs>
         </configuration>
-        <executions>
-          <execution>
-            <phase>integration-test</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.6.0</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>12.3.1</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <configLocation>${checkstyle.dir}/checks.xml</configLocation>
           <headerLocation>${checkstyle.dir}/header.txt</headerLocation>
@@ -256,7 +308,6 @@
       <plugin>
         <groupId>com.github.spotbugs</groupId>
         <artifactId>spotbugs-maven-plugin</artifactId>
-        <version>4.9.8.2</version>
         <configuration>
           <effort>Max</effort>
           <threshold>Medium</threshold>
@@ -274,58 +325,102 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.5.4</version>
+        <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <argLine>-Xms128m -Xmx1g -Duser.language=en</argLine>
-          <redirectTestOutputToFile>true</redirectTestOutputToFile>
+          <source>8</source>
+          <links>
+            <link>https://docs.oracle.com/javase/8/docs/api</link>
+          </links>
+          <quiet>true</quiet>
+          <author>false</author>
+          <show>private</show>
+          <version>true</version>
+          <doctitle>Passay ${project.version} API</doctitle>
+          <windowtitle>Passay ${project.version} API</windowtitle>
+          <bottom><![CDATA[<i>Copyright &#169; 2003-2026 Virginia Tech. All Rights Reserved.</i>]]></bottom>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>3.6.3</version>
         <executions>
           <execution>
-            <!-- Use -Dexec.skip=true to skip plugin execution -->
-            <phase>test</phase>
+            <id>javadoc</id>
+            <phase>package</phase>
             <goals>
-              <goal>java</goal>
+              <goal>jar</goal>
             </goals>
             <configuration>
-              <classpathScope>test</classpathScope>
-              <mainClass>org.passay.doc.ClassGenerator</mainClass>
-              <arguments>
-                <argument>https://github.com/vt-middleware/passay/blob/gh-pages/_includes/source/source.zip?raw=true</argument>
-                <argument>${project.build.directory}</argument>
-              </arguments>
+              <sourcepath>${project.build.sourceDirectory}:${project.build.directory}/dist-sources</sourcepath>
             </configuration>
           </execution>
         </executions>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>3.6.1</version>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestEntries>
+              <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+        </configuration>
         <executions>
           <execution>
-            <id>add-test-source</id>
+            <id>source</id>
+            <phase>package</phase>
             <goals>
-              <goal>add-test-source</goal>
+              <goal>jar</goal>
             </goals>
-            <phase>pre-integration-test</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+            <manifestEntries>
+              <Automatic-Module-Name>${module.name}</Automatic-Module-Name>
+            </manifestEntries>
+          </archive>
+          <skipIfEmpty>true</skipIfEmpty>
+        </configuration>
+        <executions>
+          <execution>
+            <id>test-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>test-jar</goal>
+            </goals>
+            <!-- modify the test jar final name not to include the project version
+                 this prevents the jar from being included by the bundle plugin
+                 but allows other modules to add a dependency on it -->
             <configuration>
-              <sources>
-                <source>${project.build.directory}/generated-test-sources/passay-docs</source>
-              </sources>
+              <finalName>${project.artifactId}</finalName>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>bundle-manifest</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
       <plugin>
         <groupId>com.github.siom79.japicmp</groupId>
         <artifactId>japicmp-maven-plugin</artifactId>
-        <version>0.25.4</version>
         <configuration>
           <oldVersion>
             <dependency>
@@ -342,6 +437,7 @@
           </newVersion>
           <parameter>
             <ignoreNonResolvableArtifacts>false</ignoreNonResolvableArtifacts>
+            <ignoreMissingClasses>true</ignoreMissingClasses>
             <onlyBinaryIncompatible>true</onlyBinaryIncompatible>
             <breakBuildOnBinaryIncompatibleModifications>${japicmp.enabled}</breakBuildOnBinaryIncompatibleModifications>
             <packagingSupporteds>
@@ -358,101 +454,33 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.12.0</version>
-        <configuration>
-          <source>8</source>
-          <links>
-            <link>https://docs.oracle.com/javase/8/docs/api</link>
-          </links>
-          <bottom><![CDATA[<i>Copyright &#169; 2003-2026 Virginia Tech. All Rights Reserved.</i>]]></bottom>
-        </configuration>
-        <executions>
-          <execution>
-            <id>javadoc</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-source-plugin</artifactId>
-        <version>3.4.0</version>
-        <executions>
-          <execution>
-            <id>source</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>3.5.0</version>
-        <configuration>
-          <archive>
-            <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
-          </archive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>test-jar</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <version>6.0.0</version>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.8.0</version>
-        <configuration>
-          <appendAssemblyId>true</appendAssemblyId>
-          <attach>false</attach>
-          <descriptors>
-            <descriptor>${assembly.dir}/passay.xml</descriptor>
-          </descriptors>
-          <archiverConfig>
-            <defaultDirectoryMode>0755</defaultDirectoryMode>
-          </archiverConfig>
-        </configuration>
-        <executions>
-          <execution>
-            <id>assembly</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
     </plugins>
   </build>
   <profiles>
+    <profile>
+      <id>integration</id>
+      <modules>
+        <module>integration</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>fuzz</id>
+      <modules>
+        <module>fuzz</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>heap</id>
+      <modules>
+        <module>heap</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>distribution</id>
+      <modules>
+        <module>distribution</module>
+      </modules>
+    </profile>
     <profile>
       <id>sign-artifacts</id>
       <activation>

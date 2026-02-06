@@ -12,13 +12,13 @@
 
 set -e
 
-HEAP_DUMP_FILE="target/HeapDump.hprof"
+HEAP_DUMP_FILE="heap/target/HeapDump.hprof"
 
-mvn -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
-for i in target/*.jar; do
+mvn -pl heap -Pheap -Dcheckstyle.skip -DskipTests -Dmaven.javadoc.skip=true clean package dependency:copy-dependencies
+for i in heap/target/*.jar; do
   CLASSPATH=$CLASSPATH:$i
 done
-for i in target/dependency/*.jar; do
+for i in heap/target/dependency/*.jar; do
   CLASSPATH=$CLASSPATH:$i
 done
 
@@ -27,4 +27,3 @@ export JAVA_OPTS="-XX:+UnlockExperimentalVMOptions -XX:+UseEpsilonGC -XX:+Always
 
 # create java heap dump
 java ${JAVA_OPTS} -cp ${CLASSPATH} org.passay.HeapDump ${HEAP_DUMP_FILE}
-

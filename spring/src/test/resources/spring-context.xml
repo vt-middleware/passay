@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:c="http://www.springframework.org/schema/c"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://schema.spring.io/beans/spring-beans.xsd">
+
+  <bean id="dictionary" class="org.passay.dictionary.WordListDictionary">
+    <constructor-arg>
+      <bean class="org.passay.dictionary.FileWordList">
+        <constructor-arg>
+          <bean class="java.io.RandomAccessFile">
+            <constructor-arg value="#{T(org.passay.dictionary.Dictionaries).FREEBSD_FILE_SORTED}"/>
+            <constructor-arg value="r"/>
+          </bean>
+        </constructor-arg>
+      </bean>
+    </constructor-arg>
+  </bean>
+
+  <bean id="charRule" class="org.passay.rule.CharacterCharacteristicsRule"
+    c:numCharacteristics="2" c:rules-ref="characterCharacteristicsRules"/>
+  <bean id="characterCharacteristicsRules" class="java.util.ArrayList">
+    <constructor-arg>
+      <list>
+        <bean id="alphaRule" class="org.passay.rule.CharacterRule"
+              c:data="#{T(org.passay.data.EnglishCharacterData).Alphabetical}"
+              c:num="3"/>
+        <bean id="digitRule" class="org.passay.rule.CharacterRule"
+              c:data="#{T(org.passay.data.EnglishCharacterData).Digit}"
+              c:num="1"/>
+      </list>
+    </constructor-arg>
+  </bean>
+
+  <bean id="dictRule" class="org.passay.rule.DictionarySubstringRule"
+    c:dict-ref="dictionary"/>
+
+  <bean id="lenRule" class="org.passay.rule.LengthRule">
+    <constructor-arg index="0" value="5"/>
+    <constructor-arg index="1" value="50"/>
+  </bean>
+
+  <bean id="qwertySeqRule" class="org.passay.rule.IllegalSequenceRule"
+    c:data="#{T(org.passay.data.EnglishSequenceData).USQwerty}"/>
+
+  <bean id="alphaSeqRule" class="org.passay.rule.IllegalSequenceRule"
+    c:data="#{T(org.passay.data.EnglishSequenceData).Alphabetical}"/>
+
+  <bean id="numSeqRule" class="org.passay.rule.IllegalSequenceRule"
+    c:data="#{T(org.passay.data.EnglishSequenceData).Numerical}"/>
+
+  <bean id="repeatRegexRule" class="org.passay.rule.RepeatCharacterRegexRule"/>
+
+  <bean id="usernameRule" class="org.passay.rule.UsernameRule"
+    c:ignoreCase="true" c:matchBackwards="true"/>
+
+  <bean id="wsRule" class="org.passay.rule.WhitespaceRule"/>
+ 
+</beans>

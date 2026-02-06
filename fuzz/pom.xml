@@ -5,17 +5,29 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>passay-fuzz</artifactId>
   <packaging>jar</packaging>
-  <name>PASSAY FUZZER</name>
-  <description>Passay fuzzer</description>
+  <name>Passay Fuzzer</name>
+  <parent>
+    <groupId>org.passay</groupId>
+    <artifactId>passay-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+  </parent>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <module.name>org.ldaptive.fuzz</module.name>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.passay</groupId>
       <artifactId>passay</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.passay</groupId>
+      <artifactId>passay-crypt</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.passay</groupId>
+      <artifactId>passay-bloom</artifactId>
     </dependency>
   </dependencies>
 
@@ -30,21 +42,24 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-depends</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <includeScope>runtime</includeScope>
-              <excludeArtifactIds>${project.artifactId}</excludeArtifactIds>
-              <outputDirectory>${basedir}/target/lib</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
+        <artifactId>maven-install-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-deploy-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.siom79.japicmp</groupId>
+        <artifactId>japicmp-maven-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
       </plugin>
     </plugins>
   </build>
