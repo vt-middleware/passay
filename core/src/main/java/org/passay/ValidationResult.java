@@ -46,7 +46,7 @@ public interface ValidationResult
 
 
   /**
-   * Returns the calculated entropy of the {@link PasswordData} used to produced this validation result, based on the
+   * Returns the calculated entropy of the {@link PasswordData} used to produce this validation result, based on the
    * password rules specified.
    *
    * @return  entropy estimate

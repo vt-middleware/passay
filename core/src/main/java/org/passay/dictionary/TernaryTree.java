@@ -43,7 +43,7 @@ public class TernaryTree
   private TernaryNode root;
 
 
-  /** Creates an empty case sensitive ternary tree. */
+  /** Creates an empty case-sensitive ternary tree. */
   public TernaryTree()
   {
     this(true);
@@ -53,7 +53,7 @@ public class TernaryTree
   /**
    * Creates an empty ternary tree with the given case sensitivity.
    *
-   * @param  caseSensitive  whether this ternary tree should be case sensitive.
+   * @param  caseSensitive  whether this ternary tree should be case-sensitive.
    */
   public TernaryTree(final boolean caseSensitive)
   {
@@ -108,14 +108,14 @@ public class TernaryTree
    * severe Note that no substring matching occurs, results only include strings of the same length. If the supplied
    * word does not contain the '.' character, then a regular search is performed.
    *
-   * <p><strong>NOTE</strong> This method is not supported for case insensitive ternary trees. Since the tree is built
+   * <p><strong>NOTE</strong> This method is not supported for case-insensitive ternary trees. Since the tree is built
    * without regard to case any words returned from the tree may or may not match the case of the supplied word.</p>
    *
    * @param  word  to search for
    *
    * @return  array of matching words
    *
-   * @throws  UnsupportedOperationException  if this is a case insensitive ternary tree
+   * @throws  UnsupportedOperationException  if this is a case-insensitive ternary tree
    */
   public CharSequence[] partialSearch(final CharSequence word)
   {
@@ -133,7 +133,7 @@ public class TernaryTree
    * nearSearch("fisher", 2): Possible results include: cipher, either, fishery, kosher, sister. If the supplied
    * distance is not &gt; 0, then a regular search is performed.
    *
-   * <p><strong>NOTE</strong> This method is not supported for case insensitive ternary trees. Since the tree is built
+   * <p><strong>NOTE</strong> This method is not supported for case-insensitive ternary trees. Since the tree is built
    * without regard to case any words returned from the tree may or may not match the case of the supplied word.</p>
    *
    * @param  word  to search for
@@ -141,7 +141,7 @@ public class TernaryTree
    *
    * @return  array of matching words
    *
-   * @throws  UnsupportedOperationException  if this is a case insensitive ternary tree
+   * @throws  UnsupportedOperationException  if this is a case-insensitive ternary tree
    */
   public CharSequence[] nearSearch(final CharSequence word, final int distance)
   {
@@ -170,7 +170,7 @@ public class TernaryTree
   /**
    * Prints an ASCII representation of this ternary tree to the supplied writer. This is a very expensive operation,
    * every node in the tree is traversed. The output produced is hard to read, but it should give an indication of
-   * whether or not your tree is balanced.
+   * whether your tree is balanced.
    *
    * @param  out  to print to
    * @param  fullPath  specifies whether each line should show the full path from root or only the suffix
@@ -189,7 +189,7 @@ public class TernaryTree
   /**
    * Prints an ASCII representation of this ternary tree to the supplied writer. This is a very expensive operation,
    * every node in the tree is traversed. The output produced is hard to read, but it should give an indication of
-   * whether or not your tree is balanced.
+   * whether your tree is balanced.
    *
    * @param  out  to print to
    *

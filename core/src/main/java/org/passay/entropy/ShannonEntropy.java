@@ -52,7 +52,7 @@ public final class ShannonEntropy implements Entropy
    *
    * @param  dictionaryCheck   whether or not a common passwords dictionary is checked against the password (50,000
    *                           dictionary words are recommended)
-   * @param  compositionCheck  whether or not at least 1 uppercase and special/symbol character is enforced (not
+   * @param  compositionCheck  whether at least 1 uppercase and special/symbol character is enforced (not
    *                           using common substitutions such as s to $ are recommended)
    * @param  pwordSize         size of the password
    */

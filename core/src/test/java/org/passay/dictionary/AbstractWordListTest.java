@@ -316,7 +316,7 @@ public abstract class AbstractWordListTest<T extends WordList>
 
 
   /** Expected result from {@link WordList#get(int)}. */
-  private static class ExpectedWord
+  public static class ExpectedWord
   {
     // CheckStyle:VisibilityModifier OFF
     /** Expected word. */

@@ -36,7 +36,7 @@ public class IllegalSequenceRule implements Rule
   /** Number of characters in sequence to match. */
   protected final int sequenceLength;
 
-  /** Whether or not to wrap a sequence when searching for matches. */
+  /** Whether to wrap a sequence when searching for matches. */
   protected final boolean wrapSequence;
 
   /** Whether to report all sequence matches or just the first. */

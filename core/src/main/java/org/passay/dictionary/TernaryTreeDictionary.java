@@ -96,7 +96,7 @@ public class TernaryTreeDictionary implements Dictionary
 
 
   /**
-   * Returns an array of strings which partially match the supplied word. This search is case sensitive by default. See
+   * Returns an array of strings which partially match the supplied word. This search is case-sensitive by default. See
    * {@link TernaryTree#partialSearch}.
    *
    * @param  word  to search for
@@ -110,8 +110,8 @@ public class TernaryTreeDictionary implements Dictionary
 
 
   /**
-   * Returns an array of strings which are near to the supplied word by the supplied distance. This search is case
-   * sensitive by default. See {@link TernaryTree#nearSearch}.
+   * Returns an array of strings which are near to the supplied word by the supplied distance. This search is
+   * case-sensitive by default. See {@link TernaryTree#nearSearch}.
    *
    * @param  word  to search for
    * @param  distance  for valid match

@@ -52,7 +52,7 @@ public final class RuleResultMetadata
     Illegal,
 
     /** Already leaked password. */
-    Pwned;
+    Pwned
   }
 
   /** Character count metadata. */

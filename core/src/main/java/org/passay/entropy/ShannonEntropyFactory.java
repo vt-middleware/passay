@@ -63,7 +63,7 @@ public final class ShannonEntropyFactory
   /**
    * Creates a new shannon entropy.
    *
-   * @param  dictionaryCheck   whether or not a common passwords dictionary is checked against the password
+   * @param  dictionaryCheck   whether a common passwords dictionary is checked against the password
    * @param  passwordData  to aid in entropy calculation
    *
    * @return  shannon entropy

@@ -185,7 +185,7 @@ public final class UnicodeString implements CharSequence
 
 
   /**
-   * Returns a new unicode string with each character upper cased. See {@link Character#toUpperCase(int)}.
+   * Returns a new unicode string with each character upper-cased. See {@link Character#toUpperCase(int)}.
    *
    * @return  upper cased unicode string
    */
@@ -196,7 +196,7 @@ public final class UnicodeString implements CharSequence
 
 
   /**
-   * Returns a new unicode string with each character upper cased. See {@link Character#toUpperCase(int)}.
+   * Returns a new unicode string with each character upper-cased. See {@link Character#toUpperCase(int)}.
    *
    * @param  clear  whether to invoke {@link #clear()} at the conclusion of this method
    *
@@ -264,7 +264,7 @@ public final class UnicodeString implements CharSequence
 
 
   /**
-   * Returns a new unicode string containing code points from the supplied begin index (inclusive) to the the supplied
+   * Returns a new unicode string containing code points from the supplied begin index (inclusive) to the supplied
    * end index (exclusive).
    *
    * @param  beginIndex  of the code point that would be the first code point in the new unicode string
