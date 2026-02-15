@@ -197,6 +197,27 @@ public class PasswordGeneratorTest
   }
 
 
+  @Test
+  public void testNoRetry()
+  {
+    new PasswordGenerator(10, 0, new CharacterRule(EnglishCharacterData.LowerCase, 10)).generate();
+  }
+
+
+  @Test
+  public void testOneRetry()
+  {
+    new PasswordGenerator(10, 1, new CharacterRule(EnglishCharacterData.LowerCase, 10)).generate();
+  }
+
+
+  @Test
+  public void testDefaultRetry()
+  {
+    new PasswordGenerator(10, 2, new CharacterRule(EnglishCharacterData.LowerCase, 10)).generate();
+  }
+
+
   private List<Rule> addCharacteristics(final List<Rule> rules)
   {
     final List<Rule> compositeRules = new ArrayList<>(rules);
