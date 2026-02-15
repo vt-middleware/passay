@@ -71,18 +71,18 @@ public class WordListsTest
     return
       new Object[][] {
         {oneWord, "a", 0},
-        {oneWord, "b", WordLists.NOT_FOUND},
+        {oneWord, "b", -1},
         {twoWords, "a", 0},
         {twoWords, "b", 1},
-        {twoWords, "c", WordLists.NOT_FOUND},
+        {twoWords, "c", -1},
         {threeWords, "a", 0},
         {threeWords, "b", 1},
         {threeWords, "c", 2},
-        {threeWords, "d", WordLists.NOT_FOUND},
+        {threeWords, "d", -1},
         {caseSensitiveWordList, "ISBN", 76},
-        {caseSensitiveWordList, "guacamole", WordLists.NOT_FOUND},
+        {caseSensitiveWordList, "guacamole", -1},
         {caseInsensitiveWordList, "irresolute", 98323},
-        {caseInsensitiveWordList, "brujo", WordLists.NOT_FOUND},
+        {caseInsensitiveWordList, "brujo", -1},
       };
   }
 

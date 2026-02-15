@@ -18,10 +18,10 @@ public class RepeatCharacterRegexRule extends IllegalRegexRule
 {
 
   /** Default length of sequence, value is {@value}. */
-  public static final int DEFAULT_SEQUENCE_LENGTH = 5;
+  protected static final int DEFAULT_SEQUENCE_LENGTH = 5;
 
   /** Minimum length of sequence, value is {@value}. */
-  public static final int MINIMUM_SEQUENCE_LENGTH = 3;
+  protected static final int MINIMUM_SEQUENCE_LENGTH = 3;
 
   /** Regular expression used by this rule, value is {@value}. */
   private static final String REPEAT_CHAR_REGEX = "([^\\x00-\\x1F])\\1{%d}";

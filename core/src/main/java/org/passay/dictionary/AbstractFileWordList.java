@@ -20,7 +20,7 @@ public abstract class AbstractFileWordList extends AbstractWordList
 {
 
   /** Default cache percent. */
-  public static final int DEFAULT_CACHE_PERCENT = 5;
+  protected static final int DEFAULT_CACHE_PERCENT = 5;
 
   /** Used to synchronize access to the underlying cache. */
   private static final Object LOCK = new Object();

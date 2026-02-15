@@ -30,10 +30,10 @@ public class RepeatCharactersRule implements Rule
   public static final String ERROR_CODE = "ILLEGAL_REPEATED_CHARS";
 
   /** Default length of sequence, value is {@value}. */
-  public static final int DEFAULT_SEQUENCE_LENGTH = 5;
+  protected static final int DEFAULT_SEQUENCE_LENGTH = 5;
 
   /** Default number of sequences, value is {@value}. */
-  public static final int DEFAULT_SEQUENCE_COUNT = 1;
+  protected static final int DEFAULT_SEQUENCE_COUNT = 1;
 
   /** Number of repeating characters to match in each sequence. */
   protected final int sequenceLength;

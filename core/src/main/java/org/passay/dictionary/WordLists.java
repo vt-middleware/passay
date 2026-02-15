@@ -102,7 +102,7 @@ public final class WordLists
   // CheckStyle:AnonInnerLength ON
 
   /** Index returned when word not found by binary search. */
-  public static final int NOT_FOUND = -1;
+  private static final int NOT_FOUND = -1;
 
 
   /** Private constructor of utility class. */

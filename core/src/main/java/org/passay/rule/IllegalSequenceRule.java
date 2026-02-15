@@ -25,10 +25,10 @@ public class IllegalSequenceRule implements Rule
 {
 
   /** Default length of keyboard sequence, value is {@value}. */
-  public static final int DEFAULT_SEQUENCE_LENGTH = 5;
+  protected static final int DEFAULT_SEQUENCE_LENGTH = 5;
 
   /** Minimum length of keyboard sequence, value is {@value}. */
-  public static final int MINIMUM_SEQUENCE_LENGTH = 3;
+  protected static final int MINIMUM_SEQUENCE_LENGTH = 3;
 
   /** Sequence data for this rule. */
   protected final SequenceData sequenceData;
