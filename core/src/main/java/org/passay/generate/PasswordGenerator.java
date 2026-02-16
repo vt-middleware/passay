@@ -32,14 +32,17 @@ public class PasswordGenerator
   /** Maximum supported length of password generation. */
   private static final int MAX_PASSWORD_LENGTH = 1024;
 
-  /** Retry password generation at most this many times. */
-  private static final int RETRY_LIMIT = 2;
+  /** Default retry limit. */
+  private static final int DEFAULT_RETRY_LIMIT = 2;
 
   /** Source of random data. */
   private final Random random;
 
   /** Length of passwords to generate. */
   private final int length;
+
+  /** Number of times to retry password generation before giving up. */
+  private final int retryLimit;
 
   /** Rules to determine password character appenders. */
   private final List<Rule> passwordRules = new ArrayList<>();
@@ -59,7 +62,7 @@ public class PasswordGenerator
    */
   public PasswordGenerator(final int length, final Rule... rules)
   {
-    this(new SecureRandom(), length, Arrays.asList(rules));
+    this(new SecureRandom(), length, DEFAULT_RETRY_LIMIT, Arrays.asList(rules));
   }
 
 
@@ -71,7 +74,33 @@ public class PasswordGenerator
    */
   public PasswordGenerator(final int length, final List<? extends Rule> rules)
   {
-    this(new SecureRandom(), length, rules);
+    this(new SecureRandom(), length, DEFAULT_RETRY_LIMIT, rules);
+  }
+
+
+  /**
+   * Creates a new password generator.
+   *
+   * @param  length  of the password to generate
+   * @param  retryLimit  retry password generation at most this many times
+   * @param  rules  to govern the content of the password
+   */
+  public PasswordGenerator(final int length, final int retryLimit, final Rule... rules)
+  {
+    this(new SecureRandom(), length, retryLimit, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new password generator.
+   *
+   * @param  length  of the password to generate
+   * @param  retryLimit  retry password generation at most this many times
+   * @param  rules  to govern the content of the password
+   */
+  public PasswordGenerator(final int length, final int retryLimit, final List<? extends Rule> rules)
+  {
+    this(new SecureRandom(), length, retryLimit, rules);
   }
 
 
@@ -80,9 +109,25 @@ public class PasswordGenerator
    *
    * @param  random  for ordering of password characters
    * @param  length  of the password to generate
+   * @param  retryLimit  retry password generation at most this many times
    * @param  rules  to govern the content of the password
    */
-  public PasswordGenerator(final Random random, final int length, final List<? extends Rule> rules)
+  public PasswordGenerator(final Random random, final int length, final int retryLimit, final Rule... rules)
+  {
+    this(random, length, retryLimit, Arrays.asList(rules));
+  }
+
+
+  /**
+   * Creates a new password generator.
+   *
+   * @param  random  for ordering of password characters
+   * @param  length  of the password to generate
+   * @param  retryLimit  retry password generation at most this many times
+   * @param  rules  to govern the content of the password
+   */
+  public PasswordGenerator(
+    final Random random, final int length, final int retryLimit, final List<? extends Rule> rules)
   {
     if (length <= 0) {
       throw new IllegalArgumentException("Length must be greater than 0");
@@ -90,12 +135,16 @@ public class PasswordGenerator
     if (length > MAX_PASSWORD_LENGTH) {
       throw new IllegalArgumentException("Length must be less than " + MAX_PASSWORD_LENGTH);
     }
+    if (retryLimit < 0) {
+      throw new IllegalArgumentException("Retry limit must be greater than or equal to 0");
+    }
     PassayUtils.assertNotNullArgOr(
       rules,
       v -> Stream.of(rules).anyMatch(Objects::isNull),
       "Rules cannot be null or contain null");
     this.random = PassayUtils.assertNotNullArg(random, "Random cannot be null");
     this.length = length;
+    this.retryLimit = retryLimit;
 
     this.characterAppenders.addAll(
       getCharacterAppenders(rules, getAllowedCharacters(rules), getIllegalCharacters(rules), this.random));
@@ -145,8 +194,8 @@ public class PasswordGenerator
       } else {
         generated.clear();
       }
-    } while (++count <= RETRY_LIMIT);
-    if (count > RETRY_LIMIT) {
+    } while (++count <= retryLimit);
+    if (count > retryLimit) {
       generated.clear();
       throw new IllegalStateException("Exceeded maximum number of password generation retries");
     }
