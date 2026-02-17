@@ -39,6 +39,18 @@ public class CharacterOccurrencesRule implements Rule
     maxOccurrences = maxAllowedOccurrences;
   }
 
+
+  /**
+   * Returns the max occurrences.
+   *
+   * @return  max occurrences
+   */
+  public int getMaxOccurrences()
+  {
+    return maxOccurrences;
+  }
+
+
   @Override
   public RuleResult validate(final PasswordData passwordData)
   {

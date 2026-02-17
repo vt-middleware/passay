@@ -34,7 +34,7 @@ public class UsernameRule implements Rule
   /** Whether to ignore case when checking for usernames. */
   private final boolean ignoreCase;
 
-  /** Where to match whitespace. */
+  /** Where to match username. */
   private final MatchBehavior matchBehavior;
 
 
@@ -102,6 +102,17 @@ public class UsernameRule implements Rule
   public boolean isIgnoreCase()
   {
     return ignoreCase;
+  }
+
+
+  /**
+   * Returns the match behavior for this rule.
+   *
+   * @return  match behavior
+   */
+  public MatchBehavior getMatchBehavior()
+  {
+    return matchBehavior;
   }
 
 

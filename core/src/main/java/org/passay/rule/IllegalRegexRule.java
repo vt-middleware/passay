@@ -31,7 +31,7 @@ public class IllegalRegexRule implements Rule
   /** Regex pattern. */
   protected final Pattern pattern;
 
-  /** Whether to report all sequence matches or just the first. */
+  /** Whether to report all regex matches or just the first. */
   protected final boolean reportAllFailures;
 
 
@@ -82,6 +82,17 @@ public class IllegalRegexRule implements Rule
   {
     pattern = Pattern.compile(regex, regexFlags);
     reportAllFailures = reportAll;
+  }
+
+
+  /**
+   * Returns whether to report all matches or just the first.
+   *
+   * @return  whether to report all matches or just the first
+   */
+  public boolean getReportAllFailures()
+  {
+    return reportAllFailures;
   }
 
 

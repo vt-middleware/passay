@@ -101,6 +101,17 @@ public class IllegalSequenceRule implements Rule
 
 
   /**
+   * Returns whether to report all matches or just the first.
+   *
+   * @return  whether to report all matches or just the first
+   */
+  public boolean getReportAllFailures()
+  {
+    return reportAllFailures;
+  }
+
+
+  /**
    * Returns the sequence length for this rule.
    *
    * @return  sequence length

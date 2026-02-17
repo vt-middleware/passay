@@ -136,6 +136,28 @@ public class RepeatCharactersRule implements Rule
   }
 
 
+  /**
+   * Returns the sequence length for this rule.
+   *
+   * @return  sequence length
+   */
+  public int getSequenceLength()
+  {
+    return sequenceLength;
+  }
+
+
+  /**
+   * Returns the sequence count for this rule.
+   *
+   * @return  sequence count
+   */
+  public int getSequenceCount()
+  {
+    return sequenceCount;
+  }
+
+
   @Override
   public String toString()
   {
