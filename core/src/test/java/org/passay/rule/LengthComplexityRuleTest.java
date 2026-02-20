@@ -43,7 +43,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
         new IllegalSequenceRule(EnglishSequenceData.Numerical),
         new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-        new RepeatCharacterRegexRule()),
+        new RepeatCharactersRule()),
       new LengthComplexityRule.Entry(
         "[12,16)",
         new LengthRule(8, 64),
@@ -56,7 +56,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
         new IllegalSequenceRule(EnglishSequenceData.Numerical),
         new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-        new RepeatCharacterRegexRule()),
+        new RepeatCharactersRule()),
       new LengthComplexityRule.Entry(
         "[16,20)",
         new LengthRule(8, 64),
@@ -68,7 +68,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
         new IllegalSequenceRule(EnglishSequenceData.Numerical),
         new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-        new RepeatCharacterRegexRule()),
+        new RepeatCharactersRule()),
       new LengthComplexityRule.Entry(
         "[20,128]",
         new LengthRule(8, 64),
@@ -76,7 +76,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
         new IllegalSequenceRule(EnglishSequenceData.Numerical),
         new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-        new RepeatCharacterRegexRule()));
+        new RepeatCharactersRule()));
 
     rule2 = new LengthComplexityRule(
       false,
@@ -94,7 +94,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
         new IllegalSequenceRule(EnglishSequenceData.Numerical),
         new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-        new RepeatCharacterRegexRule()),
+        new RepeatCharactersRule()),
       new LengthComplexityRule.Entry(
         "[20,*]",
         new LengthRule(8, 64),
@@ -102,7 +102,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
         new IllegalSequenceRule(EnglishSequenceData.Alphabetical),
         new IllegalSequenceRule(EnglishSequenceData.Numerical),
         new IllegalSequenceRule(EnglishSequenceData.USQwerty),
-        new RepeatCharacterRegexRule()));
+        new RepeatCharactersRule()));
   }
 
 
@@ -190,7 +190,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           new PasswordData("alfred", "It was the best of eeeee, it was the worst of 87654"),
           codes(
             LengthComplexityRule.ERROR_CODE,
-            RepeatCharacterRegexRule.ERROR_CODE,
+            RepeatCharactersRule.ERROR_CODE,
             EnglishSequenceData.USQwerty.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode()),
         },
@@ -198,7 +198,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
           rule2,
           new PasswordData("alfred", "It was the best of eeeee, it was the worst of 87654"),
           codes(
-            RepeatCharacterRegexRule.ERROR_CODE,
+            RepeatCharactersRule.ERROR_CODE,
             EnglishSequenceData.USQwerty.getErrorCode(),
             EnglishSequenceData.Numerical.getErrorCode()),
         },
@@ -254,7 +254,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
   public void checkInterval(final String interval, final boolean valid)
   {
     try {
-      new LengthComplexityRule(new LengthComplexityRule.Entry(interval, new RepeatCharacterRegexRule()));
+      new LengthComplexityRule(new LengthComplexityRule.Entry(interval, new RepeatCharactersRule()));
       if (!valid) {
         fail("Should have thrown IllegalArgumentException");
       }
@@ -276,7 +276,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // intersecting rules
       new LengthComplexityRule(
-        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharactersRule()),
         new LengthComplexityRule.Entry("(5,11)", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
@@ -285,7 +285,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // intersecting rules
       new LengthComplexityRule(
-        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharactersRule()),
         new LengthComplexityRule.Entry("(5,15]", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
@@ -294,7 +294,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // intersecting rules
       new LengthComplexityRule(
-        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharactersRule()),
         new LengthComplexityRule.Entry("[15,25)", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
@@ -303,7 +303,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // intersecting rules
       new LengthComplexityRule(
-        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharactersRule()),
         new LengthComplexityRule.Entry("(19,25)", new WhitespaceRule()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
@@ -312,7 +312,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // null rules
       new LengthComplexityRule(
-        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharactersRule()),
         new LengthComplexityRule.Entry("(0,1)", (Rule[]) null));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {
@@ -321,7 +321,7 @@ public class LengthComplexityRuleTest extends AbstractRuleTest
     try {
       // empty rules
       new LengthComplexityRule(
-        new LengthComplexityRule.Entry("[10,20]", new RepeatCharacterRegexRule()),
+        new LengthComplexityRule.Entry("[10,20]", new RepeatCharactersRule()),
         new LengthComplexityRule.Entry("(0,1)", new ArrayList<>()));
       fail("Should have thrown IllegalArgumentException");
     } catch (Exception e) {

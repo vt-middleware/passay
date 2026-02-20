@@ -49,7 +49,7 @@
   <bean id="numSeqRule" class="org.passay.rule.IllegalSequenceRule"
     c:data="#{T(org.passay.data.EnglishSequenceData).Numerical}"/>
 
-  <bean id="repeatRegexRule" class="org.passay.rule.RepeatCharacterRegexRule"/>
+  <bean id="repeatCharsRule" class="org.passay.rule.RepeatCharactersRule"/>
 
   <bean id="usernameRule" class="org.passay.rule.UsernameRule"
     c:ignoreCase="true" c:matchBackwards="true"/>
