@@ -33,7 +33,6 @@ import org.passay.rule.IllegalSequenceRule;
 import org.passay.rule.LengthComplexityRule;
 import org.passay.rule.LengthRule;
 import org.passay.rule.NumberRangeRule;
-import org.passay.rule.RepeatCharacterRegexRule;
 import org.passay.rule.RepeatCharactersRule;
 import org.passay.rule.Rule;
 import org.passay.rule.UsernameRule;
@@ -108,7 +107,7 @@ public final class HeapDump
 
     final IllegalSequenceRule numSeqRule = new IllegalSequenceRule(EnglishSequenceData.Numerical);
 
-    final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
+    final RepeatCharactersRule dupSeqRule = new RepeatCharactersRule();
 
     final UsernameRule userIDRule = new UsernameRule(true, true);
 

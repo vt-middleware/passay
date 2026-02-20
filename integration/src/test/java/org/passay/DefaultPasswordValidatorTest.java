@@ -32,7 +32,7 @@ import org.passay.rule.DigestSourceRule;
 import org.passay.rule.HistoryRule;
 import org.passay.rule.IllegalSequenceRule;
 import org.passay.rule.LengthRule;
-import org.passay.rule.RepeatCharacterRegexRule;
+import org.passay.rule.RepeatCharactersRule;
 import org.passay.rule.Rule;
 import org.passay.rule.SourceRule;
 import org.passay.rule.UsernameRule;
@@ -124,7 +124,7 @@ public class DefaultPasswordValidatorTest
 
     final IllegalSequenceRule numSeqRule = new IllegalSequenceRule(EnglishSequenceData.Numerical);
 
-    final RepeatCharacterRegexRule dupSeqRule = new RepeatCharacterRegexRule();
+    final RepeatCharactersRule dupSeqRule = new RepeatCharactersRule();
 
     final UsernameRule userIDRule = new UsernameRule(true, true);
 
@@ -292,7 +292,7 @@ public class DefaultPasswordValidatorTest
     l.add(new IllegalSequenceRule(EnglishSequenceData.USQwerty));
     l.add(new IllegalSequenceRule(EnglishSequenceData.Alphabetical));
     l.add(new IllegalSequenceRule(EnglishSequenceData.Numerical));
-    l.add(new RepeatCharacterRegexRule());
+    l.add(new RepeatCharactersRule());
 
     final DefaultPasswordValidator pv = new DefaultPasswordValidator(new PropertiesMessageResolver(), l);
     final ValidationResult resultPass = pv.validate(new PasswordData(VALID_PASS));
