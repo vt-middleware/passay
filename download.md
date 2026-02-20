@@ -21,6 +21,34 @@ If you would like to use this project in your maven build, include the following
 
 ## Release Notes
 
+### Version 2.0.0 - XXFeb2025
+
+v2 contains many API breaking changes which were introduced to support new features and improve extensibility. The following list is not comprehensive, but are likely the most impactful:
+
+- Setters removed on many classes in favor of constructor parameters
+- `PasswordValidator` is now an interface and returns `ValidationResult`
+  - `DefaultPasswordValidator` is the primary implementation provided by passay
+- Many classes reorganized into new sub-packages
+  - `org.passay.data` for `CharacterData` and `SequenceData`
+  - `org.passay.rule` for `Rule` implementations
+  - `org.passay.resolver` for `MessageResolver` implementations
+  - `org.passay.support` for password data classes
+- New maven modules to avoid the use of optional dependencies
+  - _passay-crypt_ for classes requiring cryptographic functions
+  - _passay-bloom_ for Bloom implementation and dependencies
+  - _passay-spring_ for classes with Spring dependencies
+
+Issue | Description
+:---- | :----------
+[passay-181]({{ site.issueURL }}181) | Add retryLimit support for password generation
+[passay-180]({{ site.issueURL }}180) | BufferOverflowException when generating password
+[passay-177]({{ site.issueURL }}177) | Password generator improvements; Leverage both Allowed and Illegal characters
+[passay-175]({{ site.issueURL }}175) | Clear password data from memory
+[passay-172]({{ site.issueURL }}172) | Allow PasswordValidator to fail fast when using expensive rules
+[passay-171]({{ site.issueURL }}171) | Remove RepeatCharacterRegexRule in favor of RepeatCharactersRule
+[passay-169]({{ site.issueURL }}169) | Add property keys and count categories for special character variants
+[passay-167]({{ site.issueURL }}167) | Character counts should use code points
+
 ### Version 1.6.6 - 14Oct2024
 
 Issue | Description

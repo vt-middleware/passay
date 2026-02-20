@@ -4,9 +4,9 @@ title: Reference manual
 ---
 The Passay API consists of 3 core components:
 
-1. [`Rule`](../javadocs/org/passay/Rule.html) - one or more rules define a password policy rule set
+1. [`Rule`](../javadocs/org/passay/rule/Rule.html) - one or more rules define a password policy rule set
 2. [`PasswordValidator`](../javadocs/org/passay/PasswordValidator.html) - validates a password against a rule set
-3. [`PasswordGenerator`](../javadocs/org/passay/PasswordGenerator.html) - produces passwords that satisfy a given rule set
+3. [`PasswordGenerator`](../javadocs/org/passay/generate/PasswordGenerator.html) - produces passwords that satisfy a given rule set
 
 # Rule overview
 Rules are the building blocks for both password validation and generation, and it is helpful to review the ruleset that
@@ -18,53 +18,51 @@ passay provides out of the box. There are two broad categories of rules:
 The following sections briefly describe the available rules in both categories.
 
 ## Positive matching rules
-1. [`AllowedCharacterRule`](../javadocs/org/passay/AllowedCharacterRule.html) -
+1. [`AllowedCharacterRule`](../javadocs/org/passay/rule/AllowedCharacterRule.html) -
 requires passwords to contain _all_ of a set of characters
-2. [`AllowedRegexRule`](../javadocs/org/passay/AllowedRegexRule.html) -
+2. [`AllowedRegexRule`](../javadocs/org/passay/rule/AllowedRegexRule.html) -
 requires passwords to conform to a regular expression
-3. [`CharacterCharacteristicsRule`](../javadocs/org/passay/CharacterCharacteristicsRule.html) -
+3. [`CharacterCharacteristicsRule`](../javadocs/org/passay/rule/CharacterCharacteristicsRule.html) -
 requires passwords to contain M of N classes of characters; for example, 3 of 4 of the following: digit, upper-case letters, lower-case letters, symbols
-4. [`CharacterRule`](../javadocs/org/passay/CharacterRule.html) -
+4. [`CharacterRule`](../javadocs/org/passay/rule/CharacterRule.html) -
 requires passwords to contain at least N characters from a given character set (e.g. digits, upper-case letters, lowercase-letters, symbols)
-5. [`LengthRule`](../javadocs/org/passay/LengthRule.html) - requires passwords to meet a minimum required length
-6. [`LengthComplexityRule`](../javadocs/org/passay/LengthComplexityRule.html) -
+5. [`LengthRule`](../javadocs/org/passay/rule/LengthRule.html) - requires passwords to meet a minimum required length
+6. [`LengthComplexityRule`](../javadocs/org/passay/rule/LengthComplexityRule.html) -
 requires passwords to meet a specific set of rules based on the length of the password. For example, passwords between 8-12 characters long must contain both a number and symbol. Passwords 13 characters and longer must only contain alphabetical characters
 
 ## Negative matching rules
 1. Dictionary rules
-   1. [`DictionaryRule`](../javadocs/org/passay/DictionaryRule.html) -
+   1. [`DictionaryRule`](../javadocs/org/passay/rule/DictionaryRule.html) -
    rejects passwords that _match_ an entry in a dictionary (exact match semantics)
-   2. [`DictionarySubstringRule`](../javadocs/org/passay/DictionarySubstringRule.html) -
+   2. [`DictionarySubstringRule`](../javadocs/org/passay/rule/DictionarySubstringRule.html) -
    rejects passwords that _contain_ an entry in a dictionary (substring match semantics)
-   3. [`DigestDictionaryRule`](../javadocs/org/passay/DigestDictionaryRule.html) -
+   3. [`DigestDictionaryRule`](../javadocs/org/passay/rule/DigestDictionaryRule.html) -
    rejects passwords that _match_ a digested entry in a dictionary (hash/digest comparison)
 2. History rules
-   1. [`HistoryRule`](../javadocs/org/passay/HistoryRule.html) -
+   1. [`HistoryRule`](../javadocs/org/passay/rule/HistoryRule.html) -
    rejects passwords that match previous passwords (cleartext comparison)
-   2. [`DigestHistoryRule`](../javadocs/org/passay/DigestHistoryRule.html) -
+   2. [`DigestHistoryRule`](../javadocs/org/passay/rule/DigestHistoryRule.html) -
    rejects passwords that match previous password digests (hash/digest comparison)
-3. [`CharacterOccurrencesRule`](../javadocs/org/passay/CharacterOccurrencesRule.html) -
+3. [`CharacterOccurrencesRule`](../javadocs/org/passay/rule/CharacterOccurrencesRule.html) -
 rejects passwords that contain too many occurances of the same character
-4. [`IllegalCharacterRule`](../javadocs/org/passay/IllegalCharacterRule.html) -
+4. [`IllegalCharacterRule`](../javadocs/org/passay/rule/IllegalCharacterRule.html) -
 rejects passwords that contain _any_ of a set of characters
-5. [`IllegalRegexRule`](../javadocs/org/passay/IllegalRegexRule.html) -
+5. [`IllegalRegexRule`](../javadocs/org/passay/rule/IllegalRegexRule.html) -
 rejects passwords that conform to a regular expression
-6. [`IllegalSequenceRule`](../javadocs/org/passay/IllegalSequenceRule.html) -
+6. [`IllegalSequenceRule`](../javadocs/org/passay/rule/IllegalSequenceRule.html) -
 rejects passwords that contain a sequence of N characters (e.g. _12345_)
-7. [`NumberRangeRule`](../javadocs/org/passay/NumberRangeRule.html) -
+7. [`NumberRangeRule`](../javadocs/org/passay/rule/NumberRangeRule.html) -
 rejects passwords that contain any number within a defined range (e.g. _1000-9999_)
 8. Source rules
-   1. [`SourceRule`](../javadocs/org/passay/SourceRule.html) -
+   1. [`SourceRule`](../javadocs/org/passay/rule/SourceRule.html) -
    rejects passwords that match those from another source (cleartext comparison)
-   2. [`DigestSourceRule`](../javadocs/org/passay/DigestSourceRule.html) -
+   2. [`DigestSourceRule`](../javadocs/org/passay/rule/DigestSourceRule.html) -
    rejects passwords that match the digest of those from another source (hash/digest comparison)
-9. [`RepeatCharacterRegexRule`](../javadocs/org/passay/RepeatCharacterRegexRule.html) -
-rejects passwords that contain a repeated ASCII character
-10. [`RepeatCharactersRule`](../javadocs/org/passay/RepeatCharactersRule.html) -
+9. [`RepeatCharactersRule`](../javadocs/org/passay/rule/RepeatCharactersRule.html) -
 rejects passwords that contain multiple sequences of repeating characters
-11. [`UsernameRule`](../javadocs/org/passay/UsernameRule.html) -
+10. [`UsernameRule`](../javadocs/org/passay/rule/UsernameRule.html) -
 rejects passwords that contain the username of the user providing the password
-12. [`WhitespaceRule`](../javadocs/org/passay/WhitespaceRule.html) -
+11. [`WhitespaceRule`](../javadocs/org/passay/rule/WhitespaceRule.html) -
 rejects passwords that contain whitespace characters
 
 # Password validation
@@ -82,7 +80,7 @@ The following code excerpt constructs a validator that enforces the policy.
 {% endhighlight %}
 
 ## Advanced validation: customizing messages
-Passay provides the [`MessageResolver`](../javadocs/org/passay/MessageResolver.html) interface to allow arbitrary
+Passay provides the [`MessageResolver`](../javadocs/org/passay/resolver/MessageResolver.html) interface to allow arbitrary
 conversion of password validation results to meaningful text intended for display to users. The default mechanism
 uses a message bundle to define validation messages whose default values are shown below.
 
@@ -108,6 +106,9 @@ uses a message bundle to define validation messages whose default values are sho
     INSUFFICIENT_ALPHABETICAL=Password must contain %1$s or more alphabetical characters.
     INSUFFICIENT_DIGIT=Password must contain %1$s or more digit characters.
     INSUFFICIENT_SPECIAL=Password must contain %1$s or more special characters.
+    INSUFFICIENT_SPECIAL_ASCII=Password must contain %1$s or more special characters.
+    INSUFFICIENT_SPECIAL_UNICODE=Password must contain %1$s or more special characters.
+    INSUFFICIENT_SPECIAL_LATIN=Password must contain %1$s or more special characters.
     INSUFFICIENT_CHARACTERISTICS=Password matches %1$s of %3$s character rules, but %2$s are required.
     INSUFFICIENT_COMPLEXITY=Password meets %2$s complexity rules, but %3$s are required.
     INSUFFICIENT_COMPLEXITY_RULES=No rules have been configured for a password of length %1$s.
@@ -174,7 +175,7 @@ The following rules support enforcement of unique passwords in the context of pa
 1. [`HistoryRule`](../javadocs/org/passay/HistoryRule.html) - for passwords stored as cleartext (insecure, uncommon)
 2. [`DigestHistoryRule`](../javadocs/org/passay/HistoryRule.html) - for passwords stored as a hash/digest
 
-Both rules require querying a data source for historical password data, but in practice `DigestHistoryRule` is the more useful component since passwords are typically stored as a hash/digest. Digest support requires the use of message digest components provided by the [cryptacular](http://www.cryptacular.org/) crypto library, which is an optional dependency of this library. The example below demonstrates history-based validation for passwords stored in the following format:
+Both rules require querying a data source for historical password data, but in practice `DigestHistoryRule` is the more useful component since passwords are typically stored as a hash/digest. Digest support requires the use of message digest components provided by the [cryptacular](http://www.cryptacular.org/) library, which is available by adding a dependency on the _passay-crypt_ maven module. The example below demonstrates history-based validation for passwords stored in the following format:
 
 1. SHA-256 digest algorithm
 2. The hash is computed by digesting two values in turn:
@@ -190,9 +191,14 @@ This is a realistic scenario for passwords stored in an LDAP directory using the
 {% endhighlight %}
 
 # Password generation
-The password generation API uses a specialized ruleset consisting exclusively of `CharacterRule`, a specialization of
-`Rule`, to define the requisite character classes in generated passwords. The example below demonstrates
-password generation for the following policy:
+The password generation API is used to create random passwords that meet an existing rule set.  The `PasswordGenerator` class creates character appenders based on the supplied rule types and then validates generated passwords against those rules. The following `Rule` types are examined for generation:
+
+1. `CharacterRule`, to define the requisite character classes in generated passwords.
+2. `CharacterCharacteristicsRule`, which contains a set of `CharacterRule`.
+3. `AllowedCharacterRule`, to define the set of allowed characters.
+4. `IllegalCharacterRule`, to define the set of illegal characters.
+
+The example below demonstrates password generation for the following policy:
 
 1. Length of 8 to 16 characters
 2. Must contain at least one of the following: upper case, lower case and digit

@@ -3,19 +3,19 @@
 // data. A common use case for labels is multiple password encodings where each
 // label identifies a particular encoding.
 // Salt=86ffd2e3521b5b169ec9a75678c92eed
-List<PasswordData.Reference> history = Arrays.asList(
+List<Reference> history = Arrays.asList(
   // Password=P@ssword1
-  new PasswordData.HistoricalReference(
+  new HistoricalReference(
     "SHA256",
     "j93vuQDT5ZpZ5L9FxSfeh87zznS3CM8govlLNHU8GRWG/9LjUhtbFp7Jp1Z4yS7t"),
 
   // Password=P@ssword2
-  new PasswordData.HistoricalReference(
+  new HistoricalReference(
     "SHA256",
     "mhR+BHzcQXt2fOUWCy4f903AHA6LzNYKlSOQ7r9np02G/9LjUhtbFp7Jp1Z4yS7t"),
 
   // Password=P@ssword3
-  new PasswordData.HistoricalReference(
+  new HistoricalReference(
     "SHA256",
     "BDr/pEo1eMmJoeP6gRKh6QMmiGAyGcddvfAHH+VJ05iG/9LjUhtbFp7Jp1Z4yS7t")
 );
@@ -36,7 +36,6 @@ List<Rule> rules = Arrays.asList(
   // ...
   new DigestHistoryRule(hasher));
 
-PasswordValidator validator = new PasswordValidator(rules);
-PasswordData data = new PasswordData("username", "P@ssword1");
-data.setPasswordReferences(history);
-RuleResult result = validator.validate(data);
+PasswordValidator validator = new DefaultPasswordValidator(rules);
+PasswordData data = new PasswordData("username", "P@ssword1", history);
+ValidationResult result = validator.validate(data);
