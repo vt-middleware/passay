@@ -8,7 +8,7 @@ List<CharacterRule> rules = Arrays.asList(
   // at least one digit character
   new CharacterRule(EnglishCharacterData.Digit, 1));
 
-PasswordGenerator generator = new PasswordGenerator();
+PasswordGenerator generator = new PasswordGenerator(12, rules);
 
 // Generated password is 12 characters long, which complies with policy
-String password = generator.generatePassword(12, rules);
+UnicodeString password = generator.generate();

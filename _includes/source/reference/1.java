@@ -1,4 +1,4 @@
-PasswordValidator validator = new PasswordValidator(
+PasswordValidator validator = new DefaultPasswordValidator(
   // length between 8 and 16 characters
   new LengthRule(8, 16),
 
@@ -16,7 +16,7 @@ PasswordValidator validator = new PasswordValidator(
 
   // define some illegal sequences that will fail when >= 5 chars long
   // alphabetical is of the form 'abcde', numerical is '34567', qwery is 'asdfg'
-  // the false parameter indicates that wrapped sequences are allowed; e.g. 'xyzabc'
+  // the false parameter indicates that wrapped sequences are valid; e.g. 'xyzabc'
   new IllegalSequenceRule(EnglishSequenceData.Alphabetical, 5, false),
   new IllegalSequenceRule(EnglishSequenceData.Numerical, 5, false),
   new IllegalSequenceRule(EnglishSequenceData.USQwerty, 5, false),
@@ -25,12 +25,12 @@ PasswordValidator validator = new PasswordValidator(
   new WhitespaceRule());
 
 final char[] password = System.console().readPassword("Password: ");
-RuleResult result = validator.validate(new PasswordData(new String(password)));
+ValidationResult result = validator.validate(new PasswordData(new UnicodeString(password)));
 if (result.isValid()) {
   System.out.println("Password is valid");
 } else {
   System.out.println("Invalid password:");
-  for (String msg : validator.getMessages(result)) {
+  for (String msg : result.getMessages()) {
     System.out.println(msg);
   }
 }
